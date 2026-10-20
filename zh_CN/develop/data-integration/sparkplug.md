@@ -4,7 +4,7 @@
 
 Sparkplug B 定义了用于监控控制和数据采集（SCADA）系统、实时控制系统和设备的 MQTT 命名空间。它通过封装结构化数据格式，包括指标、过程变量和设备状态信息，确保了标准化的数据传输，使其呈现为简洁易处理的格式。通过使用Sparkplug B，组织可以提高运营效率，避免数据孤岛，并在 MQTT 网络中实现设备间的无缝通信。
 
-本页面将为您介绍 Sparkplug B 在 EMQX 中的实现，包括数据格式、功能和实用示例。
+本页面介绍 EMQX 对 Sparkplug B 的支持，包括数据格式、编解码函数、Alias 映射、Sparkplug 感知能力和实用示例。
 
 ## Sparkplug B 数据格式
 
@@ -20,6 +20,65 @@ EMQX 通过 [Schema Registry](./schema-registry.md) 功能提供对 Sparkplug B 
 请改用更新后的 `spb_encode` 和 `spb_decode` 函数。
 
 ::::
+
+## Sparkplug 感知能力
+
+NBIRTH 消息描述边缘节点，DBIRTH 消息描述该边缘节点连接的设备；两者都包含相应的 metric 定义。按照 Sparkplug 规范，这两类消息发布到原始主题时不设置 Retain 标志。因此，主机应用（Host Application）如果在消息发布后才连接或重启，就必须等待或请求新的 Birth 消息，才能重建节点和设备模型。
+
+从 EMQX 7.0.0 开始，启用 Sparkplug 感知能力后，EMQX 会将最近收到的 NBIRTH 和 DBIRTH 消息以保留消息的形式存储在 `$sparkplug/certificates/` 主题树中。之后订阅该主题树的客户端可以立即获取节点、设备及其 metric 定义。[Sparkplug 3.0 规范](https://sparkplug.eclipse.org/specification/version/3.0/documents/sparkplug-specification-3.0.0.pdf)将这些主题称为 Birth Certificate 主题。
+
+### Sparkplug 感知能力工作机制
+
+启用 Sparkplug 感知能力后，EMQX 按以下流程处理 Birth 消息：
+
+1. 边缘节点为自身发布 NBIRTH 消息，或为其设备发布 DBIRTH 消息。
+2. EMQX 仍在原始主题上正常投递 Birth 消息。同时，EMQX 使用相同的 payload 向对应的 Birth Certificate 主题发布一条 QoS 2 的保留消息。无论 Birth 消息由 MQTT 客户端直接发布，还是通过 MQTT Source、回退动作等内部路径发布，EMQX 都按此方式处理。
+3. 主机应用或其他消费者订阅 `$sparkplug/certificates/#` 后，可以立即收到保留的 Birth 消息。当 EMQX 再次收到映射到同一 Birth Certificate 主题的 Birth 消息时，会替换该主题中已有的保留消息。
+
+下表展示 EMQX 如何将原始 Birth 主题映射到 Birth Certificate 主题：
+
+| 原始 Birth 主题 | Birth Certificate 主题 |
+| --- | --- |
+| `spBv1.0/group1/NBIRTH/eon1` | `$sparkplug/certificates/spBv1.0/group1/NBIRTH/eon1` |
+| `spBv1.0/group1/DBIRTH/eon1/device1` | `$sparkplug/certificates/spBv1.0/group1/DBIRTH/eon1/device1` |
+
+如果监听器配置了挂载点，EMQX 会为 Birth Certificate 主题添加相同的挂载点，因此其他挂载点下的订阅者无法收到该消息。保留消息还会保留原始消息中的客户端属性，以便规则引擎按命名空间处理消息。
+
+保留的 Birth 消息使用边缘节点或设备发布的原始 payload。该 payload 不会随之后的 NDATA 或 DDATA 消息更新，因此其中的 metric 值可能不是当前值。Sparkplug 感知能力不会替换 NDEATH 消息中的时间戳。
+
+### 启用 Sparkplug 感知能力
+
+Sparkplug 感知能力由 Schema Registry 提供。先启用[保留消息功能](../../guides/dashboard/retained.md#设置保留消息)，再通过 `etc/base.hocon` 或 REST API 启用 Sparkplug 感知能力。Dashboard 不提供此配置项的开关。
+
+#### 配置文件
+
+在 `etc/base.hocon` 中添加以下配置：
+
+```hocon
+schema_registry {
+  sparkplugb {
+    enable_sparkplug_awareness = true
+  }
+}
+```
+
+#### REST API
+
+向 `/api/v5/configs?mode=merge` 发送 `PUT` 请求，请求正文使用 HOCON 格式。请使用具有 [`system` 权限范围](../../guides/api.md#内置-api-密钥权限范围)的全局 API 密钥进行认证，并将 `<your-application-key>` 和 `<your-security-key>` 替换为您的 [API 密钥凭证](../../guides/api.md#认证)：
+
+```bash
+curl -X 'PUT' \
+  'http://127.0.0.1:18083/api/v5/configs?mode=merge' \
+  -u '<your-application-key>:<your-security-key>' \
+  -H 'Content-Type: text/plain' \
+  --data-binary 'schema_registry {
+    sparkplugb {
+      enable_sparkplug_awareness = true
+    }
+  }'
+```
+
+`schema_registry.sparkplugb.enable_sparkplug_awareness` 的默认值为 `false`。要在 Birth Certificate 主题中保存 Birth 消息，必须启用保留消息功能。
 
 ## Sparkplug B 函数
 
