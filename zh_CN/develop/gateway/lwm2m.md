@@ -99,8 +99,9 @@ LwM2M 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数�
 
 ## 认证
 
-由于 LwM2M 协议仅提供了客户端的 Endpoint Name，而没有提供用户名和密码。因此，
-LwM2M 网关仅支持 [HTTP Server 认证](../../guides/access-control/authn/http.md)。
+标准 LwM2M 注册请求仅提供客户端的 Endpoint Name，不定义用户名和密码。因此，LwM2M 网关仅支持 [HTTP Server 认证](../../guides/access-control/authn/http.md)。EMQX 还接受非标准注册参数 `device_id` 和 `imei`，并将其分别用作 EMQX Client ID 和 Username。
+
+从 EMQX 6.0.5 开始，客户端在现有连接上重新注册时，只有 Endpoint Name、EMQX Client ID 和 Username 均与连接已绑定的身份一致，EMQX 才会复用原有 LwM2M 会话。如果任一身份字段不同，EMQX 会返回未授权错误并拒绝此次重新注册，同时保持现有连接状态不变。
 
 例如，通过 REST API 或 `base.hocon` 为 LwM2M 网关创建 HTTP 认证：
 

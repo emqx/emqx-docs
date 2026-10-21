@@ -140,7 +140,9 @@ In addition to the default settings, EMQX provides various configuration options
 
    - **Heartbeat Timeout Threshold**: If the client fails to respond within this time frame, it is considered disconnected.
 
-   - **Maximum Payload Size**: The maximum size (in bytes) of a single `PUB` or `HPUB` message payload. Default: `1048576` bytes.
+   - **Maximum Payload Size**: The maximum allowed size of message data. For `PUB`, the limit applies to the payload. For `HPUB`, both the header section and the combined size of the headers and payload must not exceed this value. EMQX advertises the configured value as `INFO.max_payload`. Default: `1048576` bytes.
+
+   - **Maximum Control Line** <Badge type="tip" text="6.0.5+" />: The maximum length of a NATS protocol control line, excluding the CRLF delimiter. Default: `4096` bytes. The minimum configurable value is `1024` bytes.
 
    - **Idle Timeout**: The period (in seconds) after which an inactive client connection is considered stale and will be closed. Default: `30` seconds.
 
@@ -157,6 +159,8 @@ In addition to the default settings, EMQX provides various configuration options
      - **Username**: Maps to the `user` field in the `CONNECT` packet.
      - **Password**: Maps to the `pass` field in the `CONNECT` packet.
      - **Client ID**: Can be set to `${generated}` for auto-generation, or customized using specific logic.
+
+   If a control line exceeds `max_control_line`, or a declared message size exceeds `max_payload_size`, EMQX rejects the frame and closes the connection. EMQX checks declared message sizes before buffering the message contents.
 
 3. Click **Update** to apply your changes.
 

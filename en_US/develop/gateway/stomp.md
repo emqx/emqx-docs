@@ -82,11 +82,11 @@ In the **Basic Configuration** tab, you can set the maximum header allowed, the 
 
 <!--with a screenshot to be added later-->
 
-1. **Max Header**: Set the maximum allowed number of STOMP Header, default: `10`.
+1. **Max Header**: Set the maximum allowed number of STOMP headers, default: `10`.
 
-2. **Max Each Header Length**: Set the maximum allowed string length of the Header value, default: `1024`.
+2. **Max Each Header Length**: Set the maximum combined length of a STOMP header name and value, default: `1024` bytes.
 
-3. **Max Body Length**: Set the maximum allowed bytes of the STOMP packet, default: `65536`.
+3. **Max Body Length**: Set the maximum size of a STOMP frame body, default: `65536` bytes.
 
 4. **Idle Timeout**: Set the maximum amount of time in seconds that the gateway will wait for a STOMP frame before closing the connection due to inactivity.
 
@@ -95,6 +95,19 @@ In the **Basic Configuration** tab, you can set the maximum header allowed, the 
 6. **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, *stomp/*.
 
    **Note**: This topic prefix is managed by the gateway. Clients do not need to add this prefix explicitly when publishing and subscribing.
+
+### Limit STOMP Transactions <Badge type="tip" text="6.0.5+" />
+
+You can use `gateway.stomp.transaction` to limit the transaction state retained by each STOMP connection. EMQX applies the following defaults when the transaction settings are omitted:
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `max_transactions` | `100` | Maximum number of transactions that can be open at the same time on one connection. |
+| `max_actions_per_transaction` | `1000` | Maximum number of `SEND`, `ACK`, and `NACK` frames that can be buffered in one transaction. |
+| `max_retained_bytes` | `16777216` bytes | Maximum total number of bytes retained by all open transactions on one connection. |
+| `timeout` | `60s` | Time after which an open transaction expires and EMQX discards it. The value must be greater than zero. |
+
+If a connection exceeds the configured transaction count, buffered-frame count, or retained-byte limit, EMQX sends a STOMP `ERROR` frame and closes the connection.
 
 ### Add Listeners
 

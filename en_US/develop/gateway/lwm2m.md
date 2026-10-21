@@ -100,8 +100,9 @@ The LwM2M gateway only supports UDP and DTLS type listeners, for a complete list
 
 ## Authentication
 
-Since the LwM2M protocol only given the Endpoint Name of Client, there is no Username and Password.
-Therefore, the LwM2M gateway only supports [HTTP Server Authentication](../../guides/access-control/authn/http.md).
+The standard LwM2M registration request provides the client's Endpoint Name but does not define a username or password. The LwM2M gateway therefore supports only [HTTP Server Authentication](../../guides/access-control/authn/http.md). EMQX also accepts the non-standard registration parameters `device_id` and `imei` as the EMQX Client ID and Username, respectively.
+
+Starting from EMQX 6.0.5, when a client re-registers on an existing connection, EMQX reuses the LwM2M session only if the Endpoint Name, EMQX Client ID, and Username match the identity already bound to the connection. EMQX rejects the re-registration as unauthorized if any of these identity fields differ and keeps the existing connection state unchanged.
 
 For example, to create an HTTP authentication for LwM2M gateway via REST API or configuration file:
 
