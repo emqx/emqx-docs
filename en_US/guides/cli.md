@@ -427,11 +427,23 @@ When there are a large number of subscriptions in the system, the `list` command
 
 ## plugins
 
-This command is used to view and manage plugin installation.
+Use the `plugins` commands to view and manage plugins.
+
+::: tip Node-Pinned Plugins
+
+Starting from EMQX 6.1.6, the `plugins` commands behave differently for plugins configured in `node.pinned_plugins`:
+
+- `plugins start`, `plugins stop`, and `plugins restart` manage only the exact version configured in `node.pinned_plugins` on the current node. Lifecycle commands targeting another version of the same plugin are rejected.
+- `plugins allow`, `plugins install`, `plugins uninstall`, `plugins enable`, and `plugins disable` return a `plugin_pinned` error for a node-pinned plugin.
+- A node-pinned plugin stopped through the CLI remains stopped until the node starts all plugins again, such as after a node restart or cluster join.
+
+For details, see [Run a Plugin Independently on a Node](./extensions/plugin-management.md#run-a-plugin-independently-on-a-node).
+
+:::
 
 ### plugins list
 
-List all installed plugins.
+List plugins available on the current node, including node-pinned plugins.
 
 ```bash
 emqx ctl plugins list
@@ -440,7 +452,7 @@ emqx ctl plugins list
 
 ### plugins describe \<Name-Vsn\>
 
-Display detailed information about an installed plugin.
+Display detailed information about a plugin available on the current node.
 
 ```bash
 emqx ctl plugins describe emqx_auth_mnesia-3.0.1

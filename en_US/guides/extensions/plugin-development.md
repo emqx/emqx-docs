@@ -433,6 +433,16 @@ The tarball includes the compiled applications (as specified in the `relx` secti
 }
 ```
 
+### Design for Mixed Plugin Versions
+
+Starting from EMQX 6.1.6, you can use `node.pinned_plugins` to pre-deploy and configure a plugin as part of a node's deployment before EMQX starts. Each node manages its pinned plugins independently, so nodes can run different versions of the same plugin without triggering version mismatch warnings. If your plugin needs to support mixed versions, ensure that the versions remain compatible in the following areas:
+
+- Shared database tables and stored data formats.
+- RPC calls and messages exchanged between plugin instances on different nodes.
+- Configuration formats used by different plugin versions.
+
+For deployment and lifecycle behavior, see [Run a Plugin Independently on a Node](./plugin-management.md#run-a-plugin-independently-on-a-node).
+
 ## Plugin Extended API and UI
 
 Plugins can expose custom HTTP endpoints through the EMQX plugin API gateway and optionally embed a native UI in the Dashboard.

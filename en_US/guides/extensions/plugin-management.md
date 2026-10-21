@@ -1,10 +1,15 @@
 # Manage Plugins
 
-This page covers the plugin lifecycle in EMQX and explains how to install, configure, start, stop, uninstall, and upgrade plugins using the Dashboard, CLI, or REST API.
+This page explains how to deploy and manage EMQX plugins. You can manage a plugin across the cluster through the Dashboard, CLI, or REST API, or pin a pre-deployed plugin to an individual node.
+
+EMQX supports the following plugin management modes:
+
+- **Cluster-managed plugin**: EMQX distributes the plugin package and configuration to cluster nodes and records its enabled state in `plugins.states`.
+- **Node-pinned plugin**: Starting from EMQX 6.1.6, a node can run a pre-deployed plugin independently of the cluster plugin configuration by listing its name and version in `node.pinned_plugins`.
 
 ## Plugin Lifecycle
 
-An EMQX plugin goes through three main lifecycle states:
+A cluster-managed plugin goes through three main lifecycle states:
 
 - **Installed**: The plugin's code and configuration are loaded, but the application is not yet started.
 - **Started**: The plugin is running and actively interacting with EMQX.
@@ -26,7 +31,7 @@ The installation process is as follows:
 
 ::: tip
 
-For plugins, only the plugin state (`true` or `false` for the `enable` flag) is stored in the EMQX config. Full plugin configurations reside in the `$EMQX_DATA_DIR/plugins/my_emqx_plugin/config.hocon` file on the nodes.
+For cluster-managed plugins, only the plugin state (`true` or `false` for the `enable` flag) is stored in the EMQX config. Full plugin configurations reside in the `$EMQX_DATA_DIR/plugins/my_emqx_plugin/config.hocon` file on the nodes.
 
 :::
 
@@ -35,7 +40,7 @@ For plugins, only the plugin state (`true` or `false` for the `enable` flag) is 
 After installation, plugin configuration can be updated through the Dashboard or API:
 
 - The new configuration is validated against the Avro schema (if present).
-- Updates are distributed to all cluster nodes.
+- Updates are distributed to nodes that report the same version of the plugin.
 - The plugin's `on_config_changed/2` callback function is called. If the plugin accepts the new configuration, it is persisted in the `$EMQX_DATA_DIR/plugins/my_emqx_plugin/config.hocon` file.
 
 ::: tip
@@ -46,7 +51,7 @@ After installation, plugin configuration can be updated through the Dashboard or
 
 ::: tip
 
-`on_config_changed/2` callback function is called on each node of the EMQX cluster. Avoid implementing configuration validation that depends on local system state (e.g., checking network availability), as this can lead to inconsistent results across nodes. Use `on_health_check/1` for runtime checks instead and report an unhealthy status if some resource is not available.
+The `on_config_changed/2` callback runs on each node that receives the configuration update. Avoid implementing configuration validation that depends on local system state (e.g., checking network availability), as this can lead to inconsistent results across nodes. Use `on_health_check/1` for runtime checks instead and report an unhealthy status if some resource is not available.
 
 :::
 
@@ -113,6 +118,87 @@ The new node does the following:
 ## Install and Manage Plugins
 
 EMQX supports plugin package installation, uninstallation, and management via the Dashboard, CLI, and API.
+
+### Pre-Install Plugins Before EMQX Starts
+
+If you want a plugin to be available immediately when EMQX starts, for example, when building a custom Docker image, you can pre-install the plugin by extracting the package and configuring EMQX in advance.
+
+Choose one of the following modes:
+
+- Pre-install a cluster-managed plugin if every node should follow `plugins.states` and participate in cluster-wide lifecycle operations.
+- Pin the plugin to a node if the plugin is part of that node's deployment artifact and must run independently of the cluster plugin configuration.
+
+#### Pre-Install a Cluster-Managed Plugin
+
+The following steps use a Dockerfile as an example, but the same approach applies to any deployment method, including deb/rpm and bare-metal deployments:
+
+1. Copy and extract the plugin tarball into the plugins directory:
+
+   ```dockerfile
+   COPY --chown=emqx:emqx my_emqx_plugin-1.0.0.tar.gz /opt/emqx/plugins/my_emqx_plugin-1.0.0.tar.gz
+
+   RUN cd /opt/emqx/plugins && \
+       mkdir -p my_emqx_plugin-1.0.0 && \
+       tar zxf my_emqx_plugin-1.0.0.tar.gz -C my_emqx_plugin-1.0.0
+   ```
+
+2. Register the plugin in EMQX configuration so it is started automatically on boot. Append the following to the EMQX base config file:
+
+   ```dockerfile
+   RUN cat <<EOF >> /opt/emqx/etc/base.hocon
+   plugins {
+       states = [
+           {
+               name_vsn = "my_emqx_plugin-1.0.0"
+               enable = true
+           }
+       ]
+   }
+   EOF
+   ```
+
+   Set `enable = true` to start the plugin automatically, or `enable = false` to install it without starting.
+
+#### Run a Plugin Independently on a Node
+
+Starting from EMQX 6.1.6, you can pin a pre-deployed plugin to an individual node. This mode is useful when a plugin is built into a container image or another node-specific deployment artifact.
+
+1. Extract the plugin package into `<plugins.install_dir>`. Before EMQX starts, the extracted files must be located in `<plugins.install_dir>/<name-vsn>`, with `release.json` directly inside that directory. For example:
+
+   ```dockerfile
+   COPY --chown=emqx:emqx my_emqx_plugin-1.0.0.tar.gz /tmp/my_emqx_plugin-1.0.0.tar.gz
+
+   RUN mkdir -p /opt/emqx/plugins/my_emqx_plugin-1.0.0 && \
+       tar zxf /tmp/my_emqx_plugin-1.0.0.tar.gz \
+       -C /opt/emqx/plugins/my_emqx_plugin-1.0.0
+   ```
+
+2. Add the plugin name and version to the read-only `node.pinned_plugins` setting. For a container image, set the corresponding environment variable:
+
+   ```dockerfile
+   ENV EMQX_NODE__PINNED_PLUGINS="my_emqx_plugin-1.0.0"
+   ```
+
+   For other deployment methods, set the value in `emqx.conf`:
+
+   ```hocon
+   node.pinned_plugins = ["my_emqx_plugin-1.0.0"]
+   ```
+
+   You can list multiple plugins. Each entry must be a valid `<name-vsn>` identifier, and the list cannot contain two versions of the same plugin name. EMQX starts the plugins in the configured order before starting the plugins in `plugins.states`. To change the list, update the node configuration and restart the node. Cluster joins, API calls, and configuration imports cannot change this setting.
+
+A node-pinned plugin has the following operational behavior:
+
+- EMQX runs the plugin directly from the extracted directory. During a cluster join, EMQX neither distributes the plugin package nor synchronizes its stored configuration between nodes.
+- The plugin is always enabled and does not require a `plugins.states` entry, an `emqx ctl plugins allow` grant, or an installation command. Entries in `plugins.states` with the same plugin name do not control it, regardless of the version specified in the entry.
+- EMQX builds the initial configuration from the package's `priv/config.hocon` and, if present, deep-merges `etc/plugins/<name>.hocon` into it. After you save the configuration through the Dashboard or API, EMQX uses `data/plugins/<name>/config.hocon` as the complete configuration. Configuration changes apply only to nodes that report the same plugin version.
+- Use `emqx ctl plugins start|stop|restart <name-vsn>` to manage the plugin on the node that pins it. A node-pinned plugin stopped through the CLI remains stopped until the node starts all plugins again, such as after a node restart or cluster join.
+- The Dashboard and REST API can update the plugin configuration but cannot manage the lifecycle of a pinned instance. A lifecycle request returns HTTP `409` with the error code `PLUGIN_PINNED` in either of the following cases:
+  - The node handling the request has a plugin with the same name configured in `node.pinned_plugins`.
+  - Every node that reports the requested plugin version has that version configured as a node-pinned plugin.
+
+  If another node runs the same plugin version as a cluster-managed plugin, cluster-wide operations initiated through that node affect only the cluster-managed instances.
+- If the plugin directory is missing or the plugin fails to start, EMQX raises the `pinned_plugin_unavailable:<name-vsn>` alarm and continues starting the node. A later successful start clears the alarm.
 
 ### Install Packages via Dashboard
 
@@ -234,48 +320,15 @@ Suppose your plugin is already built and the tarball `my_emqx_plugin-1.0.0.tar.g
    $ curl -s -u $KEY:$SECRET -X PUT "http://$EMQX_HOST:18083/api/v5/plugins/my_emqx_plugin-1.0.0/stop"
    ```
 
-### Pre-Install Plugins before EMQX Starts
-
-If you want a plugin to be available immediately when EMQX starts, for example, when building a custom Docker image, you can pre-install the plugin by extracting the package and configuring EMQX in advance.
-
-The following steps use a Dockerfile as an example, but the same approach applies to any deployment method (deb/rpm, bare metal, etc.):
-
-1. Copy and extract the plugin tarball into the plugins directory:
-
-   ```dockerfile
-   COPY --chown=emqx:emqx my_emqx_plugin-1.0.0.tar.gz /opt/emqx/plugins/my_emqx_plugin-1.0.0.tar.gz
-
-   RUN cd /opt/emqx/plugins && \
-       mkdir -p my_emqx_plugin-1.0.0 && \
-       tar zxf my_emqx_plugin-1.0.0.tar.gz -C my_emqx_plugin-1.0.0
-   ```
-
-2. Register the plugin in EMQX configuration so it is started automatically on boot. Append the following to the EMQX base config file:
-
-   ```dockerfile
-   RUN cat <<EOF >> /opt/emqx/etc/base.hocon
-   plugins {
-       states = [
-           {
-               name_vsn = "my_emqx_plugin-1.0.0"
-               enable = true
-           }
-       ]
-   }
-   EOF
-   ```
-
-   Set `enable = true` to start the plugin automatically, or `enable = false` to install it without starting.
-
 ## Upgrade Plugins
 
-EMQX does not allow multiple versions of the same plugin to be installed simultaneously.
-
-To install a new version of the plugin:
+To upgrade a cluster-managed plugin:
 
 - The old version must first be uninstalled.
 - The new version is then installed.
 
 The plugin configuration is preserved across installations.
+
+Starting from EMQX 6.1.6, different nodes in a cluster can pin different versions of the same plugin. If a node lists a plugin version in `node.pinned_plugins`, EMQX runs only that pinned version and ignores `plugins.states` entries for every version of the same plugin. Plugin authors must ensure that these versions remain compatible with respect to shared database tables, cross-node RPC, and plugin configuration formats.
 
 <!-- **Note**: (EMQX enterprise) Plugins need to be reinstalled after hot upgrades. -->
