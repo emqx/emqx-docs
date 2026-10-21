@@ -435,7 +435,7 @@ The tarball includes the compiled applications (as specified in the `relx` secti
 
 ### Design for Mixed Plugin Versions
 
-Starting from EMQX 6.1.6, different nodes in a cluster can run different versions of the same plugin by configuring the desired version in each node's `node.pinned_plugins` setting. If your plugin needs to support this deployment mode, ensure that its versions remain compatible in the following areas:
+Starting from EMQX 6.1.6, you can use `node.pinned_plugins` to pre-deploy and configure a plugin as part of a node's deployment before EMQX starts. Each node manages its pinned plugins independently, so nodes can run different versions of the same plugin without triggering version mismatch warnings. If your plugin needs to support mixed versions, ensure that the versions remain compatible in the following areas:
 
 - Shared database tables and stored data formats.
 - RPC calls and messages exchanged between plugin instances on different nodes.

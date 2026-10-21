@@ -117,6 +117,87 @@ EMQX 支持以下插件管理方式：
 
 EMQX 支持通过 Dashboard、CLI 和 API 安装、卸载和管理插件包。
 
+### 在 EMQX 启动前预装插件
+
+如果希望插件在 EMQX 启动时即可使用，例如构建自定义 Docker 镜像时，可以提前解压插件包并配置 EMQX。
+
+根据使用场景选择以下方式：
+
+- 如果所有节点都应遵循 `plugins.states` 并参与集群级生命周期操作，请预装集群管理插件。
+- 如果插件属于特定节点的部署产物，并且必须独立于集群插件配置运行，请将插件固定到该节点。
+
+#### 预装集群管理插件
+
+以下步骤以 Dockerfile 为例，但同样适用于 deb/rpm、裸机部署等其他部署方式：
+
+1. 将插件包复制并解压到插件目录：
+
+   ```dockerfile
+   COPY --chown=emqx:emqx my_emqx_plugin-1.0.0.tar.gz /opt/emqx/plugins/my_emqx_plugin-1.0.0.tar.gz
+
+   RUN cd /opt/emqx/plugins && \
+       mkdir -p my_emqx_plugin-1.0.0 && \
+       tar zxf my_emqx_plugin-1.0.0.tar.gz -C my_emqx_plugin-1.0.0
+   ```
+
+2. 在 EMQX 基础配置文件中注册插件，使其在启动时自动加载：
+
+   ```dockerfile
+   RUN cat <<EOF >> /opt/emqx/etc/base.hocon
+   plugins {
+       states = [
+           {
+               name_vsn = "my_emqx_plugin-1.0.0"
+               enable = true
+           }
+       ]
+   }
+   EOF
+   ```
+
+   设置 `enable = true` 可在启动时自动启用插件，设置 `enable = false` 则仅安装但不启动。
+
+#### 在节点上独立运行插件
+
+从 EMQX 6.1.6 开始，可以将预先部署的插件固定到单个节点。该方式适用于将插件构建到容器镜像或其他节点专属部署产物中的场景。
+
+1. 将插件包解压到 `<plugins.install_dir>` 下。EMQX 启动前，解压后的文件必须位于 `<plugins.install_dir>/<name-vsn>` 中，并且 `release.json` 必须直接位于该目录下。例如：
+
+   ```dockerfile
+   COPY --chown=emqx:emqx my_emqx_plugin-1.0.0.tar.gz /tmp/my_emqx_plugin-1.0.0.tar.gz
+
+   RUN mkdir -p /opt/emqx/plugins/my_emqx_plugin-1.0.0 && \
+       tar zxf /tmp/my_emqx_plugin-1.0.0.tar.gz \
+       -C /opt/emqx/plugins/my_emqx_plugin-1.0.0
+   ```
+
+2. 将插件名称和版本添加到只读配置项 `node.pinned_plugins`。对于容器镜像，请设置对应的环境变量：
+
+   ```dockerfile
+   ENV EMQX_NODE__PINNED_PLUGINS="my_emqx_plugin-1.0.0"
+   ```
+
+   对于其他部署方式，请在 `emqx.conf` 中设置该配置项：
+
+   ```hocon
+   node.pinned_plugins = ["my_emqx_plugin-1.0.0"]
+   ```
+
+   可以配置多个插件。每个条目必须是有效的 `<name-vsn>` 标识符，并且不能同时包含同一插件名称的两个版本。EMQX 按列表顺序启动这些插件，然后再启动 `plugins.states` 中的插件。如需修改该列表，请更新节点配置并重启节点。节点加入集群、API 调用和配置导入均无法更改此配置项。
+
+节点固定插件的运行行为如下：
+
+- EMQX 直接从解压目录运行插件。节点加入集群时，EMQX 不会在节点之间分发该插件包，也不会同步其已保存的配置。
+- 插件始终处于启用状态，不需要 `plugins.states` 条目、`emqx ctl plugins allow` 授权或安装命令。无论版本如何，`plugins.states` 中的同名插件条目均不会控制该插件。
+- 初始配置来自插件包中的 `priv/config.hocon`。如果存在 `etc/plugins/<name>.hocon`，EMQX 会将其深度合并到默认配置中。通过 Dashboard 或 API 保存配置后，EMQX 使用 `data/plugins/<name>/config.hocon` 作为完整配置。配置变更仅应用到报告相同插件版本的节点。
+- 在固定该插件的节点上，使用 `emqx ctl plugins start|stop|restart <name-vsn>` 管理插件。通过 CLI 停止该插件后，它会保持停止状态，直至节点再次启动所有插件，例如节点重启或加入集群时。
+- Dashboard 和 REST API 可以更新插件配置，但不能管理固定实例的生命周期。以下任一情况发生时，生命周期请求会返回 HTTP `409` 和错误码 `PLUGIN_PINNED`：
+  - 处理请求的节点在 `node.pinned_plugins` 中配置了同名插件。
+  - 报告目标插件版本的所有节点均将其配置为节点固定插件。
+
+  如果有节点以集群管理方式运行同一插件版本，则从该节点发起的集群级操作仅影响集群管理实例。
+- 如果插件目录不存在或插件启动失败，EMQX 会触发 `pinned_plugin_unavailable:<name-vsn>` 告警并继续启动节点。插件后续启动成功时，EMQX 会清除该告警。
+
 ### 通过 Dashboard 安装插件
 
 假设你已经构建好插件，并且已有 `my_emqx_plugin-1.0.0.tar.gz` 文件。可按照以下步骤在 Dashboard 中安装：
@@ -238,87 +319,6 @@ EMQX 支持通过 Dashboard、CLI 和 API 安装、卸载和管理插件包。
    curl -s -u $KEY:$SECRET -X PUT \
      "http://$EMQX_HOST:18083/api/v5/plugins/my_emqx_plugin-1.0.0/stop"
    ```
-
-### 在 EMQX 启动前预装插件
-
-如果希望插件在 EMQX 启动时即可使用，例如构建自定义 Docker 镜像时，可以提前解压插件包并配置 EMQX。
-
-根据使用场景选择以下方式：
-
-- 如果所有节点都应遵循 `plugins.states` 并参与集群级生命周期操作，请预装集群管理插件。
-- 如果插件属于特定节点的部署产物，并且必须独立于集群插件配置运行，请将插件固定到该节点。
-
-#### 预装集群管理插件
-
-以下步骤以 Dockerfile 为例，但同样适用于 deb/rpm、裸机部署等其他部署方式：
-
-1. 将插件包复制并解压到插件目录：
-
-   ```dockerfile
-   COPY --chown=emqx:emqx my_emqx_plugin-1.0.0.tar.gz /opt/emqx/plugins/my_emqx_plugin-1.0.0.tar.gz
-
-   RUN cd /opt/emqx/plugins && \
-       mkdir -p my_emqx_plugin-1.0.0 && \
-       tar zxf my_emqx_plugin-1.0.0.tar.gz -C my_emqx_plugin-1.0.0
-   ```
-
-2. 在 EMQX 基础配置文件中注册插件，使其在启动时自动加载：
-
-   ```dockerfile
-   RUN cat <<EOF >> /opt/emqx/etc/base.hocon
-   plugins {
-       states = [
-           {
-               name_vsn = "my_emqx_plugin-1.0.0"
-               enable = true
-           }
-       ]
-   }
-   EOF
-   ```
-
-   设置 `enable = true` 可在启动时自动启用插件，设置 `enable = false` 则仅安装但不启动。
-
-#### 在节点上独立运行插件
-
-从 EMQX 6.1.6 开始，可以将预先部署的插件固定到单个节点。该方式适用于将插件构建到容器镜像或其他节点专属部署产物中的场景。
-
-1. 将插件包解压到 `<plugins.install_dir>` 下。EMQX 启动前，解压后的文件必须位于 `<plugins.install_dir>/<name-vsn>` 中，并且 `release.json` 必须直接位于该目录下。例如：
-
-   ```dockerfile
-   COPY --chown=emqx:emqx my_emqx_plugin-1.0.0.tar.gz /tmp/my_emqx_plugin-1.0.0.tar.gz
-
-   RUN mkdir -p /opt/emqx/plugins/my_emqx_plugin-1.0.0 && \
-       tar zxf /tmp/my_emqx_plugin-1.0.0.tar.gz \
-       -C /opt/emqx/plugins/my_emqx_plugin-1.0.0
-   ```
-
-2. 将插件名称和版本添加到只读配置项 `node.pinned_plugins`。对于容器镜像，请设置对应的环境变量：
-
-   ```dockerfile
-   ENV EMQX_NODE__PINNED_PLUGINS="my_emqx_plugin-1.0.0"
-   ```
-
-   对于其他部署方式，请在 `emqx.conf` 中设置该配置项：
-
-   ```hocon
-   node.pinned_plugins = ["my_emqx_plugin-1.0.0"]
-   ```
-
-   可以配置多个插件。每个条目必须是有效的 `<name-vsn>` 标识符，并且不能同时包含同一插件名称的两个版本。EMQX 按列表顺序启动这些插件，然后再启动 `plugins.states` 中的插件。如需修改该列表，请更新节点配置并重启节点。节点加入集群、API 调用和配置导入均无法更改此配置项。
-
-节点固定插件的运行行为如下：
-
-- EMQX 直接从解压目录运行插件。节点加入集群时，EMQX 不会在节点之间分发该插件包，也不会同步其已保存的配置。
-- 插件始终处于启用状态，不需要 `plugins.states` 条目、`emqx ctl plugins allow` 授权或安装命令。无论版本如何，`plugins.states` 中的同名插件条目均不会控制该插件。
-- 初始配置来自插件包中的 `priv/config.hocon`。如果存在 `etc/plugins/<name>.hocon`，EMQX 会将其深度合并到默认配置中。通过 Dashboard 或 API 保存配置后，EMQX 使用 `data/plugins/<name>/config.hocon` 作为完整配置。配置变更仅应用到报告相同插件版本的节点。
-- 在固定该插件的节点上，使用 `emqx ctl plugins start|stop|restart <name-vsn>` 管理插件。通过 CLI 停止该插件后，它会保持停止状态，直至节点再次启动所有插件，例如节点重启或加入集群时。
-- Dashboard 和 REST API 可以更新插件配置，但不能管理固定实例的生命周期。以下任一情况发生时，生命周期请求会返回 HTTP `409` 和错误码 `PLUGIN_PINNED`：
-  - 处理请求的节点在 `node.pinned_plugins` 中配置了同名插件。
-  - 报告目标插件版本的所有节点均将其配置为节点固定插件。
-
-  如果有节点以集群管理方式运行同一插件版本，则从该节点发起的集群级操作仅影响集群管理实例。
-- 如果插件目录不存在或插件启动失败，EMQX 会触发 `pinned_plugin_unavailable:<name-vsn>` 告警并继续启动节点。插件后续启动成功时，EMQX 会清除该告警。
 
 ## 插件升级
 
