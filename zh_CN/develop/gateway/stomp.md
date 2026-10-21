@@ -59,6 +59,18 @@ gateway.stomp {
 
 Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列表可以参考 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)中的网关配置 - 监听器。
 
+## 限制 Stomp 事务 <Badge type="tip" text="6.0.5+" />
+
+可以使用 `gateway.stomp.transaction` 限制每个 Stomp 连接保留的事务状态。未配置事务限制时，EMQX 使用以下默认值：
+
+| 配置项 | 默认值 | 说明 |
+| --- | --- | --- |
+| `max_transactions` | `100` | 单个连接可以同时打开的最大事务数。 |
+| `max_actions_per_transaction` | `1000` | 单个事务可以缓存的 `SEND`、`ACK` 和 `NACK` 帧的最大数量。 |
+| `max_retained_bytes` | `16777216` 字节 | 单个连接中所有打开事务可以保留的总字节数上限。 |
+| `timeout` | `60s` | 事务超时时间。事务到期后，EMQX 会将其丢弃。该值必须大于 `0`。 |
+
+如果连接超过配置的事务数、缓存帧数或保留字节数限制，EMQX 将发送 Stomp `ERROR` 帧并关闭连接。
 
 ## 认证
 
