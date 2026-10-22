@@ -1,0 +1,12 @@
+- title_en: Get Started
+  lang: en
+  path: ./
+- title_en: Develop
+  lang: en
+  path: develop/
+- title_en: Operate
+  lang: en
+  path: operate/
+- title_en: Reference
+  lang: en
+  path: reference/
