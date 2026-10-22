@@ -4,6 +4,10 @@ import yaml
 import json
 import os
 import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent / ".github" / "scripts"))
+from markdown_title import read_markdown_title
 
 if len(sys.argv) != 2:
     print('expecting ce or ee as arg1')
@@ -61,10 +65,7 @@ def read_title_from_md(lang, path):
     full_path = dir + '/' + path + '.md'
     if not os.path.isfile(full_path):
         return None
-    with open(full_path) as f:
-        for line in f:
-            if line.strip():
-                return line.strip('\n').strip('#').strip()
+    return read_markdown_title(full_path)
 
 def parse(children, lang, edition):
     acc=[]
