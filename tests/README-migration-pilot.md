@@ -2,13 +2,15 @@
 
 This opt-in fixture exercises the proposed four workspaces without changing production Markdown, `dir.yaml`, or `nav.yaml`. Run it before preparing a migration PR. Its task excerpts come from the supplied Enterprise rebuild; their command bytes and troubleshooting conditions are preserved. Titles and table headings follow `DOCS-WRITING-GUIDE-EN.md`. The fixture is not complete product documentation or evidence of runtime verification.
 
-## Run Regression Tests
+## Run Migration-Specific Tests
 
-Use Python 3.9 or later and PyYAML:
+Use Python 3.9 or later and PyYAML. This command runs only the isolated fixture and legacy-entry retention checks:
 
 ```bash
 python3 -m unittest discover -s tests -p 'test_migration_*.py' -v
 ```
+
+For the complete suite, functional test inventory, shared section contract, and build-copy safety requirements, see [Run Documentation Regression Tests](README.md). CI runs the complete suite.
 
 ## Generate Isolated Content
 
@@ -31,9 +33,3 @@ python3 .github/scripts/check_migration_pilot_html.py --dist /path/to/frontend/d
 This check expects the six-page v6.3 fixture, validates content links, images, and fragment IDs, and fails on missing destinations. It does not replace a full-site link checker or browser navigation testing.
 
 The current pilot does not implement old-URL redirects or EN/ZH/JA correspondence. Do not enable new production navigation until those policies and tests are ready. Chinese and Japanese product content is unchanged.
-
-## Shared Section Contract
-
-Use a standalone `<!-- include: relative.md#heading-slug -->` outside code blocks. Selection includes the heading and ends at the next heading of equal or higher level. `#intro` and `#body` are reserved selectors. Heading lookup is case-insensitive through the fixture's slug convention; changing Title Case alone preserves its ordinary Latin anchors. Special characters and duplicate headings still require output checks against VitePress.
-
-The preprocessor resolves nested includes, fails on cycles, missing or ambiguous sections, and paths outside the content root, and rebases Markdown links, reference links, and Markdown image destinations. It preserves code blocks. It does not promise HTML `href`/`src` rebasing; use Markdown links and images for shared sections. It is not enabled in the production deployment workflow by this PR.

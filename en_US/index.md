@@ -1,4 +1,113 @@
-# EMQX Overview
+---
+prev: false
+next: false
+aside: false
+pageClass: enterprise-home-page
+---
+
+<div class="enterprise-home">
+
+<div class="home-eyebrow">First Steps</div>
+
+# EMQX Enterprise
+
+Connect MQTT clients, route messages to your data systems, and operate your own EMQX deployment.
+
+<div class="home-cta">
+
+[Send your first MQTT message <span class="vpi-arrow-right" aria-hidden="true"></span>](get-started/quick-start.md)
+
+</div>
+
+Run EMQX locally with Docker. Subscribe to a topic, publish a message, and check that it arrives.
+
+## Choose a Task
+
+<div class="home-task-grid">
+
+- [Learn MQTT essentials <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](get-started/connect-client.md)
+
+  Work through connections, messaging, and client access control in a guided learning path.
+
+- [Connect a client <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](develop/developer-guide.md)
+
+  Find a client library and connect your application to EMQX.
+
+- [Connect non-MQTT devices <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](develop/gateway/gateway.md)
+
+  Configure a protocol gateway and verify uplink and downlink messages.
+
+- [Control access <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](guides/access-control/authn/authn.md)
+
+  [Authenticate clients](guides/access-control/authn/authn.md), [authorize topic access](guides/access-control/authz/authz.md), and [protect connections with TLS](guides/network/emqx-mqtt-tls.md).
+
+- [Process and retain MQTT messages <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](get-started/messaging/introduction.md)
+
+  Choose routing, delivery, session recovery, queues, and replay behavior.
+
+- [Route messages to another system <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](develop/data-integration/data-bridges.md)
+
+  Send MQTT data to Kafka, databases, HTTP services, and other destinations.
+
+- [Build AI integrations <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](develop/emqx-ai/overview.md)
+
+  Process payloads with models, expose device tools, coordinate agents, or add voice.
+
+- [Upload files over MQTT <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](develop/file-transfer/introduction.md)
+
+  Transfer segmented files, choose storage, and verify the exported result.
+
+- [Extend EMQX <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](guides/extensions/introduction.md)
+
+  Choose hooks, external gRPC services, or native plugins.
+
+- [Secure your deployment <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](guides/security-guide.md)
+
+  Protect client and administrator access. Review [namespace isolation limits](guides/multi-tenancy/namespace-overview.md) before configuring namespaces.
+
+- [Deploy to production <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](get-started/deploy/install-enterprise.md)
+
+  Choose a deployment method and prepare your environment.
+
+- [Monitor your deployment <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](guides/observability/monitoring-best-practices.md)
+
+  Track service health, set alerts, and investigate delivery problems.
+
+- [Back up and restore <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](guides/backup-restore.md)
+
+  Export and restore supported configuration and data.
+
+- [Migrate an existing deployment <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](get-started/migration/overview.md)
+
+  Move from AWS IoT Core, Azure IoT Hub, HiveMQ or Mosquitto with verification and recovery checkpoints.
+
+- [Review releases and support <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](release-notes/all-changes-ee.md)
+
+  Find version changes, known issues, upgrade considerations and lifecycle information.
+
+</div>
+
+## Reference
+
+- [Configuration](guides/configuration/configuration.md)
+- [REST API](guides/api.md)
+- [CLI commands](guides/cli.md)
+- [Rule SQL](develop/data-integration/rule-sql-syntax.md)
+- [Metrics](guides/observability/metrics-and-stats.md)
+- [Operating limits](get-started/restrictions.md)
+- [Architecture](develop/architecture-introduction.md)
+- [Tutorials](develop/tutorial/tutorial.md)
+- [Documentation for AI tools](get-started/llms-txt.md)
+
+## Before You Go to Production
+
+Complete the [security checklist](guides/access-control/security-checklist.md) and review the [license options](get-started/deploy/license.md) for your deployment.
+
+For managed services, start with [Choose how to run EMQX](get-started/feature-comparison.md). For industry architectures and customer examples, see [EMQ solutions](https://www.emqx.com/en/solutions).
+
+::: details EMQX Overview and Use Cases
+
+## EMQX Overview
 EMQX is a large-scale distributed MQTT messaging platform that offers "unlimited connections, seamless integration, and anywhere deployment." As a high-performance, scalable MQTT message server, EMQX Enterprise provides reliable real-time message transmission and device connectivity solutions for IoT applications. EMQX has accumulated more than 20,000 corporate users from more than 50 countries, connecting more than 100 million IoT devices worldwide, serving enterprises' digital, real-time, and intelligent transformation.
 
 As a commercial self-hosted MQTT messaging platform, [EMQX Enterprise](https://www.emqx.com/en/products/emqx) supports up to 100 million concurrent MQTT connections per cluster. A single server can handle and process millions of MQTT messages per second, all while maintaining millisecond-level latency. With its robust built-in rule engine and data integration capabilities, EMQX Enterprise can perform real-time data processing, transformation, and routing for massive IoT data. It seamlessly integrates IoT data with various backend databases and analytics tools, enabling enterprises to rapidly build IoT platforms and applications with leading competitiveness.
@@ -278,3 +387,147 @@ EMQX connects millions of retail devices and consumer IoT endpoints, enabling re
 - **Gaming & Social**: Build responsive online games and social apps with ultra-low latency communication for millions of concurrent users, supporting in-game chat, real-time notifications, and live events.
 
 Signify (formerly Philips Lighting) uses EMQX to power global smart lighting solutions, ensuring reliable real-time control for millions of connected lights. JAGAT, a location-based social app, handles millions of users with EMQX for reliable real-time messaging. [**Read Case Study →**](https://www.emqx.com/en/customers/how-jagat-achieved-seamless-social-interaction-with-emqx)
+
+:::
+
+</div>
+
+<style scoped>
+/* Page-local VitePress adaptation; navigation and other articles are untouched. */
+:global(.enterprise-home-page .VPDoc .content-container) {
+  max-width: 1120px !important;
+}
+:global(.enterprise-home-page .VPDoc .container) { max-width: 1120px !important; }
+:global(.enterprise-home-page .VPDoc) { padding-top: 32px; }
+@media (min-width: 960px) {
+  :global(.enterprise-home-page .VPDoc) {
+    padding-left: clamp(64px, 9.7vw, 124px);
+    padding-right: 32px;
+  }
+}
+.enterprise-home {
+  --home-purple: #5e4eff;
+  --home-muted: var(--vp-c-text-2);
+  padding: 0 0 48px;
+}
+.home-eyebrow {
+  display: inline-block;
+  margin-bottom: 18px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+}
+.enterprise-home :deep(h1) {
+  margin: 0 0 24px;
+  font-size: clamp(36px, 4vw, 48px);
+  font-weight: 700;
+  line-height: 1.17;
+  letter-spacing: -1.5px;
+}
+.enterprise-home :deep(h1 + p) {
+  max-width: 900px;
+  margin: 0 0 30px;
+  color: var(--home-muted);
+  font-size: 20px;
+  line-height: 1.65;
+}
+.home-cta :deep(p) { margin: 0; }
+.home-cta :deep(a) {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  max-width: 100%;
+  min-height: 54px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: var(--home-purple);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.6;
+  text-decoration: none;
+  transition: background-color .15s;
+}
+.home-cta :deep(a:hover) { background: #552cda; }
+.home-cta :deep(.vpi-arrow-right) { flex: 0 0 20px; font-size: 20px; }
+.home-cta + p { margin: 18px 0 0; }
+.enterprise-home :deep(h2#choose-a-task) {
+  margin: 50px 0 22px;
+  padding: 0;
+  border: 0;
+  font-size: 26px;
+  line-height: 1.35;
+  letter-spacing: -.45px;
+}
+.home-task-grid :deep(ul) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0 0 40px;
+  padding: 0;
+  list-style: none;
+}
+.home-task-grid :deep(li) {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  padding: 22px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  background: var(--vp-c-bg);
+  color: var(--home-muted);
+  font-size: 14px;
+  line-height: 1.65;
+  transition: border-color .15s, background-color .15s;
+}
+.home-task-grid :deep(li:hover), .home-task-grid :deep(li:focus-within) {
+  border-color: #b6abff;
+  background: var(--vp-c-brand-soft);
+}
+.home-task-grid :deep(li > p) { margin: 0; }
+.home-task-grid :deep(li > p:first-child) { margin-bottom: 12px; }
+.home-task-grid :deep(li > p:first-child > a) {
+  display: block;
+  padding-right: 22px;
+  color: var(--vp-c-text-1);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: none;
+}
+/* Extend the primary link's hit target, while keeping supplementary links usable. */
+.home-task-grid :deep(li > p:first-child > a::after) {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  content: "";
+}
+.home-task-grid :deep(li > p:not(:first-child) a) { position: relative; z-index: 1; }
+.home-card-arrow {
+  position: absolute;
+  top: 24px;
+  right: 20px;
+  color: var(--home-purple);
+  font-size: 18px;
+  transform: rotate(-45deg);
+}
+.enterprise-home :deep(a:focus-visible) {
+  outline: 3px solid var(--vp-c-brand-1);
+  outline-offset: 4px;
+}
+@media (max-width: 639px) {
+  .home-task-grid :deep(ul) { grid-template-columns: minmax(0, 1fr); }
+  .home-task-grid :deep(li) { padding: 20px; }
+  .enterprise-home :deep(h1) { letter-spacing: -1px; }
+  .enterprise-home :deep(h1 + p) { font-size: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-cta :deep(a), .home-task-grid :deep(li) { transition: none; }
+}
+</style>

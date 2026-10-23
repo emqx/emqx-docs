@@ -104,6 +104,7 @@ jobs:
       run: |
         cd docs-files
         pip3 install pyyaml
+        python3 .github/scripts/expand_shared_sections.py --root en_US --in-place
         ./gen.py ce | tee directory.json
         python3 .github/scripts/remove_unused.py directory.json $(pwd)
 

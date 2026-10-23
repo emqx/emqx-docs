@@ -269,9 +269,11 @@ def _rewrite_links(text: str, document: str, rebase) -> str:
             continue
         url, title = destination
         new_url = rebase(url, image=index > 0 and masked[index - 1] == "!" and not _escaped(masked, index - 1))
-        # Angle brackets protect spaces and parentheses without changing label,
-        # optional title, image prefix, or link text.
-        output.extend((masked[cursor:index], f"[{label}](<{new_url}>{title})"))
+        # Keep ordinary destinations readable. Protect whitespace, parentheses,
+        # and other delimiter-sensitive destinations without changing the URL.
+        needs_angles = not new_url or any(char.isspace() or char in "()<>\\" for char in new_url)
+        destination_text = f"<{new_url}>" if needs_angles else new_url
+        output.extend((masked[cursor:index], f"[{label}]({destination_text}{title})"))
         cursor = end
         index = end
     output.append(masked[cursor:])
