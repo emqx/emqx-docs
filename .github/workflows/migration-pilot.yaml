@@ -4,12 +4,29 @@ on:
   pull_request:
     paths:
       - gen.py
+      - .github/workflows/deploy_docs.yaml
       - .github/scripts/markdown_title.py
       - .github/scripts/markdown_sections.py
+      - .github/scripts/expand_shared_sections.py
       - .github/scripts/prepare_migration_pilot.py
       - .github/scripts/check_migration_pilot_html.py
       - .github/workflows/migration-pilot.yaml
       - tests/**
+      - dir.yaml
+      - nav.yaml
+      - en_US/index.md
+      - en_US/get-started/getting-started.md
+      - en_US/get-started/messaging/publish-and-subscribe.md
+      - en_US/get-started/mqtt-basics.md
+      - en_US/get-started/quick-start.md
+      - en_US/get-started/connect-client.md
+      - en_US/get-started/publish-subscribe.md
+      - en_US/get-started/topics-and-wildcards.md
+      - en_US/get-started/qos.md
+      - en_US/develop/clients/test-clients.md
+      - en_US/develop/clients/assets/**
+      - en_US/develop/mqtt/basics.md
+      - en_US/develop/mqtt/wildcard-subscriptions.md
 
 permissions:
   contents: read
@@ -23,4 +40,4 @@ jobs:
         with:
           python-version: '3.11'
       - run: python -m pip install PyYAML==6.0.3
-      - run: python -m unittest discover -s tests -p 'test_migration_*.py' -v
+      - run: python -m unittest discover -s tests -p 'test_*.py' -v

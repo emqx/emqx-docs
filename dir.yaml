@@ -370,6 +370,15 @@
   path: guides/telemetry/telemetry
 
 /develop/:
+- title_en: Client Connections
+  lang: en
+  children:
+  - develop/clients/test-clients
+- title_en: MQTT Messaging
+  lang: en
+  children:
+  - develop/mqtt/basics
+  - develop/mqtt/wildcard-subscriptions
 - title_en: Developer Guides
   title_cn: 开发者指南
   title_ja: 開発者ガイド
@@ -1058,7 +1067,7 @@
     title_ja: 製品ライフサイクル終了日
     path: release-notes/eol-ee
 /:
-- title_en: EMQX Overview
+- title_en: EMQX Enterprise
   title_cn: EMQX 概览
   title_ja: EMQX 概要
   path: ./
@@ -1101,7 +1110,18 @@
     title_cn: 技术支持
     title_ja: 技術サポート
     path: get-started/support/technical-support
-- title_en: Quick Start
+- title_en: First Steps
+  lang: en
+  children:
+  - get-started/quick-start
+- title_en: MQTT Essentials
+  lang: en
+  children:
+  - get-started/connect-client
+  - get-started/publish-subscribe
+  - get-started/topics-and-wildcards
+  - get-started/qos
+- title_en: Quick Start (Legacy)
   title_cn: 快速开始
   title_ja: クイックスタート
   path: get-started/getting-started
