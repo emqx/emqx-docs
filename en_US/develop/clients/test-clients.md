@@ -1,3 +1,7 @@
+---
+description: "Test MQTT connections and message delivery with MQTTX CLI, MQTTX Desktop, MQTTX Web, or the EMQX Dashboard."
+---
+
 # Test MQTT Connections and Messaging
 
 Use MQTTX CLI, MQTTX Desktop, or a browser client to verify MQTT connections and message delivery. Choose the tool that suits your environment. Connect a subscriber before publishing from a separate client, then check the exact payload at the receiver. These tests help distinguish connection or permission problems from an application's own message handling.

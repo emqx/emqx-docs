@@ -1,5 +1,5 @@
 ---
-title: "MQTT Basics"
+description: "Understand MQTT message flow, connection settings, topics, QoS, sessions, and Keep Alive when developing EMQX client applications."
 ---
 
 # MQTT Basics

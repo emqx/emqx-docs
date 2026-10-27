@@ -1,3 +1,7 @@
+---
+description: "Use MQTTX CLI to publish and subscribe with distinct Client IDs, QoS 1, and a JSON payload on a local EMQX broker."
+---
+
 # Publish and Subscribe
 
 Build on the first message exchange in [Quick Start](quick-start.md) by using a new topic, distinct Client IDs, QoS 1, and a JSON payload. This task explains the command options and shows how to change the payload and verify the result. Use the local broker connection verified in [Connect a Client](connect-client.md).

@@ -23,6 +23,14 @@ on:
       - en_US/get-started/publish-subscribe.md
       - en_US/get-started/topics-and-wildcards.md
       - en_US/get-started/qos.md
+      - en_US/get-started/password-authentication.md
+      - en_US/get-started/topic-permissions.md
+      - en_US/develop/authentication/**
+      - en_US/develop/authorization/**
+      - en_US/guides/access-control/**
+      - en_US/guides/api.md
+      - en_US/guides/configuration/configuration.md
+      - en_US/guides/network/emqx-mqtt-tls.md
       - en_US/develop/clients/test-clients.md
       - en_US/develop/clients/assets/**
       - en_US/develop/mqtt/basics.md

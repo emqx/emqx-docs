@@ -1,3 +1,7 @@
+---
+description: "Connect MQTTX CLI to a local EMQX broker and verify that the MQTT connection succeeds."
+---
+
 # Connect a Client
 
 Connect MQTTX CLI to your local EMQX broker and verify that the connection succeeds. A successful connection does not verify topic permissions or message delivery. To test message delivery, continue with [Publish and Subscribe](publish-subscribe.md).

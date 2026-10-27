@@ -1,5 +1,5 @@
 ---
-title: "Wildcard Subscriptions"
+description: "Understand MQTT topic filter rules, design wildcard subscriptions, and troubleshoot unexpected matching results."
 ---
 
 # Subscribe to Multiple Topics

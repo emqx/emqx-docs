@@ -1,5 +1,4 @@
 ---
-title: "Quick Start"
 description: "Run EMQX Enterprise locally, publish a message, and receive it with an MQTT client."
 prev: false
 ---
@@ -104,6 +103,6 @@ To keep an installation's data, follow the [Docker deployment guide](deploy/inst
 
 - Continue with [Connect a Client](connect-client.md) to understand connection settings, then [Publish and Subscribe](publish-subscribe.md) to explore topics, QoS, and message verification.
 - [Connect an application](../develop/connect-emqx/introduction.md) with an MQTT client library.
-- Secure client access: [review authentication options](../guides/access-control/authn/authn.md), [add a username and password](../guides/access-control/authn/mnesia.md), and [control topic access](../guides/access-control/authz/mnesia.md) before accepting device connections.
+- Secure client access: [review authentication options](../guides/access-control/authn/authn.md), [add a username and password](password-authentication.md), and [control topic access](topic-permissions.md) before accepting device connections.
 - [Store messages in PostgreSQL](../develop/data-integration/data-bridge-pgsql.md) and verify them in a database.
 - [Choose a test client](../develop/clients/test-clients.md) for MQTTX Desktop or WebSocket testing, or [get support](support/technical-support.md) when a problem persists.

@@ -1,3 +1,7 @@
+---
+description: "Use MQTTX CLI to compare single-level and multi-level wildcard subscriptions and verify which messages arrive."
+---
+
 # Use Topics and Wildcards
 
 Subscribe to a family of topics and compare which messages arrive with single-level and multi-level wildcards.
