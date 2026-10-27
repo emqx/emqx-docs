@@ -9,6 +9,24 @@ import yaml
 
 
 class DocumentationStructureTests(unittest.TestCase):
+    def test_migrated_pages_have_descriptions_without_redundant_titles(self):
+        from test_documentation_links import PAGES
+        from markdown_sections import expand_markdown
+        root = REPO / "en_US"
+        for name in PAGES:
+            with self.subTest(page=name):
+                path = root / name
+                text = path.read_text()
+                metadata = yaml.safe_load(text.split("---", 2)[1])
+                self.assertIsInstance(metadata["description"], str)
+                self.assertTrue(metadata["description"].strip())
+                self.assertNotIn("title", metadata)
+                self.assertFalse(set(metadata) - {
+                    "description", "prev", "next", "aside", "pageClass",
+                })
+                expanded = expand_markdown(path, root, project_root=root).text
+                self.assertEqual(expanded.count("\ndescription:"), 1)
+
     def test_wildcard_tutorial_and_reference_have_distinct_roles(self):
         tutorial = (REPO / "en_US/get-started/topics-and-wildcards.md").read_text()
         reference = (REPO / "en_US/develop/mqtt/wildcard-subscriptions.md").read_text()
@@ -29,7 +47,8 @@ class DocumentationStructureTests(unittest.TestCase):
         self.assertNotIn("Client Testing and MQTT Basics", groups)
         self.assertEqual(groups["Client Connections"]["children"], ["develop/clients/test-clients"])
         self.assertEqual(groups["MQTT Messaging"]["children"], [
-            "develop/mqtt/basics", "develop/mqtt/wildcard-subscriptions",
+            "develop/mqtt/basics",
+            {"title_en": "Wildcard Subscriptions", "path": "develop/mqtt/wildcard-subscriptions"},
         ])
         for label in ("Client Connections", "MQTT Messaging"):
             self.assertEqual(groups[label]["lang"], "en")
@@ -38,13 +57,20 @@ class DocumentationStructureTests(unittest.TestCase):
             ("wildcard-subscriptions", "Wildcard Subscriptions", "# Subscribe to Multiple Topics"),
         ):
             text = (REPO / "en_US/develop/mqtt" / (name + ".md")).read_text()
-            self.assertEqual(yaml.safe_load(text.split("---", 2)[1])["title"], title)
-            self.assertIn(heading, text)
+            body = text.split("---", 2)[2].lstrip()
+            self.assertTrue(body.startswith(heading + "\n"))
 
     def test_essentials_navigation_and_task_sequence(self):
         tree = yaml.safe_load((REPO / "dir.yaml").read_text())
         groups = {x.get("title_en"): x for x in tree["/"] if isinstance(x, dict)}
-        self.assertEqual(groups["First Steps"]["children"], ["get-started/quick-start"])
+        self.assertEqual(groups["First Steps"]["children"], [
+            {"title_en": "Quick Start", "path": "get-started/quick-start"},
+        ])
+        quick_start = (REPO / "en_US/get-started/quick-start.md").read_text()
+        metadata = yaml.safe_load(quick_start.split("---", 2)[1])
+        self.assertNotIn("title", metadata)
+        self.assertEqual(metadata["description"], "Run EMQX Enterprise locally, publish a message, and receive it with an MQTT client.")
+        self.assertIn("# Quick Start: Send Your First MQTT Message\n", quick_start)
         self.assertEqual(groups["MQTT Essentials"]["lang"], "en")
         self.assertEqual(groups["MQTT Essentials"]["children"], [
             "get-started/connect-client", "get-started/publish-subscribe",
@@ -59,7 +85,7 @@ class DocumentationStructureTests(unittest.TestCase):
             return yaml.safe_load(text.split("---", 2)[1])
         self.assertIs(metadata("index.md")["next"], False)
         self.assertIs(metadata("get-started/quick-start.md")["prev"], False)
-        self.assertIs(metadata("get-started/qos.md")["next"], False)
+        self.assertNotIn("next: false", (REPO / "en_US/get-started/qos.md").read_text())
 
 
 if __name__ == "__main__":

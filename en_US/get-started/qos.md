@@ -1,5 +1,5 @@
 ---
-next: false
+description: "Compare MQTT QoS levels and understand what delivery acknowledgments do and do not guarantee for application processing."
 ---
 
 # Understand QoS
@@ -14,9 +14,9 @@ In the earlier task, receiving the exact payload was the success check. Keep tha
 
 ## Continue Learning
 
-Next, [authenticate with a username and password](../guides/access-control/authn/mnesia.md) so that your local broker can identify clients.
+Next, [authenticate with a username and password](password-authentication.md) so that your local broker can identify clients.
 
-<!-- Migration follow-up: After the authentication task and messaging overview are migrated, update these links to their approved destinations. Keep the current valid links until then and verify final routes and anchors. -->
+<!-- Migration follow-up: Update the messaging overview link after its rebuilt destination is migrated. -->
 
 For delivery behavior, session settings, and related MQTT features, see [Messaging Features](messaging/introduction.md).
 

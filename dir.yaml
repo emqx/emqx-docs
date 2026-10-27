@@ -378,7 +378,24 @@
   lang: en
   children:
   - develop/mqtt/basics
-  - develop/mqtt/wildcard-subscriptions
+  - title_en: Wildcard Subscriptions
+    path: develop/mqtt/wildcard-subscriptions
+- title_en: Client Authentication
+  lang: en
+  children:
+  - title_en: Choose a Method
+    path: develop/authentication/index
+  - title_en: Choose a Password Backend
+    path: develop/authentication/password-backends
+  - title_en: Built-in Database
+    path: develop/authentication/built-in-database
+- title_en: Client Authorization
+  lang: en
+  children:
+  - title_en: MQTT Authorization
+    path: develop/authorization/index
+  - title_en: Built-in Database
+    path: develop/authorization/built-in-database
 - title_en: Developer Guides
   title_cn: 开发者指南
   title_ja: 開発者ガイド
@@ -1113,7 +1130,8 @@
 - title_en: First Steps
   lang: en
   children:
-  - get-started/quick-start
+  - title_en: Quick Start
+    path: get-started/quick-start
 - title_en: MQTT Essentials
   lang: en
   children:
@@ -1121,6 +1139,11 @@
   - get-started/publish-subscribe
   - get-started/topics-and-wildcards
   - get-started/qos
+- title_en: Secure Your Clients
+  lang: en
+  children:
+  - get-started/password-authentication
+  - get-started/topic-permissions
 - title_en: Quick Start (Legacy)
   title_cn: 快速开始
   title_ja: クイックスタート

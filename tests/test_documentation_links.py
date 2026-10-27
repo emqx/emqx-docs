@@ -14,6 +14,10 @@ PAGES = (
     "get-started/publish-subscribe.md", "develop/clients/test-clients.md",
     "develop/mqtt/basics.md", "get-started/topics-and-wildcards.md",
     "get-started/qos.md", "develop/mqtt/wildcard-subscriptions.md",
+    "get-started/password-authentication.md", "get-started/topic-permissions.md",
+    "develop/authentication/index.md", "develop/authentication/password-backends.md",
+    "develop/authentication/built-in-database.md",
+    "develop/authorization/index.md", "develop/authorization/built-in-database.md",
 )
 
 

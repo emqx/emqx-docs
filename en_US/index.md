@@ -1,4 +1,5 @@
 ---
+description: "Explore EMQX Enterprise documentation to connect MQTT clients, develop messaging applications, and operate your deployment."
 prev: false
 next: false
 aside: false
