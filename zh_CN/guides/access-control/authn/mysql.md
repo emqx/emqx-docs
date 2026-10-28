@@ -53,6 +53,19 @@ Query OK, 1 row affected (0,01 sec)
 SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1
 ```
 
+::: tip 为数据库账户授予只读权限
+
+EMQX 在认证客户端时只读取数据库。配置项 `query` 是一条 `SELECT` 语句，EMQX 以预处理语句的方式执行它，认证过程不会插入、更新或删除任何记录。
+
+请为 EMQX 使用专用数据库账户，仅授予该账户对查询所涉及表的 `SELECT` 权限，不授予其他权限：
+
+```sql
+GRANT SELECT ON mqtt.mqtt_user TO 'emqx_auth'@'%';
+```
+
+建表以及维护用户记录请使用单独的管理账户。即使 EMQX 配置泄露，只读账户也无法修改或删除认证数据。
+:::
+
 ## 通过 Dashboard 配置
 
 1. 在 EMQX Dashboard 页面上点击左侧导航栏的**访问控制** -> **客户端认证**。

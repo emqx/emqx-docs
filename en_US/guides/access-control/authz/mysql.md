@@ -55,6 +55,19 @@ The corresponding configuration parameters are:
 query = "SELECT action, permission, topic, ipaddress, qos, retain FROM mqtt_acl where username = ${username} and ipaddress = ${peerhost}"
 ```
 
+::: tip Grant read-only database privileges
+
+EMQX only reads from the database when it authorizes a publish or subscribe operation. The configured `query` is a `SELECT` statement that EMQX runs as a prepared statement, so authorization never inserts, updates or deletes a row.
+
+Connect EMQX with a dedicated account that holds the `SELECT` privilege on the table the query reads, and no other privilege:
+
+```sql
+GRANT SELECT ON mqtt_user.mqtt_acl TO 'emqx_auth'@'%';
+```
+
+Create the table and manage authorization rules with a separate administrative account. A read-only account cannot change or delete authorization rules if the EMQX configuration leaks.
+:::
+
 ## Configure with Dashboard
 
 You can use EMQX Dashboard to configure how to use MySQL for user authorization.

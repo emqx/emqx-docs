@@ -56,6 +56,20 @@ SQL:
 query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
 ```
 
+::: tip Grant read-only database privileges
+
+EMQX only reads from the database when it authenticates a client. The configured `query` is a `SELECT` statement that EMQX runs as a prepared statement, so authentication never inserts, updates or deletes a row.
+
+Connect EMQX with a dedicated account that holds the `SELECT` privilege on the table the query reads, and no other privilege:
+
+```sql
+GRANT USAGE ON SCHEMA public TO emqx_auth;
+GRANT SELECT ON mqtt_user TO emqx_auth;
+```
+
+Create the table and manage user records with a separate administrative account. A read-only account cannot change or delete credentials if the EMQX configuration leaks.
+:::
+
 ## Configure with Dashboard
 
 You can use EMQX Dashboard to configure how to use PostgreSQL for password authentication.

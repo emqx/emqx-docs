@@ -50,6 +50,19 @@ FROM mqtt_acl
   WHERE username = ${username}
 ```
 
+::: tip 为数据库账户授予只读权限
+
+EMQX 在对发布或订阅操作进行授权时只读取数据库。配置项 `query` 是一条 `SELECT` 语句，EMQX 以预处理语句的方式执行它，授权过程不会插入、更新或删除任何记录。
+
+请为 EMQX 使用专用数据库账户，仅授予该账户对查询所涉及表的 `SELECT` 权限，不授予其他权限：
+
+```sql
+GRANT SELECT ON mqtt_user.mqtt_acl TO 'emqx_auth'@'%';
+```
+
+建表以及维护授权规则请使用单独的管理账户。即使 EMQX 配置泄露，只读账户也无法修改或删除授权规则。
+:::
+
 ## 权限测试
 
 成功添加 MySQL 授权器后，向 MySQL 中添加权限数据，并使用 MQTTX CLI 连接到 EMQX 进行测试。
