@@ -51,6 +51,19 @@ Fetched rules are used as permissive ones, i.e., a request is accepted if the to
 All rules added in Redis Authorizer are **allow** rules, which means Redis Authorizer needs to be used in whitelist mode.
 :::
 
+::: tip Grant read-only database privileges
+
+EMQX only reads from Redis when it authorizes a publish or subscribe operation. It accepts only `HMGET` and `HGETALL` in `cmd` and rejects any other command, so authorization never writes a key.
+
+Connect EMQX with a dedicated user, available in Redis 6.0 and later, that is limited to those commands and to the keys the configured `cmd` reads:
+
+```bash
+ACL SETUSER emqx_auth on >PASSWORD ~mqtt_acl:* +hmget +hgetall
+```
+
+Add `+select` when `database` is set to a non-zero index, because EMQX then sends `SELECT` when it connects. Manage authorization rules with a separate administrative user. A read-only user cannot change or delete authorization rules if the EMQX configuration leaks.
+:::
+
 ## Configure with Dashboard
 
 You can use EMQX Dashboard to configure how to use Redis for user authorization.

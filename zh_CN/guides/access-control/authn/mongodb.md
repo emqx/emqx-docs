@@ -46,6 +46,23 @@ MongoDB 认证器支持将认证数据存储为 MongoDB 文档。用户需要提
 - Salt 字段名：`salt`
 - is_superuser_field： `is_superuser`
 
+::: tip 为数据库账户授予只读权限
+
+EMQX 在认证客户端时只读取 MongoDB。EMQX 针对配置的集合执行一次 `find_one` 查询，认证过程不会插入、更新或删除任何文档。
+
+请为 EMQX 使用专用数据库用户，仅为其授予该数据库的内置 `read` 角色，不授予其他角色：
+
+```bash
+db.createUser({
+  user: "emqx_auth",
+  pwd: "PASSWORD",
+  roles: [ { role: "read", db: "mqtt" } ]
+})
+```
+
+创建集合以及维护用户记录请使用单独的管理用户。即使 EMQX 配置泄露，只读用户也无法修改或删除认证数据。
+:::
+
 ## 通过 Dashboard 配置
 
 1. 在 EMQX Dashboard 页面上点击左侧导航栏的**访问控制** -> **客户端认证**。

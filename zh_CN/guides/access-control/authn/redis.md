@@ -35,6 +35,19 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/latest/develop/
 所以，您也可以将 `cmd` 配置为 `HMGET mqtt_user:${username} password salt is_superuser`。
 :::
 
+::: tip 为数据库账户授予只读权限
+
+EMQX 在认证客户端时只读取 Redis。`cmd` 仅接受 `HGET` 和 `HMGET` 命令，其他命令都会被拒绝，因此认证过程不会写入任何键。
+
+请为 EMQX 使用专用用户（Redis 6.0 及以上版本支持），并将其权限限制为上述命令以及所配置 `cmd` 读取的键：
+
+```bash
+ACL SETUSER emqx_auth on >PASSWORD ~mqtt_user:* +hget +hmget
+```
+
+如果 `database` 配置为非 0 的索引，请额外添加 `+select`，因为此时 EMQX 在连接时会发送 `SELECT` 命令。维护用户记录请使用单独的管理用户。即使 EMQX 配置泄露，只读用户也无法修改或删除认证数据。
+:::
+
 ## 通过 Dashboard 配置
 
 1. 在 EMQX Dashboard 页面上点击左侧导航栏的**访问控制** -> **客户端认证**

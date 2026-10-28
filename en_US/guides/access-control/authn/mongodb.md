@@ -49,6 +49,23 @@ For this MongoDB data schema, the corresponding Dashboard configuration paramete
 - **Salt Field**: `salt`
 - **is_superuser Field**： `is_superuser`
 
+::: tip Grant read-only database privileges
+
+EMQX only reads from MongoDB when it authenticates a client. It runs one `find_one` query against the configured collection, so authentication never inserts, updates or deletes a document.
+
+Connect EMQX with a dedicated user that holds the built-in `read` role on that database, and no other role:
+
+```bash
+db.createUser({
+  user: "emqx_auth",
+  pwd: "PASSWORD",
+  roles: [ { role: "read", db: "mqtt" } ]
+})
+```
+
+Create the collection and manage user records with a separate administrative user. A read-only user cannot change or delete credentials if the EMQX configuration leaks.
+:::
+
 ## Configure with Dashboard
 
 You can use EMQX Dashboard to configure how to use MongoDB for password authentication.

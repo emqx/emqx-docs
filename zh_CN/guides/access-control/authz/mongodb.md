@@ -49,6 +49,23 @@ filter { username = "${username}" }
 当系统中有大量用户时，请确保查询使用的集合已优化并使用有效的索引，以提升大量发布订阅时的数据查找速度并降低 EMQX 负载。
 :::
 
+::: tip 为数据库账户授予只读权限
+
+EMQX 在对发布或订阅操作进行授权时只读取 MongoDB。EMQX 针对配置的集合执行 `find` 查询，授权过程不会插入、更新或删除任何文档。
+
+请为 EMQX 使用专用数据库用户，仅为其授予该数据库的内置 `read` 角色，不授予其他角色：
+
+```bash
+db.createUser({
+  user: "emqx_auth",
+  pwd: "PASSWORD",
+  roles: [ { role: "read", db: "mqtt" } ]
+})
+```
+
+创建集合以及维护授权规则请使用单独的管理用户。即使 EMQX 配置泄露，只读用户也无法修改或删除授权规则。
+:::
+
 ## 配置项
 
 此认证器支持 3 种部署模式的 MongoDB。<!--详细配置请参考 [authz:mongo_single](../../configuration/configuration-manual.html#authz:mongo_single)、[authz:mongo_sharded](../../configuration/configuration-manual.html#authz:mongo_sharded) 与 [authz:mongo_rs](../../configuration/configuration-manual.html#authz:mongo_rs)。-->

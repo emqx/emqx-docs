@@ -41,6 +41,19 @@ The name `password_hash` conveys our preference for storing hashed passwords. Bu
 So, we can also configure `cmd` as `HMGET mqtt:${username} password salt is_superuser`.
 :::
 
+::: tip Grant read-only database privileges
+
+EMQX only reads from Redis when it authenticates a client. It accepts only `HGET` and `HMGET` in `cmd` and rejects any other command, so authentication never writes a key.
+
+Connect EMQX with a dedicated user, available in Redis 6.0 and later, that is limited to those commands and to the keys the configured `cmd` reads:
+
+```bash
+ACL SETUSER emqx_auth on >PASSWORD ~mqtt_user:* +hget +hmget
+```
+
+Add `+select` when `database` is set to a non-zero index, because EMQX then sends `SELECT` when it connects. Manage user records with a separate administrative user. A read-only user cannot change or delete credentials if the EMQX configuration leaks.
+:::
+
 ## Configure with Dashboard
 
 You can use EMQX Dashboard to configure how to use Redis for password authentication.

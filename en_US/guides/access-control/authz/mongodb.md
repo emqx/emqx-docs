@@ -50,6 +50,23 @@ When there is a significant number of users in the system, optimize and index th
 
 For this MongoDB data schema, the corresponding Dashboard configuration parameter is **Filter**: `{ username = "${username}" }`.
 
+::: tip Grant read-only database privileges
+
+EMQX only reads from MongoDB when it authorizes a publish or subscribe operation. It runs a `find` query against the configured collection, so authorization never inserts, updates or deletes a document.
+
+Connect EMQX with a dedicated user that holds the built-in `read` role on that database, and no other role:
+
+```bash
+db.createUser({
+  user: "emqx_auth",
+  pwd: "PASSWORD",
+  roles: [ { role: "read", db: "mqtt" } ]
+})
+```
+
+Create the collection and manage authorization rules with a separate administrative user. A read-only user cannot change or delete authorization rules if the EMQX configuration leaks.
+:::
+
 ## Configure with Dashboard
 
 You can use EMQX Dashboard to configure how to use MongoDB for user authorization.
