@@ -43,6 +43,24 @@ EMQX 为 SSL/TLS 提供了统一的证书管理模型，涵盖证书的获取、
 
 EMQX 在访问外部资源（例如基于 HTTP 的认证服务、数据库或其他数据集成服务）时，同样支持使用 SSL/TLS 进行加密通信。在配置相应功能时，您可以直接在 EMQX Dashboard 中通过**启用 TLS** 选项来开启 TLS。
 
+### 配置默认受信任 CA 证书 <Badge text="6.3.3" />
+
+`node.trusted_certs` 配置项用于指定受支持的出站 TLS 客户端默认使用的 CA 证书包。客户端使用 `verify_peer` 且未显式配置 `cacertfile` 或 `cacerts` 时，EMQX 使用该证书包校验外部服务器证书。客户端显式配置的 CA 证书优先级更高。此配置不影响使用 `verify_none` 的连接。
+
+此配置适用于 AI Completion、ClickHouse、OpenTSDB、TDengine、Tablestore、HTTP 认证与授权以及 S3 等功能使用的内置 HTTP 客户端，也适用于 HTTP 连接器和其他使用 EMQX 通用 TLS 配置的客户端。此配置不适用于 DynamoDB、Kinesis 或 GreptimeDB 连接。
+
+默认值为 `system_default`。每个 EMQX 节点启动时，会从 Erlang/OTP 检查的路径中选择第一个可读的 CA 证书包文件。例如，在 Debian 和 Ubuntu 中检查 `/etc/ssl/certs/ca-certificates.crt`，在 RHEL 中检查 `/etc/pki/tls/certs/ca-bundle.crt`。如果未找到 CA 证书包文件，EMQX 将记录 `system_ca_bundle_file_not_found` 警告。能够直接从操作系统加载 CA 证书的客户端会回退到自身的 CA 加载机制。其他出站 TLS 连接可能因没有可用的 CA 证书包文件而失败。
+
+对于 Docker 部署，官方镜像提供系统 CA 证书包的方式参见[受信任 CA 证书包](../../get-started/deploy/install-docker.md#受信任-ca-证书包)。
+
+如需使用自定义 CA 证书包，请在启动 EMQX 前，在 `etc/emqx.conf` 中设置 `node.trusted_certs`：
+
+```hocon
+node.trusted_certs = "file:///absolute/path/to/ca-bundle.pem"
+```
+
+必须使用绝对路径，且运行 EMQX 的用户必须能够读取该文件。在集群中，该文件必须位于每个节点上的相同路径。EMQX 不会在节点之间复制该文件。CA 证书包内容发生变化后，EMQX 会重新加载该文件，因此替换相同路径下的文件无需重启 EMQX。
+
 ### Dashboard 中的 TLS 配置项
 
 启用 TLS 后，可以配置以下选项：
@@ -54,7 +72,7 @@ EMQX 在访问外部资源（例如基于 HTTP 的认证服务、数据库或其
   - **手动输入**：直接填写或上传证书内容或证书文件。
   - **从托管证书中选择**：引用由 EMQX 集中管理的现有证书包（EMQX 6.1+）。这种方式支持证书复用，并简化证书轮换。有关创建和管理证书包的详细信息，请参阅[托管证书](./tls-certificate.md#托管证书)。
 - **TLS Cert / TLS Key**：当外部服务器需要校验客户端证书（双向 TLS）时必须配置。
-- **CA Cert**：当启用**验证服务器证书**时必需，用于校验服务器证书的合法性。
+- **CA Cert**：指定用于校验外部服务器证书的 CA 证书。对于支持 `node.trusted_certs` 的客户端，此项为可选配置。启用**验证服务器证书**且此项留空时，EMQX 使用 `node.trusted_certs` 选择的 CA 证书包。对于不支持此配置的客户端，请按照对应资源的要求配置 CA 证书。
 
 <img src="./assets/TLS-external-resource.png" alt="TLS-external-resource" style="zoom:50%;" />
 
@@ -78,10 +96,12 @@ authentication {
     # PEM 格式的密钥文件
     keyfile = "etc/certs/key.pem"
     # 设置成 'verify_peer' 来验证 HTTP 服务器端证书是否为 cacertfile 中某个根证书签发
-    verify = verify_none
+    verify = verify_peer
   }
 }
 ```
+
+如果将 `verify` 设置为 `verify_peer` 并省略 `cacertfile`，EMQX 将使用 `node.trusted_certs` 选择的 CA 证书包。如果外部服务器使用默认 CA 证书包中未包含的私有 CA，请配置 `cacertfile`。
 
 对于外部资源，配置文件中同样可以引用托管证书，其证书管理模型与监听器使用的方式一致。有关配置选项的更多信息，请参阅[启用单向认证的 SSl/TLS 连接](./emqx-mqtt-tls.md#启用单向认证的-ssltls-连接)。
 

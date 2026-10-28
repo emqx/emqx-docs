@@ -37,6 +37,12 @@ EMQX 容器默认使用控制台日志，但节点异常终止时，Erlang 虚�
 
 发布镜像还包含构建来源信息（provenance）和软件物料清单（SBOM）的证明材料（attestations）。Docker Scout 可利用这些证明材料，应用 Docker 针对加固基础镜像提供的漏洞评估（VEX 声明）。
 
+#### 受信任 CA 证书包 <Badge text="6.3.3" />
+
+官方 Docker 发布镜像的构建流程会从 curl.se 下载 Mozilla CA 证书包，校验其发布的 SHA-256 校验和，并将该证书包安装为 `/etc/ssl/certs/ca-certificates.crt`。
+
+默认配置 `node.trusted_certs = system_default` 使用该文件，为支持此配置且未显式指定 CA 证书的出站 TLS 连接校验服务器证书。如需信任私有 CA，请将 CA 证书包挂载到容器中，并配置 `node.trusted_certs` 或对应资源的 TLS 设置。详情参见[出站 TLS 的受信任 CA 证书](../../guides/network/tls-certificate.md#出站-tls-的受信任-ca-证书)。
+
 ## 通过 Docker 运行单个 EMQX 节点
 
 按照以下步骤运行单个 EMQX 节点。有关 EMQX 官方 Docker 镜像的更多信息，参见 [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise)。

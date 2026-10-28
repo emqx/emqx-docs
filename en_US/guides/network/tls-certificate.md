@@ -153,6 +153,14 @@ EMQX provides sample certificates in the `etc/certs` directory for testing purpo
 
 Path-based certificates remain fully supported and are compatible with all EMQX versions.
 
+### Trusted CA Certificates for Outbound TLS <Badge text="6.3.3" />
+
+The `node.trusted_certs` configuration option selects the default CA bundle for supported outbound TLS clients. The default value, `system_default`, uses the operating system CA bundle file. You can also configure a custom PEM bundle.
+
+The default CA bundle is used only when an outbound client verifies the server with `verify_peer` and does not explicitly configure `cacertfile` or `cacerts`. An explicitly configured CA certificate, including a CA certificate supplied by a managed certificate bundle, takes precedence. The setting does not affect connections that use `verify_none`.
+
+For configuration options, file requirements, cluster behavior, and fallback behavior, see [Default Trusted CA Certificates](./overview.md#default-trusted-ca-certificates).
+
 ### Managed Certificates
 
 Starting from EMQX 6.1, EMQX introduces managed certificates, a centralized mechanism for managing TLS certificate files that can be reused across multiple components.

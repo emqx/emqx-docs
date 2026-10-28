@@ -40,6 +40,12 @@ If your deployment requires additional tools or runtime dependencies, include an
 
 The release images also include build provenance and software bill of materials (SBOM) attestations. Docker Scout can use these attestations to apply Docker's vulnerability assessments (VEX statements) for the hardened base image.
 
+#### Trusted CA Bundle <Badge text="6.3.3" />
+
+The build process for each official Docker release image downloads the Mozilla CA bundle from curl.se, verifies its published SHA-256 checksum, and installs the bundle as `/etc/ssl/certs/ca-certificates.crt`.
+
+The default `node.trusted_certs = system_default` setting uses this file to verify server certificates for supported outbound TLS connections that do not explicitly configure CA certificates. To trust a private CA, mount the CA bundle into the container and configure `node.trusted_certs` or the TLS settings of the individual resource. For details, see [Trusted CA Certificates for Outbound TLS](../../guides/network/tls-certificate.md#trusted-ca-certificates-for-outbound-tls).
+
 ## Use Docker to Run A Single EMQX Node
 
 Follow these steps to run a single EMQX node. For more information about the official EMQX Docker image, see [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise).
