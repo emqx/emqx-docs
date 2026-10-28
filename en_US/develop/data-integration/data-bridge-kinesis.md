@@ -37,14 +37,18 @@ Utilizing AWS Kinesis Data Streams to build a streaming data pipeline significan
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create an Amazon Kinesis data integration, including how to set up the Kinesis service and emulate data streams service.
+Before you create an Amazon Kinesis data integration, review the prerequisites, prepare a Kinesis data stream in AWS or LocalStack, and choose a credential method for the connector.
 
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data integration](./data-bridges.md)
 
-### Create Stream in Amazon Kinesis Data Streams
+### Prepare a Kinesis Data Stream
+
+Use one of the following methods to prepare a Kinesis data stream.
+
+#### Create Stream in Amazon Kinesis Data Streams
 
 Follow the steps below to create a Stream via the AWS Management Console (see [this tutorial](https://docs.aws.amazon.com/streams/latest/dev/how-do-i-create-a-stream.html) for more details).
 
@@ -56,7 +60,7 @@ Follow the steps below to create a Stream via the AWS Management Console (see [t
 
 4. On the **Create Kinesis stream** page, enter a name for your data stream and then choose the **On-demand** capacity mode.
 
-### Emulate Amazon Kinesis Data Streams locally
+#### Emulate Amazon Kinesis Data Streams Locally
 
 To facilitate the development and test, you can emulate the Amazon Kinesis Data Streams service locally via [LocalStack](https://localstack.cloud/). With LocalStack, you can run your AWS applications entirely on your local machine without connecting to a remote cloud provider.
 
@@ -76,6 +80,19 @@ To facilitate the development and test, you can emulate the Amazon Kinesis Data 
    awslocal kinesis create-stream --stream-name "my_stream" --shard-count 1
    ```
 
+### Choose a Credential Method <Badge type="tip" text="6.3.3+" />
+
+The Amazon Kinesis connector supports the following credential methods. Choose a method based on the EMQX deployment environment:
+
+- **Manually configure access keys**: Provide an AWS Access Key ID and AWS Secret Access Key with access to the target Kinesis resources. For information about creating and managing access keys, see [Manage access keys for IAM users](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html). If you use LocalStack, enter any non-empty value in each field instead of AWS access keys. This method is suitable for local deployments, non-AWS environments, and deployments that do not use an ECS task role or EC2 instance role.
+- **Automatically obtain temporary credentials**: If EMQX runs as an Amazon ECS task or on an Amazon EC2 instance, configure an ECS task role or EC2 instance role with permission to access the target Kinesis resources. Leave **AWS Access Key ID** and **AWS Secret Access Key** blank in the connector. EMQX obtains temporary credentials through the ECS task role or EC2 Instance Metadata Service v2 (IMDSv2) and refreshes them before they expire.
+
+::: warning Important Notice
+
+**AWS Access Key ID** and **AWS Secret Access Key** must be provided together or both left blank. Providing only one of these fields results in an invalid connector configuration.
+
+:::
+
 ## Create a Connector
 
 This section demonstrates how to create a Connector to connect the Sink to the Amazon Kinesis Data Streams service.
@@ -86,8 +103,7 @@ This section demonstrates how to create a Connector to connect the Sink to the A
 4. In the **Configuration** step, configure the following information:
    - Enter the connector name, which should be a combination of upper and lower case letters and numbers, for example: `my_kinesis`.
    - **Amazon Kinesis Endpoint**: Enter the [Endpoint](https://docs.aws.amazon.com/general/latest/gr/ak.html) for the Kinesis service. If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), input `http://localhost:4566`.
-   - **AWS Access Key ID**: Enter the [Access key ID](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html). If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), enter any value.
-   - **AWS Secret Access Key**: Enter the [secret access key](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html). If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), enter any value.
+   - **AWS Access Key ID** and **AWS Secret Access Key**: To use static credentials, enter the access key ID and secret access key. If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), enter any non-empty value in each field. To use an ECS task role or EC2 instance role, leave both fields blank. For details, see [Choose a Credential Method](#choose-a-credential-method).
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Amazon Kinesis Data Streams service.
 6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Amazon Kinesis. For detailed steps, see [Create a Rule with Amazon Kinesis Sink](#create-a-rule-with-amazon-kinesis-sink).
 
