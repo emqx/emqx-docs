@@ -25,6 +25,14 @@ on:
       - en_US/get-started/qos.md
       - en_US/get-started/password-authentication.md
       - en_US/get-started/topic-permissions.md
+      - en_US/get-started/connect-over-tls.md
+      - en_US/develop/tls/**
+      - en_US/guides/network/**
+      - en_US/guides/configuration/listener.md
+      - en_US/guides/cluster/lb.md
+      - en_US/guides/cluster/security.md
+      - en_US/get-started/deploy/install-docker.md
+      - en_US/develop/connect-emqx/**
       - en_US/develop/authentication/**
       - en_US/develop/authorization/**
       - en_US/guides/access-control/**

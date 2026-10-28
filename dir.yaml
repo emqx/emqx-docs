@@ -374,6 +374,22 @@
   lang: en
   children:
   - develop/clients/test-clients
+  - title_en: MQTT over TLS
+    children:
+    - title_en: Overview
+      path: develop/tls/index
+    - title_en: Enable TLS and Mutual TLS
+      path: develop/tls/enable
+    - title_en: Client TLS Settings
+      path: develop/tls/client-examples
+    - title_en: Certificates
+      path: develop/tls/certificates
+    - title_en: CRL Checks
+      path: develop/tls/crl
+    - title_en: OCSP Stapling
+      path: develop/tls/ocsp
+    - title_en: TLS-PSK
+      path: develop/tls/psk
 - title_en: MQTT Messaging
   lang: en
   children:
@@ -1144,6 +1160,7 @@
   children:
   - get-started/password-authentication
   - get-started/topic-permissions
+  - get-started/connect-over-tls
 - title_en: Quick Start (Legacy)
   title_cn: 快速开始
   title_ja: クイックスタート

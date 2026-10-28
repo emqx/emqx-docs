@@ -27,7 +27,7 @@ Choose a guide below. TLS methods are listed alongside MQTT methods for discover
 | Kerberos tickets and compatible MQTT 5 clients | [Kerberos](../../guides/access-control/authn/kerberos.md) | MQTT enhanced authentication |
 | Rules over connection metadata | [Client info](../../guides/access-control/authn/cinfo.md) | MQTT authentication chain |
 | Client certificates issued by a trusted CA | [X.509 client certificates](../../guides/access-control/authn/x509.md) | TLS handshake, before MQTT authentication |
-| Clients that support TLS pre-shared keys | [TLS-PSK](../../guides/network/psk-authentication.md) | TLS handshake, before MQTT authentication |
+| Clients that support TLS pre-shared keys | [TLS-PSK](../tls/psk.md) | TLS handshake, before MQTT authentication |
 
 ## Combine Methods Deliberately
 

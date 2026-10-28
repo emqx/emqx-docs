@@ -18,6 +18,10 @@ PAGES = (
     "develop/authentication/index.md", "develop/authentication/password-backends.md",
     "develop/authentication/built-in-database.md",
     "develop/authorization/index.md", "develop/authorization/built-in-database.md",
+    "get-started/connect-over-tls.md", "develop/tls/index.md",
+    "develop/tls/enable.md", "develop/tls/client-examples.md",
+    "develop/tls/certificates.md", "develop/tls/crl.md",
+    "develop/tls/ocsp.md", "develop/tls/psk.md",
 )
 
 

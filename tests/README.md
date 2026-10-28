@@ -6,7 +6,7 @@ Run these checks from the repository root with Python 3.9 or later and PyYAML in
 python3 -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
-The suite contains 38 functional regression tests and 7 migration-specific tests. The tests use temporary directories for generated output and do not expand shared sections in tracked source files.
+The suite contains 45 functional regression tests and 8 migration-specific tests. The tests use temporary directories for generated output and do not expand shared sections in tracked source files.
 
 ## Functional Regression Tests
 
@@ -16,8 +16,9 @@ The suite contains 38 functional regression tests and 7 migration-specific tests
 | `test_markdown_title.py` | H1 and front matter title extraction, encoding, and invalid metadata. |
 | `test_shared_sections.py` | Section selection, nested include safety, link rebasing, code preservation, repeatable build-copy expansion, and validation before writes. |
 | `test_access_control.py` | Authentication and authorization task continuity, CLI verification, policy restoration, backend details, and CI triggers. |
+| `test_tls.py` | TLS task expansion, certificate trust and management, revocation and PSK boundaries, generated navigation, and CI triggers. |
 | `test_documentation_structure.py` | Tutorial and reference roles, navigation groups, task sequence, and pagination. |
-| `test_documentation_links.py` | Local links and anchors in the sixteen migrated pages after shared section expansion, one H1 per page, and source preservation. |
+| `test_documentation_links.py` | Local links and anchors in the twenty-four migrated pages after shared section expansion, one H1 per page, and source preservation. |
 
 Navigation and content assertions describe the documented structure. Update them deliberately when the information architecture changes. The link check covers the pages listed in `test_documentation_links.py`; it is not a full-site link checker. It excludes the preserved homepage overview content from its link checks.
 
@@ -26,6 +27,7 @@ Navigation and content assertions describe the documented structure. Update them
 - `test_migration_pilot.py` validates the isolated six-page fixture, generated navigation, HTML checker failure behavior, and output safety.
 - `test_migration_batch1.py` checks that legacy pages, navigation entries, and homepage overview content remain available during migration.
 - `test_migration_batch2.py` checks the five retained legacy access-control pages against their batch2 baseline hashes. Update or retire these temporary baselines deliberately when a reviewed change to those pages is required.
+- `test_migration_batch3.py` checks the seven retained legacy TLS pages against their batch3 baseline hashes. Update or retire these baselines only when a reviewed change to the legacy pages is required.
 
 Run only these checks with:
 
