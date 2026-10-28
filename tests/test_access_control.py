@@ -67,8 +67,8 @@ class AccessControlTests(unittest.TestCase):
         self.assertIn("anonymous commands", authn)
         self.assertIn("no longer apply unchanged", authn)
         self.assertIn("Removing the disposable container deletes", authn)
-        self.assertIn("next: false", authz)
-        self.assertNotIn("](connect-over-tls.md)", authz)
+        self.assertNotIn("next: false", authz)
+        self.assertIn("](connect-over-tls.md)", authz)
 
     def test_navigation_uses_reader_topics(self):
         tree = yaml.safe_load((REPO / "dir.yaml").read_text())
@@ -77,6 +77,7 @@ class AccessControlTests(unittest.TestCase):
         start, develop = groups("/"), groups("/develop/")
         self.assertEqual(start["Secure Your Clients"]["children"], [
             "get-started/password-authentication", "get-started/topic-permissions",
+            "get-started/connect-over-tls",
         ])
         self.assertEqual(develop["Client Authentication"]["children"], [
             {"title_en": "Choose a Method", "path": "develop/authentication/index"},

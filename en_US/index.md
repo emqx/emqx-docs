@@ -40,7 +40,7 @@ Run EMQX locally with Docker. Subscribe to a topic, publish a message, and check
 
 - [Control access <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](guides/access-control/authn/authn.md)
 
-  [Authenticate clients](guides/access-control/authn/authn.md), [authorize topic access](guides/access-control/authz/authz.md), and [protect connections with TLS](guides/network/emqx-mqtt-tls.md).
+  [Authenticate clients](guides/access-control/authn/authn.md), [authorize topic access](guides/access-control/authz/authz.md), and [protect connections with TLS](develop/tls/index.md).
 
 - [Process and retain MQTT messages <span class="vpi-arrow-right home-card-arrow" aria-hidden="true"></span>](get-started/messaging/introduction.md)
 

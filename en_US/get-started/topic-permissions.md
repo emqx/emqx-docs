@@ -1,6 +1,5 @@
 ---
 description: "Configure topic permissions on a local EMQX broker and use MQTTX CLI to verify allowed and denied publish and subscribe operations."
-next: false
 ---
 
 # Control Access to Topics
@@ -42,8 +41,8 @@ The original Quick Start policy is intentionally permissive for a disposable bro
 
 ## Continue Learning
 
-For a TLS connection, follow [Enable SSL/TLS Connection](../guides/network/emqx-mqtt-tls.md) after preparing the listener, trusted certificates, and Docker port mappings. Changing the client port alone is not enough. For MQTT concepts and session behavior, see [MQTT Basics](../develop/mqtt/basics.md).
+For a TLS connection, follow [Connect over TLS](connect-over-tls.md) after preparing the listener, trusted certificates, and Docker port mappings. Changing the client port alone is not enough. For MQTT concepts and session behavior, see [MQTT Basics](../develop/mqtt/basics.md).
 
-<!-- Migration follow-up: Replace the TLS and MQTT concept links with the approved introductory task routes after those tasks are migrated. -->
+<!-- Migration follow-up: Replace the MQTT concept link after its introductory task is migrated. -->
 
 For other rule scopes, backend choices, and policy evaluation, see [MQTT Authorization](../develop/authorization/index.md). When you finish using the test broker, follow [Quick Start: Clean Up](quick-start.md#clean-up).

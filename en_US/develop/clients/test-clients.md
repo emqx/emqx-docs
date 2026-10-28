@@ -148,4 +148,6 @@ A public test broker is suitable only for disposable, non-sensitive examples. Us
 
 ## Next Steps
 
+For certificate trust and encrypted connections, see [TLS and Certificates](../tls/index.md).
+
 Continue with [messaging features](../../get-started/messaging/introduction.md), or inspect [MQTT concepts](../../get-started/messaging/mqtt-concepts.md) to understand the result.

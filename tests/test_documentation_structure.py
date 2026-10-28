@@ -45,7 +45,15 @@ class DocumentationStructureTests(unittest.TestCase):
         tree = yaml.safe_load((REPO / "dir.yaml").read_text())
         groups = {x.get("title_en"): x for x in tree["/develop/"] if isinstance(x, dict)}
         self.assertNotIn("Client Testing and MQTT Basics", groups)
-        self.assertEqual(groups["Client Connections"]["children"], ["develop/clients/test-clients"])
+        self.assertNotIn("TLS and Certificates", groups)
+        self.assertEqual(groups["Client Connections"]["children"][0], "develop/clients/test-clients")
+        tls = groups["Client Connections"]["children"][1]
+        self.assertEqual(tls["title_en"], "MQTT over TLS")
+        self.assertEqual([entry["path"] for entry in tls["children"]], [
+            "develop/tls/" + name for name in (
+                "index", "enable", "client-examples", "certificates", "crl", "ocsp", "psk",
+            )
+        ])
         self.assertEqual(groups["MQTT Messaging"]["children"], [
             "develop/mqtt/basics",
             {"title_en": "Wildcard Subscriptions", "path": "develop/mqtt/wildcard-subscriptions"},
