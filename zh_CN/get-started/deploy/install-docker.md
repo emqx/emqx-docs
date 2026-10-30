@@ -37,6 +37,24 @@ EMQX 容器默认使用控制台日志，但节点异常终止时，Erlang 虚�
 
 发布镜像还包含构建来源信息（provenance）和软件物料清单（SBOM）的证明材料（attestations）。Docker Scout 可利用这些证明材料，应用 Docker 针对加固基础镜像提供的漏洞评估（VEX 声明）。
 
+#### 受信任 CA 证书包 <Badge text="6.3.3" />
+
+官方 Docker 发布镜像的构建流程会从 curl.se 下载 Mozilla CA 证书包，校验其发布的 SHA-256 校验和，并将该证书包安装为 `/etc/ssl/certs/ca-certificates.crt`。
+
+在 Docker 部署中，`node.trusted_certs` 的默认值 `system_default` 使用上述 CA 证书包。对于支持 `node.trusted_certs` 且未显式指定 CA 证书的出站 TLS 连接，EMQX 使用该证书包校验服务器证书。
+
+请根据 CA 证书的适用范围选择配置方式：
+
+- 如需仅为特定资源信任私有 CA，请将私有 CA 证书包挂载到容器内的单独路径，并在该资源的 TLS 配置中将 `cacertfile` 显式设置为该路径。建议优先使用此方式，以免修改共享的系统信任存储。
+- 如果镜像附带的 CA 证书包内容已过时，或其中包含不应再信任的根 CA，请将新的 CA 证书包挂载到 `/etc/ssl/certs/ca-certificates.crt`。
+- 如需默认信任私有根 CA，请将私有根证书追加到默认 CA 证书包的副本中，并将合并后的证书包挂载到 `/etc/ssl/certs/ca-certificates.crt`。
+
+::: warning 共享的系统信任存储
+所有支持 `node.trusted_certs` 且使用 `system_default` 的出站 TLS 连接都会共享 `/etc/ssl/certs/ca-certificates.crt`。如果使用仅包含私有 CA 证书的证书包覆盖该文件，可能会移除必要的公共根证书，导致与 Google Cloud、AWS 或 Azure 等服务的连接中断。
+:::
+
+详情参见[出站 TLS 的受信任 CA 证书](../../guides/network/tls-certificate.md#出站-tls-的受信任-ca-证书)。
+
 ## 通过 Docker 运行单个 EMQX 节点
 
 按照以下步骤运行单个 EMQX 节点。有关 EMQX 官方 Docker 镜像的更多信息，参见 [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise)。
