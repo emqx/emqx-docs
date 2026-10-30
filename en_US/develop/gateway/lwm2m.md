@@ -378,6 +378,16 @@ Variables:
 - `{?MsgType}`: String, the MsgType for the requested command, same as the Request command
 - `{?ResponseData}`: JSON Object, the command response content.
 
+#### Pending Downlink Command Queue Limit <Badge type="tip" text="6.3.3+" />
+
+Each LwM2M client session can retain up to 1,000 pending downlink commands. The limit is fixed and cannot be configured. EMQX queues accepted commands in first-in, first-out (FIFO) order. A command that is already in flight does not count toward the pending limit.
+
+When the pending queue contains 1,000 commands, EMQX rejects each new command and publishes a response with code `4.29` to the configured `translators.response.topic`. EMQX also increments the `delivery.dropped` metric. When EMQX dequeues an expired command, the command no longer counts toward the pending limit.
+
+This limit controls the number of pending commands, not their total payload size. If Block-Wise capacity is temporarily unavailable, accepted commands remain in the pending queue. EMQX resumes sending them in FIFO order when capacity becomes available.
+
+The `mqueue_len` session statistic reports the number of pending commands, and `mqueue_max` reports the fixed limit of `1000`.
+
 
 #### Read
 
@@ -820,7 +830,7 @@ The LwM2M protocol uses CoAP as its transport layer. Since CoAP runs over UDP, t
 
 To address this limitation, CoAP defines the Block-Wise Transfer mechanism in [RFC 7959](https://datatracker.ietf.org/doc/html/rfc7959). This mechanism divides large payloads into fixed-size blocks and transfers them across multiple request/response exchanges. The receiving side reassembles these blocks into the complete payload.
 
-The LwM2M gateway in EMQX fully supports Block-Wise transfer. When enabled, the gateway automatically handles block segmentation and reassembly. On the MQTT side, complete payloads are delivered transparently, with block-level processing handled internally.
+The LwM2M gateway in EMQX fully supports Block-Wise transfer. When enabled, the gateway automatically handles block segmentation and reassembly. On the MQTT side, complete payloads are delivered transparently, with block-level processing handled internally. If a peer proposes a supported block size larger than `blockwise.max_block_size`, EMQX negotiates the transfer down to the configured maximum.
 
 ### Transfer Directions
 
@@ -852,6 +862,8 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m' \
     "enable": true,
     "max_block_size": 1024,
     "max_body_size": "4MB",
+    "max_concurrent_exchanges": 16,
+    "max_total_size": "16MB",
     "exchange_lifetime": "247s"
   }
 }'
@@ -861,12 +873,14 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m' \
 
 ::: tab Configuration
 
-```properties
+```hocon
 gateway.lwm2m {
   blockwise {
     enable = true
     max_block_size = 1024
     max_body_size = "4MB"
+    max_concurrent_exchanges = 16
+    max_total_size = "16MB"
     exchange_lifetime = "247s"
   }
 }
@@ -876,16 +890,20 @@ gateway.lwm2m {
 
 ::::
 
-The Block-Wise-related configuration options are described below:
+The following table describes the Block-Wise configuration options. Starting from EMQX 6.3.3, `blockwise.max_concurrent_exchanges` and `blockwise.max_total_size` limit the Block-Wise state retained by each client session.
 
-| Configuration Item            | Type       | Default  | Description                                                  |
-| ----------------------------- | ---------- | -------- | ------------------------------------------------------------ |
-| `blockwise.enable`            | Boolean    | `true`   | Whether to enable Block-Wise transfer.                       |
-| `blockwise.max_block_size`    | Block Size | `1024`   | Maximum block size used in Block-Wise transfer. Available values: `16`, `32`, `64`, `128`, `256`, `512`, `1024`. |
-| `blockwise.max_body_size`     | Byte Size  | `"4MB"`  | Maximum size of the reassembled message body.                |
-| `blockwise.exchange_lifetime` | Duration   | `"247s"` | Lifetime of the Block-Wise exchange state.                   |
+| Configuration Item | Type | Default | Description |
+| --- | --- | --- | --- |
+| `blockwise.enable` | Boolean | `true` | Whether to enable Block-Wise transfer. |
+| `blockwise.max_block_size` | Block Size | `1024` | Maximum block size in bytes. Available values: `16`, `32`, `64`, `128`, `256`, `512`, and `1024`. |
+| `blockwise.max_body_size` | Byte Size | `"4MB"` | Maximum size of a payload after reassembly. The value must be greater than `0`. EMQX rejects a payload that exceeds this limit. |
+| `blockwise.max_concurrent_exchanges` | Integer | `16` | Maximum number of Block-Wise exchanges retained by one client session. The value must be greater than `0`. When the limit is reached, a new Block1 upload receives `4.29 Too Many Requests`, and downlink commands wait in the session queue. |
+| `blockwise.max_total_size` | Byte Size | `"16MB"` | Maximum total payload size retained by Block-Wise exchanges in one client session. The value must be greater than `0`. When the limit is reached, a new Block1 upload receives `4.13 Request Entity Too Large`. A downlink command is queued if its payload can fit after another exchange releases capacity. |
+| `blockwise.exchange_lifetime` | Duration | `"247s"` | How long EMQX retains temporary Block-Wise exchange state. The value must be greater than `0`. When the state expires, EMQX releases the corresponding session capacity. |
 
-When properly configured, Block-Wise transfer ensures reliable large-payload transmission over UDP while maintaining full transparency for MQTT applications.
+The exchange count and retained-payload limits apply independently to each client session. They do not impose a shared limit across all sessions on a listener. If Block-Wise capacity is temporarily unavailable, downlink commands remain queued. EMQX resumes sending them when capacity becomes available, including after retained Block-Wise state expires and EMQX releases the associated capacity. If an active downlink expires, EMQX reports a timeout, cancels its transport transaction, and then sends the next queued command. A downlink command with a payload larger than `blockwise.max_total_size` fails instead of remaining queued indefinitely.
+
+Starting from EMQX 6.3.3, `blockwise.max_body_size`, `blockwise.max_total_size`, and `blockwise.exchange_lifetime` must be greater than `0`. The REST API rejects non-positive values without changing the saved gateway configuration.
 
 ## User Interfaces
 

@@ -88,6 +88,71 @@ The CoAP gateway uses the URI path and methods defined in the [Publish-Subscribe
 
 Detailed parameters refer to [Message Publish](#message-publish), [Topic Subscribe](#topic-subscribe), [Topic Unsubscribe](#topic-unsubscribe).
 
+Starting from EMQX 6.3.3, the CoAP gateway validates the decoded topic before authorization. A publish request must use a valid MQTT topic name, while a subscribe or unsubscribe request must use a valid MQTT topic filter.
+
+## Block-Wise Transfer
+
+The CoAP gateway supports [CoAP Block-Wise Transfer](https://datatracker.ietf.org/doc/html/rfc7959) for payloads that are too large for a single datagram. The gateway splits outgoing payloads into blocks and reassembles incoming blocks before processing the complete payload. If a peer proposes a supported block size larger than `blockwise.max_block_size`, EMQX negotiates the transfer down to the configured maximum.
+
+You can configure Block-Wise transfer through the REST API or a configuration file.
+
+:::: tabs type:card
+
+::: tab REST API
+
+```bash
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/coap' \
+  -u <your-application-key>:<your-security-key> \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "coap",
+  "blockwise": {
+    "enable": true,
+    "max_block_size": 1024,
+    "max_body_size": "4MB",
+    "max_concurrent_exchanges": 16,
+    "max_total_size": "16MB",
+    "exchange_lifetime": "247s"
+  }
+}'
+```
+
+:::
+
+::: tab Configuration
+
+```hocon
+gateway.coap {
+  blockwise {
+    enable = true
+    max_block_size = 1024
+    max_body_size = "4MB"
+    max_concurrent_exchanges = 16
+    max_total_size = "16MB"
+    exchange_lifetime = "247s"
+  }
+}
+```
+
+:::
+
+::::
+
+The Block-Wise configuration options are described below. Starting from EMQX 6.3.3, `blockwise.max_concurrent_exchanges` and `blockwise.max_total_size` limit the Block-Wise state retained by each client session.
+
+| Configuration Item | Type | Default | Description |
+| --- | --- | --- | --- |
+| `blockwise.enable` | Boolean | `true` | Whether to enable Block-Wise transfer. |
+| `blockwise.max_block_size` | Block Size | `1024` | Maximum block size in bytes. Available values: `16`, `32`, `64`, `128`, `256`, `512`, and `1024`. |
+| `blockwise.max_body_size` | Byte Size | `"4MB"` | Maximum size of a payload after reassembly. The value must be greater than `0`. EMQX rejects a payload that exceeds this limit. |
+| `blockwise.max_concurrent_exchanges` | Integer | `16` | Maximum number of Block-Wise exchanges retained by one client session. The value must be greater than `0`. When the limit is reached, a new Block1 upload receives `4.29 Too Many Requests`, and outgoing Observe notifications wait in the queue. |
+| `blockwise.max_total_size` | Byte Size | `"16MB"` | Maximum total payload size retained by Block-Wise exchanges in one client session. The value must be greater than `0`. When the limit is reached, a new Block1 upload receives `4.13 Request Entity Too Large`. An outgoing Observe notification is queued if its payload can fit after another exchange releases capacity. |
+| `blockwise.exchange_lifetime` | Duration | `"247s"` | How long EMQX retains temporary Block-Wise exchange state. The value must be greater than `0`. When the state expires, EMQX releases the corresponding session capacity. |
+
+The exchange count and retained-payload limits apply independently to each client session. They do not impose a shared limit across all sessions on a listener. Queued Observe notifications resume transmission when capacity becomes available, including after retained Block-Wise state expires and EMQX releases the associated capacity.
+
+Starting from EMQX 6.3.3, `blockwise.max_body_size`, `blockwise.max_total_size`, and `blockwise.exchange_lifetime` must be greater than `0`. The REST API rejects non-positive values without changing the saved gateway configuration.
+
 ## Customize Your CoAP Gateway
 
 In addition to the default settings, EMQX provides a variety of configuration options to better accommodate your specific business requirements. This section offers an in-depth overview of the various fields available on the **Gateways** page. See the texts below the screenshot for a comprehensive explanation of each field.
@@ -309,7 +374,7 @@ This interface is used by the CoAP client to send messages to the specified topi
 **Request Parameters:**
 - Method: `POST`
 - URI: `ps/{+topic}{?QueryString*}`
-  -  `{+topic}` is the topic of publish messages, i.e. the URI is `ps/coap/test` if publish message to `coap/test`.
+  -  `{+topic}` is the MQTT topic name to publish to. For example, to publish to `coap/test`, use the URI `ps/coap/test`. The decoded value must be a valid MQTT topic name and must not contain the wildcard characters `+` or `#`.
   - `{?QueryString}` is request parameters:
     - `clientid`: required in `Connection Mode` and optional in `Connectionless Mode`.
     - `token`: `Connection Mode` only, required parameter.
@@ -323,7 +388,7 @@ This interface is used by the CoAP client to send messages to the specified topi
 
 - Return Code:
   - `2.04`: Publish successfully
-  - `4.00`: Bad request. Detailed error information will be returned in the message body.
+  - `4.00`: Bad request. If the topic name is invalid, the message body is `invalid topic`.
   - `4.01`: Not authorized. The request format is validated, but authorization failed.
 - Payload: When the return code is `2.04`, the message body is empty, otherwise it is `ErrorMessage`.
 
@@ -349,7 +414,7 @@ Additional identity information needs to be carried if the `Connection Mode` ena
 - Options: Set `Observe` to `0`.
 - CoAP Token: Use a non-empty token to identify the Observe relationship.
 - URI: `ps/{+topic}{?QueryString*}`
-  -  `{+topic}` is the topic to subscribe, i.e. the URI is `ps/coap/test` if to subscribe `coap/test`.
+  -  `{+topic}` is the MQTT topic filter to subscribe to. For example, to subscribe to `coap/test`, use the URI `ps/coap/test`. The decoded value must be a valid MQTT topic filter. For example, `a/#/b`, `a+/b`, and `#a` are invalid topic filters.
   - `{?QueryString}` is request parameters:
     - `clientid`: required in `Connection Mode` and optional in `Connectionless Mode`.
     - `token`: `Connection Mode` only, required parameter.
@@ -363,7 +428,7 @@ Additional identity information needs to be carried if the `Connection Mode` ena
 
 - Return Code:
   - `2.05`: Subscribe successfully
-  - `4.00`: Bad request. Detailed error information will be returned in the message body.
+  - `4.00`: Bad request. If the topic filter is invalid, the message body is `invalid topic`.
   - `4.01`: Not authorized. The request format is validated, but authorization failed.
 - Payload: When the return code is `2.05`, the message body is empty, otherwise it is `ErrorMessage`.
 
@@ -395,7 +460,7 @@ In the current implementation, the unsubscribing operation is only available in 
 - Options: Set `Observe` to `1`.
 - CoAP Token: Use the token from the original Observe request.
 - URI: `ps/{+topic}{?QueryString*}`
-  -  `{+topic}` is the topic to unsubscribe, i.e. the URI is `ps/coap/test` if subscribe to `coap/test`.
+  -  `{+topic}` is the MQTT topic filter to unsubscribe from. For example, to unsubscribe from `coap/test`, use the URI `ps/coap/test`. The decoded value must be a valid MQTT topic filter.
   - `{?QueryString}` is request parameters:
     - `clientid`: required in `Connection Mode` and optional in `Connectionless Mode`.
     - `token`: `Connection Mode` only, required parameter.
@@ -406,7 +471,7 @@ In the current implementation, the unsubscribing operation is only available in 
 
 - Return Code:
   - `2.07`: Unsubscribe successfully
-  - `4.00`: Bad request. Detailed error information will be returned in the message body.
+  - `4.00`: Bad request. If the topic filter is invalid, the message body is `invalid topic`.
   - `4.01`: Not authorized. The request format is validated, but authorization failed.
 - Payload: When the return code is `2.07`, the message body is empty, otherwise it is `ErrorMessage`.
 
