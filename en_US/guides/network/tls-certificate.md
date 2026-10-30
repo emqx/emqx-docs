@@ -20,6 +20,7 @@ This page covers the following topics:
 - Managing certificates in EMQX
 - Supporting multiple certificates
 - Updating SSL/TLS Certificates
+- Configuring trusted CA certificates for outbound TLS
 
 ## Obtain SSL/TLS Certificates
 
@@ -133,7 +134,7 @@ The steps are similar to issuing server certificates, except that:
 
 ## Certificate Management in EMQX
 
-After certificates are obtained, EMQX supports two ways to manage and reference them.
+After you obtain certificates, you can reference them in EMQX by file path or manage them as reusable certificate resources.
 
 ### Path-Based Certificates
 
@@ -152,14 +153,6 @@ With path-based certificates:
 EMQX provides sample certificates in the `etc/certs` directory for testing purposes only.
 
 Path-based certificates remain fully supported and are compatible with all EMQX versions.
-
-### Trusted CA Certificates for Outbound TLS <Badge text="6.3.3" />
-
-The `node.trusted_certs` configuration option selects the default CA bundle for supported outbound TLS clients. The default value, `system_default`, uses the operating system CA bundle file. You can also configure a custom PEM bundle.
-
-The default CA bundle is used only when an outbound client verifies the server with `verify_peer` and does not explicitly configure `cacertfile` or `cacerts`. An explicitly configured CA certificate, including a CA certificate supplied by a managed certificate bundle, takes precedence. The setting does not affect connections that use `verify_none`.
-
-For configuration options, file requirements, cluster behavior, and fallback behavior, see [Default Trusted CA Certificates](./overview.md#default-trusted-ca-certificates).
 
 ### Managed Certificates
 
@@ -499,6 +492,40 @@ After ACME is enabled and configured:
 - No manual certificate upload is required.
 - Listeners continue to reference the same managed certificate bundle.
 - Certificate rotation occurs without service interruption.-->
+
+## Trusted CA Certificates for Outbound TLS <Badge text="6.3.3" />
+
+The `node.trusted_certs` configuration option selects the default CA bundle for supported outbound TLS clients. Its default value, `system_default`, uses the operating system CA bundle. You can also configure a custom CA bundle in PEM format.
+
+### How Clients Use the Default CA Bundle
+
+EMQX automatically uses the default CA bundle when an outbound client verifies the server with `verify_peer` and does not explicitly configure `cacertfile` or `cacerts`. An explicitly configured CA certificate, including one supplied by a managed certificate bundle, takes precedence. Connections that use `verify_none` do not automatically use the default bundle.
+
+An outbound TLS client can also set `cacertfile = system_default` to use the CA bundle selected by `node.trusted_certs`. Listeners do not accept `system_default` as a `cacertfile` value.
+
+### Supported Clients
+
+| Usage | Clients |
+| --- | --- |
+| Automatically use `node.trusted_certs` when `verify_peer` is enabled and neither `cacertfile` nor `cacerts` is configured | The built-in HTTP client used by AI Completion, ClickHouse, OpenTSDB, TDengine, Tablestore, HTTP authentication and authorization, and S3; the HTTP connector; and other clients that use EMQX's common TLS options |
+| Use `node.trusted_certs` only when `cacertfile = system_default` is explicitly configured | GreptimeDB and Datalayers Arrow Flight connectors |
+| Do not support `node.trusted_certs` | DynamoDB and Kinesis |
+
+### How EMQX Resolves `system_default`
+
+At startup, each EMQX node selects the first readable CA bundle file from the locations checked by Erlang/OTP. For example, EMQX checks `/etc/ssl/certs/ca-certificates.crt` on Debian and Ubuntu and `/etc/pki/tls/certs/ca-bundle.crt` on RHEL. If no CA bundle file is found, EMQX logs a `system_ca_bundle_file_not_found` warning. Clients that can load CA certificates directly from the operating system fall back to their own CA-loading mechanism. Other outbound TLS connections can fail because no CA bundle file is available.
+
+For Docker deployments, see [Trusted CA Bundle](../../get-started/deploy/install-docker.md#trusted-ca-bundle) for how the official image provides the system CA bundle.
+
+### Configure a Custom CA Bundle
+
+To use a custom CA bundle, set `node.trusted_certs` in `etc/emqx.conf` before starting EMQX:
+
+```hocon
+node.trusted_certs = "file:///absolute/path/to/ca-bundle.pem"
+```
+
+The path must be absolute, and the file must exist and be readable by the user that runs EMQX. In a cluster, the file must be available at the same path on every node because EMQX does not copy it between nodes. EMQX reloads the CA bundle after its contents change, so replacing the file at the same path does not require an EMQX restart.
 
 ## Next Steps
 

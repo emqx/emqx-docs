@@ -20,6 +20,7 @@ SSL/TLS 证书是 EMQX 安全体系的重要组成部分，用于在通信过程
 - EMQX 中证书的管理
 - EMQX 如何支持多证书配置<!--以及自动化证书管理环境（Automated Certificate Management Environment， ACME）-->
 - 更新 SSL/TLS 证书
+- 配置出站 TLS 的受信任 CA 证书
 
 ## 获取 SSL/TLS 证书
 
@@ -128,7 +129,7 @@ openssl req -new -key server.key -out server.csr
 
 ## EMQX 中的证书管理
 
-在获取证书之后，EMQX 支持通过两种方式对证书进行管理和引用。
+获取证书后，可以在 EMQX 中通过文件路径引用证书，也可以将其作为可复用的证书资源进行管理。
 
 ### 基于路径的证书
 
@@ -147,14 +148,6 @@ openssl req -new -key server.key -out server.csr
 EMQX 在 `etc/certs` 目录下提供了一组示例证书，仅用于测试目的。
 
 基于路径的证书在所有 EMQX 版本中均得到完整支持，并保持兼容。
-
-### 出站 TLS 的受信任 CA 证书 <Badge text="6.3.3" />
-
-`node.trusted_certs` 配置项用于指定受支持的出站 TLS 客户端默认使用的 CA 证书包。默认值 `system_default` 使用操作系统的 CA 证书包文件。也可以配置自定义 PEM 证书包。
-
-仅当出站客户端使用 `verify_peer` 校验服务器，但未显式配置 `cacertfile` 或 `cacerts` 时，EMQX 才会使用默认 CA 证书包。显式配置的 CA 证书优先级更高，包括托管证书包中提供的 CA 证书。此配置不影响使用 `verify_none` 的连接。
-
-有关配置方式、文件要求、集群行为和回退机制，参见[配置默认受信任 CA 证书](./overview.md#配置默认受信任-ca-证书)。
 
 ### 托管证书
 
@@ -487,6 +480,40 @@ EMQX 会自动重新加载更新后的证书文件：
 - 无需手动上传证书。
 - 监听器继续引用同一个托管证书包。
 - 证书轮换过程不会中断服务连接。-->
+
+## 出站 TLS 的受信任 CA 证书 <Badge text="6.3.3" />
+
+`node.trusted_certs` 配置项用于指定受支持的出站 TLS 客户端默认使用的 CA 证书包。默认值 `system_default` 使用操作系统 CA 证书包。也可以配置 PEM 格式的自定义 CA 证书包。
+
+### 默认 CA 证书包的使用方式
+
+当出站客户端使用 `verify_peer` 校验服务器且未显式配置 `cacertfile` 或 `cacerts` 时，EMQX 会自动使用默认 CA 证书包。显式配置的 CA 证书优先级更高，包括托管证书包中提供的 CA 证书。使用 `verify_none` 的连接不会自动使用默认 CA 证书包。
+
+出站 TLS 客户端也可以将 `cacertfile` 设置为 `system_default`，以使用 `node.trusted_certs` 选择的 CA 证书包。监听器不支持将 `cacertfile` 设置为 `system_default`。
+
+### 支持的客户端
+
+| 使用方式 | 客户端 |
+| --- | --- |
+| 启用 `verify_peer` 且未配置 `cacertfile` 或 `cacerts` 时，自动使用 `node.trusted_certs` | AI Completion、ClickHouse、OpenTSDB、TDengine、Tablestore、HTTP 认证与授权以及 S3 等功能使用的内置 HTTP 客户端；HTTP 连接器；其他使用 EMQX 通用 TLS 配置的客户端 |
+| 仅在显式配置 `cacertfile = system_default` 时使用 `node.trusted_certs` | GreptimeDB 和 Datalayers Arrow Flight 连接器 |
+| 不支持 `node.trusted_certs` | DynamoDB 和 Kinesis |
+
+### `system_default` 的解析方式
+
+每个 EMQX 节点启动时，会从 Erlang/OTP 检查的路径中选择第一个可读的 CA 证书包文件。例如，在 Debian 和 Ubuntu 中检查 `/etc/ssl/certs/ca-certificates.crt`，在 RHEL 中检查 `/etc/pki/tls/certs/ca-bundle.crt`。如果未找到 CA 证书包文件，EMQX 将记录 `system_ca_bundle_file_not_found` 警告。能够直接从操作系统加载 CA 证书的客户端会回退到自身的 CA 加载机制。其他出站 TLS 连接可能因没有可用的 CA 证书包文件而失败。
+
+对于 Docker 部署，官方镜像提供系统 CA 证书包的方式参见[受信任 CA 证书包](../../get-started/deploy/install-docker.md#受信任-ca-证书包)。
+
+### 配置自定义 CA 证书包
+
+如需使用自定义 CA 证书包，请在启动 EMQX 前，在 `etc/emqx.conf` 中设置 `node.trusted_certs`：
+
+```hocon
+node.trusted_certs = "file:///absolute/path/to/ca-bundle.pem"
+```
+
+必须使用绝对路径，且运行 EMQX 的用户必须能够读取该文件。在集群中，该文件必须位于每个节点上的相同路径。EMQX 不会在节点之间复制该文件。CA 证书包内容发生变化后，EMQX 会重新加载该文件，因此替换相同路径下的文件无需重启 EMQX。
 
 ## 下一步
 

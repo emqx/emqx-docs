@@ -41,21 +41,9 @@ EMQX also supports SSL/TLS encryption when accessing external resources, such as
 
 ### Default Trusted CA Certificates <Badge text="6.3.3" />
 
-The `node.trusted_certs` configuration option selects the default CA bundle for supported outbound TLS clients. When a supported client uses `verify_peer` without explicitly configuring `cacertfile` or `cacerts`, EMQX uses this bundle to verify the external server certificate. An explicitly configured CA takes precedence over `node.trusted_certs`. Connections that use `verify_none` are not affected.
+The `node.trusted_certs` configuration option selects the default CA bundle for supported outbound TLS clients. Its default value is `system_default`. When a supported client uses `verify_peer` without explicitly configuring `cacertfile` or `cacerts`, EMQX uses this bundle to verify the external server certificate.
 
-This setting applies to the built-in HTTP client used by features such as AI Completion, ClickHouse, OpenTSDB, TDengine, Tablestore, HTTP authentication and authorization, and S3. It also applies to the HTTP connector and other clients that use EMQX's common TLS options. It does not apply to DynamoDB, Kinesis, or GreptimeDB connections.
-
-The default value is `system_default`. At startup, each EMQX node selects the first readable CA bundle file from the locations checked by Erlang/OTP. For example, EMQX checks `/etc/ssl/certs/ca-certificates.crt` on Debian and Ubuntu and `/etc/pki/tls/certs/ca-bundle.crt` on RHEL. If no CA bundle file is found, EMQX logs a `system_ca_bundle_file_not_found` warning. Clients that can load CA certificates directly from the operating system fall back to their own CA-loading mechanism. Other outbound TLS connections can fail because no CA bundle file is available.
-
-For Docker deployments, see [Trusted CA Bundle](../../get-started/deploy/install-docker.md#trusted-ca-bundle) for how the official image provides the system CA bundle.
-
-To use a custom CA bundle, set `node.trusted_certs` in `etc/emqx.conf` before starting EMQX:
-
-```hocon
-node.trusted_certs = "file:///absolute/path/to/ca-bundle.pem"
-```
-
-The path must be absolute, and the file must exist and be readable by the user that runs EMQX. In a cluster, the file must be available at the same path on every node because EMQX does not copy it between nodes. EMQX reloads the CA bundle after its contents change, so replacing the file at the same path does not require an EMQX restart.
+For details about supported clients, how EMQX resolves `system_default`, and how to configure a custom CA bundle, see [Trusted CA Certificates for Outbound TLS](./tls-certificate.md#trusted-ca-certificates-for-outbound-tls).
 
 ### TLS Configuration Options in Dashboard
 
@@ -96,7 +84,7 @@ authentication {
 **SSL Configuration Items**:
 
 - **`enable`**: Enables SSL/TLS for outbound connections to the external resource.
-- **`cacertfile`**: Path to a PEM format file containing the trusted certificate authority (CA) certificates that the HTTP client uses to verify the authenticity of the HTTP server.
+- **`cacertfile`**: Path to a PEM-formatted file that contains the CA certificates used to verify the HTTP server certificate. For supported outbound TLS clients, you can also set this option to `system_default` to use the CA bundle selected by `node.trusted_certs`.
 - **`certfile`**: Path to a PEM format file containing the SSL/TLS certificate chain for the client to present. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the client certificate to form a complete chain.
 - **`keyfile`**: Path to a PEM format private key corresponding to the client certificate specified by `certfile`.
 - **`verify`**: Controls server certificate verification behavior:
