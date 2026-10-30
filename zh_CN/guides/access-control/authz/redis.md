@@ -48,15 +48,15 @@ Redis 授权器中添加的所有规则都是**允许**规则，即 Redis Author
 
 ::: tip 为数据库账户授予只读权限
 
-EMQX 在对发布或订阅操作进行授权时只读取 Redis。`cmd` 仅接受 `HMGET` 和 `HGETALL` 命令，其他命令都会被拒绝，因此授权过程不会写入任何键。
+EMQX 对发布或订阅操作进行授权时只需要读取 Redis。`cmd` 仅接受 `HMGET` 和 `HGETALL` 命令，其他命令都会被拒绝，因此授权过程不会向 Redis 写入数据。
 
-请为 EMQX 使用专用用户（Redis 6.0 及以上版本支持），并将其权限限制为上述命令以及所配置 `cmd` 读取的键：
+对于 Redis 6.0 及以上版本，请配置 EMQX 使用专用用户，并将其权限限制为 EMQX 使用的健康检查与查询命令，以及所配置 `cmd` 读取的键：
 
 ```bash
-ACL SETUSER emqx_auth on >PASSWORD ~mqtt_acl:* +hmget +hgetall
+redis-cli ACL SETUSER emqx_auth reset on '>PASSWORD' '~mqtt_acl:*' +ping +hmget +hgetall
 ```
 
-如果 `database` 配置为非 0 的索引，请额外添加 `+select`，因为此时 EMQX 在连接时会发送 `SELECT` 命令。维护授权规则请使用单独的管理用户。即使 EMQX 配置泄露，只读用户也无法修改或删除授权规则。
+如果 `database` 配置为非零索引，请额外添加 `+select`，因为此时 EMQX 会在连接时发送 `SELECT` 命令。请使用单独的管理用户维护授权规则。即使 EMQX 配置中的 Redis 凭据泄露，攻击者也无法使用该只读用户修改或删除授权规则。
 :::
 
 ## 通过 Dashboard 配置

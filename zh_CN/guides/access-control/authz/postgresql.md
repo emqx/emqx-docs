@@ -51,16 +51,16 @@ query = "SELECT permission, action, topic, qos, retain FROM mqtt_acl WHERE usern
 
 ::: tip 为数据库账户授予只读权限
 
-EMQX 在对发布或订阅操作进行授权时只读取数据库。配置项 `query` 是一条 `SELECT` 语句，EMQX 以预处理语句的方式执行它，授权过程不会插入、更新或删除任何记录。
+EMQX 对发布或订阅操作进行授权时只需要读取数据库。请将 `query` 配置为 `SELECT` 语句。EMQX 会以预处理语句的方式执行该查询。
 
-请为 EMQX 使用专用数据库账户，仅授予该账户对查询所涉及表的 `SELECT` 权限，不授予其他权限：
+请配置 EMQX 使用专用数据库账户，仅授予该账户对查询所涉及表的 `SELECT` 权限，不要授予写入或管理权限：
 
 ```sql
 GRANT USAGE ON SCHEMA public TO emqx_auth;
 GRANT SELECT ON mqtt_acl TO emqx_auth;
 ```
 
-建表以及维护授权规则请使用单独的管理账户。即使 EMQX 配置泄露，只读账户也无法修改或删除授权规则。
+请使用单独的管理账户创建表并维护授权规则。即使 EMQX 配置中的数据库凭据泄露，攻击者也无法使用该只读账户修改或删除授权规则。
 :::
 
 ## 通过  Dashboard 配置

@@ -41,17 +41,17 @@ The name `password_hash` conveys our preference for storing hashed passwords. Bu
 So, we can also configure `cmd` as `HMGET mqtt:${username} password salt is_superuser`.
 :::
 
-::: tip Grant read-only database privileges
+::: tip Grant Read-Only Database Privileges
 
-EMQX only reads from Redis when it authenticates a client. It accepts only `HGET` and `HMGET` in `cmd` and rejects any other command, so authentication never writes a key.
+EMQX only needs read access to Redis when it authenticates a client. It accepts only `HGET` and `HMGET` in `cmd` and rejects any other command, so authentication does not write to Redis.
 
-Connect EMQX with a dedicated user, available in Redis 6.0 and later, that is limited to those commands and to the keys the configured `cmd` reads:
+For Redis 6.0 or later, configure EMQX to use a dedicated user. Limit the user to the health check and query commands that EMQX runs and to the keys that the configured `cmd` reads:
 
 ```bash
-ACL SETUSER emqx_auth on >PASSWORD ~mqtt_user:* +hget +hmget
+redis-cli ACL SETUSER emqx_auth reset on '>PASSWORD' '~mqtt:*' +ping +hget +hmget
 ```
 
-Add `+select` when `database` is set to a non-zero index, because EMQX then sends `SELECT` when it connects. Manage user records with a separate administrative user. A read-only user cannot change or delete credentials if the EMQX configuration leaks.
+Add `+select` when `database` is set to a nonzero index because EMQX then sends `SELECT` when it connects. Use a separate administrative user to manage user records. If the Redis credentials in the EMQX configuration are compromised, an attacker cannot use the read-only user to change or delete authentication data.
 :::
 
 ## Configure with Dashboard

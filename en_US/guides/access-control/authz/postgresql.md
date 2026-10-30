@@ -48,18 +48,18 @@ The corresponding config parameters are:
 query = "SELECT permission, action, topic, ipaddress, qos, retain FROM mqtt_acl WHERE username = ${username} and ipaddress = ${peerhost}"
 ```
 
-::: tip Grant read-only database privileges
+::: tip Grant Read-Only Database Privileges
 
-EMQX only reads from the database when it authorizes a publish or subscribe operation. The configured `query` is a `SELECT` statement that EMQX runs as a prepared statement, so authorization never inserts, updates or deletes a row.
+EMQX only needs read access to the database when it authorizes a publish or subscribe operation. Configure `query` as a `SELECT` statement. EMQX executes the query as a prepared statement.
 
-Connect EMQX with a dedicated account that holds the `SELECT` privilege on the table the query reads, and no other privilege:
+Configure EMQX to use a dedicated database account with the `SELECT` privilege on the table that the query reads. Do not grant the account write or administrative privileges:
 
 ```sql
 GRANT USAGE ON SCHEMA public TO emqx_auth;
 GRANT SELECT ON mqtt_acl TO emqx_auth;
 ```
 
-Create the table and manage authorization rules with a separate administrative account. A read-only account cannot change or delete authorization rules if the EMQX configuration leaks.
+Use a separate administrative account to create the table and manage authorization rules. If the database credentials in the EMQX configuration are compromised, an attacker cannot use the read-only account to change or delete authorization rules.
 :::
 
 ## Configure with Dashboard

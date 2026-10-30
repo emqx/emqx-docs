@@ -51,19 +51,19 @@ filter { username = "${username}" }
 
 ::: tip 为数据库账户授予只读权限
 
-EMQX 在对发布或订阅操作进行授权时只读取 MongoDB。EMQX 针对配置的集合执行 `find` 查询，授权过程不会插入、更新或删除任何文档。
+EMQX 对发布或订阅操作进行授权时只需要读取 MongoDB。EMQX 会针对配置的集合执行 `find` 查询，不会插入、更新或删除文档。
 
-请为 EMQX 使用专用数据库用户，仅为其授予该数据库的内置 `read` 角色，不授予其他角色：
+请配置 EMQX 使用专用数据库用户，仅为其授予该数据库的内置 `read` 角色，不要授予写入或管理角色：
 
-```bash
-db.createUser({
+```js
+db.getSiblingDB("mqtt").createUser({
   user: "emqx_auth",
   pwd: "PASSWORD",
   roles: [ { role: "read", db: "mqtt" } ]
 })
 ```
 
-创建集合以及维护授权规则请使用单独的管理用户。即使 EMQX 配置泄露，只读用户也无法修改或删除授权规则。
+请使用单独的管理用户创建集合并维护授权规则。即使 EMQX 配置中的数据库凭据泄露，攻击者也无法使用该只读用户修改或删除授权规则。
 :::
 
 ## 配置项
