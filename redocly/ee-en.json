@@ -104,14 +104,7 @@
                   "username",
                   "mountpoint",
                   "durable",
-                  "n_streams",
-                  "seqno_q1_comm",
-                  "seqno_q1_dup",
-                  "seqno_q1_next",
-                  "seqno_q2_comm",
-                  "seqno_q2_dup",
-                  "seqno_q2_rec",
-                  "seqno_q2_next"
+                  "n_streams"
                 ],
                 "type": "string"
               },
@@ -947,7 +940,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -1394,7 +1387,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -1736,7 +1729,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -2288,7 +2281,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -2633,7 +2626,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -2957,7 +2950,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -3265,7 +3258,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -3590,7 +3583,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -4149,7 +4142,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -4535,7 +4528,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -5008,7 +5001,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -5743,7 +5736,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -5785,49 +5778,43 @@
             "oneOf": [
               {
                 "enum": [
-                  "aws_timestream"
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "opents"
+                  "kinesis"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "cockroachdb"
+                  "redis"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "s3tables"
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "syskeeper_forwarder"
+                  "pulsar"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "elasticsearch"
+                  "tablestore"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
+                  "mongodb"
                 ],
                 "type": "string"
               },
@@ -5839,55 +5826,13 @@
               },
               {
                 "enum": [
-                  "redshift"
+                  "influxdb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigtable"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "emqx_tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
@@ -5899,7 +5844,97 @@
               },
               {
                 "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "emqx_tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "quasardb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigtable"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
@@ -5911,13 +5946,13 @@
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
+                  "oracle"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "bigquery"
+                  "pgsql"
                 ],
                 "type": "string"
               },
@@ -5941,73 +5976,7 @@
               },
               {
                 "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "quasardb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
+                  "cockroachdb"
                 ],
                 "type": "string"
               },
@@ -6019,25 +5988,19 @@
               },
               {
                 "enum": [
-                  "kinesis"
+                  "confluent_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kafka_producer"
+                  "mysql"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
+                  "cassandra"
                 ],
                 "type": "string"
               },
@@ -6049,19 +6012,49 @@
               },
               {
                 "enum": [
-                  "rocketmq"
+                  "sqlserver"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "datalayers"
+                  "bigquery"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
                 ],
                 "type": "string"
               }
@@ -7095,7 +7088,6 @@
             "type": "string"
           },
           "role": {
-            "default": "administrator",
             "description": "Role for this API. A namespaced role is written as `ns:<namespace>::<role>`. Namespace names listed in `multi_tenancy.deny_namespaces` (default: `global`, `undefined`, `null`, `none`) cannot be used.",
             "example": "administrator",
             "type": "string"
@@ -7978,7 +7970,7 @@
       "authn.jwks_client_ssl_opts": {
         "properties": {
           "cacertfile": {
-            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.",
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.<br/><br/>TLS clients can set <code>system_default</code> instead of a path, to trust the CA certificates of <code>node.trusted_certs</code>.<br/>Listeners do not accept this value.",
             "type": "string"
           },
           "cacerts": {
@@ -9835,6 +9827,17 @@
             ],
             "type": "string"
           },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
+          },
           "pool_size": {
             "default": 8,
             "description": "The pool size.",
@@ -9963,6 +9966,17 @@
               "post"
             ],
             "type": "string"
+          },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
           },
           "pool_size": {
             "default": 8,
@@ -10155,7 +10169,7 @@
           },
           "rules": {
             "description": "Authorization rules.",
-            "example": "{allow,{username,{re,\"^dashboard$\"}},subscribe,[\"$SYS/#\"]}.\n{allow,{ipaddr,\"127.0.0.1\"},all,[\"$SYS/#\",\"#\"]}.",
+            "example": "{allow,{username,\"dashboard\"},subscribe,[\"$SYS/#\"]}.\n{allow,{ipaddr,\"127.0.0.1\"},all,[\"$SYS/#\",\"#\"]}.",
             "type": "string"
           },
           "type": {
@@ -12182,7 +12196,7 @@
       "bridge_azure_event_hub.ssl_client_opts": {
         "properties": {
           "cacertfile": {
-            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.",
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.<br/><br/>TLS clients can set <code>system_default</code> instead of a path, to trust the CA certificates of <code>node.trusted_certs</code>.<br/>Listeners do not accept this value.",
             "type": "string"
           },
           "cacerts": {
@@ -12413,7 +12427,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -13042,7 +13056,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -13259,6 +13273,13 @@
             "default": {},
             "description": "Resource options."
           },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings."
+          },
           "status": {
             "description": "The status of the connector<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the connector passes the health probes.<br/><br/>- <code>disconnected</code>: when the connector can not pass health probes.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status.",
             "enum": [
@@ -13422,6 +13443,13 @@
             "default": {},
             "description": "Resource options."
           },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings."
+          },
           "tags": {
             "description": "Tags to annotate this config entry.",
             "items": {
@@ -13552,6 +13580,13 @@
             "$ref": "#/components/schemas/bridge_clickhouse.connector_resource_opts",
             "default": {},
             "description": "Resource options."
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings."
           },
           "tags": {
             "description": "Tags to annotate this config entry.",
@@ -13685,7 +13720,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -14324,7 +14359,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -14863,7 +14898,7 @@
           },
           "max_retries": {
             "default": 2,
-            "description": "HTTP request max retry times if failed.",
+            "description": "Maximum number of retries for failed HTTP requests within a single action query.<br/>Retries for normal connection shutdown races do not consume this budget.<br/>The action buffer may retry recoverable errors independently until the request TTL expires.",
             "minimum": 0,
             "type": "integer"
           },
@@ -14909,7 +14944,7 @@
           },
           "max_retries": {
             "default": 2,
-            "description": "HTTP request max retry times if failed.",
+            "description": "Maximum number of retries for failed HTTP requests within a single action query.<br/>Retries for normal connection shutdown races do not consume this budget.<br/>The action buffer may retry recoverable errors independently until the request TTL expires.",
             "minimum": 0,
             "type": "integer"
           },
@@ -14988,7 +15023,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -15043,7 +15078,7 @@
           },
           "max_retries": {
             "default": 2,
-            "description": "HTTP request max retry times if failed.",
+            "description": "Maximum number of retries for failed HTTP requests within a single action query.<br/>Retries for normal connection shutdown races do not consume this budget.<br/>The action buffer may retry recoverable errors independently until the request TTL expires.",
             "minimum": 0,
             "type": "integer"
           },
@@ -15419,7 +15454,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -16003,7 +16038,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -16319,7 +16354,7 @@
           },
           "max_retries": {
             "default": 2,
-            "description": "HTTP request max retry times if failed.",
+            "description": "Maximum number of retries for failed HTTP requests within a single action query.<br/>Retries for normal connection shutdown races do not consume this budget.<br/>The action buffer may retry recoverable errors independently until the request TTL expires.",
             "minimum": 0,
             "type": "integer"
           },
@@ -16791,7 +16826,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -17444,7 +17479,7 @@
           },
           "max_retries": {
             "default": 2,
-            "description": "HTTP request max retry times if failed.",
+            "description": "Maximum number of retries for failed HTTP requests within a single action query.<br/>Retries for normal connection shutdown races do not consume this budget.<br/>The action buffer may retry recoverable errors independently until the request TTL expires.",
             "minimum": 0,
             "type": "integer"
           },
@@ -17487,7 +17522,7 @@
           },
           "max_retries": {
             "default": 2,
-            "description": "HTTP request max retry times if failed.",
+            "description": "Maximum number of retries for failed HTTP requests within a single action query.<br/>Retries for normal connection shutdown races do not consume this budget.<br/>The action buffer may retry recoverable errors independently until the request TTL expires.",
             "minimum": 0,
             "type": "integer"
           },
@@ -17579,7 +17614,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -18840,6 +18875,16 @@
       },
       "bridge_kafka.socket_opts": {
         "properties": {
+          "ip_family": {
+            "default": "auto",
+            "description": "The IP address family used to connect to Kafka brokers.<br/>- <code>auto</code>: Connect to an IP address with its own family. For a hostname, try IPv4 first, then IPv6 if IPv4 fails.<br/>- <code>ipv4</code>: Connect over IPv4 only.<br/>- <code>ipv6</code>: Connect over IPv6 only. Use this when the brokers are reachable only over IPv6.",
+            "enum": [
+              "auto",
+              "ipv4",
+              "ipv6"
+            ],
+            "type": "string"
+          },
           "nodelay": {
             "default": true,
             "description": "When set to 'true', TCP buffer is sent as soon as possible. Otherwise, the OS kernel may buffer small TCP packets for a while (40 ms by default).",
@@ -18868,7 +18913,7 @@
       "bridge_kafka.ssl_client_opts": {
         "properties": {
           "cacertfile": {
-            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.",
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.<br/><br/>TLS clients can set <code>system_default</code> instead of a path, to trust the CA certificates of <code>node.trusted_certs</code>.<br/>Listeners do not accept this value.",
             "type": "string"
           },
           "cacerts": {
@@ -19108,7 +19153,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -19272,11 +19317,11 @@
             "type": "array"
           },
           "aws_access_key_id": {
-            "description": "Access Key ID for connecting to Amazon Kinesis.",
+            "description": "Access Key ID for connecting to Amazon Kinesis.<br/>If both the Access Key ID and the Secret Access Key are omitted, credentials are obtained from the ECS task role or EC2 instance metadata.",
             "type": "string"
           },
           "aws_secret_access_key": {
-            "description": "AWS Secret Access Key for connecting to Amazon Kinesis.",
+            "description": "AWS Secret Access Key for connecting to Amazon Kinesis.<br/>If both the Access Key ID and the Secret Access Key are omitted, credentials are obtained from the ECS task role or EC2 instance metadata.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -19355,8 +19400,6 @@
           }
         },
         "required": [
-          "aws_access_key_id",
-          "aws_secret_access_key",
           "endpoint",
           "name",
           "type"
@@ -19433,11 +19476,11 @@
       "bridge_kinesis.post_connector": {
         "properties": {
           "aws_access_key_id": {
-            "description": "Access Key ID for connecting to Amazon Kinesis.",
+            "description": "Access Key ID for connecting to Amazon Kinesis.<br/>If both the Access Key ID and the Secret Access Key are omitted, credentials are obtained from the ECS task role or EC2 instance metadata.",
             "type": "string"
           },
           "aws_secret_access_key": {
-            "description": "AWS Secret Access Key for connecting to Amazon Kinesis.",
+            "description": "AWS Secret Access Key for connecting to Amazon Kinesis.<br/>If both the Access Key ID and the Secret Access Key are omitted, credentials are obtained from the ECS task role or EC2 instance metadata.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -19494,8 +19537,6 @@
           }
         },
         "required": [
-          "aws_access_key_id",
-          "aws_secret_access_key",
           "endpoint",
           "name",
           "type"
@@ -19559,11 +19600,11 @@
       "bridge_kinesis.put_connector": {
         "properties": {
           "aws_access_key_id": {
-            "description": "Access Key ID for connecting to Amazon Kinesis.",
+            "description": "Access Key ID for connecting to Amazon Kinesis.<br/>If both the Access Key ID and the Secret Access Key are omitted, credentials are obtained from the ECS task role or EC2 instance metadata.",
             "type": "string"
           },
           "aws_secret_access_key": {
-            "description": "AWS Secret Access Key for connecting to Amazon Kinesis.",
+            "description": "AWS Secret Access Key for connecting to Amazon Kinesis.<br/>If both the Access Key ID and the Secret Access Key are omitted, credentials are obtained from the ECS task role or EC2 instance metadata.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -19609,8 +19650,6 @@
           }
         },
         "required": [
-          "aws_access_key_id",
-          "aws_secret_access_key",
           "endpoint"
         ],
         "type": "object"
@@ -20161,7 +20200,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -20878,7 +20917,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -21430,7 +21469,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -22098,7 +22137,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -22417,7 +22456,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -23054,7 +23093,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -23450,7 +23489,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -24065,7 +24104,7 @@
             "type": "boolean"
           },
           "host": {
-            "description": "The host of the S3 endpoint.",
+            "description": "The host of the S3 endpoint.<br/><br/>Note: even when using the Virtual Host (`vhost`) access method, do **NOT** specify an endpoint containing the bucket name.  The bucket name is specified in each Action, and prepended to the endpoint automatically.",
             "type": "string"
           },
           "name": {
@@ -24083,6 +24122,10 @@
             "description": "The port of the S3 endpoint.",
             "minimum": 1,
             "type": "integer"
+          },
+          "region": {
+            "description": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.<br/><br/>When this field is set, its value takes precedence over the region inferred from the endpoint host.<br/>Otherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.<br/><br/>Set this field when the endpoint host does not contain the region, for example a custom domain name.",
+            "type": "string"
           },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_s3.s3_connector_resource_opts",
@@ -24237,7 +24280,7 @@
             "type": "boolean"
           },
           "host": {
-            "description": "The host of the S3 endpoint.",
+            "description": "The host of the S3 endpoint.<br/><br/>Note: even when using the Virtual Host (`vhost`) access method, do **NOT** specify an endpoint containing the bucket name.  The bucket name is specified in each Action, and prepended to the endpoint automatically.",
             "type": "string"
           },
           "name": {
@@ -24248,6 +24291,10 @@
             "description": "The port of the S3 endpoint.",
             "minimum": 1,
             "type": "integer"
+          },
+          "region": {
+            "description": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.<br/><br/>When this field is set, its value takes precedence over the region inferred from the endpoint host.<br/>Otherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.<br/><br/>Set this field when the endpoint host does not contain the region, for example a custom domain name.",
+            "type": "string"
           },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_s3.s3_connector_resource_opts",
@@ -24374,13 +24421,17 @@
             "type": "boolean"
           },
           "host": {
-            "description": "The host of the S3 endpoint.",
+            "description": "The host of the S3 endpoint.<br/><br/>Note: even when using the Virtual Host (`vhost`) access method, do **NOT** specify an endpoint containing the bucket name.  The bucket name is specified in each Action, and prepended to the endpoint automatically.",
             "type": "string"
           },
           "port": {
             "description": "The port of the S3 endpoint.",
             "minimum": 1,
             "type": "integer"
+          },
+          "region": {
+            "description": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.<br/><br/>When this field is set, its value takes precedence over the region inferred from the endpoint host.<br/>Otherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.<br/><br/>Set this field when the endpoint host does not contain the region, for example a custom domain name.",
+            "type": "string"
           },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_s3.s3_connector_resource_opts",
@@ -24664,7 +24715,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -24778,7 +24829,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -25451,7 +25502,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -25670,7 +25721,7 @@
             "description": "Resource options."
           },
           "ssl": {
-            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
             "default": {
               "enable": false
             },
@@ -25842,7 +25893,7 @@
             "description": "Resource options."
           },
           "ssl": {
-            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
             "default": {
               "enable": false
             },
@@ -25982,7 +26033,7 @@
             "description": "Resource options."
           },
           "ssl": {
-            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
             "default": {
               "enable": false
             },
@@ -26162,7 +26213,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -26966,7 +27017,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -28114,7 +28165,7 @@
       "confluent.ssl_client_opts": {
         "properties": {
           "cacertfile": {
-            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.",
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.<br/><br/>TLS clients can set <code>system_default</code> instead of a path, to trust the CA certificates of <code>node.trusted_certs</code>.<br/>Listeners do not accept this value.",
             "type": "string"
           },
           "cacerts": {
@@ -31326,7 +31377,7 @@
       "connector_doris.ssl": {
         "properties": {
           "cacertfile": {
-            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.",
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.<br/><br/>TLS clients can set <code>system_default</code> instead of a path, to trust the CA certificates of <code>node.trusted_certs</code>.<br/>Listeners do not accept this value.",
             "type": "string"
           },
           "cacerts": {
@@ -33564,6 +33615,146 @@
         },
         "type": "object"
       },
+      "connector_schema_lib.client_tls_verify_peer": {
+        "properties": {
+          "cacertfile": {
+            "default": "system_default",
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.<br/><br/>TLS clients can set <code>system_default</code> instead of a path, to trust the CA certificates of <code>node.trusted_certs</code>.<br/>Listeners do not accept this value.",
+            "type": "string"
+          },
+          "cacerts": {
+            "default": false,
+            "deprecated": true,
+            "type": "boolean"
+          },
+          "certfile": {
+            "description": "PEM format certificates chain file.<br/><br/>The certificates in this file should be in reversed order of the certificate<br/>issue chain. That is, the host's certificate should be placed in the beginning<br/>of the file, followed by the immediate issuer certificate and so on.<br/>Although the root CA certificate is optional, it should be placed at the end of<br/>the file if it is to be added.",
+            "type": "string"
+          },
+          "ciphers": {
+            "default": [],
+            "description": "This config holds TLS cipher suite names separated by comma,<br/>or as an array of strings. e.g.<br/><code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code> or<br/><code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>.<br/><br/><br/>Ciphers (and their ordering) define the way in which the<br/>client and server encrypts information over the network connection.<br/>Selecting a good cipher suite is critical for the<br/>application's data security, confidentiality and performance.<br/><br/>The names should be in OpenSSL string format (not RFC format).<br/>All default values and examples provided by EMQX config<br/>documentation are all in OpenSSL format.<br/><br/><br/>NOTE: Certain cipher suites are only compatible with<br/>specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')<br/>incompatible cipher suites will be silently dropped.<br/>For instance, if only 'tlsv1.3' is given in the <code>versions</code>,<br/>configuring cipher suites for other versions will have no effect.<br/><br/><br/><br/>NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/><br/>If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/><br/>PSK cipher suites: <code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,<br/>RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,<br/>RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,<br/>RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code>",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "depth": {
+            "default": 10,
+            "description": "Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.<br/>So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/><br/>if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/><br/>if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "enable": {
+            "default": false,
+            "description": "Enable TLS.",
+            "type": "boolean"
+          },
+          "hibernate_after": {
+            "default": "5s",
+            "description": "Specifies the amount of time that an SSL process will hibernate after being idle, thus reducing its memory footprint.<br/><br/>The hibernating process will be woken up when a new message arrives.<br/>Hibernating and waking up too often can cause CPU utilization to increase, as they both perform garbage collection on the process.",
+            "example": "12m",
+            "type": "string"
+          },
+          "keyfile": {
+            "description": "PEM format private key file.",
+            "type": "string"
+          },
+          "log_level": {
+            "default": "notice",
+            "description": "The minimum level of logging allowed for SSL output.<br/><br/>The default is `notice`, set to a lower `debug` level for more detailed logging that can be used to investigate SSL handshake issues.",
+            "enum": [
+              "emergency",
+              "alert",
+              "critical",
+              "error",
+              "warning",
+              "notice",
+              "info",
+              "debug",
+              "none",
+              "all"
+            ],
+            "type": "string"
+          },
+          "managed_certs": {
+            "$ref": "#/components/schemas/emqx.managed_certs",
+            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored."
+          },
+          "middlebox_comp_mode": {
+            "default": true,
+            "description": "Configures the middle box compatibility mode for a TLS-1.3 connection.<br/><br/>A significant number of middle boxes misbehave when a TLS-1.3 connection is negotiated. Implementations can increase the chance of making connections through those middle boxes by adapting the TLS-1.3 handshake to resemble that of a TLS-1.2 handshake.",
+            "type": "boolean"
+          },
+          "partial_chain": {
+            "description": "Enable or disable peer verification with partial_chain.<br/>When local verifies a peer certificate during the x509 path validation<br/>process, it constructs a certificate chain that starts with the peer<br/>certificate and ends with a trust anchor.<br/>By default, if it is set to `false`, the trust anchor is the<br/>Root CA, and the certificate chain must be complete.<br/>However, if the setting is set to `true` or `cacert_from_cacertfile`,<br/>the last certificate in `cacertfile` will be used as the trust anchor<br/>certificate (intermediate CA). This creates a partial chain<br/>in the path validation.<br/>Alternatively, if it is configured with `two_cacerts_from_cacertfile`,<br/>one of the last two certificates in `cacertfile` will be used as the<br/>trust anchor certificate, forming a partial chain. This option is<br/>particularly useful for intermediate CA certificate rotation.<br/>However, please note that it incurs some additional overhead, so it<br/>should only be used for certificate rotation purposes.",
+            "enum": [
+              true,
+              false,
+              "two_cacerts_from_cacertfile",
+              "cacert_from_cacertfile"
+            ],
+            "type": "string"
+          },
+          "password": {
+            "description": "String containing the user's password. Only used if the private key file is password-protected.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>. The file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
+            "example": "",
+            "format": "password",
+            "type": "string"
+          },
+          "reuse_sessions": {
+            "default": false,
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "type": "boolean"
+          },
+          "secure_renegotiate": {
+            "default": true,
+            "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "type": "boolean"
+          },
+          "server_name_indication": {
+            "description": "Specify the host name to be used in TLS Server Name Indication extension.<br/><br/>For instance, when connecting to \"server.example.net\", the genuine server<br/>which accepts the connection and performs TLS handshake may differ from the<br/>host the TLS client initially connects to, e.g. when connecting to an IP address<br/>or when the host has multiple resolvable DNS records <br/><br/>If not specified, it will default to the host name string which is used<br/>to establish the connection, unless it is IP address used.<br/><br/>The host name is then also used in the host name verification of the peer<br/>certificate.<br/> The special value 'disable' prevents the Server Name<br/>Indication extension from being sent and disables the hostname<br/>verification check.",
+            "example": "disable",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disable"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "verify": {
+            "default": "verify_peer",
+            "description": "Enable or disable peer verification.",
+            "enum": [
+              "verify_peer",
+              "verify_none"
+            ],
+            "type": "string"
+          },
+          "verify_peer_ext_key_usage": {
+            "description": "Verify extended key usage in peer's certificate<br/>For additional peer certificate validation, the value defined here must present in the<br/>'Extended Key Usage' of peer certificate defined in<br/>[rfc5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.12).<br/><br/>Allowed values are<br/>- `clientAuth`<br/>- `serverAuth`<br/>- `codeSigning`<br/>- `emailProtection`<br/>- `timeStamping`<br/>- `ocspSigning`<br/>- raw OID, for example: \"OID:1.3.6.1.5.5.7.3.2\" means `id-pk 2` which is equivalent to `clientAuth`<br/><br/>Comma-separated string is also supported for validating more than one key usages.<br/><br/>For example, `\"serverAuth,OID:1.3.6.1.5.5.7.3.2\"`",
+            "example": "",
+            "type": "string"
+          },
+          "versions": {
+            "default": [
+              "tlsv1.3",
+              "tlsv1.2"
+            ],
+            "description": "All TLS/DTLS versions to be supported.<br/><br/>NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/><br/>In case PSK cipher suites are intended, make sure to configure<br/><code>['tlsv1.2', 'tlsv1.1']</code> here.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "connector_snowflake_aggregated.get_connector": {
         "properties": {
           "account": {
@@ -34609,6 +34800,11 @@
             ],
             "type": "string"
           },
+          "show_preview_version": {
+            "default": true,
+            "description": "Report the release version with its preview suffix in the REST API.<br/>When set to `false`, the REST API removes the `-preview.N` suffix from the version that it reports.<br/>For example, `6.1.5-preview.1` is reported as `6.1.5`.<br/>The setting has no effect on a release version without the suffix.",
+            "type": "boolean"
+          },
           "sso": {
             "$ref": "#/components/schemas/dashboard.sso"
           },
@@ -34825,6 +35021,11 @@
             "description": "Whether to require IDP to sign SAML Response envelopes (outer signature). Defaults to `true` in all security profiles. To disable signature verification entirely, set this and `idp_signs_assertions` both to `false`; this is insecure and should only be used for testing.",
             "type": "boolean"
           },
+          "skip_login_cookie_check": {
+            "default": false,
+            "description": "Enable at your own risk. When `true`, EMQX does not check the login cookie at the assertion consumer service, so a login is no longer bound to the browser that started it. Enable it only when browsers cannot keep that cookie and SSO login fails, for example when `dashboard_addr` uses plain HTTP. Defaults to `false`.",
+            "type": "boolean"
+          },
           "sp_private_key": {
             "description": "The private key of the SP.",
             "format": "password",
@@ -34850,7 +35051,7 @@
         "properties": {
           "cacertfile": {
             "default": "${EMQX_ETC_DIR}/certs/cacert.pem",
-            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.",
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.<br/><br/>TLS clients can set <code>system_default</code> instead of a path, to trust the CA certificates of <code>node.trusted_certs</code>.<br/>Listeners do not accept this value.",
             "type": "string"
           },
           "cacerts": {
@@ -35086,8 +35287,8 @@
             "description": "Backend type.",
             "enum": [
               "ldap",
-              "saml",
-              "oidc"
+              "oidc",
+              "saml"
             ],
             "type": "string"
           },
@@ -36101,18 +36302,12 @@
         "properties": {
           "cacertfile": {
             "default": "${EMQX_ETC_DIR}/certs/cacert.pem",
-            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.",
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.<br/><br/>TLS clients can set <code>system_default</code> instead of a path, to trust the CA certificates of <code>node.trusted_certs</code>.<br/>Listeners do not accept this value.",
             "type": "string"
           },
           "certfile": {
             "default": "${EMQX_ETC_DIR}/certs/cert.pem",
             "description": "PEM format certificates chain file.<br/><br/>The certificates in this file should be in reversed order of the certificate<br/>issue chain. That is, the host's certificate should be placed in the beginning<br/>of the file, followed by the immediate issuer certificate and so on.<br/>Although the root CA certificate is optional, it should be placed at the end of<br/>the file if it is to be added.",
-            "type": "string"
-          },
-          "hibernate_after": {
-            "default": "5s",
-            "description": "Specifies the amount of time that an SSL process will hibernate after being idle, thus reducing its memory footprint.<br/><br/>The hibernating process will be woken up when a new message arrives.<br/>Hibernating and waking up too often can cause CPU utilization to increase, as they both perform garbage collection on the process.",
-            "example": "12m",
             "type": "string"
           },
           "keyfile": {
@@ -36156,7 +36351,7 @@
         "properties": {
           "cacertfile": {
             "default": "${EMQX_ETC_DIR}/certs/cacert.pem",
-            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.",
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.<br/><br/>TLS clients can set <code>system_default</code> instead of a path, to trust the CA certificates of <code>node.trusted_certs</code>.<br/>Listeners do not accept this value.",
             "type": "string"
           },
           "cacerts": {
@@ -36331,7 +36526,7 @@
         "properties": {
           "cacertfile": {
             "default": "${EMQX_ETC_DIR}/certs/cacert.pem",
-            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.",
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.<br/><br/>TLS clients can set <code>system_default</code> instead of a path, to trust the CA certificates of <code>node.trusted_certs</code>.<br/>Listeners do not accept this value.",
             "type": "string"
           },
           "cacerts": {
@@ -36849,6 +37044,28 @@
             "minimum": 23,
             "type": "integer"
           },
+          "max_connect_packet_size": {
+            "default": "1MB",
+            "description": "Maximum size of a CONNECT packet. Maximum: 256 MB.<br/>EMQX closes the connection when a CONNECT packet is larger than this.<br/>This limit applies in addition to `max_packet_size`, and the smaller of the two applies to CONNECT.",
+            "example": "32MB",
+            "type": "string"
+          },
+          "max_connect_user_properties": {
+            "default": 100,
+            "description": "Maximum number of 'User-Property' pairs accepted in a CONNECT packet.<br/>The limit applies separately to the CONNECT properties and to the will properties.<br/>EMQX closes the connection when a CONNECT carries more pairs than this.<br/>Set to `infinity` to accept any number.",
+            "oneOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
           "max_inflight": {
             "default": 32,
             "description": "Maximum number of QoS 1 and QoS 2 messages that are allowed to be delivered simultaneously before completing the acknowledgment. If an MQTT 5 client advertises a smaller Receive Maximum during connection setup, that limit is used.<br/><br/>Note that on a congested connection, available inflight slots also limit the number of messages that may be delivered at once in response to client acknowledgments, irrespective of QoS level.",
@@ -37169,7 +37386,7 @@
       "emqx.ssl_client_opts": {
         "properties": {
           "cacertfile": {
-            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.",
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.<br/><br/>TLS clients can set <code>system_default</code> instead of a path, to trust the CA certificates of <code>node.trusted_certs</code>.<br/>Listeners do not accept this value.",
             "type": "string"
           },
           "cacerts": {
@@ -37535,6 +37752,15 @@
             "example": "4KB",
             "type": "string"
           },
+          "buffer_retention_strategy": {
+            "default": "packet",
+            "description": "Receive buffer retention strategy for the `socket` TCP backend.<br/><br/>- `packet`: Do not keep the *receive buffer* while waiting for the next packet.<br/>- `always`: Always keep the *receive buffer* while waiting for data.",
+            "enum": [
+              "always",
+              "packet"
+            ],
+            "type": "string"
+          },
           "high_watermark": {
             "default": "1MB",
             "description": "Controls how much outgoing data can be queued before EMQX treats a connection as congested.<br/><br/>A lower value makes EMQX react to slow clients sooner; a higher value allows more data to queue before the connection is considered congested. When a connection is congested, EMQX slows down QoS 0 delivery for that client to help the connection recover.<br/><br/>For the default `socket` TCP backend, this value controls EMQX's internal send queue. If queued data continues to grow beyond this limit, the `send_timeout` deadline starts.<br/><br/>For the `gen_tcp` backend, this value also controls Erlang's socket-busy threshold. If the Erlang internal socket buffer grows beyond `high_watermark`, the sending process may be suspended until the socket is no longer busy or `send_timeout` expires. While the process is suspended, the process message queue may accumulate; see `max_mailbox_len` for details.",
@@ -37544,6 +37770,11 @@
           "keepalive": {
             "default": "none",
             "description": "Enable TCP keepalive for MQTT connections over TCP or SSL.<br/>Use three comma-separated numbers to configure (in seconds): 'Idle,Interval,Probes'<br/> - Idle: The number of seconds a connection needs to be idle before the server begins to send out keep-alive probes (Linux default 7200).<br/> - Interval: The number of seconds between TCP keep-alive probes (Linux default 75).<br/> - Probes: The maximum number of TCP keep-alive probes to send before giving up and killing the connection if no response is obtained from the other end (Linux default 9).<br/>For example \"240,30,5\" means: EMQX should start sending TCP keepalive probes after the connection is in idle for 240 seconds, and the probes are sent every 30 seconds until a response is received from the MQTT client, if it misses 5 consecutive responses, EMQX should close the connection.<br/>Default: 'none', Set to 'none' to use OS default keepalive settings (still active, not disabled).",
+            "type": "string"
+          },
+          "low_watermark": {
+            "description": "The amount of queued outgoing data below which a congested connection is considered recovered.<br/><br/>This option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.<br/><br/>When this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.<br/><br/>The `socket` TCP backend ignores this option.",
+            "example": "32MB",
             "type": "string"
           },
           "nodelay": {
@@ -37642,7 +37873,7 @@
           },
           "max_frame_size": {
             "default": "infinity",
-            "description": "The maximum length of a single MQTT packet.",
+            "description": "The maximum size of a single WebSocket message, in bytes.<br/>The limit applies to the message after its fragments are joined, and after decompression when <code>compress</code> is enabled.<br/>When a client sends a larger message, the broker closes the connection with WebSocket status code 1009.<br/><br/>When set to <code>infinity</code> (the default), the limit is twice the zone's <code>mqtt.max_packet_size</code>.<br/>The spare room lets the broker receive a packet that is slightly too large and answer with DISCONNECT reason code 0x95 (packet too large), as it does on TCP listeners.<br/>Set an explicit value when clients send several MQTT packets in one WebSocket message.<br/>The maximum value is 268435455.",
             "oneOf": [
               {
                 "minimum": 1,
@@ -37710,9 +37941,14 @@
       "emqx_authn_api.request_authn_settings": {
         "properties": {
           "ignore_backend_failures": {
-            "default": false,
-            "description": "Ignore authentication backend failures in hardened security profile and continue to the next authenticator in the chain.",
-            "type": "boolean"
+            "default": "per_security_profile",
+            "description": "Decides what happens when an authentication backend fails, for example when the database is unreachable or the request times out.<br/>- `per_security_profile`: Follow the security profile. The `legacy` profile ignores the failure. The `hardened` profile denies the client.<br/>- `true`: Ignore the failure in both security profiles. Continue to the next authenticator in the chain.<br/>- `false`: Deny the client in both security profiles.",
+            "enum": [
+              "per_security_profile",
+              true,
+              false
+            ],
+            "type": "string"
           },
           "node_cache": {
             "$ref": "#/components/schemas/auth_cache.config",
@@ -37775,9 +38011,14 @@
       "emqx_authn_api.response_authn_settings": {
         "properties": {
           "ignore_backend_failures": {
-            "default": false,
-            "description": "Ignore authentication backend failures in hardened security profile and continue to the next authenticator in the chain.",
-            "type": "boolean"
+            "default": "per_security_profile",
+            "description": "Decides what happens when an authentication backend fails, for example when the database is unreachable or the request times out.<br/>- `per_security_profile`: Follow the security profile. The `legacy` profile ignores the failure. The `hardened` profile denies the client.<br/>- `true`: Ignore the failure in both security profiles. Continue to the next authenticator in the chain.<br/>- `false`: Deny the client in both security profiles.",
+            "enum": [
+              "per_security_profile",
+              true,
+              false
+            ],
+            "type": "string"
           },
           "node_cache": {
             "$ref": "#/components/schemas/auth_cache.config",
@@ -39694,6 +39935,9 @@
               "stomp"
             ],
             "type": "string"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/gateway.stomp_transaction"
           }
         },
         "type": "object"
@@ -41576,7 +41820,7 @@
             "type": "integer"
           },
           "recv_cnt": {
-            "description": "Number of TCP packets received",
+            "description": "Number of MQTT packets received. This field has the same value as `recv_pkt`. It is kept for compatibility.",
             "type": "integer"
           },
           "recv_msg": {
@@ -41616,7 +41860,7 @@
             "type": "integer"
           },
           "send_cnt": {
-            "description": "Number of TCP packets sent",
+            "description": "Number of MQTT packets sent. This field has the same value as `send_pkt`. It is kept for compatibility.",
             "type": "integer"
           },
           "send_msg": {
@@ -41657,41 +41901,6 @@
           },
           "send_pkt": {
             "description": "Number of MQTT packets sent",
-            "type": "integer"
-          },
-          "seqno_q1_comm": {
-            "description": "Sequence number of the last PUBACK received from the client (Durable sessions only)",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "seqno_q1_dup": {
-            "description": "Sequence number of the last QoS1 message sent to the client, that hasn't been acked (Durable sessions only)",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "seqno_q1_next": {
-            "description": "Sequence number of the next QoS1 message to be sent to the client (Durable sessions only)",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "seqno_q2_comm": {
-            "description": "Sequence number of the last PUBCOMP received from the client (Durable sessions only)",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "seqno_q2_dup": {
-            "description": "Sequence number of the last QoS2 message sent to the client, that hasn't been acked (Durable sessions only)",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "seqno_q2_next": {
-            "description": "Sequence number of next QoS2 message to be added to the batch (Durable sessions only)",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "seqno_q2_rec": {
-            "description": "Sequence number of last PUBREC received from the client (Durable sessions only)",
-            "minimum": 0,
             "type": "integer"
           },
           "subscriptions_cnt": {
@@ -41764,7 +41973,7 @@
             "type": "string"
           },
           "inserted_at": {
-            "description": "A nanosecond precision Unix epoch timestamp at which a message was inserted to In-flight / Mqueue.",
+            "description": "Message insertion time as a Unix epoch timestamp in nanoseconds.<br/>For in-flight messages, the actual clock precision is microseconds.",
             "type": "string"
           },
           "msgid": {
@@ -41804,7 +42013,7 @@
             "type": "string"
           },
           "inserted_at": {
-            "description": "A nanosecond precision Unix epoch timestamp at which a message was inserted to In-flight / Mqueue.",
+            "description": "Message insertion time as a Unix epoch timestamp in nanoseconds.<br/>For in-flight messages, the actual clock precision is microseconds.",
             "type": "string"
           },
           "mqueue_priority": {
@@ -42022,7 +42231,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "0D7DD080DD517F0C",
+            "example": "396BF065B9DB028B",
             "type": "string"
           },
           "status": {
@@ -44430,7 +44639,7 @@
       "exhook.ssl_conf": {
         "properties": {
           "cacertfile": {
-            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.",
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.<br/><br/>TLS clients can set <code>system_default</code> instead of a path, to trust the CA certificates of <code>node.trusted_certs</code>.<br/>Listeners do not accept this value.",
             "type": "string"
           },
           "cacerts": {
@@ -44725,7 +44934,7 @@
             "type": "boolean"
           },
           "host": {
-            "description": "The host of the S3 endpoint.",
+            "description": "The host of the S3 endpoint.<br/><br/>Note: even when using the Virtual Host (`vhost`) access method, do **NOT** specify an endpoint containing the bucket name.  The bucket name is specified in each Action, and prepended to the endpoint automatically.",
             "type": "string"
           },
           "max_part_size": {
@@ -44744,6 +44953,10 @@
             "description": "The port of the S3 endpoint.",
             "minimum": 1,
             "type": "integer"
+          },
+          "region": {
+            "description": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.<br/><br/>When this field is set, its value takes precedence over the region inferred from the endpoint host.<br/>Otherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.<br/><br/>Set this field when the endpoint host does not contain the region, for example a custom domain name.",
+            "type": "string"
           },
           "secret_access_key": {
             "description": "The secret access key of the S3 bucket.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
@@ -44842,6 +45055,7 @@
           },
           "password": {
             "description": "Template for overriding password.",
+            "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
@@ -44861,7 +45075,7 @@
           },
           "exchange_lifetime": {
             "default": "247s",
-            "description": "How long temporary block-wise state is kept.<br/>Too short can break slow transfers; too long consumes memory longer.",
+            "description": "How long temporary block-wise state is kept. Must be greater than zero.<br/>Too short can break slow transfers; too long consumes memory longer.",
             "example": "32s",
             "type": "string"
           },
@@ -44875,7 +45089,19 @@
           },
           "max_body_size": {
             "default": "4MB",
-            "description": "Maximum final payload size after reassembly.<br/>If exceeded, the message is rejected to protect memory.",
+            "description": "Maximum final payload size after reassembly. Must be greater than zero.<br/>If exceeded, the message is rejected to protect memory.",
+            "example": "32MB",
+            "type": "string"
+          },
+          "max_concurrent_exchanges": {
+            "default": 16,
+            "description": "Maximum number of block-wise exchanges retained by one client session.<br/>When full, new uploads receive 4.29 and downlink notifications wait in the Observe queue.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_total_size": {
+            "default": "16MB",
+            "description": "Maximum total payload bytes retained by block-wise exchanges in one client session. Must be greater than zero.<br/>When full, uploads receive 4.13 and downlink notifications wait if they can fit later.",
             "example": "32MB",
             "type": "string"
           }
@@ -44886,7 +45112,7 @@
         "properties": {
           "cacertfile": {
             "default": "${EMQX_ETC_DIR}/certs/cacert.pem",
-            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.",
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.<br/><br/>TLS clients can set <code>system_default</code> instead of a path, to trust the CA certificates of <code>node.trusted_certs</code>.<br/>Listeners do not accept this value.",
             "type": "string"
           },
           "cacerts": {
@@ -45247,7 +45473,7 @@
           },
           "exchange_lifetime": {
             "default": "247s",
-            "description": "How long temporary block-wise state is kept.<br/>Too short can break slow transfers; too long consumes memory longer.",
+            "description": "How long temporary block-wise state is kept. Must be greater than zero.<br/>Too short can break slow transfers; too long consumes memory longer.",
             "example": "32s",
             "type": "string"
           },
@@ -45261,7 +45487,19 @@
           },
           "max_body_size": {
             "default": "4MB",
-            "description": "Maximum final payload size after reassembly.<br/>If exceeded, the message is rejected to protect memory.",
+            "description": "Maximum final payload size after reassembly. Must be greater than zero.<br/>If exceeded, the message is rejected to protect memory.",
+            "example": "32MB",
+            "type": "string"
+          },
+          "max_concurrent_exchanges": {
+            "default": 16,
+            "description": "Maximum number of block-wise exchanges retained by one client session.<br/>When full, new uploads receive 4.29 and downlink commands wait in the session queue.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_total_size": {
+            "default": "16MB",
+            "description": "Maximum total payload bytes retained by block-wise exchanges in one client session. Must be greater than zero.<br/>When full, uploads receive 4.13 and downlink commands wait if they can fit later.",
             "example": "32MB",
             "type": "string"
           }
@@ -45321,9 +45559,15 @@
       },
       "gateway.protocol": {
         "properties": {
+          "max_control_line": {
+            "default": 4096,
+            "description": "Maximum length of a NATS protocol control line, excluding the CRLF delimiter. The default is 4096 bytes and the minimum is 1024 bytes.",
+            "minimum": 0,
+            "type": "integer"
+          },
           "max_payload_size": {
             "default": 1048576,
-            "description": "The maximum number of bytes of Payload allowed per NATS PUB/HPUB message.",
+            "description": "Maximum number of bytes allowed in a NATS PUB payload or HPUB headers and payload. This value is advertised as INFO.max_payload.",
             "minimum": 0,
             "type": "integer"
           }
@@ -45348,6 +45592,35 @@
             "description": "The maximum string length of the Header Value",
             "minimum": 0,
             "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "gateway.stomp_transaction": {
+        "properties": {
+          "max_actions_per_transaction": {
+            "default": 1000,
+            "description": "Maximum number of frames that can be buffered in a single transaction",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "max_retained_bytes": {
+            "default": 16777216,
+            "description": "Maximum number of bytes retained by all open transactions on a connection",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "max_transactions": {
+            "default": 100,
+            "description": "Maximum number of transactions that can be open at the same time on a connection",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "timeout": {
+            "default": "60s",
+            "description": "How long a transaction may stay open without being committed or aborted. Must be greater than zero.",
+            "example": "32s",
+            "type": "string"
           }
         },
         "type": "object"
@@ -45453,10 +45726,11 @@
             "type": "string"
           },
           "max_frame_size": {
-            "default": "infinity",
-            "description": "The maximum length of a single MQTT packet.",
+            "default": 2097152,
+            "description": "The maximum size of a single WebSocket message, in bytes.<br/>The limit applies to the message after its fragments are joined, and after decompression when <code>compress</code> is enabled.<br/>When a client sends a larger message, the gateway closes the connection with WebSocket status code 1009.<br/><br/>Set it larger than the largest message that the gateway protocol accepts. The maximum value is 268435455.<br/>The value <code>infinity</code> is accepted for backward compatibility. It selects the default value, 2097152.",
             "oneOf": [
               {
+                "minimum": 1,
                 "type": "integer"
               },
               {
@@ -46260,7 +46534,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -46381,7 +46655,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -48412,7 +48686,7 @@
       "ldap.ssl": {
         "properties": {
           "cacertfile": {
-            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.",
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.<br/><br/>TLS clients can set <code>system_default</code> instead of a path, to trust the CA certificates of <code>node.trusted_certs</code>.<br/>Listeners do not accept this value.",
             "type": "string"
           },
           "cacerts": {
@@ -52271,6 +52545,7 @@
           "NO_DEFAULT_VALUE",
           "PARAM_ERROR",
           "PASSWORD_LOGIN_DISABLED",
+          "PLUGIN_PINNED",
           "REDIRECT",
           "RESET_FAILED",
           "RESOURCE_NOT_FOUND",
@@ -52505,10 +52780,10 @@
           "auto_create": {
             "$ref": "#/components/schemas/mq.auto_create",
             "default": {
-              "lastvalue": {},
+              "lastvalue": false,
               "regular": false
             },
-            "description": "Settings for automatically creating the Message Queue if it does not exist<br/>when subscribing to the queue topic."
+            "description": "Settings for automatically creating the Message Queue if it does not exist<br/>when subscribing to the queue topic.<br/>Automatic creation is disabled by default. Set either <code>regular</code> or<br/><code>lastvalue</code> to enable it. They cannot be enabled at the same time."
           },
           "enable": {
             "default": "auto",
@@ -52545,7 +52820,7 @@
           },
           "regular_queue_retention_period": {
             "default": "7d",
-            "description": "The maximum retention period of messages in regular Message Queues.<br/>Individual Message Queues may set a shorter retention period.",
+            "description": "The maximum retention period of messages in regular Message Queues.<br/>Individual Message Queues may set a shorter retention period.<br/>Longer retention increases disk usage.<br/>Consumed messages remain on disk until generation garbage collection reclaims them.",
             "example": "32s",
             "type": "string"
           }
@@ -52565,10 +52840,10 @@
           "auto_create": {
             "$ref": "#/components/schemas/mq.auto_create",
             "default": {
-              "lastvalue": {},
+              "lastvalue": false,
               "regular": false
             },
-            "description": "Settings for automatically creating the Message Queue if it does not exist<br/>when subscribing to the queue topic."
+            "description": "Settings for automatically creating the Message Queue if it does not exist<br/>when subscribing to the queue topic.<br/>Automatic creation is disabled by default. Set either <code>regular</code> or<br/><code>lastvalue</code> to enable it. They cannot be enabled at the same time."
           },
           "enable": {
             "default": "auto",
@@ -52605,7 +52880,7 @@
           },
           "regular_queue_retention_period": {
             "default": "7d",
-            "description": "The maximum retention period of messages in regular Message Queues.<br/>Individual Message Queues may set a shorter retention period.",
+            "description": "The maximum retention period of messages in regular Message Queues.<br/>Individual Message Queues may set a shorter retention period.<br/>Longer retention increases disk usage.<br/>Consumed messages remain on disk until generation garbage collection reclaims them.",
             "example": "32s",
             "type": "string"
           }
@@ -52623,8 +52898,8 @@
       "mq.auto_create": {
         "properties": {
           "lastvalue": {
-            "default": {},
-            "description": "Last-Value Message Queue settings for automatic creation",
+            "default": false,
+            "description": "Last-Value Message Queue settings for automatic creation.<br/>Set to <code>false</code> to not automatically create Last-Value Message Queues.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/mq.auto_create_lastvalue"
@@ -52639,7 +52914,7 @@
           },
           "regular": {
             "default": false,
-            "description": "Regular Message Queue settings for automatic creation",
+            "description": "Regular Message Queue settings for automatic creation.<br/>Set to <code>false</code> to not automatically create regular Message Queues.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/mq.auto_create_regular"
@@ -53748,6 +54023,13 @@
             "description": "The URL of OpenTSDB endpoint.",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings."
+          },
           "status": {
             "description": "The status of the bridge<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the bridge passes the health probes.<br/><br/>- <code>disconnected</code>: when the bridge can not pass health probes.<br/><br/>- <code>stopped</code>: when the bridge resource is requested to be stopped.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status.",
             "enum": [
@@ -53826,6 +54108,13 @@
             "description": "The URL of OpenTSDB endpoint.",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings."
+          },
           "summary": {
             "default": true,
             "description": "Whether to return summary information.",
@@ -53884,6 +54173,13 @@
           "server": {
             "description": "The URL of OpenTSDB endpoint.",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings."
           },
           "summary": {
             "default": true,
@@ -54007,6 +54303,11 @@
             "example": "emqx_plugin_template-5.0-rc.1",
             "type": "string"
           },
+          "pinned": {
+            "description": "True when every node that reports the plugin lists it in node.pinned_plugins.<br/>Such a plugin is not managed through the cluster.",
+            "example": false,
+            "type": "boolean"
+          },
           "readme": {
             "description": "Only return when `GET /plugins/{name}`.",
             "example": "This is an demo plugin.",
@@ -54081,6 +54382,11 @@
             "description": "Node name.",
             "example": "emqx@127.0.0.1",
             "type": "string"
+          },
+          "pinned": {
+            "description": "True when this node lists the plugin in node.pinned_plugins.<br/>The node runs the plugin independently of the cluster plugin config.",
+            "example": false,
+            "type": "boolean"
           },
           "status": {
             "description": "Install plugin status at runtime.<br/>  - running: plugin is running.<br/>  - stopped: plugin is stopped.",
@@ -54570,7 +54876,7 @@
           "request_ttl": {
             "default": "45s",
             "deprecated": true,
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -54596,7 +54902,7 @@
             "type": "string"
           },
           "health_check_timeout": {
-            "default": "60s",
+            "default": "10s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
             "oneOf": [
               {
@@ -55476,7 +55782,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -56444,7 +56750,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -58839,7 +59145,7 @@
           },
           "max_retries": {
             "default": 2,
-            "description": "HTTP request max retry times if failed.",
+            "description": "Maximum number of retries for failed HTTP requests within a single action query.<br/>Retries for normal connection shutdown races do not consume this budget.<br/>The action buffer may retry recoverable errors independently until the request TTL expires.",
             "minimum": 0,
             "type": "integer"
           },
@@ -59916,6 +60222,11 @@
             "example": "1h",
             "type": "string"
           },
+          "skip_login_cookie_check": {
+            "default": false,
+            "description": "Enable at your own risk. When `true`, EMQX does not check the login cookie at the SSO callback, so a login is no longer bound to the browser that started it. Enable it only when browsers cannot keep that cookie and SSO login fails, for example when users open the Dashboard at an address other than `dashboard_addr`. Defaults to `false`.",
+            "type": "boolean"
+          },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
             "description": "SSL connection settings."
@@ -59934,10 +60245,10 @@
           "auto_create": {
             "$ref": "#/components/schemas/streams.auto_create",
             "default": {
-              "lastvalue": {},
+              "lastvalue": false,
               "regular": false
             },
-            "description": "Settings for automatically creating the Message Stream if it does not exist<br/>when subscribing to the queue topic."
+            "description": "Settings for automatically creating the Message Stream if it does not exist<br/>when subscribing to the queue topic.<br/>Automatic creation is disabled by default. Set either <code>regular</code> or<br/><code>lastvalue</code> to enable it. They cannot be enabled at the same time."
           },
           "enable": {
             "default": false,
@@ -59986,10 +60297,10 @@
           "auto_create": {
             "$ref": "#/components/schemas/streams.auto_create",
             "default": {
-              "lastvalue": {},
+              "lastvalue": false,
               "regular": false
             },
-            "description": "Settings for automatically creating the Message Stream if it does not exist<br/>when subscribing to the queue topic."
+            "description": "Settings for automatically creating the Message Stream if it does not exist<br/>when subscribing to the queue topic.<br/>Automatic creation is disabled by default. Set either <code>regular</code> or<br/><code>lastvalue</code> to enable it. They cannot be enabled at the same time."
           },
           "enable": {
             "default": false,
@@ -60036,8 +60347,8 @@
       "streams.auto_create": {
         "properties": {
           "lastvalue": {
-            "default": {},
-            "description": "Last-Value Message Stream settings for automatic creation",
+            "default": false,
+            "description": "Last-Value Message Stream settings for automatic creation.<br/>Set to <code>false</code> to not automatically create Last-Value Message Streams.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/streams.auto_create_lastvalue"
@@ -60052,7 +60363,7 @@
           },
           "regular": {
             "default": false,
-            "description": "Regular Message Stream settings for automatic creation",
+            "description": "Regular Message Stream settings for automatic creation.<br/>Set to <code>false</code> to not automatically create regular Message Streams.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/streams.auto_create_regular"
@@ -60527,7 +60838,7 @@
           },
           "request_ttl": {
             "default": "infinity",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -61142,6 +61453,13 @@
             "description": "The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The TDengine default port 6041 is used if `[:Port]` is not specified.<br/><br/>This field also supports an HTTPS URLs to connect to the TDengine Cloud. For example: `https://gw.us-west-2.aws.cloud.tdengine.com `",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings."
+          },
           "status": {
             "description": "The status of the bridge<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the bridge passes the health probes.<br/><br/>- <code>disconnected</code>: when the bridge can not pass health probes.<br/><br/>- <code>stopped</code>: when the bridge resource is requested to be stopped.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status.",
             "enum": [
@@ -61230,6 +61548,13 @@
             "description": "The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The TDengine default port 6041 is used if `[:Port]` is not specified.<br/><br/>This field also supports an HTTPS URLs to connect to the TDengine Cloud. For example: `https://gw.us-west-2.aws.cloud.tdengine.com `",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings."
+          },
           "tags": {
             "description": "Tags to annotate this config entry.",
             "items": {
@@ -61298,6 +61623,13 @@
           "server": {
             "description": "The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The TDengine default port 6041 is used if `[:Port]` is not specified.<br/><br/>This field also supports an HTTPS URLs to connect to the TDengine Cloud. For example: `https://gw.us-west-2.aws.cloud.tdengine.com `",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings."
           },
           "tags": {
             "description": "Tags to annotate this config entry.",
@@ -61681,8 +62013,9 @@
     }
   },
   "info": {
+    "description": "A request accepts at most 100 query parameters in total, including repeated and pagination parameters.",
     "title": "EMQX Enterprise API",
-    "version": "6.3.2"
+    "version": "6.3.3-rc.2"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -62298,106 +62631,106 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "s3",
-                      "datalayers",
-                      "rocketmq",
-                      "azure_event_grid",
-                      "mongodb",
                       "snowflake_streaming",
-                      "kafka_producer",
-                      "kinesis",
-                      "iotdb",
-                      "pgsql",
-                      "rabbitmq",
-                      "matrix",
-                      "sqlserver",
                       "tdengine",
-                      "quasardb",
-                      "greptimedb",
+                      "azure_blob_storage",
                       "alloydb",
-                      "redis",
-                      "pulsar",
-                      "tablestore",
-                      "influxdb",
+                      "elasticsearch",
+                      "s3",
+                      "bigquery",
+                      "sqlserver",
+                      "azure_event_grid",
+                      "cassandra",
+                      "mysql",
+                      "confluent_producer",
+                      "iotdb",
+                      "cockroachdb",
                       "timescale",
                       "azure_event_hub_producer",
                       "clickhouse",
-                      "bigquery",
-                      "gcp_pubsub_producer",
-                      "doris",
-                      "couchbase",
-                      "dynamo",
-                      "disk_log",
-                      "emqx_tables",
-                      "confluent_producer",
-                      "http",
-                      "snowflake",
-                      "bigtable",
-                      "azure_blob_storage",
-                      "mysql",
-                      "redshift",
-                      "mqtt",
-                      "cassandra",
+                      "pgsql",
                       "oracle",
-                      "elasticsearch",
+                      "doris",
                       "syskeeper_forwarder",
+                      "bigtable",
+                      "aws_timestream",
+                      "couchbase",
+                      "datalayers",
+                      "disk_log",
+                      "greptimedb",
+                      "quasardb",
+                      "redshift",
+                      "emqx_tables",
+                      "matrix",
+                      "rocketmq",
+                      "snowflake",
+                      "http",
                       "s3tables",
-                      "cockroachdb",
                       "opents",
-                      "aws_timestream"
+                      "dynamo",
+                      "rabbitmq",
+                      "influxdb",
+                      "mqtt",
+                      "mongodb",
+                      "tablestore",
+                      "pulsar",
+                      "kafka_producer",
+                      "redis",
+                      "kinesis",
+                      "gcp_pubsub_producer"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "s3",
-                      "datalayers",
-                      "rocketmq",
-                      "azure_event_grid",
-                      "mongodb",
                       "snowflake_streaming",
-                      "kafka_producer",
-                      "kinesis",
-                      "iotdb",
-                      "pgsql",
-                      "rabbitmq",
-                      "matrix",
-                      "sqlserver",
                       "tdengine",
-                      "quasardb",
-                      "greptimedb",
+                      "azure_blob_storage",
                       "alloydb",
-                      "redis",
-                      "pulsar",
-                      "tablestore",
-                      "influxdb",
+                      "elasticsearch",
+                      "s3",
+                      "bigquery",
+                      "sqlserver",
+                      "azure_event_grid",
+                      "cassandra",
+                      "mysql",
+                      "confluent_producer",
+                      "iotdb",
+                      "cockroachdb",
                       "timescale",
                       "azure_event_hub_producer",
                       "clickhouse",
-                      "bigquery",
-                      "gcp_pubsub_producer",
-                      "doris",
-                      "couchbase",
-                      "dynamo",
-                      "disk_log",
-                      "emqx_tables",
-                      "confluent_producer",
-                      "http",
-                      "snowflake",
-                      "bigtable",
-                      "azure_blob_storage",
-                      "mysql",
-                      "redshift",
-                      "mqtt",
-                      "cassandra",
+                      "pgsql",
                       "oracle",
-                      "elasticsearch",
+                      "doris",
                       "syskeeper_forwarder",
+                      "bigtable",
+                      "aws_timestream",
+                      "couchbase",
+                      "datalayers",
+                      "disk_log",
+                      "greptimedb",
+                      "quasardb",
+                      "redshift",
+                      "emqx_tables",
+                      "matrix",
+                      "rocketmq",
+                      "snowflake",
+                      "http",
                       "s3tables",
-                      "cockroachdb",
                       "opents",
-                      "aws_timestream"
+                      "dynamo",
+                      "rabbitmq",
+                      "influxdb",
+                      "mqtt",
+                      "mongodb",
+                      "tablestore",
+                      "pulsar",
+                      "kafka_producer",
+                      "redis",
+                      "kinesis",
+                      "gcp_pubsub_producer"
                     ],
                     "type": "string"
                   },
@@ -74796,7 +75129,6 @@
                       "type": "string"
                     },
                     "role": {
-                      "default": "administrator",
                       "description": "Role for this API. A namespaced role is written as `ns:<namespace>::<role>`. Namespace names listed in `multi_tenancy.deny_namespaces` (default: `global`, `undefined`, `null`, `none`) cannot be used.",
                       "example": "administrator",
                       "type": "string"
@@ -75129,7 +75461,6 @@
                       "type": "string"
                     },
                     "role": {
-                      "default": "administrator",
                       "description": "Role for this API. A namespaced role is written as `ns:<namespace>::<role>`. Namespace names listed in `multi_tenancy.deny_namespaces` (default: `global`, `undefined`, `null`, `none`) cannot be used.",
                       "example": "administrator",
                       "type": "string"
@@ -75223,7 +75554,6 @@
                     "type": "boolean"
                   },
                   "expired_at": {
-                    "default": "infinity",
                     "description": "Expiration time. Either an ISO 8601 timestamp / epoch second, or `infinity` for keys that never expire.",
                     "example": "2021-12-05T02:01:34.186Z",
                     "oneOf": [
@@ -75255,7 +75585,6 @@
                     "type": "string"
                   },
                   "role": {
-                    "default": "administrator",
                     "description": "Role for this API. A namespaced role is written as `ns:<namespace>::<role>`. Namespace names listed in `multi_tenancy.deny_namespaces` (default: `global`, `undefined`, `null`, `none`) cannot be used.",
                     "example": "administrator",
                     "type": "string"
@@ -75364,7 +75693,6 @@
                       "type": "string"
                     },
                     "role": {
-                      "default": "administrator",
                       "description": "Role for this API. A namespaced role is written as `ns:<namespace>::<role>`. Namespace names listed in `multi_tenancy.deny_namespaces` (default: `global`, `undefined`, `null`, `none`) cannot be used.",
                       "example": "administrator",
                       "type": "string"
@@ -78436,9 +78764,14 @@
                       "type": "string"
                     },
                     "ignore_backend_failures": {
-                      "default": false,
-                      "description": "When enabled, authorization backend failures are ignored even when the active security profile would deny them.",
-                      "type": "boolean"
+                      "default": "per_security_profile",
+                      "description": "Decides what happens when an authorization backend fails, for example when the database is unreachable or the request times out.<br/>- `per_security_profile`: Follow the security profile. The `legacy` profile ignores the failure. The `hardened` profile denies the action.<br/>- `true`: Ignore the failure in both security profiles. Continue to the next authorization source.<br/>- `false`: Deny the action in both security profiles.",
+                      "enum": [
+                        "per_security_profile",
+                        true,
+                        false
+                      ],
+                      "type": "string"
                     },
                     "include_mountpoint": {
                       "default": false,
@@ -78500,9 +78833,14 @@
                     "type": "string"
                   },
                   "ignore_backend_failures": {
-                    "default": false,
-                    "description": "When enabled, authorization backend failures are ignored even when the active security profile would deny them.",
-                    "type": "boolean"
+                    "default": "per_security_profile",
+                    "description": "Decides what happens when an authorization backend fails, for example when the database is unreachable or the request times out.<br/>- `per_security_profile`: Follow the security profile. The `legacy` profile ignores the failure. The `hardened` profile denies the action.<br/>- `true`: Ignore the failure in both security profiles. Continue to the next authorization source.<br/>- `false`: Deny the action in both security profiles.",
+                    "enum": [
+                      "per_security_profile",
+                      true,
+                      false
+                    ],
+                    "type": "string"
                   },
                   "include_mountpoint": {
                     "default": false,
@@ -78547,9 +78885,14 @@
                       "type": "string"
                     },
                     "ignore_backend_failures": {
-                      "default": false,
-                      "description": "When enabled, authorization backend failures are ignored even when the active security profile would deny them.",
-                      "type": "boolean"
+                      "default": "per_security_profile",
+                      "description": "Decides what happens when an authorization backend fails, for example when the database is unreachable or the request times out.<br/>- `per_security_profile`: Follow the security profile. The `legacy` profile ignores the failure. The `hardened` profile denies the action.<br/>- `true`: Ignore the failure in both security profiles. Continue to the next authorization source.<br/>- `false`: Deny the action in both security profiles.",
+                      "enum": [
+                        "per_security_profile",
+                        true,
+                        false
+                      ],
+                      "type": "string"
                     },
                     "include_mountpoint": {
                       "default": false,
@@ -82323,7 +82666,7 @@
             "$ref": "#/components/parameters/public.limit"
           },
           {
-            "description": "User name of client when connecting",
+            "description": "Username. This parameter can be repeated.",
             "in": "query",
             "name": "username",
             "required": false,
@@ -82475,7 +82818,7 @@
             }
           },
           {
-            "description": "Client ID",
+            "description": "Client ID. This parameter can be repeated.",
             "in": "query",
             "name": "clientid",
             "required": false,
@@ -97946,7 +98289,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "0D7DD080DD517F0C",
+            "example": "396BF065B9DB028B",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98009,7 +98352,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "0D7DD080DD517F0C",
+            "example": "396BF065B9DB028B",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98423,7 +98766,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "0D7DD080DD517F0C",
+            "example": "396BF065B9DB028B",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98509,7 +98852,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "0D7DD080DD517F0C",
+            "example": "396BF065B9DB028B",
             "in": "path",
             "name": "site",
             "required": true,
@@ -103991,73 +104334,6 @@
                   },
                   {
                     "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
-                  },
-                  {
-                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -104158,6 +104434,73 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
+                  },
+                  {
+                    "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
                   }
                 ],
                 "schema": {
@@ -109942,8 +110285,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -115978,6 +116321,28 @@
               }
             },
             "description": ""
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PLUGIN_PINNED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "The plugin is listed in node.pinned_plugins, so the operation is not allowed.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -116039,6 +116404,50 @@
                     },
                     "message": {
                       "description": "Possible error reason codes for invalid requests.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PLUGIN_PINNED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "The plugin is listed in node.pinned_plugins, so the operation is not allowed.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Internal Error.",
                       "type": "string"
                     }
                   },
@@ -116110,6 +116519,28 @@
                     },
                     "message": {
                       "description": "Plugin Not Found.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PLUGIN_PINNED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "The plugin is listed in node.pinned_plugins, so the operation is not allowed.",
                       "type": "string"
                     }
                   },
@@ -116507,6 +116938,7 @@
                     "code": {
                       "enum": [
                         "BAD_CONFIG",
+                        "BAD_FORM_DATA",
                         "UNEXPECTED_ERROR"
                       ],
                       "type": "string"
@@ -116667,6 +117099,28 @@
               }
             },
             "description": ""
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PLUGIN_PINNED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "The plugin is listed in node.pinned_plugins, so the operation is not allowed.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -116801,6 +117255,28 @@
                     },
                     "message": {
                       "description": "Plugin Not Found.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PLUGIN_PINNED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "The plugin is listed in node.pinned_plugins, so the operation is not allowed.",
                       "type": "string"
                     }
                   },
@@ -119144,12 +119620,13 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "ALREADY_EXISTS"
+                        "ALREADY_EXISTS",
+                        "BAD_REQUEST"
                       ],
                       "type": "string"
                     },
                     "message": {
-                      "description": "Schema already exists.",
+                      "description": "Possible error reason codes for invalid requests.",
                       "type": "string"
                     }
                   },
@@ -119192,6 +119669,28 @@
         "responses": {
           "204": {
             "description": "Schema deleted."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Invalid request.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           },
           "404": {
             "content": {
@@ -119395,6 +119894,28 @@
             },
             "description": ""
           },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Invalid request.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
           "404": {
             "content": {
               "application/json": {
@@ -119559,12 +120080,13 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "ALREADY_EXISTS"
+                        "ALREADY_EXISTS",
+                        "BAD_REQUEST"
                       ],
                       "type": "string"
                     },
                     "message": {
-                      "description": "Schema already exists.",
+                      "description": "Possible error reason codes for invalid requests.",
                       "type": "string"
                     }
                   },
@@ -119607,6 +120129,28 @@
         "responses": {
           "204": {
             "description": "Deleted."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Invalid request.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -119771,6 +120315,28 @@
             },
             "description": ""
           },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Invalid request.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
           "404": {
             "content": {
               "application/json": {
@@ -119880,7 +120446,8 @@
                     "code": {
                       "enum": [
                         "ALREADY_EXISTS",
-                        "BAD_FORM_DATA"
+                        "BAD_FORM_DATA",
+                        "BAD_REQUEST"
                       ],
                       "type": "string"
                     },
@@ -119978,7 +120545,8 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "BAD_FORM_DATA"
+                        "BAD_FORM_DATA",
+                        "BAD_REQUEST"
                       ],
                       "type": "string"
                     },
@@ -122990,8 +123558,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -123003,10 +123571,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/sso.login"
+                    "$ref": "#/components/schemas/dashboard.login"
                   },
                   {
-                    "$ref": "#/components/schemas/dashboard.login"
+                    "$ref": "#/components/schemas/sso.login"
                   },
                   {
                     "$ref": "#/components/schemas/sso.login"
@@ -123404,6 +123972,28 @@
             },
             "description": ""
           },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "FORBIDDEN"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "The login was not started by this browser",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
           "404": {
             "content": {
               "application/json": {
@@ -123446,8 +124036,8 @@
                   "items": {
                     "enum": [
                       "ldap",
-                      "saml",
-                      "oidc"
+                      "oidc",
+                      "saml"
                     ],
                     "type": "string"
                   },
@@ -123701,8 +124291,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -123760,8 +124350,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -123774,10 +124364,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -123836,8 +124426,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -123849,10 +124439,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/sso.oidc"
+                    "$ref": "#/components/schemas/dashboard.saml"
                   },
                   {
-                    "$ref": "#/components/schemas/dashboard.saml"
+                    "$ref": "#/components/schemas/sso.oidc"
                   },
                   {
                     "$ref": "#/components/schemas/sso.ldap"
@@ -123869,10 +124459,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -125899,8 +126489,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -125992,8 +126582,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -126290,8 +126880,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -126360,8 +126950,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
