@@ -104,14 +104,7 @@
                   "username",
                   "mountpoint",
                   "durable",
-                  "n_streams",
-                  "seqno_q1_comm",
-                  "seqno_q1_dup",
-                  "seqno_q1_next",
-                  "seqno_q2_comm",
-                  "seqno_q2_dup",
-                  "seqno_q2_rec",
-                  "seqno_q2_next"
+                  "n_streams"
                 ],
                 "type": "string"
               },
@@ -5785,61 +5778,13 @@
             "oneOf": [
               {
                 "enum": [
-                  "aws_timestream"
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
+                  "bigquery"
                 ],
                 "type": "string"
               },
@@ -5851,67 +5796,7 @@
               },
               {
                 "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigtable"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "emqx_tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
+                  "redis"
                 ],
                 "type": "string"
               },
@@ -5923,7 +5808,169 @@
               },
               {
                 "enum": [
-                  "bigquery"
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "emqx_tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "quasardb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigtable"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
                 ],
                 "type": "string"
               },
@@ -5941,91 +5988,13 @@
               },
               {
                 "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "timescale"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "quasardb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
+                  "cockroachdb"
                 ],
                 "type": "string"
               },
@@ -6037,7 +6006,25 @@
               },
               {
                 "enum": [
-                  "mongodb"
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
                 ],
                 "type": "string"
               },
@@ -6049,19 +6036,25 @@
               },
               {
                 "enum": [
-                  "rocketmq"
+                  "elasticsearch"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "datalayers"
+                  "alloydb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kafka_producer"
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
                 ],
                 "type": "string"
               }
@@ -7095,7 +7088,6 @@
             "type": "string"
           },
           "role": {
-            "default": "administrator",
             "description": "该 API 的角色。命名空间角色写作 `ns:<namespace>::<role>`。`multi_tenancy.deny_namespaces` 中列出的命名空间名称（默认为 `global`、`undefined`、`null`、`none`）不可使用。",
             "example": "administrator",
             "type": "string"
@@ -9835,6 +9827,17 @@
             ],
             "type": "string"
           },
+          "oauth2": {
+            "description": "OAuth2 客户端凭证（Client Credentials）认证。启用后，EMQX 会使用 `client_credentials`<br/>授权方式从配置的令牌端点获取 OAuth2 访问令牌，并在每个出站请求上以<br/>`Authorization: Bearer <token>` 形式注入。令牌会被缓存并在过期前刷新。",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
+          },
           "pool_size": {
             "default": 8,
             "description": "连接池大小。",
@@ -9963,6 +9966,17 @@
               "post"
             ],
             "type": "string"
+          },
+          "oauth2": {
+            "description": "OAuth2 客户端凭证（Client Credentials）认证。启用后，EMQX 会使用 `client_credentials`<br/>授权方式从配置的令牌端点获取 OAuth2 访问令牌，并在每个出站请求上以<br/>`Authorization: Bearer <token>` 形式注入。令牌会被缓存并在过期前刷新。",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
           },
           "pool_size": {
             "default": 8,
@@ -10155,7 +10169,7 @@
           },
           "rules": {
             "description": "授权规则。",
-            "example": "{allow,{username,{re,\"^dashboard$\"}},subscribe,[\"$SYS/#\"]}.\n{allow,{ipaddr,\"127.0.0.1\"},all,[\"$SYS/#\",\"#\"]}.",
+            "example": "{allow,{username,\"dashboard\"},subscribe,[\"$SYS/#\"]}.\n{allow,{ipaddr,\"127.0.0.1\"},all,[\"$SYS/#\",\"#\"]}.",
             "type": "string"
           },
           "type": {
@@ -13259,6 +13273,13 @@
             "default": {},
             "description": "资源相关的选项。"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "启用 SSL 连接。"
+          },
           "status": {
             "description": "连接器的状态<br/><br/>- <code>正在连接</code>: 在进行任何健康检查之前的初始状态。<br/><br/>- <code>已连接</code>: 当连接器通过健康检查时的状态。<br/><br/>- <code>已断开</code>: 当连接器无法通过健康检查时的状态。<br/><br/>- <code>不一致</code>: 集群节点之间的连接器状态不一致。",
             "enum": [
@@ -13422,6 +13443,13 @@
             "default": {},
             "description": "资源相关的选项。"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "启用 SSL 连接。"
+          },
           "tags": {
             "description": "连接器的标签",
             "items": {
@@ -13552,6 +13580,13 @@
             "$ref": "#/components/schemas/bridge_clickhouse.connector_resource_opts",
             "default": {},
             "description": "资源相关的选项。"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "启用 SSL 连接。"
           },
           "tags": {
             "description": "连接器的标签",
@@ -18840,6 +18875,16 @@
       },
       "bridge_kafka.socket_opts": {
         "properties": {
+          "ip_family": {
+            "default": "auto",
+            "description": "连接 Kafka broker 时使用的 IP 地址族。<br/>- <code>auto</code>：按 IP 地址自身的地址族连接。对于主机名，先尝试 IPv4，IPv4 失败后再尝试 IPv6。<br/>- <code>ipv4</code>：仅通过 IPv4 连接。<br/>- <code>ipv6</code>：仅通过 IPv6 连接。当 broker 只能通过 IPv6 访问时使用此选项。",
+            "enum": [
+              "auto",
+              "ipv4",
+              "ipv6"
+            ],
+            "type": "string"
+          },
           "nodelay": {
             "default": true,
             "description": "设置‘true’让系统内核立即发送。否则当需要发送的内容很少时，可能会有一定延迟（默认 40 毫秒）。",
@@ -19355,8 +19400,6 @@
           }
         },
         "required": [
-          "aws_access_key_id",
-          "aws_secret_access_key",
           "endpoint",
           "name",
           "type"
@@ -19494,8 +19537,6 @@
           }
         },
         "required": [
-          "aws_access_key_id",
-          "aws_secret_access_key",
           "endpoint",
           "name",
           "type"
@@ -19609,8 +19650,6 @@
           }
         },
         "required": [
-          "aws_access_key_id",
-          "aws_secret_access_key",
           "endpoint"
         ],
         "type": "object"
@@ -24084,6 +24123,10 @@
             "minimum": 1,
             "type": "integer"
           },
+          "region": {
+            "description": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.<br/><br/>When this field is set, its value takes precedence over the region inferred from the endpoint host.<br/>Otherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.<br/><br/>Set this field when the endpoint host does not contain the region, for example a custom domain name.",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_s3.s3_connector_resource_opts",
             "default": {},
@@ -24249,6 +24292,10 @@
             "minimum": 1,
             "type": "integer"
           },
+          "region": {
+            "description": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.<br/><br/>When this field is set, its value takes precedence over the region inferred from the endpoint host.<br/>Otherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.<br/><br/>Set this field when the endpoint host does not contain the region, for example a custom domain name.",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_s3.s3_connector_resource_opts",
             "default": {},
@@ -24381,6 +24428,10 @@
             "description": "S3 端点的端口。",
             "minimum": 1,
             "type": "integer"
+          },
+          "region": {
+            "description": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.<br/><br/>When this field is set, its value takes precedence over the region inferred from the endpoint host.<br/>Otherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.<br/><br/>Set this field when the endpoint host does not contain the region, for example a custom domain name.",
+            "type": "string"
           },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_s3.s3_connector_resource_opts",
@@ -25670,7 +25721,7 @@
             "description": "资源相关的选项。"
           },
           "ssl": {
-            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
             "default": {
               "enable": false
             },
@@ -25842,7 +25893,7 @@
             "description": "资源相关的选项。"
           },
           "ssl": {
-            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
             "default": {
               "enable": false
             },
@@ -25982,7 +26033,7 @@
             "description": "资源相关的选项。"
           },
           "ssl": {
-            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
             "default": {
               "enable": false
             },
@@ -33564,6 +33615,146 @@
         },
         "type": "object"
       },
+      "connector_schema_lib.client_tls_verify_peer": {
+        "properties": {
+          "cacertfile": {
+            "default": "system_default",
+            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。",
+            "type": "string"
+          },
+          "cacerts": {
+            "default": false,
+            "deprecated": true,
+            "type": "boolean"
+          },
+          "certfile": {
+            "description": "PEM 格式证书链文件<br/><br/>此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，<br/>然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。<br/>根 CA 证书是可选的，如果想要添加，应加到文件到最末端。",
+            "type": "string"
+          },
+          "ciphers": {
+            "default": [],
+            "description": "此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如<br/><code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code>或<br/><code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>。<br/><br/><br/>密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。<br/>选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。<br/><br/>名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。<br/>EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/><br/>注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。<br/>不兼容的密码套件将被自动删除。<br/><br/>例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。<br/><br/><br/><br/>注：PSK 的 Ciphers 不支持 tlsv1.3<br/><br/>如果打算使用 PSK 密码套件, <code>tlsv1.3</code> 应在<code>ssl.versions</code>中禁用。<br/><br/><br/><br/>PSK 密码套件：<br/><code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,<br/>RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,<br/>RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,<br/>RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code>",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "depth": {
+            "default": 10,
+            "description": "在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。<br/>因此，如果深度为 0，则对等方必须由受信任的根 CA 直接签名；<br/><br/>如果是 1，路径可以是 PEER、中间 CA、ROOT-CA；<br/><br/>如果是 2，则路径可以是 PEER、中间 CA1、中间 CA2、ROOT-CA。",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "enable": {
+            "default": false,
+            "description": "启用 TLS。",
+            "type": "boolean"
+          },
+          "hibernate_after": {
+            "default": "5s",
+            "description": "指定 SSL 进程在空闲后休眠的时间，从而减少其内存占用。<br/><br/>当有新消息到达时，休眠的进程将被唤醒。<br/>过于频繁地休眠和唤醒可能会导致 CPU 使用率增加，因为这两个操作都会对进程进行垃圾回收。",
+            "example": "12m",
+            "type": "string"
+          },
+          "keyfile": {
+            "description": "PEM 格式的私钥文件。",
+            "type": "string"
+          },
+          "log_level": {
+            "default": "notice",
+            "description": "SSL 握手的日志级别。默认值是 'notice'，可以设置为 'debug' 用来调查 SSL 握手的问题。",
+            "enum": [
+              "emergency",
+              "alert",
+              "critical",
+              "error",
+              "warning",
+              "notice",
+              "info",
+              "debug",
+              "none",
+              "all"
+            ],
+            "type": "string"
+          },
+          "managed_certs": {
+            "$ref": "#/components/schemas/emqx.managed_certs",
+            "description": "EMQX 管理的证书文件捆绑包的引用。<br/><br/>如果使用此选项，`cacertfile`、`certfile`、`keyfile` 和 `password` 将被忽略。"
+          },
+          "middlebox_comp_mode": {
+            "default": true,
+            "description": "配置 TLS-1.3 连接的中间盒兼容模式。<br/><br/>大量中间盒在协商 TLS-1.3 连接时表现不佳。通过将 TLS-1.3 握手调整为类似于 TLS-1.2 握手的方式，可以增加通过这些中间盒建立连接的机会。",
+            "type": "boolean"
+          },
+          "partial_chain": {
+            "description": "启用或禁用使用 partial_chain 的对等验证。<br/>在 x509 路径验证过程中，本地验证对等证书时，它会构建一个从对等证书开始到信任锚结束的证书链。<br/>默认情况下，如果设置为 `false`，信任锚是根 CA，证书链必须完整。<br/>但是，如果设置为 `true` 或 `cacert_from_cacertfile`，则 `cacertfile` 中的最后一个证书将用作信任锚证书（中间 CA）。这在路径验证中创建了一个部分链。<br/>或者，如果配置为 `two_cacerts_from_cacertfile`，则 `cacertfile` 中的最后两个证书之一将用作信任锚证书，形成部分链。此选项特别适用于中间 CA 证书轮换。<br/>但是，请注意，这会产生一些额外的开销，因此应仅用于证书轮换目的。",
+            "enum": [
+              true,
+              false,
+              "two_cacerts_from_cacertfile",
+              "cacert_from_cacertfile"
+            ],
+            "type": "string"
+          },
+          "password": {
+            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/><br/>如需从文件加载密码而不是内联写入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式。文件内容（去除末尾空白）将作为密码使用。集群模式下，该文件必须存在于所有 EMQX 节点。",
+            "example": "",
+            "format": "password",
+            "type": "string"
+          },
+          "reuse_sessions": {
+            "default": false,
+            "description": "启用 TLS 会话重用。",
+            "type": "boolean"
+          },
+          "secure_renegotiate": {
+            "default": true,
+            "description": "SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。<br/>RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。",
+            "type": "boolean"
+          },
+          "server_name_indication": {
+            "description": "指定要在 TLS 服务器名称指示扩展中使用的主机名。<br/><br/>例如，当连接到 \"server.example.net\" 时，接受连接并执行 TLS 握手的真正服务器可能与 TLS 客户端最初连接到的主机不同，<br/>例如，当连接到 IP 地址时，或者当主机具有多个可解析的 DNS 记录时<br/><br/>如果未指定，它将默认为使用的主机名字符串<br/>建立连接，除非使用 IP 地址<br/><br/>然后，主机名也用于对等机的主机名验证证书<br/><br/>特殊值 <code>disable</code> 阻止发送服务器名称指示扩展，并禁用主机名验证检查。",
+            "example": "disable",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disable"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "verify": {
+            "default": "verify_peer",
+            "description": "启用或禁用对等验证。",
+            "enum": [
+              "verify_peer",
+              "verify_none"
+            ],
+            "type": "string"
+          },
+          "verify_peer_ext_key_usage": {
+            "description": "验证对等证书中的扩展密钥用法<br/>为了额外的对等证书验证，这里定义的值必须出现在对等证书的 '扩展密钥用法' 中，<br/>如 [rfc5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.12) 中定义。<br/><br/>允许的值有<br/>- `clientAuth`<br/>- `serverAuth`<br/>- `codeSigning`<br/>- `emailProtection`<br/>- `timeStamping`<br/>- `ocspSigning`<br/>- 原始 OID，例如：\"OID:1.3.6.1.5.5.7.3.2\" 表示 `id-pk 2`，相当于 `clientAuth`<br/><br/>也支持用逗号分隔的字符串来验证多个密钥用法。<br/><br/>例如，`\"serverAuth,OID:1.3.6.1.5.5.7.3.2\"`",
+            "example": "",
+            "type": "string"
+          },
+          "versions": {
+            "default": [
+              "tlsv1.3",
+              "tlsv1.2"
+            ],
+            "description": "支持所有 TLS/DTLS 版本<br/><br/>注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>[\"tlsv1.2\",\"tlsv1.1\"]</code>。",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "connector_snowflake_aggregated.get_connector": {
         "properties": {
           "account": {
@@ -34609,6 +34800,11 @@
             ],
             "type": "string"
           },
+          "show_preview_version": {
+            "default": true,
+            "description": "Report the release version with its preview suffix in the REST API.<br/>When set to `false`, the REST API removes the `-preview.N` suffix from the version that it reports.<br/>For example, `6.1.5-preview.1` is reported as `6.1.5`.<br/>The setting has no effect on a release version without the suffix.",
+            "type": "boolean"
+          },
           "sso": {
             "$ref": "#/components/schemas/dashboard.sso"
           },
@@ -34823,6 +35019,11 @@
           "idp_signs_envelopes": {
             "default": true,
             "description": "是否要求 IDP 对 SAML Response 信封进行签名（外部签名）。在所有安全配置档案下默认为 `true`。若要完全禁用签名校验，需将本项与 `idp_signs_assertions` 同时设为 `false`；这样做不安全，仅应用于测试。",
+            "type": "boolean"
+          },
+          "skip_login_cookie_check": {
+            "default": false,
+            "description": "启用此选项需自行承担风险。设置为 `true` 时，EMQX 不会在 Assertion Consumer Service 处检查登录 Cookie，因此登录不再与发起登录的浏览器绑定。仅当浏览器无法保留该 Cookie 并导致 SSO 登录失败时才启用此选项，例如 `dashboard_addr` 使用明文 HTTP 时。默认值为 `false`。",
             "type": "boolean"
           },
           "sp_private_key": {
@@ -35086,8 +35287,8 @@
             "description": "后端类型。",
             "enum": [
               "ldap",
-              "saml",
-              "oidc"
+              "oidc",
+              "saml"
             ],
             "type": "string"
           },
@@ -36109,12 +36310,6 @@
             "description": "PEM 格式证书链文件<br/><br/>此文件中的证书应与证书颁发链的顺序相反。也就是说，主机的证书应该放在文件的开头，<br/>然后是直接颁发者 CA 证书，依此类推，一直到根 CA 证书。<br/>根 CA 证书是可选的，如果想要添加，应加到文件到最末端。",
             "type": "string"
           },
-          "hibernate_after": {
-            "default": "5s",
-            "description": "指定 SSL 进程在空闲后休眠的时间，从而减少其内存占用。<br/><br/>当有新消息到达时，休眠的进程将被唤醒。<br/>过于频繁地休眠和唤醒可能会导致 CPU 使用率增加，因为这两个操作都会对进程进行垃圾回收。",
-            "example": "12m",
-            "type": "string"
-          },
           "keyfile": {
             "default": "${EMQX_ETC_DIR}/certs/key.pem",
             "description": "PEM 格式的私钥文件。",
@@ -36849,6 +37044,28 @@
             "minimum": 23,
             "type": "integer"
           },
+          "max_connect_packet_size": {
+            "default": "1MB",
+            "description": "CONNECT 报文的最大长度。最大值：256 MB。<br/>当 CONNECT 报文超过此长度时，EMQX 会关闭连接。<br/>此限制在 `max_packet_size` 之外额外生效，两者中较小的值适用于 CONNECT 报文。",
+            "example": "32MB",
+            "type": "string"
+          },
+          "max_connect_user_properties": {
+            "default": 100,
+            "description": "CONNECT 报文中允许的用户属性键值对的最大数量。<br/>该限制分别作用于 CONNECT 属性和遗嘱属性。<br/>当 CONNECT 报文携带的键值对数量超过此值时，EMQX 会关闭连接。<br/>设置为 `infinity` 表示不限制数量。",
+            "oneOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
           "max_inflight": {
             "default": 32,
             "description": "允许在完成应答前同时投递的 QoS 1 和 QoS 2 消息的最大数量。如果 MQTT 5 客户端在连接建立时声明了更小的 Receive Maximum，则采用客户端声明的限制。<br/><br/>注意，在拥塞的连接上，可用的飞行窗口槽位同时也限制了响应客户端应答时一次可投递的消息数量，与 QoS 等级无关。",
@@ -37535,6 +37752,15 @@
             "example": "4KB",
             "type": "string"
           },
+          "buffer_retention_strategy": {
+            "default": "packet",
+            "description": "Receive buffer retention strategy for the `socket` TCP backend.<br/><br/>- `packet`: Do not keep the *receive buffer* while waiting for the next packet.<br/>- `always`: Always keep the *receive buffer* while waiting for data.",
+            "enum": [
+              "always",
+              "packet"
+            ],
+            "type": "string"
+          },
           "high_watermark": {
             "default": "1MB",
             "description": "控制在 EMQX 将连接视为拥塞之前，可以排队的待发送数据量。<br/><br/>该值越小，EMQX 越早对慢速客户端作出反应；该值越大，则允许排队更多数据后才判定连接拥塞。当连接处于拥塞状态时，EMQX 会减慢对该客户端的 QoS 0 投递，以帮助连接恢复。<br/><br/>对于默认的 `socket` TCP 后端，该值控制 EMQX 的内部发送队列。如果排队数据持续增长并超过该限制，`send_timeout` 的计时将开始。<br/><br/>对于 `gen_tcp` 后端，该值同时控制 Erlang 的套接字忙碌阈值。如果 Erlang 内部套接字缓冲区增长超过 `high_watermark`，发送进程可能被挂起，直到套接字不再忙碌或 `send_timeout` 超时。进程被挂起期间，其消息队列可能会累积，详见 `max_mailbox_len`。",
@@ -37544,6 +37770,11 @@
           "keepalive": {
             "default": "none",
             "description": "为通过 TCP 或 SSL 建立的 MQTT 连接启用 TCP keepalive。<br/>使用三个逗号分隔的数字（单位：秒）进行配置： 'Idle,Interval,Probes'<br/> - Idle: 在服务器开始发送 keepalive 探测包之前，连接需要处于空闲状态的秒数（Linux 默认为 7200 秒）。<br/> - Interval: 每次发送 TCP keepalive 探测包之间的间隔时间（Linux 默认 75 秒）。<br/> - Probes: 在未收到响应的情况下，最多发送多少次探测包后放弃并关闭连接（Linux 默认 9 次）。<br/>例如 \"240,30,5\" 表示：在连接空闲 240 秒后发送 TCP keepalive 探测，每隔 30 秒发送一次，直到收到响应，如果连续丢失 5 个响应，连接应该被关闭。<br/>默认值为：'none'，设置为 'none' 时将使用操作系统的默认 keepalive 设置（仍然启用，并非禁用）。",
+            "type": "string"
+          },
+          "low_watermark": {
+            "description": "The amount of queued outgoing data below which a congested connection is considered recovered.<br/><br/>This option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.<br/><br/>When this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.<br/><br/>The `socket` TCP backend ignores this option.",
+            "example": "32MB",
             "type": "string"
           },
           "nodelay": {
@@ -37710,9 +37941,14 @@
       "emqx_authn_api.request_authn_settings": {
         "properties": {
           "ignore_backend_failures": {
-            "default": false,
+            "default": "per_security_profile",
             "description": "决定认证后端失败时的行为，例如数据库不可达或请求超时。<br/>- `per_security_profile`：遵循安全配置档案。`legacy` 档案忽略该失败，`hardened` 档案拒绝客户端。<br/>- `true`：在两种安全配置档案下都忽略该失败，并继续链中的下一个认证器。<br/>- `false`：在两种安全配置档案下都拒绝客户端。",
-            "type": "boolean"
+            "enum": [
+              "per_security_profile",
+              true,
+              false
+            ],
+            "type": "string"
           },
           "node_cache": {
             "$ref": "#/components/schemas/auth_cache.config",
@@ -37775,9 +38011,14 @@
       "emqx_authn_api.response_authn_settings": {
         "properties": {
           "ignore_backend_failures": {
-            "default": false,
+            "default": "per_security_profile",
             "description": "决定认证后端失败时的行为，例如数据库不可达或请求超时。<br/>- `per_security_profile`：遵循安全配置档案。`legacy` 档案忽略该失败，`hardened` 档案拒绝客户端。<br/>- `true`：在两种安全配置档案下都忽略该失败，并继续链中的下一个认证器。<br/>- `false`：在两种安全配置档案下都拒绝客户端。",
-            "type": "boolean"
+            "enum": [
+              "per_security_profile",
+              true,
+              false
+            ],
+            "type": "string"
           },
           "node_cache": {
             "$ref": "#/components/schemas/auth_cache.config",
@@ -39694,6 +39935,9 @@
               "stomp"
             ],
             "type": "string"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/gateway.stomp_transaction"
           }
         },
         "type": "object"
@@ -41659,41 +41903,6 @@
             "description": "发送的 MQTT 报文数量。",
             "type": "integer"
           },
-          "seqno_q1_comm": {
-            "description": "最后一个从客户端收到的 PUBACK 报文的序列号（仅适用于持久会话）。",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "seqno_q1_dup": {
-            "description": "最后一个发送给客户端但尚未收到确认（ACK）的 QoS1 消息序列号（仅适用于持久会话）。",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "seqno_q1_next": {
-            "description": "下一个要发送给客户端的 QoS1 消息的序列号（仅适用于持久会话）。",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "seqno_q2_comm": {
-            "description": "最后一个从客户端收到的 PUBCOMP 报文的序列号（仅适用于持久会话）。Sequence number of the last PUBCOMP received from the client (Durable sessions only)",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "seqno_q2_dup": {
-            "description": "最后一个发送给客户端但尚未确认的 QoS2 消息的序列号（仅适用于持久会话）。",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "seqno_q2_next": {
-            "description": "下一个要添加到批处理的 QoS2 消息的序列号（仅适用于持久会话）。",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "seqno_q2_rec": {
-            "description": "最后一个从客户端收到的 PUBREC 报文的序列号（仅适用于持久会话）。",
-            "minimum": 0,
-            "type": "integer"
-          },
           "subscriptions_cnt": {
             "description": "该客户端已建立的订阅数量。",
             "type": "integer"
@@ -42022,7 +42231,7 @@
         "properties": {
           "site": {
             "description": "站点的标识符。",
-            "example": "680E6EE0567945B9",
+            "example": "CC12FBA0ED4D85C7",
             "type": "string"
           },
           "status": {
@@ -44745,6 +44954,10 @@
             "minimum": 1,
             "type": "integer"
           },
+          "region": {
+            "description": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.<br/><br/>When this field is set, its value takes precedence over the region inferred from the endpoint host.<br/>Otherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.<br/><br/>Set this field when the endpoint host does not contain the region, for example a custom domain name.",
+            "type": "string"
+          },
           "secret_access_key": {
             "description": "S3 桶的 Secret Access Key。<br/><br/>如需从文件加载密钥而不是内联写入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密钥使用。集群模式下，该文件必须存在于所有 EMQX 节点。",
             "example": "R4ND0M/S∃CЯ∃T",
@@ -44842,6 +45055,7 @@
           },
           "password": {
             "description": "password 重写模板",
+            "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
@@ -44876,6 +45090,18 @@
           "max_body_size": {
             "default": "4MB",
             "description": "重组后的最终负载最大大小。<br/>超过此大小的消息将被拒绝以保护内存。",
+            "example": "32MB",
+            "type": "string"
+          },
+          "max_concurrent_exchanges": {
+            "default": 16,
+            "description": "Maximum number of block-wise exchanges retained by one client session.<br/>When full, new uploads receive 4.29 and downlink notifications wait in the Observe queue.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_total_size": {
+            "default": "16MB",
+            "description": "Maximum total payload bytes retained by block-wise exchanges in one client session. Must be greater than zero.<br/>When full, uploads receive 4.13 and downlink notifications wait if they can fit later.",
             "example": "32MB",
             "type": "string"
           }
@@ -45264,6 +45490,18 @@
             "description": "重组后的最终负载最大大小。<br/>超过此大小的消息将被拒绝以保护内存。",
             "example": "32MB",
             "type": "string"
+          },
+          "max_concurrent_exchanges": {
+            "default": 16,
+            "description": "Maximum number of block-wise exchanges retained by one client session.<br/>When full, new uploads receive 4.29 and downlink commands wait in the session queue.",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_total_size": {
+            "default": "16MB",
+            "description": "Maximum total payload bytes retained by block-wise exchanges in one client session. Must be greater than zero.<br/>When full, uploads receive 4.13 and downlink commands wait if they can fit later.",
+            "example": "32MB",
+            "type": "string"
           }
         },
         "type": "object"
@@ -45321,6 +45559,12 @@
       },
       "gateway.protocol": {
         "properties": {
+          "max_control_line": {
+            "default": 4096,
+            "description": "NATS 协议控制行的最大长度，不含 CRLF 分隔符。默认值为 4096 字节，最小值为 1024 字节。",
+            "minimum": 0,
+            "type": "integer"
+          },
           "max_payload_size": {
             "default": 1048576,
             "description": "NATS PUB Payload 或 HPUB 头部与 Payload 允许的最大字节数。此值会通过 INFO.max_payload 通告给客户端。",
@@ -45348,6 +45592,35 @@
             "description": "允许的 Header 字符串的最大长度",
             "minimum": 0,
             "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "gateway.stomp_transaction": {
+        "properties": {
+          "max_actions_per_transaction": {
+            "default": 1000,
+            "description": "单个事务中可缓存的最大帧数量",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "max_retained_bytes": {
+            "default": 16777216,
+            "description": "一个连接上所有未完成事务可保留的最大字节数",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "max_transactions": {
+            "default": 100,
+            "description": "一个连接上可同时打开的最大事务数量",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "timeout": {
+            "default": "60s",
+            "description": "事务在未提交或未中止的情况下可保持打开的时长。必须大于零。",
+            "example": "32s",
+            "type": "string"
           }
         },
         "type": "object"
@@ -45453,10 +45726,11 @@
             "type": "string"
           },
           "max_frame_size": {
-            "default": "infinity",
+            "default": 2097152,
             "description": "单个 WebSocket 消息的最大字节数。<br/>该限制作用于分片合并之后的消息，并且在启用 <code>compress</code> 时作用于解压之后的消息。<br/>当客户端发送的消息超过此限制时，网关会以 WebSocket 状态码 1009 关闭连接。<br/><br/>请将其设置为大于网关协议所接受的最大消息长度。最大值为 268435455。<br/>为保持向后兼容，仍接受 <code>infinity</code> 取值，它表示选用默认值 2097152。",
             "oneOf": [
               {
+                "minimum": 1,
                 "type": "integer"
               },
               {
@@ -52271,6 +52545,7 @@
           "NO_DEFAULT_VALUE",
           "PARAM_ERROR",
           "PASSWORD_LOGIN_DISABLED",
+          "PLUGIN_PINNED",
           "REDIRECT",
           "RESET_FAILED",
           "RESOURCE_NOT_FOUND",
@@ -52505,7 +52780,7 @@
           "auto_create": {
             "$ref": "#/components/schemas/mq.auto_create",
             "default": {
-              "lastvalue": {},
+              "lastvalue": false,
               "regular": false
             },
             "description": "当订阅队列主题时，如果消息队列不存在，自动创建的设置"
@@ -52565,7 +52840,7 @@
           "auto_create": {
             "$ref": "#/components/schemas/mq.auto_create",
             "default": {
-              "lastvalue": {},
+              "lastvalue": false,
               "regular": false
             },
             "description": "当订阅队列主题时，如果消息队列不存在，自动创建的设置"
@@ -52623,7 +52898,7 @@
       "mq.auto_create": {
         "properties": {
           "lastvalue": {
-            "default": {},
+            "default": false,
             "description": "自动创建最后值消息队列的设置",
             "oneOf": [
               {
@@ -53748,6 +54023,13 @@
             "description": "服务器的地址。",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "启用 SSL 连接。"
+          },
           "status": {
             "description": "数据桥接的状态<br/><br/>- <code>connecting</code>：在进行任何健康检查之前的初始状态。<br/><br/>- <code>connected</code>：数据桥接通过健康检查。<br/><br/>- <code>disconnected</code>：数据桥接无法通过健康检查。<br/><br/>- <code>stopped</code>：请求停止桥接资源。<br/><br/>- <code>inconsistent</code>：并非所有节点都处于相同状态。",
             "enum": [
@@ -53826,6 +54108,13 @@
             "description": "服务器的地址。",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "启用 SSL 连接。"
+          },
           "summary": {
             "default": true,
             "description": "是否返回摘要信息。",
@@ -53884,6 +54173,13 @@
           "server": {
             "description": "服务器的地址。",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "启用 SSL 连接。"
           },
           "summary": {
             "default": true,
@@ -54007,6 +54303,11 @@
             "example": "emqx_plugin_template-5.0-rc.1",
             "type": "string"
           },
+          "pinned": {
+            "description": "当报告该插件的所有节点都在 node.pinned_plugins 中列出它时为 true。<br/>此类插件不通过集群管理。",
+            "example": false,
+            "type": "boolean"
+          },
           "readme": {
             "description": "仅在 `GET /plugins/{name}` 时返回。",
             "example": "This is an demo plugin.",
@@ -54081,6 +54382,11 @@
             "description": "节点名称。",
             "example": "emqx@127.0.0.1",
             "type": "string"
+          },
+          "pinned": {
+            "description": "当本节点在 node.pinned_plugins 中列出该插件时为 true。<br/>该节点独立于集群插件配置运行此插件。",
+            "example": false,
+            "type": "boolean"
           },
           "status": {
             "description": "运行时安装插件的状态。<br/>  - 运行中：插件正在运行。<br/>  - 停止：插件已停止。",
@@ -54596,7 +54902,7 @@
             "type": "string"
           },
           "health_check_timeout": {
-            "default": "60s",
+            "default": "10s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
             "oneOf": [
               {
@@ -59916,6 +60222,11 @@
             "example": "1h",
             "type": "string"
           },
+          "skip_login_cookie_check": {
+            "default": false,
+            "description": "启用此选项需自行承担风险。设置为 `true` 时，EMQX 不会在 SSO 回调时检查登录 Cookie，因此登录不再与发起登录的浏览器绑定。仅当浏览器无法保留该 Cookie 并导致 SSO 登录失败时才启用此选项，例如用户通过 `dashboard_addr` 以外的地址访问 Dashboard。默认值为 `false`。",
+            "type": "boolean"
+          },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
             "description": "启用 SSL 连接。"
@@ -59934,7 +60245,7 @@
           "auto_create": {
             "$ref": "#/components/schemas/streams.auto_create",
             "default": {
-              "lastvalue": {},
+              "lastvalue": false,
               "regular": false
             },
             "description": "在订阅队列主题时，如果消息流不存在，自动创建的设置。"
@@ -59986,7 +60297,7 @@
           "auto_create": {
             "$ref": "#/components/schemas/streams.auto_create",
             "default": {
-              "lastvalue": {},
+              "lastvalue": false,
               "regular": false
             },
             "description": "在订阅队列主题时，如果消息流不存在，自动创建的设置。"
@@ -60036,7 +60347,7 @@
       "streams.auto_create": {
         "properties": {
           "lastvalue": {
-            "default": {},
+            "default": false,
             "description": "最后值消息流自动创建的设置",
             "oneOf": [
               {
@@ -61142,6 +61453,13 @@
             "description": "将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/><br/>主机名具有以下形式：`Host[:Port]`。<br/><br/>如果未指定 `[:Port]`，则使用 TDengine 默认端口 6041。<br/><br/><br/><br/>该字段也支持设置一个连接到 TDengine Cloud 的 HTTPS URLs。例如：`https://gw.us-west-2.aws.cloud.tdengine.com `。",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "启用 SSL 连接。"
+          },
           "status": {
             "description": "数据桥接的状态<br/><br/>- <code>connecting</code>：在进行任何健康检查之前的初始状态。<br/><br/>- <code>connected</code>：数据桥接通过健康检查。<br/><br/>- <code>disconnected</code>：数据桥接无法通过健康检查。<br/><br/>- <code>stopped</code>：请求停止桥接资源。<br/><br/>- <code>inconsistent</code>：并非所有节点都处于相同状态。",
             "enum": [
@@ -61230,6 +61548,13 @@
             "description": "将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/><br/>主机名具有以下形式：`Host[:Port]`。<br/><br/>如果未指定 `[:Port]`，则使用 TDengine 默认端口 6041。<br/><br/><br/><br/>该字段也支持设置一个连接到 TDengine Cloud 的 HTTPS URLs。例如：`https://gw.us-west-2.aws.cloud.tdengine.com `。",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "启用 SSL 连接。"
+          },
           "tags": {
             "description": "连接器的标签",
             "items": {
@@ -61298,6 +61623,13 @@
           "server": {
             "description": "将要连接的 IPv4 或 IPv6 地址，或者主机名。<br/><br/>主机名具有以下形式：`Host[:Port]`。<br/><br/>如果未指定 `[:Port]`，则使用 TDengine 默认端口 6041。<br/><br/><br/><br/>该字段也支持设置一个连接到 TDengine Cloud 的 HTTPS URLs。例如：`https://gw.us-west-2.aws.cloud.tdengine.com `。",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": false
+            },
+            "description": "启用 SSL 连接。"
           },
           "tags": {
             "description": "连接器的标签",
@@ -61681,8 +62013,9 @@
     }
   },
   "info": {
+    "description": "A request accepts at most 100 query parameters in total, including repeated and pagination parameters.",
     "title": "EMQX Enterprise API",
-    "version": "6.3.2"
+    "version": "6.3.3-rc.2"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -62298,106 +62631,106 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "kafka_producer",
-                      "datalayers",
-                      "rocketmq",
-                      "azure_event_grid",
-                      "mongodb",
-                      "iotdb",
-                      "snowflake_streaming",
-                      "pgsql",
-                      "gcp_pubsub_producer",
-                      "matrix",
                       "tdengine",
-                      "quasardb",
-                      "greptimedb",
+                      "azure_blob_storage",
                       "alloydb",
-                      "redis",
-                      "sqlserver",
-                      "pulsar",
-                      "tablestore",
-                      "influxdb",
+                      "elasticsearch",
+                      "azure_event_grid",
+                      "cassandra",
+                      "mysql",
+                      "confluent_producer",
+                      "syskeeper_forwarder",
+                      "iotdb",
+                      "cockroachdb",
                       "timescale",
-                      "s3tables",
                       "azure_event_hub_producer",
                       "clickhouse",
-                      "bigquery",
-                      "kinesis",
-                      "doris",
-                      "couchbase",
-                      "dynamo",
-                      "disk_log",
-                      "emqx_tables",
-                      "confluent_producer",
-                      "http",
-                      "snowflake",
-                      "bigtable",
-                      "azure_blob_storage",
-                      "mysql",
-                      "s3",
-                      "redshift",
-                      "mqtt",
-                      "cassandra",
+                      "pgsql",
                       "oracle",
-                      "elasticsearch",
-                      "rabbitmq",
-                      "cockroachdb",
+                      "doris",
+                      "bigtable",
+                      "aws_timestream",
+                      "couchbase",
+                      "datalayers",
+                      "disk_log",
+                      "greptimedb",
+                      "quasardb",
+                      "redshift",
+                      "emqx_tables",
+                      "matrix",
+                      "rocketmq",
+                      "snowflake",
+                      "snowflake_streaming",
+                      "http",
+                      "s3tables",
                       "opents",
-                      "syskeeper_forwarder",
-                      "aws_timestream"
+                      "dynamo",
+                      "rabbitmq",
+                      "influxdb",
+                      "sqlserver",
+                      "mqtt",
+                      "mongodb",
+                      "tablestore",
+                      "gcp_pubsub_producer",
+                      "pulsar",
+                      "kinesis",
+                      "redis",
+                      "s3",
+                      "bigquery",
+                      "kafka_producer"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "kafka_producer",
-                      "datalayers",
-                      "rocketmq",
-                      "azure_event_grid",
-                      "mongodb",
-                      "iotdb",
-                      "snowflake_streaming",
-                      "pgsql",
-                      "gcp_pubsub_producer",
-                      "matrix",
                       "tdengine",
-                      "quasardb",
-                      "greptimedb",
+                      "azure_blob_storage",
                       "alloydb",
-                      "redis",
-                      "sqlserver",
-                      "pulsar",
-                      "tablestore",
-                      "influxdb",
+                      "elasticsearch",
+                      "azure_event_grid",
+                      "cassandra",
+                      "mysql",
+                      "confluent_producer",
+                      "syskeeper_forwarder",
+                      "iotdb",
+                      "cockroachdb",
                       "timescale",
-                      "s3tables",
                       "azure_event_hub_producer",
                       "clickhouse",
-                      "bigquery",
-                      "kinesis",
-                      "doris",
-                      "couchbase",
-                      "dynamo",
-                      "disk_log",
-                      "emqx_tables",
-                      "confluent_producer",
-                      "http",
-                      "snowflake",
-                      "bigtable",
-                      "azure_blob_storage",
-                      "mysql",
-                      "s3",
-                      "redshift",
-                      "mqtt",
-                      "cassandra",
+                      "pgsql",
                       "oracle",
-                      "elasticsearch",
-                      "rabbitmq",
-                      "cockroachdb",
+                      "doris",
+                      "bigtable",
+                      "aws_timestream",
+                      "couchbase",
+                      "datalayers",
+                      "disk_log",
+                      "greptimedb",
+                      "quasardb",
+                      "redshift",
+                      "emqx_tables",
+                      "matrix",
+                      "rocketmq",
+                      "snowflake",
+                      "snowflake_streaming",
+                      "http",
+                      "s3tables",
                       "opents",
-                      "syskeeper_forwarder",
-                      "aws_timestream"
+                      "dynamo",
+                      "rabbitmq",
+                      "influxdb",
+                      "sqlserver",
+                      "mqtt",
+                      "mongodb",
+                      "tablestore",
+                      "gcp_pubsub_producer",
+                      "pulsar",
+                      "kinesis",
+                      "redis",
+                      "s3",
+                      "bigquery",
+                      "kafka_producer"
                     ],
                     "type": "string"
                   },
@@ -74796,7 +75129,6 @@
                       "type": "string"
                     },
                     "role": {
-                      "default": "administrator",
                       "description": "该 API 的角色。命名空间角色写作 `ns:<namespace>::<role>`。`multi_tenancy.deny_namespaces` 中列出的命名空间名称（默认为 `global`、`undefined`、`null`、`none`）不可使用。",
                       "example": "administrator",
                       "type": "string"
@@ -75129,7 +75461,6 @@
                       "type": "string"
                     },
                     "role": {
-                      "default": "administrator",
                       "description": "该 API 的角色。命名空间角色写作 `ns:<namespace>::<role>`。`multi_tenancy.deny_namespaces` 中列出的命名空间名称（默认为 `global`、`undefined`、`null`、`none`）不可使用。",
                       "example": "administrator",
                       "type": "string"
@@ -75223,7 +75554,6 @@
                     "type": "boolean"
                   },
                   "expired_at": {
-                    "default": "infinity",
                     "description": "过期时间。可为 ISO 8601 时间戳 / epoch second，或 `infinity` 表示永不过期。",
                     "example": "2021-12-05T02:01:34.186Z",
                     "oneOf": [
@@ -75255,7 +75585,6 @@
                     "type": "string"
                   },
                   "role": {
-                    "default": "administrator",
                     "description": "该 API 的角色。命名空间角色写作 `ns:<namespace>::<role>`。`multi_tenancy.deny_namespaces` 中列出的命名空间名称（默认为 `global`、`undefined`、`null`、`none`）不可使用。",
                     "example": "administrator",
                     "type": "string"
@@ -75364,7 +75693,6 @@
                       "type": "string"
                     },
                     "role": {
-                      "default": "administrator",
                       "description": "该 API 的角色。命名空间角色写作 `ns:<namespace>::<role>`。`multi_tenancy.deny_namespaces` 中列出的命名空间名称（默认为 `global`、`undefined`、`null`、`none`）不可使用。",
                       "example": "administrator",
                       "type": "string"
@@ -78436,9 +78764,14 @@
                       "type": "string"
                     },
                     "ignore_backend_failures": {
-                      "default": false,
+                      "default": "per_security_profile",
                       "description": "决定授权后端失败时的行为，例如数据库不可达或请求超时。<br/>- `per_security_profile`：遵循安全配置档案。`legacy` 档案忽略该失败，`hardened` 档案拒绝该操作。<br/>- `true`：在两种安全配置档案下都忽略该失败，并继续下一个授权数据源。<br/>- `false`：在两种安全配置档案下都拒绝该操作。",
-                      "type": "boolean"
+                      "enum": [
+                        "per_security_profile",
+                        true,
+                        false
+                      ],
+                      "type": "string"
                     },
                     "include_mountpoint": {
                       "default": false,
@@ -78500,9 +78833,14 @@
                     "type": "string"
                   },
                   "ignore_backend_failures": {
-                    "default": false,
+                    "default": "per_security_profile",
                     "description": "决定授权后端失败时的行为，例如数据库不可达或请求超时。<br/>- `per_security_profile`：遵循安全配置档案。`legacy` 档案忽略该失败，`hardened` 档案拒绝该操作。<br/>- `true`：在两种安全配置档案下都忽略该失败，并继续下一个授权数据源。<br/>- `false`：在两种安全配置档案下都拒绝该操作。",
-                    "type": "boolean"
+                    "enum": [
+                      "per_security_profile",
+                      true,
+                      false
+                    ],
+                    "type": "string"
                   },
                   "include_mountpoint": {
                     "default": false,
@@ -78547,9 +78885,14 @@
                       "type": "string"
                     },
                     "ignore_backend_failures": {
-                      "default": false,
+                      "default": "per_security_profile",
                       "description": "决定授权后端失败时的行为，例如数据库不可达或请求超时。<br/>- `per_security_profile`：遵循安全配置档案。`legacy` 档案忽略该失败，`hardened` 档案拒绝该操作。<br/>- `true`：在两种安全配置档案下都忽略该失败，并继续下一个授权数据源。<br/>- `false`：在两种安全配置档案下都拒绝该操作。",
-                      "type": "boolean"
+                      "enum": [
+                        "per_security_profile",
+                        true,
+                        false
+                      ],
+                      "type": "string"
                     },
                     "include_mountpoint": {
                       "default": false,
@@ -82323,7 +82666,7 @@
             "$ref": "#/components/parameters/public.limit"
           },
           {
-            "description": "客户端连接时使用的用户名称。",
+            "description": "Username. This parameter can be repeated.",
             "in": "query",
             "name": "username",
             "required": false,
@@ -82475,7 +82818,7 @@
             }
           },
           {
-            "description": "客户端 ID。",
+            "description": "Client ID. This parameter can be repeated.",
             "in": "query",
             "name": "clientid",
             "required": false,
@@ -88790,7 +89133,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -90466,7 +90809,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -92374,7 +92717,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -93674,7 +94017,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -95339,7 +95682,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -96992,7 +97335,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -97946,7 +98289,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "680E6EE0567945B9",
+            "example": "CC12FBA0ED4D85C7",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98009,7 +98352,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "680E6EE0567945B9",
+            "example": "CC12FBA0ED4D85C7",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98423,7 +98766,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "680E6EE0567945B9",
+            "example": "CC12FBA0ED4D85C7",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98509,7 +98852,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "680E6EE0567945B9",
+            "example": "CC12FBA0ED4D85C7",
             "in": "path",
             "name": "site",
             "required": true,
@@ -109942,8 +110285,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -115978,6 +116321,28 @@
               }
             },
             "description": ""
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PLUGIN_PINNED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "该插件已在 node.pinned_plugins 中列出，因此不允许执行此操作。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -116039,6 +116404,50 @@
                     },
                     "message": {
                       "description": "无效请求的可能错误原因代码。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PLUGIN_PINNED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "该插件已在 node.pinned_plugins 中列出，因此不允许执行此操作。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "内部错误。",
                       "type": "string"
                     }
                   },
@@ -116110,6 +116519,28 @@
                     },
                     "message": {
                       "description": "未找到插件。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PLUGIN_PINNED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "该插件已在 node.pinned_plugins 中列出，因此不允许执行此操作。",
                       "type": "string"
                     }
                   },
@@ -116507,6 +116938,7 @@
                     "code": {
                       "enum": [
                         "BAD_CONFIG",
+                        "BAD_FORM_DATA",
                         "UNEXPECTED_ERROR"
                       ],
                       "type": "string"
@@ -116667,6 +117099,28 @@
               }
             },
             "description": ""
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PLUGIN_PINNED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "该插件已在 node.pinned_plugins 中列出，因此不允许执行此操作。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -116801,6 +117255,28 @@
                     },
                     "message": {
                       "description": "未找到插件。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PLUGIN_PINNED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "该插件已在 node.pinned_plugins 中列出，因此不允许执行此操作。",
                       "type": "string"
                     }
                   },
@@ -119144,12 +119620,13 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "ALREADY_EXISTS"
+                        "ALREADY_EXISTS",
+                        "BAD_REQUEST"
                       ],
                       "type": "string"
                     },
                     "message": {
-                      "description": "Schema already exists.",
+                      "description": "无效请求的可能错误原因代码。",
                       "type": "string"
                     }
                   },
@@ -119192,6 +119669,28 @@
         "responses": {
           "204": {
             "description": "Schema 已删除。"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "无效请求。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           },
           "404": {
             "content": {
@@ -119395,6 +119894,28 @@
             },
             "description": ""
           },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "无效请求。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
           "404": {
             "content": {
               "application/json": {
@@ -119559,12 +120080,13 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "ALREADY_EXISTS"
+                        "ALREADY_EXISTS",
+                        "BAD_REQUEST"
                       ],
                       "type": "string"
                     },
                     "message": {
-                      "description": "Schema already exists.",
+                      "description": "无效请求的可能错误原因代码。",
                       "type": "string"
                     }
                   },
@@ -119607,6 +120129,28 @@
         "responses": {
           "204": {
             "description": "已删除。"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "无效请求。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -119771,6 +120315,28 @@
             },
             "description": ""
           },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "无效请求。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
           "404": {
             "content": {
               "application/json": {
@@ -119880,7 +120446,8 @@
                     "code": {
                       "enum": [
                         "ALREADY_EXISTS",
-                        "BAD_FORM_DATA"
+                        "BAD_FORM_DATA",
+                        "BAD_REQUEST"
                       ],
                       "type": "string"
                     },
@@ -119978,7 +120545,8 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "BAD_FORM_DATA"
+                        "BAD_FORM_DATA",
+                        "BAD_REQUEST"
                       ],
                       "type": "string"
                     },
@@ -122990,8 +123558,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -123003,10 +123571,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/sso.login"
+                    "$ref": "#/components/schemas/dashboard.login"
                   },
                   {
-                    "$ref": "#/components/schemas/dashboard.login"
+                    "$ref": "#/components/schemas/sso.login"
                   },
                   {
                     "$ref": "#/components/schemas/sso.login"
@@ -123404,6 +123972,28 @@
             },
             "description": ""
           },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "FORBIDDEN"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "此登录并非由当前浏览器发起",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
           "404": {
             "content": {
               "application/json": {
@@ -123446,8 +124036,8 @@
                   "items": {
                     "enum": [
                       "ldap",
-                      "saml",
-                      "oidc"
+                      "oidc",
+                      "saml"
                     ],
                     "type": "string"
                   },
@@ -123701,8 +124291,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -123760,8 +124350,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -123774,10 +124364,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -123836,8 +124426,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -123849,10 +124439,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/sso.oidc"
+                    "$ref": "#/components/schemas/dashboard.saml"
                   },
                   {
-                    "$ref": "#/components/schemas/dashboard.saml"
+                    "$ref": "#/components/schemas/sso.oidc"
                   },
                   {
                     "$ref": "#/components/schemas/sso.ldap"
@@ -123869,10 +124459,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -125899,8 +126489,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -125992,8 +126582,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -126290,8 +126880,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -126360,8 +126950,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
