@@ -44,7 +44,19 @@ The release images also include build provenance and software bill of materials 
 
 The build process for each official Docker release image downloads the Mozilla CA bundle from curl.se, verifies its published SHA-256 checksum, and installs the bundle as `/etc/ssl/certs/ca-certificates.crt`.
 
-The default `node.trusted_certs = system_default` setting uses this file to verify server certificates for supported outbound TLS connections that do not explicitly configure CA certificates. To trust a private CA, mount the CA bundle into the container and configure `node.trusted_certs` or the TLS settings of the individual resource. For details, see [Trusted CA Certificates for Outbound TLS](../../guides/network/tls-certificate.md#trusted-ca-certificates-for-outbound-tls).
+In Docker deployments, the default `node.trusted_certs` value, `system_default`, uses this CA bundle. EMQX uses the bundle to verify server certificates for supported outbound TLS connections that do not explicitly configure CA certificates.
+
+Choose how to provide additional or replacement CA certificates based on their scope:
+
+- To trust a private CA for a specific resource, mount the private CA bundle at a separate path in the container, and explicitly set `cacertfile` to that path in the resource's TLS configuration. This is the recommended approach because it leaves the shared system trust store unchanged.
+- If the CA bundle supplied with the image is outdated or contains a root CA that you no longer trust, mount a replacement trust store at `/etc/ssl/certs/ca-certificates.crt`.
+- To trust a private root CA by default, create a combined bundle by appending the private root certificate to a copy of the default bundle, and mount the combined bundle at `/etc/ssl/certs/ca-certificates.crt`.
+
+::: warning Shared System Trust Store
+The CA bundle at `/etc/ssl/certs/ca-certificates.crt` is shared by all supported outbound TLS connections that use `system_default`. Replacing it with a bundle that contains only private CA certificates can remove required public roots and disrupt connections to services such as Google Cloud, AWS, or Azure.
+:::
+
+For details, see [Trusted CA Certificates for Outbound TLS](../../guides/network/tls-certificate.md#trusted-ca-certificates-for-outbound-tls).
 
 ## Use Docker to Run A Single EMQX Node
 
