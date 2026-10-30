@@ -52,11 +52,11 @@ EMQX 通过规则引擎与 Sink 将设备事件和数据转发至 Apache Doris�
 
 ### 安装 Apache Doris 服务器
 
-请按照[官方指南](https://doris.apache.org/zh-CN/docs/dev/gettingStarted/quick-start#use-docker-for-quick-deployment)使用 Docker Compose 在本地运行 Doris。
+请按照[官方指南](https://doris.apache.org/zh-CN/docs/dev/getting-started/quick-start/#%E4%BD%BF%E7%94%A8-docker-%E5%BF%AB%E9%80%9F%E9%83%A8%E7%BD%B2)使用 Docker Compose 在本地运行 Doris。
 
 ### 创建数据表
 
-您可以使用 MySQL 客户端连接到 Doris 的 Frontend 并执行命令。参见[官方文档](https://doris.apache.org/zh-CN/docs/dev/gettingStarted/quick-start#%E8%BF%90%E8%A1%8C%E6%9F%A5%E8%AF%A2)。
+您可以使用 MySQL 客户端连接到 Doris 的 Frontend 并执行命令。参见[官方文档](https://doris.apache.org/zh-CN/docs/dev/getting-started/quick-start/#%E8%BF%90%E8%A1%8C%E9%A6%96%E6%AC%A1%E6%9F%A5%E8%AF%A2)。
 
 例如：
 
