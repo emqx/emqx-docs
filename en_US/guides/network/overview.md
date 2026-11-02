@@ -39,6 +39,12 @@ The [Client TLS](./mqtt-client-tls.md) section provides sample MQTT client code 
 
 EMQX also supports SSL/TLS encryption when accessing external resources, such as HTTP-based authentication services, databases, or other data integration services. You can enable TLS for these connections directly from the EMQX Dashboard by turning on the **Enable TLS** option when configuring the corresponding feature.
 
+### Default Trusted CA Certificates <Badge text="6.3.3" />
+
+The `node.trusted_certs` configuration option selects the default CA bundle for supported outbound TLS clients. Its default value is `system_default`. When a supported client uses `verify_peer` without explicitly configuring `cacertfile` or `cacerts`, EMQX uses this bundle to verify the external server certificate.
+
+For details about supported clients, how EMQX resolves `system_default`, and how to configure a custom CA bundle, see [Trusted CA Certificates for Outbound TLS](./tls-certificate.md#trusted-ca-certificates-for-outbound-tls).
+
 ### TLS Configuration Options in Dashboard
 
 After enabling TLS, the following options are available:
@@ -50,7 +56,7 @@ After enabling TLS, the following options are available:
   - **Enter Manually**: Provide certificate contents or files directly.
   - **Select from Managed Certs**: Reference an existing certificate bundle managed centrally by EMQX (EMQX 6.1+). This allows certificate reuse and simplifies certificate rotation. For details on creating and managing certificate bundles, see [Managed Certificates](./tls-certificate.md#managed-certificates).
 - **TLS Cert / TLS Key**: Required when the external server verifies the client certificate (mutual TLS).
-- **CA Cert**: Required when **TLS Verify** is enabled, to validate the server’s certificate.
+- **CA Cert**: Specifies the CA certificates used to verify the external server certificate. For clients that support `node.trusted_certs`, this field is optional. If **TLS Verify** is enabled and this field is empty, EMQX uses the CA bundle selected by `node.trusted_certs`. For clients that do not support this setting, follow the CA certificate requirements of the corresponding resource.
 
 <img src="./assets/enable-TLS-dashboard.png" alt="enable-TLS-dashboard" style="zoom:50%;" />
 
@@ -78,12 +84,14 @@ authentication {
 **SSL Configuration Items**:
 
 - **`enable`**: Enables SSL/TLS for outbound connections to the external resource.
-- **`cacertfile`**: Path to a PEM format file containing the trusted certificate authority (CA) certificates that the HTTP client uses to verify the authenticity of the HTTP server.
+- **`cacertfile`**: Path to a PEM-formatted file that contains the CA certificates used to verify the HTTP server certificate. For supported outbound TLS clients, you can also set this option to `system_default` to use the CA bundle selected by `node.trusted_certs`.
 - **`certfile`**: Path to a PEM format file containing the SSL/TLS certificate chain for the client to present. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the client certificate to form a complete chain.
 - **`keyfile`**: Path to a PEM format private key corresponding to the client certificate specified by `certfile`.
 - **`verify`**: Controls server certificate verification behavior:
   - **`verify_peer`**: Verify the server’s certificate chain.
   - **`verify_none`**: Do not verify the server’s certificate.
+
+If you set `verify` to `verify_peer` and omit `cacertfile`, EMQX uses the CA bundle selected by `node.trusted_certs`. Configure `cacertfile` when the external server uses a private CA that is not included in the default bundle.
 
 Managed certificates can also be referenced in configuration files for external resources, following the same certificate management model used by listeners. For more details about configuration options, see [Enable SSL/TLS with One-Way Authentication](./emqx-mqtt-tls.md#enable-via-configuration-file) listeners via configuration file.
 

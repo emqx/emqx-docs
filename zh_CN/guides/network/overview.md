@@ -43,6 +43,12 @@ EMQX 为 SSL/TLS 提供了统一的证书管理模型，涵盖证书的获取、
 
 EMQX 在访问外部资源（例如基于 HTTP 的认证服务、数据库或其他数据集成服务）时，同样支持使用 SSL/TLS 进行加密通信。在配置相应功能时，您可以直接在 EMQX Dashboard 中通过**启用 TLS** 选项来开启 TLS。
 
+### 配置默认受信任 CA 证书 <Badge text="6.3.3" />
+
+`node.trusted_certs` 配置项用于指定受支持的出站 TLS 客户端默认使用的 CA 证书包。默认值为 `system_default`。当受支持的客户端使用 `verify_peer` 且未显式配置 `cacertfile` 或 `cacerts` 时，EMQX 会使用该证书包校验外部服务器证书。
+
+有关支持的客户端、`system_default` 的解析方式和自定义 CA 证书包配置，参见[出站 TLS 的受信任 CA 证书](./tls-certificate.md#出站-tls-的受信任-ca-证书)。
+
 ### Dashboard 中的 TLS 配置项
 
 启用 TLS 后，可以配置以下选项：
@@ -54,7 +60,7 @@ EMQX 在访问外部资源（例如基于 HTTP 的认证服务、数据库或其
   - **手动输入**：直接填写或上传证书内容或证书文件。
   - **从托管证书中选择**：引用由 EMQX 集中管理的现有证书包（EMQX 6.1+）。这种方式支持证书复用，并简化证书轮换。有关创建和管理证书包的详细信息，请参阅[托管证书](./tls-certificate.md#托管证书)。
 - **TLS Cert / TLS Key**：当外部服务器需要校验客户端证书（双向 TLS）时必须配置。
-- **CA Cert**：当启用**验证服务器证书**时必需，用于校验服务器证书的合法性。
+- **CA Cert**：指定用于校验外部服务器证书的 CA 证书。对于支持 `node.trusted_certs` 的客户端，此项为可选配置。启用**验证服务器证书**且此项留空时，EMQX 使用 `node.trusted_certs` 选择的 CA 证书包。对于不支持此配置的客户端，请按照对应资源的要求配置 CA 证书。
 
 <img src="./assets/TLS-external-resource.png" alt="TLS-external-resource" style="zoom:50%;" />
 
@@ -78,10 +84,12 @@ authentication {
     # PEM 格式的密钥文件
     keyfile = "etc/certs/key.pem"
     # 设置成 'verify_peer' 来验证 HTTP 服务器端证书是否为 cacertfile 中某个根证书签发
-    verify = verify_none
+    verify = verify_peer
   }
 }
 ```
+
+如果将 `verify` 设置为 `verify_peer` 并省略 `cacertfile`，EMQX 将使用 `node.trusted_certs` 选择的 CA 证书包。如果外部服务器使用默认 CA 证书包中未包含的私有 CA，请配置 `cacertfile`。
 
 对于外部资源，配置文件中同样可以引用托管证书，其证书管理模型与监听器使用的方式一致。有关配置选项的更多信息，请参阅[启用单向认证的 SSl/TLS 连接](./emqx-mqtt-tls.md#启用单向认证的-ssltls-连接)。
 
