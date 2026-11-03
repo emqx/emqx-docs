@@ -1,21 +1,21 @@
 ---
-description: このページでは、公式Dockerイメージを使用してEMQXをインストールおよび起動する方法と、Docker Composeを使用してEMQXクラスターを構築する方法を紹介します。
+description: このページでは、公式Dockerイメージを使用してEMQXをインストールおよび実行する方法と、Docker Composeを使用してEMQXクラスターを構築する方法を紹介します。
 ---
 
 # Dockerを使用したEMQXのインストール
-このページでは、公式Dockerイメージを使用してEMQX Enterpriseをインストールおよび起動する方法と、Docker Composeを使用してEMQXクラスターを構築する方法を紹介します。
+このページでは、公式Dockerイメージを使用してEMQX Enterpriseをインストールおよび実行する方法と、Docker Composeを使用してEMQXクラスターを構築する方法を紹介します。
 
 ## はじめに
 
-Docker上でEMQXを起動する前に、以下のデプロイメントに関する注意点を確認してください。
+DockerでEMQXを起動する前に、以下のデプロイメントに関する注意点を確認してください。
 
 ### 安定したノード名を選択する
 
-EMQXはノードデータを `data/mnesia/<node_name>` ディレクトリに保存します。コンテナ起動後にノード名が変更されるとデータが失われる可能性があるため、コンテナ起動前に安定したノード名を選択してください。
+EMQXはノードデータを `data/mnesia/<node_name>` ディレクトリに保存します。コンテナ起動後にノード名が変更されるとデータが失われる可能性があるため、コンテナを起動する前に安定したノード名を選択してください。
 
-単一ノードのデプロイメントの場合、`EMQX_NODE_NAME` 環境変数を `emqx@<host>` 形式で設定し、コンテナのホスト名も同じ `<host>` に設定してください。
+単一ノードのデプロイメントの場合、`EMQX_NODE_NAME` 環境変数を `emqx@<host>` の形式で設定します。コンテナのホスト名も同じ `<host>` の値に設定してください。
 
-**注意:** `<host>` 部分はIPアドレスまたは完全修飾ドメイン名（FQDN）、例えば `node1.emqx.com` である必要があります。EMQXはErlangノードをロングネームモードで動作させるため、ドットなしの短いホスト名（例：`node1`）は使用できません。
+**注意:** `<host>` 部分はIPアドレスまたは完全修飾ドメイン名（FQDN）、例えば `node1.emqx.com` である必要があります。EMQXはErlangノードをロングネームモードで実行するため、ドットなしの短いホスト名（例: `node1`）は使用できません。
 
 ### 永続ストレージの準備
 
@@ -24,25 +24,43 @@ EMQXはノードデータを `data/mnesia/<node_name>` ディレクトリに保�
 - `/opt/emqx/data`: EMQXのデータを保存します。
 - `/opt/emqx/log`: ファイルログおよびクラッシュダンプを保存します。
 
-EMQXコンテナはデフォルトでコンソールログを使用しますが、Erlang VMはノードが異常終了した場合にクラッシュダンプを `/opt/emqx/log` に書き込みます。マウントしていないとコンテナ削除時にダンプが失われます。ホストのログディレクトリはコンテナ内の `emqx` ユーザー（UID 1000）が書き込み可能である必要があります。詳細は[Dockerでのクラッシュダンプ](../../guides/configuration/logs.md#crash-dumps-in-docker)を参照してください。
+EMQXコンテナはデフォルトでコンソールログを使用しますが、Erlang VMはノードが異常終了した場合にクラッシュダンプを `/opt/emqx/log` に書き込みます。マウントしていない場合、コンテナ削除時にダンプが失われます。ホストのログディレクトリはコンテナ内の `emqx` ユーザー（UID 1000）が書き込み可能である必要があります。詳細は[Dockerでのクラッシュダンプ](../../guides/configuration/logs.md#crash-dumps-in-docker)を参照してください。
 
-EMQXのディレクトリ構成については、[EMQXのファイルとディレクトリ](./install.md#files-and-directories)を参照してください。
+EMQXのディレクトリ構成の詳細は[EMQXのファイルとディレクトリ](./install.md#files-and-directories)をご覧ください。
 
 ### ホスト上のサービスへのアクセス
 
-EMQXがホスト上で動作するサービスにアクセスする場合、サービスアドレスに `localhost` や `127.0.0.1` を使用しないでください。これらはコンテナ自身のネットワークインターフェースを指します。ホストのIPアドレスか、[ホストネットワーキング](https://docs.docker.com/network/host/)を使用してください。Docker Desktop for MacやWindowsでは `host.docker.internal` も利用可能です。
+EMQXがホスト上で動作するサービスにアクセスする場合、サービスアドレスに `localhost` や `127.0.0.1` を使用しないでください。これらはコンテナ自身のネットワークインターフェースを指します。ホストのIPアドレスまたは[ホストネットワーキング](https://docs.docker.com/network/host/)を使用してください。MacやWindowsのDocker Desktopでは `host.docker.internal` も使用可能です。
 
 ### ランタイムイメージについて理解する
 
-EMQX Enterprise 6.3.1以降の公式Dockerリリースイメージは、Docker Hardened Debian 13（Trixie）を使用しています。ランタイムイメージには `apt` や `dpkg` といったパッケージマネージャーが含まれていないため、実行中のEMQXコンテナ内でこれらのツールを使ってパッケージをインストールすることはできません。
+EMQX Enterprise 6.3.1以降の公式DockerリリースイメージはDocker Hardened Debian 13（Trixie）を使用しています。ランタイムイメージには `apt` や `dpkg` などのパッケージマネージャーが含まれていないため、実行中のEMQXコンテナ内でこれらのツールを使ってパッケージをインストールすることはできません。
 
-追加のツールやランタイム依存関係が必要な場合は、カスタムイメージに含めて検証し、デプロイ前に準備してください。公式コンテナの実行中にパッケージをインストールすることに依存しないでください。
+追加のツールやランタイム依存関係が必要な場合は、カスタムイメージに含めて検証した上でデプロイしてください。公式コンテナの実行中にパッケージをインストールすることに依存しないでください。
 
-リリースイメージにはビルド由来情報やソフトウェア部品表（SBOM）の証明も含まれています。Docker Scoutはこれらの証明を利用して、ハードニングされたベースイメージに対するDockerの脆弱性評価（VEXステートメント）を適用できます。
+リリースイメージにはビルドの由来情報やソフトウェア部品表（SBOM）も含まれています。Docker Scoutはこれらの情報を利用して、ハードニングされたベースイメージの脆弱性評価（VEXステートメント）を適用できます。
 
-## Dockerを使って単一のEMQXノードを起動する
+#### 信頼されたCAバンドル <Badge text="6.3.3" />
 
-単一ノードのEMQXを起動する手順は以下の通りです。公式EMQX Dockerイメージの詳細は [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise) を参照してください。
+各公式Dockerリリースイメージのビルドプロセスでは、curl.seからMozilla CAバンドルをダウンロードし、公開されているSHA-256チェックサムを検証した上で `/etc/ssl/certs/ca-certificates.crt` にインストールします。
+
+Dockerデプロイメントでは、デフォルトの `node.trusted_certs` 値である `system_default` はこのCAバンドルを使用します。EMQXは明示的にCA証明書を設定していないサポート対象のアウトバウンドTLS接続のサーバー証明書検証にこのバンドルを利用します。
+
+追加または置換のCA証明書を提供する方法はスコープに応じて選択してください。
+
+- 特定リソースのプライベートCAを信頼する場合は、プライベートCAバンドルをコンテナ内の別パスにマウントし、そのリソースのTLS設定で `cacertfile` を明示的にそのパスに設定します。これは共有システムトラストストアを変更しないため推奨される方法です。
+- もしイメージに含まれるCAバンドルが古い、または信頼しないルートCAを含む場合は、置換用トラストストアを `/etc/ssl/certs/ca-certificates.crt` にマウントしてください。
+- デフォルトでプライベートルートCAを信頼する場合は、プライベートルート証明書をデフォルトバンドルのコピーに追記して結合バンドルを作成し、それを `/etc/ssl/certs/ca-certificates.crt` にマウントしてください。
+
+::: warning 共有システムトラストストアについて
+`/etc/ssl/certs/ca-certificates.crt` のCAバンドルは、`system_default` を使用するすべてのサポート対象アウトバウンドTLS接続で共有されます。プライベートCA証明書のみを含むバンドルに置き換えると、Google Cloud、AWS、Azureなどのサービスへの接続に必要な公開ルートが削除され、接続障害を引き起こす可能性があります。
+:::
+
+詳細は[アウトバウンドTLSの信頼されたCA証明書](../../guides/network/tls-certificate.md#trusted-ca-certificates-for-outbound-tls)をご覧ください。
+
+## Dockerを使って単一のEMQXノードを実行する
+
+単一ノードのEMQXを実行する手順は以下の通りです。公式EMQX Dockerイメージの詳細は[Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise)を参照してください。
 
 1. Dockerイメージをプルします。
 
@@ -57,7 +75,7 @@ EMQX Enterprise 6.3.1以降の公式Dockerリリースイメージは、Docker H
    sudo chown $UID:$GID $PWD/log
    ```
 
-3. 安定したノード名とマウントしたディレクトリを指定してコンテナを起動します。
+3. 安定したノード名とマウント済みディレクトリを指定してコンテナを起動します。
 
    ```bash
    docker run -d --name emqx-enterprise \
@@ -75,29 +93,29 @@ EMQX Enterprise 6.3.1以降の公式Dockerリリースイメージは、Docker H
 
 **Dockerイメージのデフォルト**
 
-EMQX 6.3.0以降、公式イメージのエントリポイントは `EMQX_NODE__DEFAULT_LISTENER_ADDRESS` 環境変数が未設定または空の場合に `all` を設定します。
+EMQX 6.3.0以降、公式イメージのエントリポイントは `EMQX_NODE__DEFAULT_LISTENER_ADDRESS` が未設定または空の場合に `all` を設定します。
 
-これにより、ポートのみ指定されたMQTTリスナー、ゲートウェイリスナー、ダッシュボードHTTPリスナーはすべてのネットワークインターフェースにバインドされ、どちらの[セキュリティプロファイル](../../guides/access-control/security-profile.md)でも公開されたコンテナポート経由でアクセス可能になります。
+これにより、ポートのみ指定されたMQTTリスナー、ゲートウェイリスナー、およびダッシュボードHTTPリスナーがすべてのネットワークインターフェースにバインドされ、公開されたコンテナポート経由で両方の[セキュリティプロファイル](../../guides/access-control/security-profile.md)からアクセス可能になります。
 
 リスナーのバインドに明示的なIPアドレスが指定されている場合は変更されません。この設定はバインドアドレスのみを制御し、認証や認可の要件を緩和するものではありません。
 
 **デフォルトの上書き**
 
-このデフォルトを上書きするには、`docker run -e EMQX_NODE__DEFAULT_LISTENER_ADDRESS=<value>` で別のサポートされている値を渡すか、Docker Composeのサービスの `environment` セクションで変数を設定してください。
+このデフォルトを上書きするには、`docker run -e EMQX_NODE__DEFAULT_LISTENER_ADDRESS=<value>` でサポートされる別の値を渡すか、Docker Composeのサービスの `environment` セクションで変数を設定してください。
 
-環境変数は設定ファイルより優先されるため、マウントした `emqx.conf` のみで `node.default_listener_address` を設定してもエントリポイントのデフォルトは上書きされません。
+環境変数は設定ファイルより優先されるため、マウントした `emqx.conf` 内で `node.default_listener_address` を設定してもエントリポイントのデフォルトは上書きされません。
 
-サポートされている値については [デフォルトリスナーアドレス](../../guides/access-control/security-profile.md#default-listener-address) を参照してください。
+サポートされる値は[デフォルトリスナーアドレス](../../guides/access-control/security-profile.md#default-listener-address)を参照してください。
 
 ::: warning 重要なお知らせ
-Dockerのブリッジネットワークを使用している場合、この変数を `loopback` に設定すると、対象のリスナーはコンテナのネットワーク名前空間内のループバックにバインドされます。そのため、`-p` オプションでポートを公開していても外部からアクセスできなくなります。
+Dockerのブリッジネットワーク環境では、この変数を `loopback` に設定すると、対象のリスナーはコンテナのネットワーク名前空間内のループバックにバインドされます。そのため、`-p` オプションで公開してもポート経由でアクセスできなくなります。
 
-公開ポートで使用するホストアドレスを制御するには、[Dockerのポート公開とマッピング](https://docs.docker.com/engine/network/port-publishing/)を参照してください。
+公開ポートで使用するホストアドレスの制御については、[Dockerのポート公開とマッピング](https://docs.docker.com/engine/network/port-publishing/)を参照してください。
 :::
 
 ### Feature Gatesを使ってEMQXを起動する
 
-EMQX 6.3.0以降、`EMQX_FEATURES` 環境変数を使って起動時に有効にするオプション機能を制御できます。例えば、コアアプリケーションのみでEMQXを起動するには以下のようにします。
+EMQX 6.3.0以降、`EMQX_FEATURES` 環境変数で起動時に利用可能なオプション機能を制御できます。例えば、コアアプリケーションのみで起動するには以下のように実行します。
 
 ```bash
 docker run -d --name emqx-enterprise \
@@ -107,7 +125,7 @@ docker run -d --name emqx-enterprise \
   emqx/emqx-enterprise:@EE_VERSION@
 ```
 
-カスタム機能セットで起動するには、以下のようにします。
+カスタム機能セットで起動するには以下のように実行します。
 
 ```bash
 docker run -d --name emqx-enterprise \
@@ -116,17 +134,17 @@ docker run -d --name emqx-enterprise \
   emqx/emqx-enterprise:@EE_VERSION@
 ```
 
-機能一覧と依存関係の詳細は [Feature Gates](./feature-gates.md) を参照してください。
+機能一覧と依存関係の詳細は[Feature Gates](./feature-gates.md)を参照してください。
 
 ## Docker Composeを使ってEMQXクラスターを構築する
 
 Docker Composeは複数コンテナのDockerアプリケーションを定義・実行するツールです。このセクションではDocker Composeを使って静的なEMQXクラスターを作成する方法を紹介します。
 
-このセクションのDocker Composeの例はローカルテスト用であり、ボリュームマウントはコメントアウトされています。データやクラッシュダンプを保持するには、[はじめに](#はじめに)で説明したホストディレクトリを準備し、`volumes` のコメントを解除してください。本番環境でのクラスター構築については [クラスタリング](../../develop/cluster/introduction.md) を参照してください。
+このセクションのDocker Compose例はローカルテスト用であり、ボリュームマウントはコメントアウトされています。データやクラッシュダンプを保持するには、[はじめに](#はじめに)で説明したホストディレクトリを準備し、`volumes` エントリのコメントを解除してください。商用クラスターのデプロイについては[クラスタリング](../../develop/cluster/introduction.md)を参照してください。
 
 :::tip
 
-Docker ComposeはDocker Desktopに既に含まれています。もしDocker Composeが未インストールの場合は、[Docker Composeのインストール](https://docs.docker.com/compose/install/) を参照してインストールしてください。
+Docker ComposeはDocker Desktopに含まれています。まだインストールが必要な場合は、[Docker Composeのインストール](https://docs.docker.com/compose/install/)をご覧ください。
 
 :::
 
@@ -191,7 +209,7 @@ Docker ComposeはDocker Desktopに既に含まれています。もしDocker Com
 
    Docker Composeクラスターで `EMQX_FEATURES` を設定する場合は、すべてのEMQXサービスで同じ値を使用してください。
 
-2. コマンドラインツールで `docker-compose.yml` があるディレクトリに移動し、以下のコマンドでEMQXクラスターを起動します。
+2. コマンドラインツールで `docker-compose.yml` があるディレクトリに移動し、以下のコマンドを実行してEMQXクラスターを起動します。
 
    ```bash
    docker-compose up -d
@@ -207,8 +225,8 @@ Docker ComposeはDocker Desktopに既に含まれています。もしDocker Com
 
 ## 次のステップ
 
-MQTTクライアントを使ってEMQXに接続し、メッセージのパブリッシュ／サブスクライブを行ってください。詳細は [パブリッシュとサブスクライブ](../messaging/publish-and-subscribe.md) を参照してください。
+MQTTクライアントを使ってEMQXに接続し、メッセージのパブリッシュ／サブスクライブを行ってください。詳細は[パブリッシュとサブスクライブ](../messaging/publish-and-subscribe.md)を参照してください。
 
-- EMQXのパラメータ設定やその他機能については、[設定](../../guides/configuration/configuration.md) を参照してください。
+- EMQXのパラメータ設定やその他機能については[設定](../../guides/configuration/configuration.md)をご覧ください。
 
-- 複数ノードによるEMQXクラスターの構築方法は、[クラスタリング](../../develop/cluster/introduction.md) を参照してください。
+- 複数ノードによるEMQXクラスターの構築方法は[クラスタリング](../../develop/cluster/introduction.md)を参照してください。
