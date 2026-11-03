@@ -814,7 +814,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m' \
 
 ::: tab 配置文件
 
-```properties
+```hocon
 gateway.lwm2m {
   blockwise {
     enable = true
@@ -834,8 +834,10 @@ Block-Wise 传输相关配置项说明如下：
 | ----------------------------- | ---------- | -------- | ------------------------------------------------------------ |
 | `blockwise.enable`            | Boolean    | `true`   | 是否启用 Block-Wise 传输。                                   |
 | `blockwise.max_block_size`    | Block Size | `1024`   | Block-Wise 传输使用的最大块大小。可选值为 `16`、`32`、`64`、`128`、`256`、`512`、`1024`。 |
-| `blockwise.max_body_size`     | Byte Size  | `"4MB"`  | 组装后消息体的最大大小。                                     |
-| `blockwise.exchange_lifetime` | Duration   | `"247s"` | Block-Wise 交换状态的保持时间。                              |
+| `blockwise.max_body_size`     | Byte Size  | `"4MB"`  | 重新组装后的最大负载大小。该值必须大于 `0`。超过此限制的负载将被拒绝。 |
+| `blockwise.exchange_lifetime` | Duration   | `"247s"` | 临时 Block-Wise 交换状态的保留时长。该值必须大于 `0`。状态过期后，其占用的资源将被释放。 |
+
+从 EMQX 6.1.6 开始，`blockwise.max_body_size` 和 `blockwise.exchange_lifetime` 必须大于 `0`。REST API 会拒绝非正数值，且不会更改已保存的网关配置。升级到 EMQX 6.1.6 前，请将所有零值或负数值改为正数。
 
 ## 用户层接口
 
