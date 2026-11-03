@@ -167,6 +167,71 @@ CoAP 网关基于 [Publish-Subscribe Broker for the CoAP](https://datatracker.ie
 
 网关内无独立的发布订阅的权限控制，其对主题的权限控制需要统一在 [授权（Authorization）](../../guides/access-control/authz/authz.md) 中管理。
 
+从 EMQX 6.3.3 开始，CoAP 网关会在授权前验证解码后的主题。发布请求必须使用有效的 MQTT 主题名，订阅或取消订阅请求必须使用有效的 MQTT 主题过滤器。
+
+## Block-Wise 传输
+
+CoAP 网关支持 [CoAP Block-Wise Transfer](https://datatracker.ietf.org/doc/html/rfc7959)，用于传输无法装入单个数据报的负载。网关会将待发送的负载拆分为多个块，并在处理收到的负载前完成分块重组。如果对端提出的有效分块大小超过 `blockwise.max_block_size`，EMQX 会将分块大小协商为配置的最大值。
+
+可通过 REST API 或配置文件配置 Block-Wise 传输。
+
+:::: tabs type:card
+
+::: tab REST API
+
+```bash
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/coap' \
+  -u <your-application-key>:<your-security-key> \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "coap",
+  "blockwise": {
+    "enable": true,
+    "max_block_size": 1024,
+    "max_body_size": "4MB",
+    "max_concurrent_exchanges": 16,
+    "max_total_size": "16MB",
+    "exchange_lifetime": "247s"
+  }
+}'
+```
+
+:::
+
+::: tab 配置文件
+
+```hocon
+gateway.coap {
+  blockwise {
+    enable = true
+    max_block_size = 1024
+    max_body_size = "4MB"
+    max_concurrent_exchanges = 16
+    max_total_size = "16MB"
+    exchange_lifetime = "247s"
+  }
+}
+```
+
+:::
+
+::::
+
+Block-Wise 传输相关配置项说明如下。从 EMQX 6.3.3 开始，`blockwise.max_concurrent_exchanges` 和 `blockwise.max_total_size` 用于限制每个客户端会话保留的 Block-Wise 状态。
+
+| 配置项 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `blockwise.enable` | Boolean | `true` | 是否启用 Block-Wise 传输。 |
+| `blockwise.max_block_size` | Block Size | `1024` | 最大分块大小，单位为字节。可选值为 `16`、`32`、`64`、`128`、`256`、`512` 和 `1024`。 |
+| `blockwise.max_body_size` | Byte Size | `"4MB"` | 重组后负载的最大大小。该值必须大于 `0`。EMQX 会拒绝超过此限制的负载。 |
+| `blockwise.max_concurrent_exchanges` | Integer | `16` | 每个客户端会话可保留的最大 Block-Wise 交换数。该值必须大于 `0`。达到限制后，新的 Block1 上传会收到 `4.29 Too Many Requests`，待发送的 Observe 通知则进入队列等待。 |
+| `blockwise.max_total_size` | Byte Size | `"16MB"` | 每个客户端会话中 Block-Wise 交换可保留的最大负载总大小。该值必须大于 `0`。达到限制后，新的 Block1 上传会收到 `4.13 Request Entity Too Large`。如果其他交换释放容量后可容纳其负载，待发送的 Observe 通知会进入队列等待。 |
+| `blockwise.exchange_lifetime` | Duration | `"247s"` | EMQX 保留临时 Block-Wise 交换状态的时长。该值必须大于 `0`。状态过期后会释放对应的会话容量。 |
+
+交换数和保留负载大小限制分别应用于每个客户端会话，不限制监听器上所有会话的资源总量。排队的 Observe 通知会在容量可用后继续发送，例如已保留的 Block-Wise 状态过期且 EMQX 释放相应容量时。
+
+从 EMQX 6.3.3 开始，`blockwise.max_body_size`、`blockwise.max_total_size` 和 `blockwise.exchange_lifetime` 必须大于 `0`。REST API 会拒绝非正数值，且不会更改已保存的网关配置。
+
 
 ## 用户层接口
 
@@ -292,7 +357,7 @@ coap-client -m put -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&token=34
 
 - 方法（Method）：`POST`
 - 请求路径（URI）：`ps/{+topic}{?QueryString*}`，其中：
-  -  `{+topic}` 为需要发布的主题，例如向 `coap/test` 主题发布消息，那么请求路径为 `ps/coap/test`
+  -  `{+topic}` 为发布消息使用的 MQTT 主题名。例如，向 `coap/test` 发布消息时，请求路径为 `ps/coap/test`。解码后的值必须是有效的 MQTT 主题名，不能包含通配符 `+` 或 `#`。
   - `{?QueryString*}` 为请求参数
     - `clientid`： `连接模式` 下为必填参数，`无连接模式` 下为可选参数。
     - `token`： 仅用于 `连接模式`，必填参数；
@@ -305,7 +370,7 @@ coap-client -m put -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&token=34
 
 - 返回码（Return Code）：
   - `2.04`：发送成功。
-  - `4.00`：错误的请求格式，并在消息体中返回具体的错误信息。
+  - `4.00`：请求无效。如果主题名无效，消息体为 `invalid topic`。
   - `4.01`：请求格式正确，但鉴权失败。并在消息体中返回具体的错误信息。
 - 消息体（Payload）：当返回码为 `2.04` 时，消息体为空；否则为具体的错误消息
 
@@ -333,7 +398,7 @@ coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clie
 - 选项值（Options）：需设置 `Observe` 为 `0`。
 - CoAP Token：使用非空 Token 标识 Observe 关系。
 - 请求路径（URI）：`ps/{+topic}{?QueryString*}`，其中：
-  -  `{+topic}` 为需要订阅主题，例如订阅 `coap/test` 主题，则请求路径为 `ps/coap/test`
+  -  `{+topic}` 为订阅使用的 MQTT 主题过滤器。例如，订阅 `coap/test` 时，请求路径为 `ps/coap/test`。解码后的值必须是有效的 MQTT 主题过滤器。例如，`a/#/b`、`a+/b` 和 `#a` 均为无效主题过滤器。
   - `{?QueryString*}`为请求参数
     - `clientid`： `连接模式`下为必填参数，`无连接模式`下为可选参数。
     - `token`： 仅用于 `连接模式`，必填参数；
@@ -346,7 +411,7 @@ coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clie
 
 - 返回码（Return Code）：
   - `2.05`：订阅成功。
-  - `4.00`：错误的请求格式，并在消息体中返回具体的错误信息。
+  - `4.00`：请求无效。如果主题过滤器无效，消息体为 `invalid topic`。
   - `4.01`：请求格式正确，但鉴权失败。并在消息体中返回具体的错误信息。
 - 消息体（Payload）：当返回码为 `2.05` 时，消息体为空；否则为具体的错误消息
 
@@ -376,7 +441,7 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 - 选项值（Options）：需设置 `Observe` 为 `1`。
 - CoAP Token：使用原 Observe 请求中的 Token。
 - 请求路径（URI）：`ps/{+topic}{?QueryString*}`，其中：
-  -  `{+topic}` 为需要取消订阅主题，例如取消订阅 `coap/test` 主题，则请求路径为 `ps/coap/test`
+  -  `{+topic}` 为取消订阅使用的 MQTT 主题过滤器。例如，取消订阅 `coap/test` 时，请求路径为 `ps/coap/test`。解码后的值必须是有效的 MQTT 主题过滤器。
   - `{?QueryString*}`为请求参数
     - `clientid`： `连接模式`下为必填参数，`无连接模式`下为可选参数。
     - `token`： 仅用于 `连接模式`，必填参数；
@@ -386,7 +451,7 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 
 - 返回码（Return Code）：
   - `2.07`：取消订阅成功。
-  - `4.00`：错误的请求格式，并在消息体中返回具体的错误信息。
+  - `4.00`：请求无效。如果主题过滤器无效，消息体为 `invalid topic`。
   - `4.01`：请求格式正确，但鉴权失败。并在消息体中返回具体的错误信息。
 - 消息体（Payload）：当返回码为 `2.07` 时，消息体为空；否则为具体的错误消息
 

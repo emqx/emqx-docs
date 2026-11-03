@@ -437,6 +437,22 @@ When writing MQTT examples:
 
 EMQX documentation is written in Markdown and rendered with VitePress. Use standard Markdown unless an EMQX or VitePress extension is needed.
 
+### Version Badges
+
+When an entire independent section applies only to a specific EMQX version and later, add a VitePress `Badge` to the end of the section heading. Use `type="tip"` and append `+` to the version number to mean "this version and later."
+
+```markdown
+### Choose a Credential Method <Badge type="tip" text="6.3.3+" />
+```
+
+Follow these rules:
+
+- Use a version badge only when the version scope applies to the entire section.
+- Use the same language-neutral badge text in the English and Chinese headings.
+- If the version scope applies only to a paragraph, configuration option, table row, or individual behavior, state the version in the relevant body text instead of adding a badge to the section heading.
+- Use body text for complex version ranges, edition-specific conditions, compatibility exceptions, deprecation details, and other qualifications that a short badge cannot express accurately.
+- Do not add a version badge merely because a section is newly added to the documentation. The badge must reflect the version in which the documented product behavior became available.
+
 ### Links
 
 Use descriptive link text.

@@ -357,6 +357,16 @@ Update 消息的 **消息体（Payload）** 格式为：
 - `{?MsgType}`：String，消息类型与发起请求的消息类型相同。
 - `{?ResponseData}`：JSON 对象，应答的消息体内容，具体取决于不同的消息类型。
 
+#### 待处理下行命令队列上限 <Badge type="tip" text="6.3.3+" />
+
+每个 LwM2M 客户端会话最多可保留 1,000 条待处理下行命令。该限制为固定值，无法配置。EMQX 按先进先出（FIFO）顺序将已接受的命令加入队列。正在传输的命令不计入待处理命令限制。
+
+当待处理队列中已有 1,000 条命令时，EMQX 会拒绝每条新命令，并向配置的 `translators.response.topic` 主题发布响应，响应码为 `4.29`。EMQX 还会递增 `delivery.dropped` 指标。EMQX 将过期命令移出队列后，该命令不再计入待处理命令限制。
+
+此限制控制待处理命令的数量，不限制其负载总大小。如果 Block-Wise 容量暂时不可用，已接受的命令会保留在待处理队列中。容量可用后，EMQX 会按先进先出顺序继续发送这些命令。
+
+会话统计项 `mqueue_len` 表示待处理命令数，`mqueue_max` 表示固定上限 `1000`。
+
 
 #### Read
 
@@ -779,7 +789,7 @@ LwM2M 协议底层使用 CoAP 进行通信，而 CoAP 基于 UDP，单个数据�
 
 [CoAP Block-Wise Transfer (RFC 7959)](https://datatracker.ietf.org/doc/html/rfc7959) 正是为解决这一问题而设计的机制。它将大数据拆分为多个固定大小的块（Block），通过多次 CoAP 请求/响应逐块传输，最终在接收端重新组装为完整数据。
 
-EMQX 的 LwM2M 网关内置了 Block-Wise 传输的支持。启用后，网关会自动处理块的拆分和组装，MQTT 侧的用户无需关心底层的分块细节，发送和接收的始终是完整的数据。
+EMQX 的 LwM2M 网关内置了 Block-Wise 传输的支持。启用后，网关会自动处理块的拆分和组装，MQTT 侧的用户无需关心底层的分块细节，发送和接收的始终是完整的数据。如果对端提出的有效分块大小超过 `blockwise.max_block_size`，EMQX 会将分块大小协商为配置的最大值。
 
 ### 传输方向
 
@@ -806,6 +816,8 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m' \
     "enable": true,
     "max_block_size": 1024,
     "max_body_size": "4MB",
+    "max_concurrent_exchanges": 16,
+    "max_total_size": "16MB",
     "exchange_lifetime": "247s"
   }
 }'
@@ -814,12 +826,14 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m' \
 
 ::: tab 配置文件
 
-```properties
+```hocon
 gateway.lwm2m {
   blockwise {
     enable = true
     max_block_size = 1024
     max_body_size = "4MB"
+    max_concurrent_exchanges = 16
+    max_total_size = "16MB"
     exchange_lifetime = "247s"
   }
 }
@@ -828,14 +842,20 @@ gateway.lwm2m {
 
 ::::
 
-Block-Wise 传输相关配置项说明如下：
+Block-Wise 传输相关配置项说明如下。从 EMQX 6.3.3 开始，`blockwise.max_concurrent_exchanges` 和 `blockwise.max_total_size` 用于限制每个客户端会话保留的 Block-Wise 状态。
 
-| 配置项                        | 类型       | 默认值   | 说明                                                         |
-| ----------------------------- | ---------- | -------- | ------------------------------------------------------------ |
-| `blockwise.enable`            | Boolean    | `true`   | 是否启用 Block-Wise 传输。                                   |
-| `blockwise.max_block_size`    | Block Size | `1024`   | Block-Wise 传输使用的最大块大小。可选值为 `16`、`32`、`64`、`128`、`256`、`512`、`1024`。 |
-| `blockwise.max_body_size`     | Byte Size  | `"4MB"`  | 组装后消息体的最大大小。                                     |
-| `blockwise.exchange_lifetime` | Duration   | `"247s"` | Block-Wise 交换状态的保持时间。                              |
+| 配置项 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `blockwise.enable` | Boolean | `true` | 是否启用 Block-Wise 传输。 |
+| `blockwise.max_block_size` | Block Size | `1024` | 最大分块大小，单位为字节。可选值为 `16`、`32`、`64`、`128`、`256`、`512` 和 `1024`。 |
+| `blockwise.max_body_size` | Byte Size | `"4MB"` | 重组后负载的最大大小。该值必须大于 `0`。EMQX 会拒绝超过此限制的负载。 |
+| `blockwise.max_concurrent_exchanges` | Integer | `16` | 每个客户端会话可保留的最大 Block-Wise 交换数。该值必须大于 `0`。达到限制后，新的 Block1 上传会收到 `4.29 Too Many Requests`，下行命令则进入会话队列等待。 |
+| `blockwise.max_total_size` | Byte Size | `"16MB"` | 每个客户端会话中 Block-Wise 交换可保留的最大负载总大小。该值必须大于 `0`。达到限制后，新的 Block1 上传会收到 `4.13 Request Entity Too Large`。如果其他交换释放容量后可容纳其负载，下行命令会进入队列等待。 |
+| `blockwise.exchange_lifetime` | Duration | `"247s"` | EMQX 保留临时 Block-Wise 交换状态的时长。该值必须大于 `0`。状态过期后会释放对应的会话容量。 |
+
+交换数和保留负载大小限制分别应用于每个客户端会话，不限制监听器上所有会话的资源总量。如果 Block-Wise 容量暂时不可用，下行命令会继续排队。容量可用后，EMQX 会恢复发送，例如已保留的 Block-Wise 状态过期且 EMQX 释放相应容量时。如果正在传输的下行命令过期，EMQX 会报告超时并取消其传输事务，然后发送队列中的下一条命令。负载大小超过 `blockwise.max_total_size` 的下行命令会失败，不会无限期排队。
+
+从 EMQX 6.3.3 开始，`blockwise.max_body_size`、`blockwise.max_total_size` 和 `blockwise.exchange_lifetime` 必须大于 `0`。REST API 会拒绝非正数值，且不会更改已保存的网关配置。
 
 ## 用户层接口
 
