@@ -88,6 +88,61 @@ The CoAP gateway uses the URI path and methods defined in the [Publish-Subscribe
 
 Detailed parameters refer to [Message Publish](#message-publish), [Topic Subscribe](#topic-subscribe), [Topic Unsubscribe](#topic-unsubscribe).
 
+## Block-Wise Transfer
+
+CoAP defines the Block-Wise Transfer mechanism in [RFC 7959](https://datatracker.ietf.org/doc/html/rfc7959) to transfer payloads that are too large for a single datagram. The mechanism splits a large payload into smaller blocks and reassembles the blocks at the receiving side.
+
+You can configure Block-Wise transfer through the REST API or the configuration file.
+
+:::: tabs type:card
+
+::: tab REST API
+
+```bash
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/coap' \
+  -u <your-application-key>:<your-security-key> \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "coap",
+  "blockwise": {
+    "enable": true,
+    "max_block_size": 1024,
+    "max_body_size": "4MB",
+    "exchange_lifetime": "247s"
+  }
+}'
+```
+
+:::
+
+::: tab Configuration
+
+```hocon
+gateway.coap {
+  blockwise {
+    enable = true
+    max_block_size = 1024
+    max_body_size = "4MB"
+    exchange_lifetime = "247s"
+  }
+}
+```
+
+:::
+
+::::
+
+The Block-Wise-related configuration options are described below:
+
+| Configuration Item            | Type       | Default  | Description                                                  |
+| ----------------------------- | ---------- | -------- | ------------------------------------------------------------ |
+| `blockwise.enable`            | Boolean    | `true`   | Whether to enable Block-Wise transfer.                       |
+| `blockwise.max_block_size`    | Block Size | `1024`   | Maximum block size used in Block-Wise transfer. Available values: `16`, `32`, `64`, `128`, `256`, `512`, `1024`. |
+| `blockwise.max_body_size`     | Byte Size  | `"4MB"`  | Maximum payload size after reassembly. The value must be greater than `0`. Payloads that exceed this limit are rejected. |
+| `blockwise.exchange_lifetime` | Duration   | `"247s"` | How long the temporary Block-Wise exchange state is retained. The value must be greater than `0`. When the state expires, its resources are released. |
+
+Starting from EMQX 6.1.6, `blockwise.max_body_size` and `blockwise.exchange_lifetime` must be greater than `0`. The REST API rejects non-positive values without changing the saved gateway configuration. Before upgrading to EMQX 6.1.6, replace any zero or negative values with positive values.
+
 ## Customize Your CoAP Gateway
 
 In addition to the default settings, EMQX provides a variety of configuration options to better accommodate your specific business requirements. This section offers an in-depth overview of the various fields available on the **Gateways** page. See the texts below the screenshot for a comprehensive explanation of each field.
