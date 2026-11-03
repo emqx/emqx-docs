@@ -335,9 +335,9 @@ timestamp, clientid, recv_oct, recv_cnt, send_oct, send_cnt, subscriptions_cnt, 
 - `timestamp`：数据采集时的 UNIX 时间戳（毫秒）
 - `clientid`：MQTT 客户端 ID
 - `recv_oct`：客户端接收的总字节数
-- `recv_cnt`：接收到的消息数量（或消息片段）
+- `recv_cnt`：从 EMQX 6.3.3 开始，该字段表示接收的 MQTT 报文数量，与客户端统计项 `recv_pkt` 的值相同。在 EMQX 6.3.3 之前，该字段表示套接字 `recv()` 调用次数。为保持向后兼容，该字段予以保留。
 - `send_oct`：发送给客户端的总字节数
-- `send_cnt`：发送的 MQTT 报文数量
+- `send_cnt`：从 EMQX 6.3.3 开始，该字段表示发送的 MQTT 报文数量，与客户端统计项 `send_pkt` 的值相同。在 EMQX 6.3.3 之前，该字段表示套接字 `send()` 调用次数。为保持向后兼容，该字段予以保留。
 - `subscriptions_cnt`：客户端持有的订阅数量
 - `awaiting_rel_cnt`：等待 PUBREL 的 QoS 2 消息数量
 - `mqueue_len`：客户端内存会话消息队列的长度
