@@ -143,6 +143,8 @@ After defining the SQL rule, add an action to write the selected data into EMQX 
      > - If you do not add a suffix, whole-number values are interpreted as signed integers by default, and values containing a decimal point are interpreted as floating-point numbers.
      > - Use `i` when the value may be negative or must be stored as a signed integer, and use `u` for non-negative values that should be stored as unsigned integers (for example, counters, IDs, or monotonically increasing metrics).
 
+   - **Field Types** (optional): Specify the column types to use when EMQX Tables automatically creates the target table. This setting supports only `json2`. For configuration requirements and limitations, see [Write JSON Data to JSON2 Columns](#write-json-data-to-json2-columns).
+
    - **Time Precision**: Select the time precision for timestamps. The default value is `millisecond`.
 
    - **Fallback Actions** (optional): Configure fallback actions to be executed if this action fails. By default, no fallback action is configured. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
@@ -154,6 +156,34 @@ After defining the SQL rule, add an action to write the selected data into EMQX 
 4. Click **Create** to save the action.
 
 5. On the **Create Rule** page, click **Save** to save the rule.
+
+### Write JSON Data to JSON2 Columns <Badge type="tip" text="7.0.0+" />
+
+An EMQX Tables action can write JSON data to a `JSON2` column. This feature requires GreptimeDB 1.2.1 or later.
+
+If the target table already contains a `JSON2` column, use the column as a field in **Write Syntax**. EMQX sends the JSON value to the existing column without requiring a field type declaration.
+
+If the target table does not exist, declare the field as `json2` in **Field Types**. Without this declaration, EMQX Tables creates the column as `STRING` when it automatically creates the table. For example, use the following action parameters:
+
+```hocon
+write_syntax = "logs payload=${payload}"
+field_types = { payload = json2 }
+```
+
+The `field_types` setting has the following requirements:
+
+- It is supported only by EMQX Tables actions.
+- It supports only the `json2` type.
+- Each field name must be static and must match a field in `write_syntax`. Placeholders are not supported in field names.
+- A `JSON2` value can be a JSON object or JSON `null`. Objects can contain nested objects and arrays. Top-level arrays and scalar JSON values are not supported.
+
+Invalid JSON and unsupported JSON document types cause the affected table's insert batch to fail with an unrecoverable error. Inserts to other tables in the same action batch can still succeed.
+
+::: warning JSON2 Fields Missing from the First Message
+
+When an incoming message causes EMQX Tables to automatically create a target table, the message must provide a value for the field declared as `json2`. If the first message omits the declared field, EMQX Tables creates a non-append-only table without the `JSON2` column. A later message cannot add the column. If the field can be absent from the first message, pre-create the target table with `append_mode = 'true'`.
+
+:::
 
 ## Test Rule and Query Data
 
