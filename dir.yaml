@@ -649,8 +649,8 @@
       title_cn: 快速开始
       title_ja: クイックスタート
       path: develop/message-queue/message-queue-quick-start
-  - title_en: MQTT Streams
-    title_cn: MQTT 消息流
+  - title_en: MQTT Streams (Beta)
+    title_cn: MQTT 消息流 (Beta)
     title_ja: MQTT ストリーム
     path: develop/mqtt-stream/mqtt-stream-concept
     collapsed: true
