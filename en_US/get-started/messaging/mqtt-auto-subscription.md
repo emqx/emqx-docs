@@ -30,6 +30,14 @@ Before EMQX 5.0, this feature is called **Proxy Subscription**.
 
 Now the auto subscription function is enabled. New subscribers will subscribe to the topic `a/1` automatically once they are connected to the broker.
 
+## Set Auto Subscribe Topics Through HTTP Authentication <Badge type="tip" text="7.0.0+" />
+
+An HTTP authentication service can return Auto Subscribe topic filters for a client in a response with `"result": "allow"`. EMQX merges these response entries with the globally configured Auto Subscribe rules. A response entry overrides a global rule with the same topic filter.
+
+Auto Subscribe placeholders such as `${clientid}` are not expanded in HTTP response entries. The HTTP service must return the final topic filter for each client.
+
+For details about the response format, limits, validation, security profiles, and persistent sessions, see [Set Auto Subscribe Topics in the HTTP Authentication Response](../../guides/access-control/authn/http.md#set-auto-subscribe-topics-in-the-response).
+
 ## Try Auto Subscription Using MQTTX Desktop
 
 The topic `a/1` is configured as the auto-subscribe topic in [Configure Auto Subscribe via Dashboard](#configure-auto-subscribe-via-dashboard). The following procedure demonstrates how a client subscribes to the topic `a/1` automatically once it is connected to the broker.

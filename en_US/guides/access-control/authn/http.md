@@ -15,9 +15,10 @@ The authentication process is similar to an HTTP API call where EMQX, as the req
 - The response encoding format `content-type` must be `application/json`.
 - The authentication result is marked by `result` in the body, with option value: `allow`, `deny`, `ignore`.
 - Superuser is marked by `is_superuser` in the body, option value: `true`, `false`.
-- Starting from EMQX v5.7.0, you can set [client attributes](../../../develop/client-attributes/client-attributes.md) using the optional `client_attrs` field. Note that both keys and values must be strings.
-- Starting from EMQX v5.8.0, you can set an optional `acl` field in the response body to specify the client's permissions. See [Access Control List (ACL)](./acl.md) for more information.
-- Starting from EMQX v5.8.0, you can set an optional `expire_at` field in the response body to specify the expiration time of the client's authenticity, forcing the client to disconnect and get reauthenticated at reconnection. The value is a Unix timestamp in seconds.
+- Starting from EMQX 5.7.0, you can set [client attributes](../../../develop/client-attributes/client-attributes.md) using the optional `client_attrs` field. Note that both keys and values must be strings.
+- Starting from EMQX 5.8.0, you can set an optional `acl` field in the response body to specify the client's permissions. See [Access Control List (ACL)](./acl.md) for more information.
+- Starting from EMQX 5.8.0, you can set an optional `expire_at` field in the response body to specify the expiration time of the client's authenticity, forcing the client to disconnect and get reauthenticated at reconnection. The value is a Unix timestamp in seconds.
+- Starting from EMQX 7.0.0, you can set an optional `auto_subscribe` field in a response with `"result": "allow"` to subscribe the client to specified topic filters. See [Set Auto Subscribe Topics in the Response](#set-auto-subscribe-topics-in-the-response) for the response format and processing rules.
 - The HTTP response status code `Status Code` should be `200` or `204`, the `4xx/5xx` status code returned will ignore the body and determine the result to be `ignore` and continue with the authentication chain.
 
 Example response:
@@ -30,12 +31,12 @@ Body:
 {
     "result": "allow", // "allow" | "deny" | "ignore"
     "is_superuser": false, // options: true | false, default value: false
-    "client_attrs": { // optional (since v5.7.0)
+    "client_attrs": { // optional (since 5.7.0)
         "role": "admin",
         "sn": "10c61f1a1f47"
     }
-    "expire_at": 1654254601, // optional (since v5.8.0)
-    "acl": // optional (since v5.8.0)
+    "expire_at": 1654254601, // optional (since 5.8.0)
+    "acl": // optional (since 5.8.0)
     [
         {
             "permission": "allow",
@@ -58,6 +59,44 @@ In EMQX 4.x, only HTTP status code is used, but body is discarded, for example, 
 Due to the lack of expressiveness, it has been redesigned to make use of HTTP body, and thus is not compatible with EMQX 5.0.
 
 :::
+
+### Set Auto Subscribe Topics in the Response <Badge type="tip" text="7.0.0+" />
+
+A response with `"result": "allow"` can include an `auto_subscribe` array. EMQX subscribes the client to the valid topic filters in the array when the client connects.
+
+Each array entry supports the following fields:
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `topic` | Yes | A valid MQTT topic filter. The value must be a string. |
+| `qos` | No | The subscription QoS. The value must be the integer `0`, `1`, or `2`. The default is `0`. |
+
+For example:
+
+```json
+{
+  "result": "allow",
+  "auto_subscribe": [
+    {
+      "topic": "devices/device-001/commands",
+      "qos": 1
+    },
+    {
+      "topic": "broadcast/notifications"
+    }
+  ]
+}
+```
+
+EMQX applies the following processing rules:
+
+- EMQX processes only the first 200 entries in each response. This limit is independent of the 20-rule limit for globally configured Auto Subscribe rules.
+- If `auto_subscribe` is not an array, EMQX logs a warning and ignores the field. If the array contains an invalid entry, EMQX logs a warning and ignores that entry without affecting the other valid entries.
+- EMQX merges the response entries with the globally configured Auto Subscribe rules. A response entry overrides a global rule with the same topic filter. Among the first 200 entries, the last valid entry for a topic filter takes effect.
+- EMQX validates HTTP response topic filters under both [security profiles](../security-profile.md). Under the `legacy` profile, Auto Subscribe bypasses subscription authorization and MQTT capability checks. Under the `hardened` profile, EMQX additionally applies authorization, MQTT capability checks, subscribe hooks, and the configured authorization deny action.
+- When a client resumes a persistent session, EMQX adds the subscriptions specified by valid entries in the current response to the subscriptions stored in the session. EMQX does not remove an existing subscription only because its topic filter is absent from the current response.
+
+For information about configuring global rules, see [Auto Subscribe](../../../get-started/messaging/mqtt-auto-subscription.md).
 
 ## Configure Dynamic Hostname Resolution
 
