@@ -14,9 +14,10 @@ EMQX 支持通过外部 HTTP 服务进行密码认证。客户端连接时，EMQ
 - 响应编码格式 `content-type` 必须是 `application/json`。
 - 认证结果通过 body 中的 `result` 标示，可选 `allow`、`deny`、`ignore`。
 - 超级用户通过 body 中的 `is_superuser` 标示，可选 `true`、`false`。
-- 从 EMQX v5.7.0 版本开始，您可以使用可选的 `client_attrs` 字段设置[客户端属性](../../../develop/client-attributes/client-attributes.md)。请注意，键和值都必须是字符串类型。
-- 从 EMQX v5.8.0 版本开始，您可以在响应体中设置一个可选的 `acl` 字段，用于指定客户端的权限。有关更多信息，请参阅[权限列表（ACL）](./acl.md)。
-- 从 EMQX v5.8.0 版本开始，您可以在响应体中设置一个可选的 `expire_at` 字段，用于指定客户端的认证到期时间，并强制客户端断开连接以便重新认证。该值为 Unix 时间戳（秒）。
+- 从 EMQX 5.7.0 开始，您可以使用可选的 `client_attrs` 字段设置[客户端属性](../../../develop/client-attributes/client-attributes.md)。请注意，键和值都必须是字符串类型。
+- 从 EMQX 5.8.0 开始，您可以在响应体中设置一个可选的 `acl` 字段，用于指定客户端的权限。有关更多信息，请参阅[权限列表（ACL）](./acl.md)。
+- 从 EMQX 5.8.0 开始，您可以在响应体中设置一个可选的 `expire_at` 字段，用于指定客户端的认证到期时间，并强制客户端断开连接以便重新认证。该值为 Unix 时间戳（秒）。
+- 从 EMQX 7.0.0 开始，您可以在 `"result": "allow"` 的响应中设置可选的 `auto_subscribe` 字段，使客户端自动订阅指定的主题过滤器。有关响应格式和处理规则，参见[通过响应设置自动订阅主题](#通过响应设置自动订阅主题)。
 - HTTP 响应状态码 `Status Code` 应当为 `200` 或 `204`，返回 `4xx/5xx` 状态码时将忽略 body 并判定结果为 `ignore`，继续执行认证链。
 
 响应示例：
@@ -29,12 +30,12 @@ Body:
 {
     "result": "allow", // "allow" | "deny" | "ignore"
     "is_superuser": false, // true | false，该项为空时默认为 false
-    "client_attrs": { // 可选 (自 v5.7.0 起)
+    "client_attrs": { // 可选 (自 5.7.0 起)
         "role": "admin",
         "sn": "10c61f1a1f47"
     }
-    "expire_at": 1654254601, // 可选 (自 v5.8.0 起)
-    "acl": // 可选 (自 v5.8.0 起)
+    "expire_at": 1654254601, // 可选 (自 5.8.0 起)
+    "acl": // 可选 (自 5.8.0 起)
     [
         {
             "permission": "allow",
@@ -54,6 +55,44 @@ Body:
 ::: tip EMQX 4.x 兼容性说明
 在 4.x 中，EMQX 仅用到了 HTTP API 返回的状态码，而内容则被丢弃。例如 `200` 表示 `allow`，`403` 表示 `deny`。因为缺乏丰富的表达能力，在 5.0 中对这一机制进行了不兼容的调整。
 :::
+
+### 通过响应设置自动订阅主题 <Badge type="tip" text="7.0.0+" />
+
+`"result": "allow"` 的响应可以包含 `auto_subscribe` 数组。客户端连接时，EMQX 会使客户端自动订阅数组中的有效主题过滤器。
+
+数组中的每个条目支持以下字段：
+
+| 字段 | 是否必填 | 说明 |
+| --- | --- | --- |
+| `topic` | 是 | 有效的 MQTT 主题过滤器，值必须是字符串。 |
+| `qos` | 否 | 订阅 QoS，值必须是整数 `0`、`1` 或 `2`，默认值为 `0`。 |
+
+例如：
+
+```json
+{
+  "result": "allow",
+  "auto_subscribe": [
+    {
+      "topic": "devices/device-001/commands",
+      "qos": 1
+    },
+    {
+      "topic": "broadcast/notifications"
+    }
+  ]
+}
+```
+
+EMQX 按照以下规则处理响应：
+
+- EMQX 仅处理每个响应中的前 200 个条目。此限制独立于全局自动订阅规则的 20 条限制。
+- 如果 `auto_subscribe` 不是数组，EMQX 会记录 warning 级别日志并忽略该字段。如果数组中存在无效条目，EMQX 会记录 warning 级别日志并忽略该条目，不影响其他有效条目。
+- EMQX 会将响应中的条目与全局自动订阅规则合并。如果响应条目与全局规则使用相同的主题过滤器，响应条目优先生效。在前 200 个条目中，同一主题过滤器的最后一个有效条目生效。
+- EMQX 在两种[安全方案](../security-profile.md)下都会验证 HTTP 响应中的主题过滤器。在 `legacy` 方案下，自动订阅会绕过订阅授权和 MQTT 能力检查。在 `hardened` 方案下，EMQX 还会执行授权、MQTT 能力检查和订阅 Hook，并应用配置的授权拒绝操作。
+- 客户端恢复持久会话时，EMQX 会在会话已有订阅的基础上，添加当前响应中有效条目指定的订阅。已有订阅不会仅因其主题过滤器未出现在当前响应中而被删除。
+
+有关配置全局规则的信息，参见[自动订阅](../../../get-started/messaging/mqtt-auto-subscription.md)。
 
 ## 配置动态主机名解析
 
