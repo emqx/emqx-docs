@@ -53,11 +53,11 @@ This section describes the preparations you need to complete before you start to
 
 ### Install Apache Doris Server
 
-Follow the [official guide](https://doris.apache.org/docs/dev/gettingStarted/quick-start#use-docker-for-quick-deployment) to run Doris locally using Docker Compose.
+Follow the [official guide](https://doris.apache.org/docs/dev/getting-started/quick-start/#quick-deployment-with-docker) to run Doris locally using Docker Compose.
 
 ### Create Data Tables
 
-You can use a MySQL client to connect to a Doris Frontend and issue commands.  See the [official documentation](https://doris.apache.org/docs/dev/gettingStarted/quick-start#run-queries).
+You can use a MySQL client to connect to a Doris Frontend and issue commands.  See the [official documentation](https://doris.apache.org/docs/dev/getting-started/quick-start/#run-your-first-query).
 
 For example:
 

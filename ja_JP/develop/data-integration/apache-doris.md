@@ -52,11 +52,11 @@ Apache Doris とのデータ統合により、以下のような特長とメリ�
 
 ### Apache Doris サーバーのインストール
 
-[公式ガイド](https://doris.apache.org/docs/dev/gettingStarted/quick-start#use-docker-for-quick-deployment) に従い、Docker Compose を使ってローカル環境に Doris を起動してください。
+[公式ガイド](https://doris.apache.org/docs/dev/getting-started/quick-start/#quick-deployment-with-docker) に従い、Docker Compose を使ってローカル環境に Doris を起動してください。
 
 ### データテーブルの作成
 
-MySQL クライアントを使って Doris Frontend に接続し、コマンドを発行できます。詳細は [公式ドキュメント](https://doris.apache.org/docs/dev/gettingStarted/quick-start#run-queries) を参照してください。
+MySQL クライアントを使って Doris Frontend に接続し、コマンドを発行できます。詳細は [公式ドキュメント](https://doris.apache.org/docs/dev/getting-started/quick-start/#run-your-first-query) を参照してください。
 
 例：
 
