@@ -1,22 +1,26 @@
 # MQTT Streams クイックスタート
 
-このページでは、EMQX 6.1 の MQTT Streams 機能の使い方を説明します。MQTTX を使ってクライアントをシミュレートし、EMQX ダッシュボードからストリームを作成・管理し、メッセージの保存、再生、圧縮の動作を体験します。
+::: warning 重要なお知らせ
+MQTT Streams は EMQX 6.1 のベータ機能です。機能やインターフェースは変更される可能性があります。
+:::
+
+このページでは、EMQX 6.1 の MQTT Streams 機能の使い方を説明します。MQTTX を使ってクライアントをシミュレートし、EMQX ダッシュボードからストリームを作成・管理し、メッセージの保存、再生、圧縮の仕組みを体験します。
 
 ## 目的
 
-このクイックスタートでは、EMQX MQTT Streams が以下を実現できることを示します：
+このクイックスタートでは、EMQX MQTT Streams が以下を実現できることを示します。
 
 - サブスクライバーの有無に関わらずメッセージを永続化する
 - タイムスタンプに基づく再生をサポートする
-- 状態指向メッセージングのための Last-Value セマンティクスを有効にする
+- 状態指向のメッセージングに適した Last-Value セマンティクスを有効にする
 - `$stream/` プレフィックスのサブスクライブによるストリームの自動作成を可能にする
 
 ## 前提条件
 
-開始前に以下を準備してください：
+開始前に以下を準備してください。
 
 - EMQX 6.1 以上が稼働していること
-- [MQTTX](https://mqttx.app/)（または MQTT 5.0 対応の任意のクライアント）
+- [MQTTX](https://mqttx.app/)（または MQTT 5.0 対応のクライアント）
 - EMQX ダッシュボードへのアクセス（デフォルト：`http://localhost:18083`）
 
 ## MQTT Streams 基本機能のテスト（レギュラーストリーム）
@@ -25,23 +29,22 @@
 
 ### 前提条件
 
-開始前に、MQTT Streams 機能が有効であり、自動作成の設定がこの例に影響しないことを確認してください。
+開始前に、MQTT Streams 機能が有効であり、自動作成設定が本例に影響しないことを確認してください。
 
 1. 左メニューの **Streams** に移動します。
 
-2. Message Stream が無効の場合は、**Settings** をクリックします。**Management** -> **MQTT Settings** -> **Streams** ページにリダイレクトされます。
+2. Message Stream が無効の場合は **Settings** をクリックします。**Management** -> **MQTT Settings** -> **Streams** ページにリダイレクトされます。
 
 3. **Enable Streams** スイッチをオンにします。
 
-4. 自動作成の設定を確認し、**Regular Stream** が使用されるようにします：
+4. 自動作成設定を確認し、**Regular Stream** が使用されていることを確認します。
 
    - **Enable Auto Create Streams** が無効、または
+   - **Auto Create Stream Type** が **Regular Stream** に設定されている
 
-   - **Auto Create Stream Type** が **Regular Stream** に設定されている。
+   > これにより、ストリームが Last-Value Stream として自動作成されることを防ぎます。Last-Value Stream はキーごとに最新のメッセージのみを保持します。
 
-   > これにより、ストリームが Last-Value Stream として自動作成されるのを防ぎます。Last-Value Stream はキーごとに最新のメッセージのみを保持します。
-
-5. 変更を行った場合は、**Save Changes** をクリックして適用します。
+5. 変更を加えた場合は **Save Changes** をクリックして適用します。
 
    <img src="./assets/message_stream_settings.png" alt="メッセージストリーム設定" style="zoom:67%;" />
 
@@ -49,15 +52,16 @@
 
 1. 左メニューの **Streams** に移動します。
 
-2. ページ内の **Create Stream** をクリックするか、右上の **Create** をクリックします。
+2. ページ内の **Create Stream** または右上の **Create** をクリックします。
 
-3. **Create Stream** ダイアログで以下の設定を行います：
+3. **Create Stream** ダイアログで以下の設定を行います。
+
    - **Name**: `my_stream`
    - **Topic Filter**: `demo/stream`
    - **Last-Value Semantics**: 無効
    - **Stream Key Expression**: `message.from`
 
-   他のオプションはデフォルトのままにします。
+   その他のオプションはデフォルトのままにします。
 
 4. **Create** をクリックします。
 
@@ -67,17 +71,17 @@
 
 MQTTX CLI を使ってパブリッシャークライアントをシミュレートします。
 
-1. MQTTX CLI がインストールされていることを確認してください。詳細は [インストール](https://mqttx.app/docs/cli/downloading-and-installation) を参照してください。
+1. MQTTX CLI がインストールされていることを確認します。詳細は [インストール](https://mqttx.app/docs/cli/downloading-and-installation) を参照してください。
 
-2. EMQX に接続します：
+2. EMQX に接続します。
 
    ```bash
    mqttx conn -h 'localhost' -p 1883
    ```
 
-3. QoS 1 でトピック `demo/stream` に複数のメッセージをパブリッシュします。
+3. トピック `demo/stream` に QoS 1 で複数のメッセージをパブリッシュします。
 
-   例：
+   例:
 
    ```bash
    mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 1}'
@@ -85,26 +89,26 @@ MQTTX CLI を使ってパブリッシャークライアントをシミュレー�
    mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 3}'
    ```
 
-   期待される出力：
+   期待される出力:
 
    ```bash
    ✔ Connected
    ✔ Message published
    ```
 
-このストリームはレギュラーストリームなので、すべてのパブリッシュされたメッセージは保持ポリシーに従ってストリームに保存されます。
+レギュラーストリームなので、パブリッシュされたすべてのメッセージは保持ポリシーに従ってストリームに保存されます。
 
 ### ステップ 3: ストリームからすべてのメッセージを再生
 
-MQTTX CLI を使い、MQTT 5 のサブスクリプションユーザープロパティ `stream-offset` を設定して、ストリームの最初からメッセージを再生します。
+MQTTX CLI を使ってストリームにサブスクライブし、MQTT 5 のサブスクリプションユーザープロパティ `stream-offset` を設定して最初からメッセージを再生します。
 
 ```bash
 mqttx sub -t \$stream/my_stream  -q 1  -h localhost -up "stream-offset: 0"
 ```
 
-**期待される動作**：
+**期待される動作**:
 
-これまでにパブリッシュされたすべてのメッセージがパブリッシュ順に受信されます：
+これまでにパブリッシュされたすべてのメッセージがパブリッシュ順に受信されます。
 
 ```bash
 topic: demo/stream, qos: 0, size: 10B, userProperties: [
@@ -126,15 +130,15 @@ topic: demo/stream, qos: 0, size: 10B, userProperties: [
 {"value": 3}
 ```
 
-これは以下を確認しています：
+これにより以下が確認できます。
 
-- ストリームはレギュラーストリームであること
-- `stream-offset` サブスクリプションプロパティが正しく機能していること
-- メッセージが圧縮または上書きされていないこと
+- ストリームはレギュラーストリームである
+- `stream-offset` サブスクリプションプロパティが正しく機能している
+- メッセージは圧縮や上書きされていない
 
 ## 異なる位置からのメッセージ再生
 
-MQTT Streams では、サブスクライバーがサブスクライブ時に `stream-offset` を指定することで、メッセージ再生の開始位置を制御できます。
+MQTT Streams では、サブスクライブ時に `stream-offset` を指定することで、メッセージ再生の開始位置を制御できます。
 
 この例では、特定の時点以降にパブリッシュされたメッセージのみを再生する方法を示します。
 
@@ -142,31 +146,31 @@ MQTT Streams では、サブスクライバーがサブスクライブ時に `st
 
 新しいメッセージをパブリッシュする前に、現在の Unix タイムスタンプ（マイクロ秒単位）を記録します。
 
-ミリ秒単位の現在時刻は以下で取得できます：
+ミリ秒単位の現在時刻は以下で取得可能です。
 
-- **Linux / macOS**：
+- **Linux / macOS**:
 
   ```bash
   date +%s000
   ```
 
-- **JavaScript**：
+- **JavaScript**:
 
   ```javascript
   Date.now()
   ```
 
-例：
+例:
 
 ```
 1772162409000
 ```
 
-この値に 1000 を掛けてマイクロ秒に変換し、再生開始位置として保存します。
+この値に 1000 を掛けてマイクロ秒単位に変換し、保存します。これが再生開始位置になります。
 
 ### ステップ 2: 新しいメッセージをパブリッシュ
 
-ストリームにさらにメッセージをパブリッシュします：
+ストリームにさらにメッセージをパブリッシュします。
 
 ```bash
 mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 4}'
@@ -175,15 +179,15 @@ mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 5}'
 
 ### ステップ 3: 記録したタイムスタンプから再生
 
-保存したタイムスタンプを `stream-offset` として指定し、ストリームにサブスクライブします：
+保存したタイムスタンプを `stream-offset` に指定してストリームにサブスクライブします。
 
 ```bash
 mqttx sub -t \$stream/my_stream  -q 1  -h localhost -up "stream-offset: 1772162409000000"
 ```
 
-**期待される動作**：
+**期待される動作**:
 
-この時刻以降にパブリッシュされたメッセージのみがサブスクライバーに届きます：
+この時刻以降にパブリッシュされたメッセージのみがサブスクライバーに届きます。
 
 ```bash
 topic: demo/stream, qos: 1, size: 12B, userProperties: [
@@ -199,13 +203,13 @@ topic: demo/stream, qos: 1, size: 12B, userProperties: [
 {"value": 5}
 ```
 
-異なるコンシューマーは同じストリームを別々の位置から独立して再生できます：
+異なるコンシューマーは同じストリームを異なる位置から独立して再生できます。
 
 - あるコンシューマーは最初から（`earliest`）再生
 - 別のコンシューマーは特定のタイムスタンプから再生
 - さらに別のコンシューマーは新しいメッセージのみ（`latest`）受信
 
-各コンシューマーの再生位置は独立しており、他のサブスクライバーに影響しません。
+各コンシューマーの再生位置は独立しており、他のサブスクライバーに影響を与えません。
 
 これにより、MQTT Streams のコンシューマー制御による再生が示されます。
 
@@ -213,26 +217,28 @@ topic: demo/stream, qos: 1, size: 12B, userProperties: [
 
 このセクションでは、Last-Value MQTT Streams がキーごとに最新のメッセージのみを保持し、状態を表現するのに適していることを示します。
 
-### ステップ 1: 既存のストリームを削除
+### ステップ 1: 既存ストリームの削除
 
 1. ダッシュボードの **Streams** に移動します。
-2. ストリーム `my_stream` を見つけます。
+2. ストリーム `my_stream` を探します。
 3. **Delete** をクリックし、確認します。
 
 ### ステップ 2: Last-Value メッセージストリームの作成
 
 1. **Streams** ページで **Create** をクリックします。
-2. 以下の設定を行います：
+2. 以下の設定を行います。
+
    - **Name**: `device_stream`
    - **Topic Filter**: `device/state`
    - **Data Retention Period**: `7` 日
    - **Last-Value Semantics**: 有効
    - **Stream Key Expression**: `message.from`
+
 3. **Create** をクリックします。
 
-キー式が `message.from` に設定されているため、同じキーのストリーム内で最新のメッセージのみが保持されます。
+キー式が `message.from` に設定されているため、同じキーを持つストリーム内で最新のメッセージのみが保持されます。
 
-### ステップ 3: 状態更新メッセージのパブリッシュ
+### ステップ 3: 状態更新のパブリッシュ
 
 同じクライアント ID `-i device-1` からメッセージをパブリッシュします。
 
@@ -242,19 +248,19 @@ mqttx pub -t 'device/state' -h 'localhost' -p 1883 -q 1 -i device-1 -m '{"status
 mqttx pub -t 'device/state' -h 'localhost' -p 1883 -q 1 -i device-1 -m '{"status": "offline"}'
 ```
 
-ストリームキー式がメッセージのメタデータからクライアント ID を抽出してキーにしているため、両メッセージは同じストリームキーを持ちます。2つ目のメッセージが1つ目を上書きします。
+ストリームキー式が `message.from` でメッセージメタデータからクライアント ID をキーとして抽出するため、両方のメッセージは同じストリームキーを持ちます。2つ目のメッセージが1つ目を上書きします。
 
-### ステップ 4: ストリームにサブスクライブ
+### ステップ 4: ストリームのサブスクライブ
 
-ストリームにサブスクライブし、最初から再生します：
+ストリームにサブスクライブし、最初から再生します。
 
 ```bash
 mqttx sub -t '$stream/device_stream' -h 'localhost' -p 1883 -q 1 -up "stream-offset: 0"
 ```
 
-**期待される動作**：
+**期待される動作**:
 
-最新のメッセージのみが配信されます：
+最新のメッセージのみが届きます。
 
 ```bash
 topic: device/state, qos: 1, size: 21B, userProperties: [
@@ -264,43 +270,43 @@ topic: device/state, qos: 1, size: 21B, userProperties: [
 {"status": "offline"}
 ```
 
-これにより、MQTT Streams が Last-Value セマンティクスを用いた状態指向メッセージングパターンをサポートしていることが示されます。
+これにより、MQTT Streams が Last-Value セマンティクスを用いた状態指向メッセージングをサポートしていることが示されます。
 
 ## ストリームの自動作成
 
-EMQX の MQTT Streams は、クライアントが `$stream/` プレフィックス付きトピックにサブスクライブすると自動的にストリームを作成できます。これにより、ダッシュボードで手動作成せずにストリームを動的にプロビジョニングできます。
+EMQX の MQTT Streams は、クライアントが `$stream/` プレフィックス付きトピックにサブスクライブすると自動的にストリームを作成できます。これにより、ダッシュボードで手動作成せずにストリームを動的にプロビジョニング可能です。
 
-このセクションでは、自動作成を有効にしてテストする方法を示します。
+このセクションでは、自動作成の有効化とテスト方法を示します。
 
 1. ダッシュボードの **Management** -> **MQTT Settings** -> **Streams** に移動します。
 
 2. **Enable Auto Create Streams** がオンになっていることを確認します。
 
-3. ストリームタイプを選択します：
+3. ストリームタイプを選択します。
 
    - **Regular Stream**
    - **Last-Value Stream**
 
-   > 自動作成で有効にできるのは一度に1種類のみです。
+   > 自動作成で有効にできるタイプは同時に1つだけです。
 
-4. 他のオプションはデフォルトのままにします。
+4. その他のオプションはデフォルトのままにします。
 
 5. **Save Changes** をクリックします。
 
-6. 以下のコマンドでサブスクライブし、自動作成をトリガーします：
+6. 以下のコマンドでサブスクライブし、自動作成をトリガーします。
 
    ```bash
    mqttx sub -h localhost -p 1883 -q 1 -t '$stream/auto_stream/demo/auto' -up "stream-offset: earliest"
    ```
 
-   手動作成ストリームとは異なり、自動作成ストリームはサブスクライブ時にトピックフィルター（この例では `demo/auto`）が必要です。
+   手動作成ストリームとは異なり、自動作成ストリームではサブスクライブ時にトピックフィルター（この例では `demo/auto`）が必要です。
 
-   ストリームが存在しない場合、EMQX は以下を行います：
+   ストリームが存在しない場合、EMQX は以下を実行します。
 
    - `auto_stream` という名前の新しいストリームを作成
    - トピックフィルターを `demo/auto` に設定
    - 設定された自動作成タイプ（レギュラーまたは Last-Value）を適用
 
-7. ダッシュボードの **Streams** ページで自動作成が確認できます。ストリーム一覧に "auto_stream" が表示されているはずです。
+7. ダッシュボードの **Streams** ページで自動作成が反映されていることを確認します。ストリームリストに "auto_stream" が表示されます。
 
    ![auto_stream](./assets/auto_stream.png)
