@@ -61,7 +61,17 @@ For Redis 6.0 or later, configure EMQX to use a dedicated user. Limit the user t
 redis-cli ACL SETUSER emqx_auth reset on '>PASSWORD' '~mqtt_acl:*' +ping +hmget +hgetall
 ```
 
-Add `+select` when `database` is set to a nonzero index because EMQX then sends `SELECT` when it connects. Use a separate administrative user to manage authorization rules. If the Redis credentials in the EMQX configuration are compromised, an attacker cannot use the read-only user to change or delete authorization rules.
+For Redis Cluster, also grant `+cluster|slots` because EMQX runs `CLUSTER SLOTS` to obtain and update the mapping between hash slots and Redis nodes, ensuring that each query is sent to the correct node:
+
+```bash
+redis-cli ACL SETUSER emqx_auth '+cluster|slots'
+```
+
+For Single or Sentinel mode, if `database` is set to a nonzero index, grant `+select` to the Redis data-node user because EMQX runs `SELECT` after connecting. This permission is not required when using the default database 0.
+
+In Sentinel mode, if authentication is enabled on the Sentinel nodes, configure the Sentinel connection credentials with `sentinel_username` and `sentinel_password`. These credentials are separate from the `username` and `password` used to connect to the Redis data nodes.
+
+Use a separate administrative user to manage authorization rules. If the Redis credentials in the EMQX configuration are compromised, an attacker cannot use the read-only user to change or delete authorization rules.
 :::
 
 ## Configure with Dashboard
