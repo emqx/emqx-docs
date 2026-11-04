@@ -1,5 +1,9 @@
 # MQTT Streams User Guide
 
+::: warning Important Notice
+MQTT Streams is a Beta feature in EMQX 6.1. Its functionality and interfaces are subject to change.
+:::
+
 This page walks you through the practical usage of the MQTT Streams feature in EMQX, from creating streams to configuring their behavior and managing them using the Dashboard, REST API, or configuration files.
 
 ## Enable MQTT Streams Feature

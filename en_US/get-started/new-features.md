@@ -10,6 +10,10 @@ This page highlights major new features supported in the current release. Note t
 
 ### MQTT Streams
 
+::: warning Important Notice
+MQTT Streams is a Beta feature in EMQX 6.1. Its functionality and interfaces are subject to change.
+:::
+
 MQTT Streams introduce a persistent, replayable streaming model to EMQX, extending MQTT’s real-time publish/subscribe paradigm with durable message storage and consumer-controlled replay.
 
 Unlike traditional MQTT delivery, which is transient and depends on subscriber availability, MQTT Streams continuously capture messages matching a topic filter into a named persistent stream. Each stream is identified by a unique name and managed independently of its topic filter.
