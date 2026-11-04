@@ -120,12 +120,18 @@ EMQX Enterprise Licenses may include usage limits to enforce compliance with lic
 
 ### Session Limits
 
-The session limit defines the maximum number of concurrent MQTT client connections (sessions) that EMQX Enterprise can support under the current License.
+The session limit defines the maximum number of concurrent MQTT client connections (sessions) authorized under the current License.
 
-- When the limit is reached, any new connection attempts will be rejected.
-- Clients attempting to connect beyond the licensed quota will receive a "Quota Exceeded" response with CONNACK reason code `151 (0x97)`.
+- When the session count reaches the connection enforcement threshold, new connection attempts are rejected.
+- Rejected clients receive a "Quota Exceeded" response with CONNACK reason code `151 (0x97)`.
 - An alarm will be raised if the session usage crosses the configured high watermark threshold.
 - The alarm will be cleared automatically once the usage drops below the low watermark threshold.
+
+::: tip Note
+
+EMQX applies a 10% enforcement buffer to account for inaccuracies caused by delays in session-count statistics. The connection limit is therefore enforced at 110% of the licensed session quota. This buffer is used only for limit enforcement and does not grant additional licensed session capacity.
+
+:::
 
 You can configure the alarm watermarks via the EMQX Dashboard or configuration file.
 
