@@ -58,6 +58,19 @@ password_hash_algorithm {
 query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
 ```
 
+::: tip Grant Read-Only Database Privileges
+
+EMQX only needs read access to the database when it authenticates a client. Configure `query` as a `SELECT` statement. EMQX executes the query as a prepared statement.
+
+Configure EMQX to use a dedicated database account with the `SELECT` privilege on the table that the query reads. Do not grant the account write or administrative privileges:
+
+```sql
+GRANT SELECT ON mqtt.mqtt_user TO 'emqx_auth'@'%';
+```
+
+Use a separate administrative account to create the table and manage user records. If the database credentials in the EMQX configuration are compromised, an attacker cannot use the read-only account to change or delete authentication data.
+:::
+
 ## Configure with Dashboard
 
 You can use EMQX Dashboard to configure how to use MySQL for password authentication.
