@@ -115,49 +115,9 @@ EMQX 支持以下插件管理方式：
 
 ## 安装和管理插件
 
-EMQX 支持通过 Dashboard、CLI 和 API 安装、卸载和管理插件包。
+EMQX 支持在启动前预先部署节点固定插件，也支持通过 Dashboard、CLI 或 API 安装和管理集群管理插件。
 
-### 在 EMQX 启动前预装插件
-
-如果希望插件在 EMQX 启动时即可使用，例如构建自定义 Docker 镜像时，可以提前解压插件包并配置 EMQX。
-
-根据使用场景选择以下方式：
-
-- 如果所有节点都应遵循 `plugins.states` 并参与集群级生命周期操作，请预装集群管理插件。
-- 如果插件属于特定节点的部署产物，并且必须独立于集群插件配置运行，请将插件固定到该节点。
-
-#### 预装集群管理插件
-
-以下步骤以 Dockerfile 为例，但同样适用于 deb/rpm、裸机部署等其他部署方式：
-
-1. 将插件包复制并解压到插件目录：
-
-   ```dockerfile
-   COPY --chown=emqx:emqx my_emqx_plugin-1.0.0.tar.gz /opt/emqx/plugins/my_emqx_plugin-1.0.0.tar.gz
-
-   RUN cd /opt/emqx/plugins && \
-       mkdir -p my_emqx_plugin-1.0.0 && \
-       tar zxf my_emqx_plugin-1.0.0.tar.gz -C my_emqx_plugin-1.0.0
-   ```
-
-2. 在 EMQX 基础配置文件中注册插件，使其在启动时自动加载：
-
-   ```dockerfile
-   RUN cat <<EOF >> /opt/emqx/etc/base.hocon
-   plugins {
-       states = [
-           {
-               name_vsn = "my_emqx_plugin-1.0.0"
-               enable = true
-           }
-       ]
-   }
-   EOF
-   ```
-
-   设置 `enable = true` 可在启动时自动启用插件，设置 `enable = false` 则仅安装但不启动。
-
-#### 在节点上独立运行插件
+### 在节点上独立运行插件
 
 从 EMQX 6.1.6 开始，可以将预先部署的插件固定到单个节点。该方式适用于将插件构建到容器镜像或其他节点专属部署产物中的场景。
 

@@ -117,49 +117,9 @@ The new node does the following:
 
 ## Install and Manage Plugins
 
-EMQX supports plugin package installation, uninstallation, and management via the Dashboard, CLI, and API.
+EMQX supports pre-deploying a node-pinned plugin before EMQX starts, or installing and managing a cluster-managed plugin through the Dashboard, CLI, or API.
 
-### Pre-Install Plugins Before EMQX Starts
-
-If you want a plugin to be available immediately when EMQX starts, for example, when building a custom Docker image, you can pre-install the plugin by extracting the package and configuring EMQX in advance.
-
-Choose one of the following modes:
-
-- Pre-install a cluster-managed plugin if every node should follow `plugins.states` and participate in cluster-wide lifecycle operations.
-- Pin the plugin to a node if the plugin is part of that node's deployment artifact and must run independently of the cluster plugin configuration.
-
-#### Pre-Install a Cluster-Managed Plugin
-
-The following steps use a Dockerfile as an example, but the same approach applies to any deployment method, including deb/rpm and bare-metal deployments:
-
-1. Copy and extract the plugin tarball into the plugins directory:
-
-   ```dockerfile
-   COPY --chown=emqx:emqx my_emqx_plugin-1.0.0.tar.gz /opt/emqx/plugins/my_emqx_plugin-1.0.0.tar.gz
-
-   RUN cd /opt/emqx/plugins && \
-       mkdir -p my_emqx_plugin-1.0.0 && \
-       tar zxf my_emqx_plugin-1.0.0.tar.gz -C my_emqx_plugin-1.0.0
-   ```
-
-2. Register the plugin in EMQX configuration so it is started automatically on boot. Append the following to the EMQX base config file:
-
-   ```dockerfile
-   RUN cat <<EOF >> /opt/emqx/etc/base.hocon
-   plugins {
-       states = [
-           {
-               name_vsn = "my_emqx_plugin-1.0.0"
-               enable = true
-           }
-       ]
-   }
-   EOF
-   ```
-
-   Set `enable = true` to start the plugin automatically, or `enable = false` to install it without starting.
-
-#### Run a Plugin Independently on a Node
+### Run a Plugin Independently on a Node
 
 Starting from EMQX 6.1.6, you can pin a pre-deployed plugin to an individual node. This mode is useful when a plugin is built into a container image or another node-specific deployment artifact.
 
