@@ -1,14 +1,13 @@
 # LwM2M ゲートウェイ
 
-[LwM2M (Lightweight Machine-to-Machine)](https://lwm2m.openmobilealliance.org/) は、IoTデバイスおよびマシン間通信向けに設計されたプロトコルです。  
-処理能力やメモリが限られたデバイスをサポートする軽量プロトコルです。
+[LwM2M (Lightweight Machine-to-Machine)](https://lwm2m.openmobilealliance.org/) は、IoTデバイスおよびマシン間通信向けに設計されたプロトコルです。処理能力やメモリが限られたデバイスをサポートする軽量プロトコルです。
 
-EMQXの**LwM2Mゲートウェイ**は、LwM2Mクライアントを受け入れ、それらのイベントやメッセージをMQTTのパブリッシュメッセージに変換します。
+EMQXの**LwM2Mゲートウェイ**は、LwM2Mクライアントを受け入れ、そのイベントやメッセージをMQTTのパブリッシュメッセージに変換します。
 
-現在の実装には以下の制限があります：
+現時点の実装には以下の制限があります：
 - UDP/DTLSベースのトランスポート。
 - v1.0.2のみサポート。v1.1.xおよびv1.2.xは未対応。
-- LwM2Mのブートストラップサービスは含まれていません。
+- LwM2Mブートストラップサービスは含まれていません。
 
 ## クイックスタート
 
@@ -91,18 +90,17 @@ gateway.lwm2m {
 
 
 ::: tip
-`base.hocon`でゲートウェイを設定するとノードごとに変更が必要ですが、ダッシュボードやREST APIで設定するとクラスター全体に反映されます。
+`base.hocon`でゲートウェイを設定する場合はノードごとに変更が必要ですが、ダッシュボードやREST APIで設定するとクラスター全体に反映されます。
 :::
 
-LwM2MゲートウェイはUDPおよびDTLSタイプのリスナーのみをサポートしています。  
-設定可能なパラメータの完全なリストは以下を参照してください：[Gateway Configuration - Listeners](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/#V-gateway-S-gateway-lwm2m-S-lwm2m-listeners)
+LwM2MゲートウェイはUDPおよびDTLSタイプのリスナーのみをサポートしています。設定可能なパラメータの完全な一覧は以下を参照してください：[Gateway Configuration - Listeners](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/#V-gateway-S-gateway-lwm2m-S-lwm2m-listeners)
 
 ## 認証
 
-LwM2Mプロトコルはクライアントのエンドポイント名のみを提供し、ユーザー名やパスワードはありません。  
-そのため、LwM2Mゲートウェイは[HTTPサーバ認証](../../guides/access-control/authn/http.md)のみをサポートします。
+LwM2Mプロトコルはクライアントのエンドポイント名のみを提供し、ユーザー名やパスワードはありません。
+そのため、LwM2Mゲートウェイは[HTTPサーバ認証](../../guides/access-control/authn/http.md)のみをサポートしています。
 
-例として、REST APIまたは設定ファイルでLwM2Mゲートウェイ用のHTTP認証を作成する方法：
+例えば、REST APIや設定ファイルでLwM2MゲートウェイのHTTP認証を作成する例：
 
 :::: tabs type:card
 
@@ -166,17 +164,15 @@ gateway.lwm2m {
 
 ## メッセージフォーマット
 
-LwM2Mプロトコルのメッセージモデルは[リソースモデルと操作](https://technical.openmobilealliance.org/OMNA/LwM2M/LwM2MRegistry.html)に基づいており、MQTTプロトコルのパブリッシュ／サブスクライブモデルとは全く異なります。  
-そのため、LwM2Mゲートウェイではこれらのメッセージモデルを互換させるためのメッセージフォーマットを作成する必要があります。
+LwM2Mプロトコルのメッセージモデルは[リソースモデルと操作](https://technical.openmobilealliance.org/OMNA/LwM2M/LwM2MRegistry.html)に基づいており、MQTTのパブリッシュ/サブスクライブモデルとは全く異なります。そのため、LwM2Mゲートウェイではこれらのメッセージモデルを互換させるためのメッセージフォーマットを作成しています。
 
 ### クライアント登録インターフェース
 
-#### Register
+#### Register（登録）
 
-**Register**メッセージはLwM2MクライアントからLwM2Mサーバへ送信され、自身をサーバに登録します。  
-クライアントの情報や機能（エンドポイント名、ライフタイム、LwM2Mバージョン、オブジェクト、オブジェクトインスタンスなど）が含まれます。
+**Register**メッセージはLwM2MクライアントがLwM2Mサーバに自身を登録するために送信します。クライアントの情報や機能（エンドポイント名、ライフタイム、LwM2Mバージョン、オブジェクト、オブジェクトインスタンスなど）が含まれます。
 
-Registerメッセージは通信開始時にクライアントが最初に送信するメッセージです。
+Registerメッセージはクライアントがサーバとの通信を開始する最初のメッセージです。
 
 **Register**メッセージはLwM2Mゲートウェイによって以下のMQTTメッセージに変換されます。
 
@@ -189,7 +185,7 @@ Registerメッセージは通信開始時にクライアントが最初に送信
 - `{?mountpoint}` はLwM2Mゲートウェイ設定の `mountpoint` オプションの値です。
 - `{?translators.register.topic}` はLwM2Mゲートウェイ設定の `translators.register.topic` オプションの値です。
 
-例として、`mountpoint` が `lwm2m/${endpoint_name}/` に設定され、`translators.register.topic` が `up/register` の場合、レスポンスメッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/up/register` となります。
+例えば、`mountpoint` が `lwm2m/${endpoint_name}/` に設定され、`translators.register.topic` が `up/register` の場合、レスポンスメッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/up/register` となります。
 
 **ペイロード**の形式は以下の通りです：
 ```json
@@ -209,10 +205,10 @@ Registerメッセージは通信開始時にクライアントが最初に送信
 - `{?EndpointName}`: 文字列、LwM2Mクライアントのエンドポイント名。
 - `{?Version}`: 文字列、LwM2Mクライアントのプロトコルバージョン。
 - `{?LifeTime}`: 数値、LwM2Mクライアントが要求したライフタイム。
-- `{?Binding}`: 列挙型、クライアントがサーバとの通信に対応するバインディングタイプ。以下のいずれか：
+- `{?Binding}`: 列挙型、クライアントがサーバと通信するためにサポートするバインディングタイプ。以下のいずれか：
   * `"U"`: UDP
   * `"UQ"`: データキューイング付きUDP
-- `{?ObjectList}`: 配列、LwM2Mクライアントがサポートするオブジェクトとオブジェクトインスタンスのリスト。
+- `{?ObjectList}`: 配列、LwM2Mクライアントがサポートするオブジェクトおよび利用可能なオブジェクトインスタンスのリスト。
 
 例として、Registerメッセージの完全なMQTTペイロードは以下のようになります：
 ```json
@@ -228,12 +224,9 @@ Registerメッセージは通信開始時にクライアントが最初に送信
 }
 ```
 
-#### Update
+#### Update（更新）
 
-**Update**メッセージはLwM2MクライアントからLwM2Mサーバへ送信され、登録情報を更新します。  
-Registerメッセージに似ていますが、初回登録後に送信されます。  
-Updateメッセージはクライアントの機能や状態の変更（IPアドレスの変更やLwM2Mオブジェクトによるデータの更新など）を含みます。  
-また、クライアントの登録期間を延長する役割もあります。
+**Update**メッセージはLwM2MクライアントがLwM2Mサーバに登録情報を更新するために送信します。Registerメッセージに似ていますが、初期登録後に送信されます。Updateメッセージはクライアントの機能や状態の変更（IPアドレスの変更やLwM2Mオブジェクトでモデル化されたデータの更新など）を含みます。Updateメッセージはクライアントの登録期間を延長し、クライアントがまだ利用可能でアクティブであることをサーバに知らせる手段です。
 
 Updateメッセージの送信頻度はRegisterメッセージで指定されたライフタイム値によって決まります。
 
@@ -247,7 +240,7 @@ Updateメッセージの送信頻度はRegisterメッセージで指定された
 - `{?mountpoint}` はLwM2Mゲートウェイ設定の `mountpoint` オプションの値です。
 - `{?translators.update.topic}` はLwM2Mゲートウェイ設定の `translators.update.topic` オプションの値です。
 
-例として、`mountpoint` が `lwm2m/${endpoint_name}/` に設定され、`translators.update.topic` が `up/update` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/up/update` となります。
+例えば、`mountpoint` が `lwm2m/${endpoint_name}/` に設定され、`translators.update.topic` が `up/update` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/up/update` となります。
 
 **ペイロード**の形式は以下の通りです：
 ```json
@@ -281,16 +274,15 @@ Updateメッセージの送信頻度はRegisterメッセージで指定された
 
 ### LwM2Mデバイス管理およびサービス有効化インターフェース
 
-このインターフェースはLwM2Mサーバが登録済みLwM2Mクライアントのオブジェクトインスタンスやリソースにアクセスするために使用されます。
+このインターフェースはLwM2Mサーバが登録済みLwM2Mクライアントのオブジェクトインスタンスおよびリソースにアクセスするために使用します。
 
-「作成(Create)」「読み取り(Read)」「書き込み(Write)」「削除(Delete)」「実行(Execute)」「属性書き込み(Write-Attributes)」「探索(Discover)」操作を通じてアクセスを提供します。
+「作成(Create)」「読み取り(Read)」「書き込み(Write)」「削除(Delete)」「実行(Execute)」「属性書き込み(Write-Attributes)」「探索(Discover)」の操作を通じてアクセスを提供します。
 
-リソースがサポートする操作はオブジェクトテンプレートファイルで定義されたオブジェクト定義に基づきます。
+リソースがサポートする操作はオブジェクトテンプレートファイルで定義されています。
 
-LwM2Mクライアントにコマンドを送信するには、固定フォーマットのMQTTメッセージをEMQXに送信します。  
-これらのメッセージはLwM2Mゲートウェイによって正しいLwM2Mメッセージに変換され、クライアントに送信されます。
+LwM2Mクライアントにコマンドを送信するには、決まった形式のMQTTメッセージをEMQXに送信します。これらのメッセージはLwM2Mゲートウェイによって正しいLwM2Mメッセージに変換され、クライアントに送信されます。
 
-**コマンドリクエストのトピック**は以下の通りです：
+**コマンド要求のトピック**は以下の通りです：
 ```
 {?mountpoint}{?translators.command.topic}
 ```
@@ -298,9 +290,9 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
 - `{?mountpoint}` はLwM2Mゲートウェイ設定の `mountpoint` オプションの値です。
 - `{?translators.command.topic}` はLwM2Mゲートウェイ設定の `translators.command.topic` オプションの値です。
 
-例として、`mountpoint` が `lwm2m/${endpoint_name}/` に設定され、`translators.command.topic` が `dn/cmd` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/dn/cmd` となります。
+例えば、`mountpoint` が `lwm2m/${endpoint_name}/` に設定され、`translators.command.topic` が `dn/cmd` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/dn/cmd` となります。
 
-**コマンドリクエストのペイロード**の形式は以下の通りです：
+**コマンド要求のペイロード**の形式は以下の通りです：
 ```json
 {
   "reqID": {?ReqID},
@@ -309,7 +301,7 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
 }
 ```
 変数：
-- `{?ReqID}`: 整数、リクエストID。レスポンスとリクエストを対応付けるために使用。
+- `{?ReqID}`: 整数、リクエストID。レスポンスとの紐付けに使用。
 - `{?MsgType}`: 文字列、以下のいずれか：
   - `"read"`: LwM2M読み取り
   - `"discover"`: LwM2M探索
@@ -318,9 +310,9 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
   - `"execute"`: LwM2M実行
   - `"create"`: LwM2M作成
   - `"delete"`: LwM2M削除
-- `{?RequestData}`: JSONオブジェクト、`{?MsgType}`に応じて内容が異なり、以下のセクションで説明。
+- `{?RequestData}`: JSONオブジェクト、`{?MsgType}`に応じた内容（後述）
 
-**コマンドレスポンスのトピック**は以下の通りです：
+**コマンド応答のトピック**は以下の通りです：
 ```
 {?mountpoint}{?translators.response.topic}
 ```
@@ -328,9 +320,9 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
 - `{?mountpoint}` はLwM2Mゲートウェイ設定の `mountpoint` オプションの値です。
 - `{?translators.response.topic}` はLwM2Mゲートウェイ設定の `translators.response.topic` オプションの値です。
 
-例として、`mountpoint` が `lwm2m/${endpoint_name}/` に設定され、`translators.response.topic` が `up/resp` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/up/resp` となります。
+例えば、`mountpoint` が `lwm2m/${endpoint_name}/` に設定され、`translators.response.topic` が `up/resp` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/up/resp` となります。
 
-**コマンドレスポンスのペイロード**の形式は以下の通りです：
+**コマンド応答のペイロード**の形式は以下の通りです：
 ```json
 {
   "reqID": {?ReqID},
@@ -339,15 +331,25 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
 }
 ```
 変数：
-- `{?ReqID}`: 整数、リクエストID。リクエストと対応付けるために使用。
+- `{?ReqID}`: 整数、リクエストID。リクエストとの紐付けに使用。
 - `{?MsgType}`: 文字列、リクエストコマンドと同じMsgType。
-- `{?ResponseData}`: JSONオブジェクト、コマンドレスポンスの内容。
+- `{?ResponseData}`: JSONオブジェクト、コマンド応答の内容。
 
-#### Read
+#### 保留中のダウンリンクコマンドキュー制限 <Badge type="tip" text="6.3.3+" />
 
-「Read」操作はリソース、リソースインスタンスの配列、オブジェクトインスタンス、またはオブジェクトのすべてのオブジェクトインスタンスの値にアクセスするために使用されます。
+各LwM2Mクライアントセッションは最大1,000件の保留中ダウンリンクコマンドを保持できます。この制限は固定で設定変更できません。EMQXは受け入れたコマンドを先入れ先出し（FIFO）でキューイングします。すでに送信中のコマンドは保留制限にカウントされません。
 
-リクエストコマンドで**MsgType**が `"read"` の場合、**RequestData** の構造は以下の通りです：
+保留キューが1,000件に達すると、新規コマンドは拒否され、`translators.response.topic`にコード`4.29`のレスポンスがパブリッシュされます。また、`delivery.dropped`メトリクスがインクリメントされます。期限切れのコマンドがキューから削除されると、その分保留制限のカウントから除外されます。
+
+この制限は保留中コマンド数を制御し、ペイロードの合計サイズではありません。Block-Wise容量が一時的に不足しても、受け入れたコマンドは保留キューに残ります。容量が利用可能になると、FIFO順に送信が再開されます。
+
+セッション統計の`mqueue_len`は保留中コマンド数を、`mqueue_max`は固定制限の`1000`を報告します。
+
+#### Read（読み取り）
+
+"Read"操作はリソース、リソースインスタンスの配列、オブジェクトインスタンス、またはオブジェクトのすべてのオブジェクトインスタンスの値にアクセスするために使用します。
+
+リクエストコマンドで**MsgType**が`"read"`の場合、**RequestData**の構造は以下の通りです：
 
 ```json
 {
@@ -356,11 +358,11 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
 ```
 変数：
 - `{?ResourcePath}`: 文字列、要求されたリソースパス。以下の3つのシナリオがあります：
-  * オブジェクトIDのみ、例：`/3`。そのオブジェクトのすべてのインスタンスとリソースの値を読み取る。
-  * オブジェクトID/インスタンスID、例：`/3/0`。そのオブジェクトインスタンスのすべてのリソースの値を読み取る。
-  * フルパス `{ObjectID}/{InstanceID}/{ResourceID}`、例：`/3/0/1`。特定のリソースの値を読み取る。
+  * オブジェクトIDのみ、例：`/3`。該当オブジェクトの全インスタンスとリソースの値を読み取る。
+  * オブジェクトID/インスタンスID、例：`/3/0`。該当オブジェクトインスタンスの全リソースの値を読み取る。
+  * フルパス（`{ObjectID}/{InstanceID}/{ResourceID}`）、例：`/3/0/1`。特定リソースの値を読み取る。
 
-例として、Readコマンドの完全なMQTTペイロードは以下のようになります：
+例として、Readコマンドの完全なMQTTペイロードは以下の通りです：
 ```json
 {
   "reqID": 1,
@@ -371,7 +373,7 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
 }
 ```
 
-レスポンスでは、**ResponseData** の構造は以下の通りです：
+レスポンスでは、**ResponseData**の構造は以下の通りです：
 ```json
 {
   "reqPath": {?ResourcePath},
@@ -381,12 +383,12 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
 }
 ```
 変数：
-- `{?ResourcePath}`: 文字列、リクエストの `path` フィールドと同じ値。
-- `{?ResponseCode}`: 文字列、LwM2Mステータスコード、例："2.01", "4.00" など。
-- `{?ResponseMsg}`: 文字列、LwM2Mレスポンスメッセージ、例："content", "bad_request" など。
-- `{?ReadResponseData}`: JSONオブジェクト、リクエストの値の結果。リソース値の配列。
+- `{?ResourcePath}`: 文字列、リクエストの`path`フィールドと同じ。
+- `{?ResponseCode}`: 文字列、LwM2Mステータスコード（例："2.01", "4.00"など）。
+- `{?ResponseMsg}`: 文字列、LwM2Mレスポンスメッセージ（例："content", "bad_request"など）。
+- `{?ReadResponseData}`: JSONオブジェクト、リクエストに対する値の結果。リソース値の配列。
 
-例として、Readレスポンスの完全なMQTTペイロードは以下のようになります：
+例として、Readレスポンスの完全なMQTTペイロードは以下の通りです：
 ```json
 {
   "reqID": 1,
@@ -405,13 +407,11 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
 }
 ```
 
-#### Discover
+#### Discover（探索）
 
-「Discover」操作はオブジェクト、オブジェクトインスタンス、リソースに付随するLwM2M属性を探索するために使用されます。  
-この操作は特定のオブジェクトインスタンスにどのリソースがインスタンス化されているかを探索するために利用できます。  
-返されるペイロードは対象のオブジェクト、オブジェクトインスタンス、リソースごとのアプリケーション/リンク形式のCoREリンク[RFC6690]のリストです。
+"Discover"操作はオブジェクト、オブジェクトインスタンス、リソースに付随するLwM2M属性を探索するために使用します。この操作は特定のオブジェクトインスタンスにインスタンス化されているリソースを探索するために利用されます。返されるペイロードは対象のオブジェクト、オブジェクトインスタンス、リソースごとのアプリケーション/リンク形式のCoREリンク[RFC6690]のリストです。
 
-リクエストコマンドで**MsgType**が `"discover"` の場合、**RequestData** の構造は以下の通りです：
+リクエストコマンドで**MsgType**が`"discover"`の場合、**RequestData**の構造は以下の通りです：
 
 ```json
 {
@@ -419,12 +419,12 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
 }
 ```
 
-形式は**Read**メッセージと同じです：
-* オブジェクトIDのみ、例：`/3`。そのオブジェクトのすべてのインスタンス、リソース、属性を探索。
-* オブジェクトID/インスタンスID、例：`/3/0`。そのオブジェクトインスタンスのすべてのリソースと属性を探索。
-* フルパス `{ObjectID}/{InstanceID}/{ResourceID}`、例：`/3/0/1`。特定リソースのすべての属性を探索。
+フォーマットは**Read**メッセージと同じです：
+* オブジェクトIDのみ、例：`/3`。該当オブジェクトの全インスタンス、リソース、属性を探索。
+* オブジェクトID/インスタンスID、例：`/3/0`。該当オブジェクトインスタンスの全リソース、属性を探索。
+* フルパス（`{ObjectID}/{InstanceID}/{ResourceID}`）、例：`/3/0/1`。特定リソースの全属性を探索。
 
-例として、Discoverコマンドの完全なMQTTペイロードは以下のようになります：
+例として、Discoverコマンドの完全なMQTTペイロードは以下の通りです：
 ```json
 {
   "reqID": 2,
@@ -435,7 +435,7 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
 }
 ```
 
-レスポンスでは、**ResponseData** の構造は以下の通りです：
+レスポンスでは、**ResponseData**の構造は以下の通りです：
 ```json
 {
   "reqPath": {?ResourcePath},
@@ -444,9 +444,9 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
   "content": {?DiscoverResponseData}
 }
 ```
-変数は**Read**レスポンスと同じですが、`content` フィールドはリソースと属性の配列です。
+**Read**レスポンスと同じ変数ですが、`content`フィールドはリソースと属性の配列です。
 
-例として、Discoverレスポンスの完全なMQTTペイロードは以下のようになります：
+例として、Discoverレスポンスの完全なMQTTペイロードは以下の通りです：
 ```json
 {
   "reqID": 123,
@@ -465,13 +465,13 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
 }
 ```
 
-#### Write
+#### Write（書き込み）
 
-「Write」操作はリソースの値、リソースインスタンスの配列の値、またはオブジェクトインスタンス内の複数リソースの値を変更するために使用されます。
+"Write"操作はリソースの値、リソースインスタンスの配列の値、またはオブジェクトインスタンスの複数リソースの値を変更するために使用します。
 
-リクエストコマンドで**MsgType**が `"write"` の場合、**RequestData** は2つの構造が考えられます。
+リクエストコマンドで**MsgType**が`"write"`の場合、**RequestData**は2つの構造が考えられます。
 
-単一リソースへの書き込みの場合：
+単一リソースに値を書き込む場合：
 ```json
 {
     "path": {?ResourcePath},
@@ -479,11 +479,11 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
     "value": {?Value}
 }
 ```
-- `{?ResourcePath}`: 文字列、完全なリソースパス、例：`31024/11/1`。
+- `{?ResourcePath}`: 文字列、完全なリソースパス（例：`31024/11/1`）。
 - `{?ValueType}`: 文字列、"Time", "String", "Integer", "Float", "Boolean", "Opaque", "Objlnk" のいずれか。
-- `{?Value}`: リソースの値、`type`に依存。
+- `{?Value}`: リソースの値。`type`に依存。
 
-例として、Writeコマンドの完全なMQTTペイロードは以下のようになります：
+例として、Writeコマンドの完全なMQTTペイロードは以下の通りです：
 ```json
 {
   "reqID": 3,
@@ -496,7 +496,7 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
 }
 ```
 
-複数リソースへの書き込みの場合：
+複数リソースに書き込む場合：
 ```json
 {
   "basePath": {?BasePath},
@@ -509,9 +509,9 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
   ]
 }
 ```
-完全なパスは `{?BasePath}` と `"{ResourcePath}"` の連結です。
+完全パスは `{?BasePath}` と `"{ResourcePath}"` の連結です。
 
-例として、Writeコマンドの完全なMQTTペイロードは以下のようになります：
+例として、Writeコマンドの完全なMQTTペイロードは以下の通りです：
 ```json
 {
   "reqID": 3,
@@ -534,13 +534,13 @@ LwM2Mクライアントにコマンドを送信するには、固定フォーマ
 }
 ```
 
-#### Write-Attributes
+#### Write-Attributes（属性書き込み）
 
-LwM2M 1.0では、`<NOTIFICATION>` クラスの属性のみ「Write-Attributes」操作で変更可能です。
+LwM2M 1.0では、`<NOTIFICATION>`クラスの属性のみが"Write-Attributes"操作で変更可能です。
 
 この操作は複数の属性を同時に変更できます。
 
-リクエストコマンドで**MsgType**が `"write-attr"` の場合、**RequestData** の構造は以下の通りです：
+リクエストコマンドで**MsgType**が`"write-attr"`の場合、**RequestData**の構造は以下の通りです：
 
 ```json
 {
@@ -553,17 +553,17 @@ LwM2M 1.0では、`<NOTIFICATION>` クラスの属性のみ「Write-Attributes�
 }
 ```
 変数：
-- `{?PeriodMin}`: 数値、通知の最小期間。
-- `{?PeriodMax}`: 数値、通知の最大期間。
-- `{?GreaterThan}`: 数値、リソース値がこの値を超えた場合に通知。
-- `{?LessThan}`: 数値、リソース値がこの値未満の場合に通知。
-- `{?Step}`: 数値、リソース値の変化がこの値を超えた場合に通知。
+- `{?PeriodMin}`: 数値、通知の最小周期。
+- `{?PeriodMax}`: 数値、通知の最大周期。
+- `{?GreaterThan}`: 数値、リソース値がこの値を超えたときに通知。
+- `{?LessThan}`: 数値、リソース値がこの値を下回ったときに通知。
+- `{?Step}`: 数値、リソース値の変化がこの値を超えたときに通知。
 
-#### Execute
+#### Execute（実行）
 
-「Execute」操作はLwM2Mサーバがアクションを開始するために使用し、個別のリソースに対してのみ実行可能です。
+"Execute"操作はLwM2Mサーバが特定のリソースに対してアクションを開始するために使用します。
 
-リクエストコマンドで**MsgType**が `"execute"` の場合、**RequestData** の構造は以下の通りです：
+リクエストコマンドで**MsgType**が`"execute"`の場合、**RequestData**の構造は以下の通りです：
 ```json
 {
   "path": {?ResourcePath},
@@ -573,12 +573,11 @@ LwM2M 1.0では、`<NOTIFICATION>` クラスの属性のみ「Write-Attributes�
 変数：
 - `{?Arguments}`: 文字列、LwM2M実行引数。
 
-#### Create
+#### Create（作成）
 
-「Create」操作はLwM2MサーバがLwM2Mクライアント内にオブジェクトインスタンスを作成するために使用します。  
-「Create」操作はオブジェクトを対象としなければなりません。
+"Create"操作はLwM2MサーバがLwM2Mクライアント内にオブジェクトインスタンスを作成するために使用します。"Create"操作はオブジェクトを対象としなければなりません。
 
-リクエストコマンドで**MsgType**が `"create"` の場合、**RequestData** の構造は以下の通りです：
+リクエストコマンドで**MsgType**が`"create"`の場合、**RequestData**の構造は以下の通りです：
 
 ```json
 {
@@ -595,11 +594,11 @@ LwM2M 1.0では、`<NOTIFICATION>` クラスの属性のみ「Write-Attributes�
 変数：
 - `{?ObjectID}`: 整数、LwM2MオブジェクトID。
 
-#### Delete
+#### Delete（削除）
 
-「Delete」操作はLwM2MサーバがLwM2Mクライアント内のオブジェクトインスタンスを削除するために使用します。
+"Delete"操作はLwM2MサーバがLwM2Mクライアント内のオブジェクトインスタンスを削除するために使用します。
 
-リクエストコマンドで**MsgType**が `"delete"` の場合、**RequestData** の構造は以下の通りです：
+リクエストコマンドで**MsgType**が`"create"`の場合、**RequestData**の構造は以下の通りです：
 ```json
 {
   "path": "{?ObjectID}/{?InstanceID}"
@@ -610,13 +609,11 @@ LwM2M 1.0では、`<NOTIFICATION>` クラスの属性のみ「Write-Attributes�
 
 ### 情報報告インターフェース
 
-このインターフェースはLwM2Mサーバが登録済みLwM2Mクライアントのリソースの変化を監視し、新しい値が利用可能になると通知を受け取るために使用されます。  
-監視関係はLwM2Mクライアントに「Observe」操作を送信することで開始されます。  
-監視は「Cancel Observation」操作が実行されると終了します。
+このインターフェースはLwM2Mサーバが登録済みLwM2Mクライアントのリソースの変化を監視し、新しい値が利用可能になると通知を受け取るために使用します。この監視関係はオブザーブ操作をLwM2Mクライアントに送信することで開始されます。監視はキャンセルオブザーブ操作で終了します。
 
-#### ObserveおよびCancel Observation
+#### Observe（監視）および Cancel Observation（監視キャンセル）
 
-Observeおよびキャンセルリクエストの**トピック**は以下の通りです：
+監視および監視キャンセル要求の**トピック**は以下の通りです：
 ```
 {?mountpoint}{?translators.command.topic}
 ```
@@ -624,9 +621,9 @@ Observeおよびキャンセルリクエストの**トピック**は以下の通
 - `{?mountpoint}` はLwM2Mゲートウェイ設定の `mountpoint` オプションの値です。
 - `{?translators.command.topic}` はLwM2Mゲートウェイ設定の `translators.command.topic` オプションの値です。
 
-例として、`mountpoint` が `lwm2m/${endpoint_name}/` に設定され、`translators.command.topic` が `dn/cmd` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/dn/cmd` となります。
+例えば、`mountpoint` が `lwm2m/${endpoint_name}/` に設定され、`translators.command.topic` が `dn/cmd` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/dn/cmd` となります。
 
-Observeおよびキャンセルリクエストの**ペイロード**の形式は以下の通りです：
+監視および監視キャンセル要求の**ペイロード**の形式は以下の通りです：
 ```json
 {
   "reqID": {?ReqID},
@@ -640,11 +637,11 @@ Observeおよびキャンセルリクエストの**ペイロード**の形式は
 変数：
 - `{?ReqID}`: 整数、リクエストID。
 - `{?MsgType}`: 文字列、以下のいずれか：
-  * `"observe"`: LwM2M Observe
-  * `"cancel-observe"`: LwM2M Cancel Observe
-- `{?ResourcePath}`: 文字列、監視またはキャンセル対象のLwM2Mリソース。完全なリソースパスのみサポート、例：`/3/0/1`。
+  * `"observe"`: LwM2M監視
+  * `"cancel-observe"`: LwM2M監視キャンセル
+- `{?ResourcePath}`: 文字列、監視/監視キャンセル対象のLwM2Mリソース。完全なリソースパスのみサポート（例：`/3/0/1`）。
 
-例として、Observeコマンドの完全なMQTTペイロードは以下のようになります：
+例として、Observeコマンドの完全なMQTTペイロードは以下の通りです：
 ```json
 {
   "reqID": 10,
@@ -663,7 +660,7 @@ Observeレスポンスの**トピック**は以下の通りです：
 - `{?mountpoint}` はLwM2Mゲートウェイ設定の `mountpoint` オプションの値です。
 - `{?translators.response.topic}` はLwM2Mゲートウェイ設定の `translators.response.topic` オプションの値です。
 
-例として、`mountpoint` が `lwm2m/${endpoint_name}/` に設定され、`translators.response.topic` が `up/resp` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/up/resp` となります。
+例えば、`mountpoint` が `lwm2m/${endpoint_name}/` に設定され、`translators.response.topic` が `up/resp` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/up/resp` となります。
 
 Observeレスポンスの**ペイロード**の形式は以下の通りです：
 ```json
@@ -684,18 +681,17 @@ Observeレスポンスの**ペイロード**の形式は以下の通りです：
 }
 ```
 変数：
-- `{?ReqID}`: 整数、リクエストID。
+- `{?ReqID}`: 整数、リクエストID。リクエストとの紐付けに使用。
 - `{?MsgType}`: 文字列、リクエストコマンドと同じMsgType。
-- `{?RequestPath}`: 文字列、リクエストの `path` フィールドと同じ値。
-- `{?ResponseCode}`: 文字列、LwM2Mステータスコード、例："2.01", "4.00" など。
-- `{?ResponseMsg}`: 文字列、LwM2Mレスポンスメッセージ、例："content", "bad_request" など。
-- `{?ResourcePath}`: 文字列、完全なリソースパス、例：`31024/11/1`。
-- `{?Value}`: 監視中のリソースの現在の値。
+- `{?RequestPath}`: 文字列、リクエストの`path`フィールドと同じ。
+- `{?ResponseCode}`: 文字列、LwM2Mステータスコード（例："2.01", "4.00"など）。
+- `{?ResponseMsg}`: 文字列、LwM2Mレスポンスメッセージ（例："content", "bad_request"など）。
+- `{?ResourcePath}`: 文字列、要求された完全なリソースパス（例：`31024/11/1`）。
+- `{?Value}`: 監視対象リソースの現在の値。
 
-#### Notify
+#### Notify（通知）
 
-「Notify」操作はLwM2MクライアントからLwM2Mサーバへ、オブジェクトインスタンスまたはリソースの有効な監視中に送信されます。  
-この操作にはオブジェクトインスタンスまたはリソースの新しい値が含まれます。
+"Notify"操作はLwM2MクライアントからLwM2Mサーバに対し、有効な監視中にオブジェクトインスタンスまたはリソースの新しい値を送信するために使われます。
 
 LwM2Mクライアントからの通知はMQTTメッセージに変換されます。
 
@@ -707,7 +703,7 @@ LwM2Mクライアントからの通知はMQTTメッセージに変換されま�
 - `{?mountpoint}` はLwM2Mゲートウェイ設定の `mountpoint` オプションの値です。
 - `{?translators.notify.topic}` はLwM2Mゲートウェイ設定の `translators.notify.topic` オプションの値です。
 
-例として、`mountpoint` が `lwm2m/${endpoint_name}/` に設定され、`translators.notify.topic` が `up/notify` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/up/notify` となります。
+例えば、`mountpoint` が `lwm2m/${endpoint_name}/` に設定され、`translators.notify.topic` が `up/notify` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/up/notify` となります。
 
 通知メッセージの**ペイロード**の形式は以下の通りです：
 
@@ -730,44 +726,37 @@ LwM2Mクライアントからの通知はMQTTメッセージに変換されま�
 }
 ```
 変数：
-- `{?ReqID}`: 整数、リクエストID。
-- `{?ObserveSeqNum}`: 数値、CoAPメッセージの「Observe」オプションの値。
-- `{?ResponseCode}`: 文字列、LwM2Mステータスコード、例："2.01", "4.00" など。
-- `{?ResponseMsg}`: 文字列、LwM2Mレスポンスメッセージ、例："content", "bad_request" など。
-- `{?RequestPath}`: 文字列、リクエストの `path` フィールドと同じ値。
-- `{?ResourcePath}`: 文字列、完全なリソースパス、例：`31024/11/1`。
+- `{?ReqID}`: 整数、リクエストID。リクエストとの紐付けに使用。
+- `{?ObserveSeqNum}`: 数値、CoAPメッセージの"Observe"オプションの値。
+- `{?ResponseCode}`: 文字列、LwM2Mステータスコード（例："2.01", "4.00"など）。
+- `{?ResponseMsg}`: 文字列、LwM2Mレスポンスメッセージ（例："content", "bad_request"など）。
+- `{?RequestPath}`: 文字列、リクエストの`path`フィールドと同じ。
+- `{?ResourcePath}`: 文字列、要求された完全なリソースパス（例：`31024/11/1`）。
 - `{?Value}`: リソースの最新値。
 
-## ブロック転送（Block-Wise Transfer）
+## ブロック単位転送（Block-Wise Transfer）
 
-LwM2Mプロトコルはトランスポート層にCoAPを使用します。CoAPはUDP上で動作するため、単一のデータグラムサイズはネットワークMTU（通常約1500バイト）に制限されます。  
-送信するデータがこの制限を超える場合、単一のCoAPパケットでの送信はできません。  
-例えば、数百KBから数MBに及ぶファームウェアパッケージのプッシュや、多数のリソースを含むオブジェクトの読み取り時に発生します。
+LwM2Mプロトコルはトランスポート層にCoAPを使用します。CoAPはUDP上で動作するため、単一のデータグラムサイズはネットワークMTU（通常約1500バイト）に制限されます。送信データがこの制限を超える場合、単一のCoAPパケットで送信できません。例えば、数百KB〜数MBのファームウェアパッケージをデバイスにプッシュする場合や、多数のリソースを含むオブジェクトを読み取る場合などです。
 
-この制限に対応するため、CoAPは[RFC 7959](https://datatracker.ietf.org/doc/html/rfc7959)でブロック転送機構を定義しています。  
-この機構は大きなペイロードを固定サイズのブロックに分割し、複数のリクエスト/レスポンス交換で転送します。受信側はこれらのブロックを再構成して完全なペイロードを復元します。
+この制限に対応するため、CoAPは[RFC 7959](https://datatracker.ietf.org/doc/html/rfc7959)でブロック単位転送機構を定義しています。この機構は大きなペイロードを固定サイズのブロックに分割し、複数のリクエスト/レスポンス交換で転送します。受信側はこれらのブロックを再構成して完全なペイロードを復元します。
 
-EMQXのLwM2Mゲートウェイはブロック転送を完全にサポートしています。  
-有効化すると、ゲートウェイは自動的にブロックの分割と再構成を処理します。  
-MQTT側には完全なペイロードが透過的に配信され、ブロックレベルの処理は内部で行われます。
+EMQXのLwM2Mゲートウェイはブロック単位転送を完全にサポートしています。有効化すると、ゲートウェイは自動的にブロックの分割と再構成を処理します。MQTT側には完全なペイロードが透過的に配信され、ブロック単位の処理は内部で行われます。ピアが`blockwise.max_block_size`より大きいブロックサイズを提案した場合、EMQXは設定された最大値まで交渉します。
 
 ### 転送方向
 
-ブロック転送は以下の2方向をサポートします：
+ブロック単位転送は以下の2方向をサポートします：
 
 - **Block1 (サーバ -> デバイス)**
 
-  サーバがデバイスに大きなデータを書き込む場合（例：ファームウェア更新時）、EMQXはペイロードを複数のBlock1セグメントに分割し、順次デバイスに送信します。  
-  例えば、256バイトのファームウェアペイロードを16バイトのブロックサイズで分割すると、16個のブロックに分割され順次送信されます。
+  サーバが大きなデータを書き込む際（例：ファームウェア更新）、EMQXはペイロードを複数のBlock1セグメントに分割し、順次デバイスに送信します。例えば、256バイトのファームウェアペイロードを16バイトのブロックサイズで分割すると、16個のブロックに分かれて順次送信されます。
 
 - **Block2 (デバイス -> サーバ)**
 
-  デバイスが単一パケットサイズ制限を超えるレスポンスを生成する場合（例：デバイスオブジェクト `/3/0` の読み取り時）、デバイスは複数のBlock2セグメントでレスポンスを送信します。  
-  EMQXはすべてのブロックを自動的に再構成し、MQTTに完全なメッセージを転送します。
+  デバイスが単一パケットサイズ制限を超えるレスポンスを生成する場合（例：デバイスオブジェクト`/3/0`の読み取り）、デバイスは複数のBlock2セグメントでレスポンスを送信します。EMQXはすべてのブロックを自動的に再構成し、MQTTに完全なメッセージを転送します。
 
-### ブロック転送の設定
+### ブロック単位転送の設定
 
-ブロック転送はREST APIまたは設定ファイルで有効化および設定可能です。
+ブロック単位転送はREST APIまたは設定ファイルで有効化および設定できます。
 
 :::: tabs type:card
 
@@ -783,6 +772,8 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m' \
     "enable": true,
     "max_block_size": 1024,
     "max_body_size": "4MB",
+    "max_concurrent_exchanges": 16,
+    "max_total_size": "16MB",
     "exchange_lifetime": "247s"
   }
 }'
@@ -792,12 +783,14 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m' \
 
 ::: tab Configuration
 
-```properties
+```hocon
 gateway.lwm2m {
   blockwise {
     enable = true
     max_block_size = 1024
     max_body_size = "4MB"
+    max_concurrent_exchanges = 16
+    max_total_size = "16MB"
     exchange_lifetime = "247s"
   }
 }
@@ -807,20 +800,24 @@ gateway.lwm2m {
 
 ::::
 
-ブロック転送に関する設定項目は以下の通りです：
+以下の表はブロック単位転送の設定項目を説明しています。EMQX 6.3.3以降、`blockwise.max_concurrent_exchanges`および`blockwise.max_total_size`は各クライアントセッションが保持するブロック単位状態の制限となります。
 
-| 設定項目                     | 型         | デフォルト | 説明                                                         |
-| ---------------------------- | ---------- | --------- | ------------------------------------------------------------ |
-| `blockwise.enable`           | Boolean    | `true`    | ブロック転送を有効にするかどうか。                           |
-| `blockwise.max_block_size`   | ブロックサイズ | `1024`    | ブロック転送で使用する最大ブロックサイズ。利用可能な値：`16`, `32`, `64`, `128`, `256`, `512`, `1024`。 |
-| `blockwise.max_body_size`    | バイトサイズ | `"4MB"`   | 再構成されたメッセージボディの最大サイズ。                   |
-| `blockwise.exchange_lifetime`| Duration   | `"247s"`  | ブロック転送交換状態の有効期間。                             |
+| 設定項目 | 型 | デフォルト | 説明 |
+| --- | --- | --- | --- |
+| `blockwise.enable` | ブール値 | `true` | ブロック単位転送を有効にするかどうか。 |
+| `blockwise.max_block_size` | ブロックサイズ | `1024` | 最大ブロックサイズ（バイト単位）。利用可能な値：`16`, `32`, `64`, `128`, `256`, `512`, `1024`。 |
+| `blockwise.max_body_size` | バイトサイズ | `"4MB"` | 再構成後のペイロードの最大サイズ。0より大きい必要があります。これを超えるペイロードはEMQXにより拒否されます。 |
+| `blockwise.max_concurrent_exchanges` | 整数 | `16` | 1クライアントセッションが保持できるブロック単位交換の最大数。0より大きい必要があります。制限に達すると新規Block1アップロードは`4.29 Too Many Requests`を受け、ダウンリンクコマンドはセッションキューで待機します。 |
+| `blockwise.max_total_size` | バイトサイズ | `"16MB"` | 1クライアントセッションが保持できるブロック単位交換の合計ペイロードサイズの最大値。0より大きい必要があります。制限に達すると新規Block1アップロードは`4.13 Request Entity Too Large`を受けます。容量が空くまでダウンリンクコマンドはキューイングされます。 |
+| `blockwise.exchange_lifetime` | 期間 | `"247s"` | EMQXが一時的なブロック単位交換状態を保持する期間。0より大きい必要があります。状態が期限切れになると、対応するセッション容量が解放されます。 |
 
-適切に設定すると、ブロック転送はUDP上での大容量ペイロードの信頼性ある送信を保証し、MQTTアプリケーションには完全に透過的に動作します。
+交換数および保持ペイロード制限は各クライアントセッションごとに独立して適用されます。リスナー全体で共有される制限ではありません。Block-Wise容量が一時的に不足しても、ダウンリンクコマンドはキューに残ります。容量が利用可能になると送信が再開されます。アクティブなダウンリンクが期限切れになると、EMQXはタイムアウトを報告し、トランスポートトランザクションをキャンセルして次のキューコマンドを送信します。`blockwise.max_total_size`より大きいペイロードのダウンリンクコマンドは無期限にキューに残ることなく失敗します。
+
+EMQX 6.3.3以降、`blockwise.max_body_size`、`blockwise.max_total_size`、`blockwise.exchange_lifetime`は0より大きい必要があります。REST APIは非正の値を拒否し、保存済みのゲートウェイ設定を変更しません。
 
 ## ユーザーインターフェース
 
-- 詳細な設定オプション：[Gateway configuration - lwm2m (Opensource)](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) および [Gateway configuration - lwm2m (Enterprise)](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)。
+- 詳細な設定オプション：[Gateway configuration - lwm2m (Opensource)](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) および [Gateway configuration - lwm2m (Enterprise)](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)
 - 詳細なHTTP API説明：[REST API - Gateway](../../guides/api.md)
 
 ## クライアントライブラリ
