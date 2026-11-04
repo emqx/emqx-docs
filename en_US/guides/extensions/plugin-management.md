@@ -119,7 +119,7 @@ The new node does the following:
 
 EMQX supports pre-deploying a node-pinned plugin before EMQX starts, or installing and managing a cluster-managed plugin through the Dashboard, CLI, or API.
 
-### Run a Plugin Independently on a Node
+### Pre-Deploy a Node-Pinned Plugin
 
 Starting from EMQX 6.1.6, you can pin a pre-deployed plugin to an individual node. This mode is useful when a plugin is built into a container image or another node-specific deployment artifact.
 

@@ -441,7 +441,7 @@ Starting from EMQX 6.1.6, you can use `node.pinned_plugins` to pre-deploy and co
 - RPC calls and messages exchanged between plugin instances on different nodes.
 - Configuration formats used by different plugin versions.
 
-For deployment and lifecycle behavior, see [Run a Plugin Independently on a Node](./plugin-management.md#run-a-plugin-independently-on-a-node).
+For deployment and lifecycle behavior, see [Pre-Deploy a Node-Pinned Plugin](./plugin-management.md#pre-deploy-a-node-pinned-plugin).
 
 ## Plugin Extended API and UI
 

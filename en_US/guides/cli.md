@@ -437,7 +437,7 @@ Starting from EMQX 6.1.6, the `plugins` commands behave differently for plugins 
 - `plugins allow`, `plugins install`, `plugins uninstall`, `plugins enable`, and `plugins disable` return a `plugin_pinned` error for a node-pinned plugin.
 - A node-pinned plugin stopped through the CLI remains stopped until the node starts all plugins again, such as after a node restart or cluster join.
 
-For details, see [Run a Plugin Independently on a Node](./extensions/plugin-management.md#run-a-plugin-independently-on-a-node).
+For details, see [Pre-Deploy a Node-Pinned Plugin](./extensions/plugin-management.md#pre-deploy-a-node-pinned-plugin).
 
 :::
 
