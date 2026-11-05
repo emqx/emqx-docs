@@ -94,7 +94,7 @@ file_transfer {
 
 Use the following configuration example to save the merged complete file in an S3 bucket.
 
-```bash
+```hocon
 file_transfer {
   # Enable file transfer feature
   enable = true
@@ -106,6 +106,12 @@ file_transfer {
 
     host = "s3.us-east-1.amazonaws.com"
     port = 443
+
+    # Optional signing region. If omitted, EMQX infers it from the host.
+    region = "us-east-1"
+
+    # Access the bucket by request path or virtual host. The default is path.
+    access_method = path
 
     # Credentials for accessing S3
     access_key_id = "AKIA27EZDDM9XLINWXFE"
@@ -126,6 +132,12 @@ file_transfer {
   }
 }
 ```
+
+The following fields configure the S3 endpoint, signing region, and bucket addressing method:
+
+- `host`: Enter the S3 endpoint host without the actual S3 bucket name. A standard AWS Regional endpoint has the format `s3.{region}.amazonaws.com`, for example, `s3.us-east-1.amazonaws.com`. When using an Amazon S3 interface endpoint (AWS PrivateLink), enter its Regional or Zonal DNS name, for example, `bucket.vpce-0123456789abcdef0-example.s3.us-west-2.vpce.amazonaws.com`. In this DNS name, `bucket` is a literal prefix, not the actual S3 bucket name. Configure the actual bucket in the `bucket` field.
+- `region`: Available in EMQX 6.1.6 and later. Specifies the region for signing S3 upload requests and presigned download URLs, overriding the value inferred from `host`. If empty, EMQX infers the region from `host`, including standard AWS Regional endpoints and the Regional and Zonal DNS names of Amazon S3 interface endpoints (AWS PrivateLink). If no region can be inferred, EMQX falls back to `us-east-1`. Set this field when the endpoint host, such as a custom domain, does not include a region identifier.
+- `access_method`: Controls how EMQX addresses the configured bucket. The default `path` method includes the bucket name in the request path. The `vhost` method prepends the configured bucket name to `host`. When using `vhost`, do not include the actual bucket name in `host`; configure it separately in `bucket`.
 
 ## Configure MQTT Transfer Settings
 
@@ -161,8 +173,10 @@ You can configure the following general settings:
 - **Init Timeout**: The maximum amount of time allowed for the `init` command to execute before it times out. For instance, if the system is overloaded and cannot process the `init` command within this timeframe, the operation will time out. In such cases, a PUBACK message with an error code (0x80) is sent to indicate the failure. The default value is `10s`.
 - **Segments Root Directory**: The directory path where temporary segments of uploaded files are stored. It's essential to choose an absolute path, preferably located on a disk with high I/O performance. This ensures efficient handling of file segments, especially under heavy load.
 - **File Storage**: Select the method for exporting the files. The options include `Local Storage` and `S3 Storage`. When `S3 Storage` is selected, additional configurations are required:
-  - **Host**: The endpoint for the S3 service. For example, `s3.us-east-1.amazonaws.com`.
+  - **Host**: Enter the S3 endpoint host without the actual S3 bucket name. A standard AWS Regional endpoint has the format `s3.{region}.amazonaws.com`, for example, `s3.us-east-1.amazonaws.com`. When using an Amazon S3 interface endpoint (AWS PrivateLink), enter its Regional or Zonal DNS name. In this DNS name, `bucket` is a literal prefix, not the actual S3 bucket name.
   - **Port**: The port used to connect to the S3 service, for example, `443`, indicating a secure HTTPS connection.
+  - **Signing Region**: Available in EMQX 6.1.6 and later. Specifies the region for signing S3 upload requests and presigned download URLs, overriding the value inferred from **Host**. If empty, EMQX infers the region from **Host**, including standard AWS Regional endpoints and the Regional and Zonal DNS names of Amazon S3 interface endpoints (AWS PrivateLink). If no region can be inferred, EMQX falls back to `us-east-1`. Set it when the endpoint host, such as a custom domain, does not include a region identifier.
+  - **Bucket Access Method**: Select `path` or `vhost`. The default `path` method includes the bucket name in the request path. The `vhost` method prepends the bucket name to **Host**. When using `vhost`, do not include the actual bucket name in **Host**.
   - **Access Key ID** and **Secret Access Key**: Credentials required for accessing the S3 bucket. These should be securely stored.
   - **Bucket**: The name of the S3 bucket where files are stored, for example, `my-bucket`.
   - **Enable TLS**: Determine whether to use TLS (Transport Layer Security) for secure file transfers. For more information, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).

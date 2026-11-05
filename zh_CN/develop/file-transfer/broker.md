@@ -96,7 +96,7 @@ file_transfer {
 
 使用以下配置示例会将合并后的完整文件保存到 S3 存储桶中。
 
-```bash
+```hocon
 file_transfer {
   # 启用文件传输功能
   enable = true
@@ -110,6 +110,12 @@ file_transfer {
 
     host = "s3.us-east-1.amazonaws.com"
     port = 443
+
+    # 可选的签名区域。如果省略，EMQX 将从主机中推断区域。
+    region = "us-east-1"
+
+    # 通过请求路径或虚拟主机访问存储桶，默认值为 path。
+    access_method = path
 
     # 用于访问 S3 的凭证
     access_key_id = "AKIA27EZDDM9XLINWXFE"
@@ -130,6 +136,12 @@ file_transfer {
   }
 }
 ```
+
+以下字段用于配置 S3 端点、签名区域和存储桶寻址方式：
+
+- `host`：填写不包含实际 S3 存储桶名称的 S3 端点主机。AWS 标准区域端点格式为 `s3.{region}.amazonaws.com`，例如 `s3.us-east-1.amazonaws.com`。使用 Amazon S3 接口端点（AWS PrivateLink）时，请填写其区域级或可用区级 DNS 名称，例如 `bucket.vpce-0123456789abcdef0-example.s3.us-west-2.vpce.amazonaws.com`。在此 DNS 名称中，`bucket` 是固定前缀，并非实际的 S3 存储桶名称。请在 `bucket` 字段中配置实际的存储桶。
+- `region`：从 EMQX 6.1.6 开始提供。用于指定 S3 上传请求和预签名下载 URL 的签名区域，其值优先于从 `host` 推断的区域。留空时，EMQX 从 `host` 推断区域，包括 AWS 标准区域端点以及 Amazon S3 接口端点（AWS PrivateLink）的区域级和可用区级 DNS 名称。如果无法推断，则使用 `us-east-1`。当端点主机（例如自定义域名）不包含区域标识时，请设置此字段。
+- `access_method`：控制 EMQX 如何寻址配置的存储桶。默认值为 `path`，此时 EMQX 将存储桶名称放在请求路径中。使用 `vhost` 时，EMQX 将配置的存储桶名称添加到 `host` 前。不要在 `host` 中包含实际的存储桶名称，请在 `bucket` 中单独配置。
 
 ## 配置 MQTT 传输
 
@@ -166,8 +178,10 @@ file_transfer {
 - **初始化超时时间**：`init` 命令执行超时的最大时间。例如，如果系统过载且无法在此时间内处理 `init` 命令，则操作将超时。在这种情况下，将发送带有错误代码（0x80）的 PUBACK 消息以指示失败。默认值为 `10s`。
 - **分片存储目录**：上传文件的临时分片存储的目录路径。选择绝对路径至关重要，最好位于具有高 I/O 性能的磁盘上。这样可以在高负载下有效处理文件分片。
 - **文件存储**：选择文件的导出方法，选项包括 `本地存储`和 `S3 存储`。选择 `S3 存储`时，需要进行额外配置：
-  - **地址**：S3 服务的端点。例如 `s3.us-east-1.amazonaws.com`。
+  - **地址**：填写不包含实际 S3 存储桶名称的 S3 端点主机。AWS 标准区域端点格式为 `s3.{region}.amazonaws.com`，例如 `s3.us-east-1.amazonaws.com`。使用 Amazon S3 接口端点（AWS PrivateLink）时，请填写其区域级或可用区级 DNS 名称。在此 DNS 名称中，`bucket` 是固定前缀，并非实际的 S3 存储桶名称。
   - **端口**：用于连接 S3 服务的端口，例如 `443`，表示安全的 HTTPS 连接。
+  - **签名区域（Signing Region）**：从 EMQX 6.1.6 开始提供。用于指定 S3 上传请求和预签名下载 URL 的签名区域，其值优先于从**地址**推断的区域。留空时，EMQX 从**地址**推断区域，包括 AWS 标准区域端点以及 Amazon S3 接口端点（AWS PrivateLink）的区域级和可用区级 DNS 名称。如果无法推断，则使用 `us-east-1`。当端点地址（例如自定义域名）不包含区域标识时，请设置此字段。
+  - **存储桶访问方式（Bucket Access Method）**：选择 `path` 或 `vhost`。默认的 `path` 方式将存储桶名称放在请求路径中；`vhost` 方式将存储桶名称添加到**地址**前。使用 `vhost` 时，不要在**地址**中包含实际的存储桶名称。
   - **访问密钥 ID** 和 **访问密钥**：用于访问 S3 存储桶的凭据。应安全地保存。
   - **存储桶**：存储文件的 S3 存储桶的名称，例如 `my-bucket`。
   - **启用 TLS**：确定是否使用 TLS（传输层安全性）进行安全文件传输。有关更多信息，请参阅[启用 TLS 加密访问外部资源](../../guides/network/overview.md#tls-for-external-resource-access)。
