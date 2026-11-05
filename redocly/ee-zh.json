@@ -5778,25 +5778,13 @@
             "oneOf": [
               {
                 "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
@@ -5814,54 +5802,6 @@
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "opents"
                 ],
                 "type": "string"
@@ -5874,7 +5814,79 @@
               },
               {
                 "enum": [
-                  "http"
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "quasardb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigtable"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
@@ -5886,37 +5898,25 @@
               },
               {
                 "enum": [
-                  "snowflake"
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "emqx_tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "quasardb"
                 ],
                 "type": "string"
               },
@@ -5940,73 +5940,7 @@
               },
               {
                 "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "aws_timestream"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigtable"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
+                  "cassandra"
                 ],
                 "type": "string"
               },
@@ -6018,19 +5952,43 @@
               },
               {
                 "enum": [
-                  "mysql"
+                  "azure_blob_storage"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "cassandra"
+                  "s3"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "azure_event_grid"
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
                 ],
                 "type": "string"
               },
@@ -6042,13 +6000,55 @@
               },
               {
                 "enum": [
-                  "alloydb"
+                  "emqx_tables"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "azure_blob_storage"
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_grid"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
                 ],
                 "type": "string"
               },
@@ -27114,6 +27114,7 @@
           "retry_interval": {
             "default": "15s",
             "description": "在未收到 ACK 的情况下，MQTT 桥接器重试发送 QoS1/QoS2 消息的延迟。",
+            "example": "1h",
             "type": "string"
           },
           "server": {
@@ -27282,6 +27283,7 @@
           "retry_interval": {
             "default": "15s",
             "description": "在未收到 ACK 的情况下，MQTT 桥接器重试发送 QoS1/QoS2 消息的延迟。",
+            "example": "1h",
             "type": "string"
           },
           "server": {
@@ -29362,6 +29364,7 @@
           "retry_interval": {
             "default": "15s",
             "description": "在未收到 ACK 的情况下，MQTT 桥接器重试发送 QoS1/QoS2 消息的延迟。",
+            "example": "1h",
             "type": "string"
           },
           "server": {
@@ -29518,6 +29521,7 @@
           "retry_interval": {
             "default": "15s",
             "description": "在未收到 ACK 的情况下，MQTT 桥接器重试发送 QoS1/QoS2 消息的延迟。",
+            "example": "1h",
             "type": "string"
           },
           "server": {
@@ -29655,6 +29659,7 @@
           "retry_interval": {
             "default": "15s",
             "description": "在未收到 ACK 的情况下，MQTT 桥接器重试发送 QoS1/QoS2 消息的延迟。",
+            "example": "1h",
             "type": "string"
           },
           "server": {
@@ -32010,6 +32015,7 @@
           "retry_interval": {
             "default": "15s",
             "description": "在未收到 ACK 的情况下，MQTT 桥接器重试发送 QoS1/QoS2 消息的延迟。",
+            "example": "1h",
             "type": "string"
           },
           "server": {
@@ -32166,6 +32172,7 @@
           "retry_interval": {
             "default": "15s",
             "description": "在未收到 ACK 的情况下，MQTT 桥接器重试发送 QoS1/QoS2 消息的延迟。",
+            "example": "1h",
             "type": "string"
           },
           "server": {
@@ -32303,6 +32310,7 @@
           "retry_interval": {
             "default": "15s",
             "description": "在未收到 ACK 的情况下，MQTT 桥接器重试发送 QoS1/QoS2 消息的延迟。",
+            "example": "1h",
             "type": "string"
           },
           "server": {
@@ -42231,7 +42239,7 @@
         "properties": {
           "site": {
             "description": "站点的标识符。",
-            "example": "CC12FBA0ED4D85C7",
+            "example": "1393EA8B14203DB2",
             "type": "string"
           },
           "status": {
@@ -45935,6 +45943,13 @@
           "scope": {
             "description": "指定请求 OAuth 访问令牌时要提供的 `scope`。",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/connector_schema_lib.client_tls_verify_peer",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
           },
           "type": {
             "description": "使用客户端凭据授权类型的 OIDC",
@@ -55439,7 +55454,7 @@
           "heartbeat": {
             "default": "30s",
             "description": "向 RabbitMQ 服务器发送心跳消息的间隔。",
-            "example": "32s",
+            "example": "1h",
             "type": "string"
           },
           "node_status": {
@@ -55544,7 +55559,7 @@
           "heartbeat": {
             "default": "30s",
             "description": "向 RabbitMQ 服务器发送心跳消息的间隔。",
-            "example": "32s",
+            "example": "1h",
             "type": "string"
           },
           "name": {
@@ -55640,7 +55655,7 @@
           "heartbeat": {
             "default": "30s",
             "description": "向 RabbitMQ 服务器发送心跳消息的间隔。",
-            "example": "32s",
+            "example": "1h",
             "type": "string"
           },
           "password": {
@@ -62015,7 +62030,7 @@
   "info": {
     "description": "A request accepts at most 100 query parameters in total, including repeated and pagination parameters.",
     "title": "EMQX Enterprise API",
-    "version": "6.3.3-rc.2"
+    "version": "6.3.3-rc.3"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -62632,52 +62647,52 @@
                     "summary": "Action Types",
                     "value": [
                       "tdengine",
-                      "azure_blob_storage",
-                      "alloydb",
-                      "elasticsearch",
-                      "azure_event_grid",
-                      "cassandra",
-                      "mysql",
-                      "confluent_producer",
-                      "syskeeper_forwarder",
-                      "iotdb",
-                      "cockroachdb",
-                      "timescale",
                       "azure_event_hub_producer",
-                      "clickhouse",
-                      "pgsql",
-                      "oracle",
-                      "doris",
-                      "bigtable",
                       "aws_timestream",
-                      "couchbase",
+                      "oracle",
+                      "snowflake",
+                      "azure_event_grid",
+                      "cockroachdb",
+                      "mysql",
+                      "redshift",
+                      "emqx_tables",
+                      "elasticsearch",
+                      "pgsql",
+                      "matrix",
+                      "iotdb",
+                      "dynamo",
+                      "clickhouse",
+                      "s3",
+                      "azure_blob_storage",
+                      "confluent_producer",
+                      "cassandra",
                       "datalayers",
                       "disk_log",
                       "greptimedb",
-                      "quasardb",
-                      "redshift",
-                      "emqx_tables",
-                      "matrix",
                       "rocketmq",
-                      "snowflake",
-                      "snowflake_streaming",
+                      "bigquery",
+                      "alloydb",
                       "http",
+                      "snowflake_streaming",
+                      "gcp_pubsub_producer",
+                      "couchbase",
+                      "influxdb",
+                      "bigtable",
+                      "quasardb",
+                      "rabbitmq",
+                      "mqtt",
+                      "tablestore",
+                      "mongodb",
+                      "doris",
+                      "kafka_producer",
+                      "timescale",
+                      "sqlserver",
                       "s3tables",
                       "opents",
-                      "dynamo",
-                      "rabbitmq",
-                      "influxdb",
-                      "sqlserver",
-                      "mqtt",
-                      "mongodb",
-                      "tablestore",
-                      "gcp_pubsub_producer",
                       "pulsar",
                       "kinesis",
-                      "redis",
-                      "s3",
-                      "bigquery",
-                      "kafka_producer"
+                      "syskeeper_forwarder",
+                      "redis"
                     ]
                   }
                 },
@@ -62685,52 +62700,52 @@
                   "items": {
                     "enum": [
                       "tdengine",
-                      "azure_blob_storage",
-                      "alloydb",
-                      "elasticsearch",
-                      "azure_event_grid",
-                      "cassandra",
-                      "mysql",
-                      "confluent_producer",
-                      "syskeeper_forwarder",
-                      "iotdb",
-                      "cockroachdb",
-                      "timescale",
                       "azure_event_hub_producer",
-                      "clickhouse",
-                      "pgsql",
-                      "oracle",
-                      "doris",
-                      "bigtable",
                       "aws_timestream",
-                      "couchbase",
+                      "oracle",
+                      "snowflake",
+                      "azure_event_grid",
+                      "cockroachdb",
+                      "mysql",
+                      "redshift",
+                      "emqx_tables",
+                      "elasticsearch",
+                      "pgsql",
+                      "matrix",
+                      "iotdb",
+                      "dynamo",
+                      "clickhouse",
+                      "s3",
+                      "azure_blob_storage",
+                      "confluent_producer",
+                      "cassandra",
                       "datalayers",
                       "disk_log",
                       "greptimedb",
-                      "quasardb",
-                      "redshift",
-                      "emqx_tables",
-                      "matrix",
                       "rocketmq",
-                      "snowflake",
-                      "snowflake_streaming",
+                      "bigquery",
+                      "alloydb",
                       "http",
+                      "snowflake_streaming",
+                      "gcp_pubsub_producer",
+                      "couchbase",
+                      "influxdb",
+                      "bigtable",
+                      "quasardb",
+                      "rabbitmq",
+                      "mqtt",
+                      "tablestore",
+                      "mongodb",
+                      "doris",
+                      "kafka_producer",
+                      "timescale",
+                      "sqlserver",
                       "s3tables",
                       "opents",
-                      "dynamo",
-                      "rabbitmq",
-                      "influxdb",
-                      "sqlserver",
-                      "mqtt",
-                      "mongodb",
-                      "tablestore",
-                      "gcp_pubsub_producer",
                       "pulsar",
                       "kinesis",
-                      "redis",
-                      "s3",
-                      "bigquery",
-                      "kafka_producer"
+                      "syskeeper_forwarder",
+                      "redis"
                     ],
                     "type": "string"
                   },
@@ -84476,6 +84491,7 @@
                   "retry_interval": {
                     "default": "15s",
                     "description": "在未收到 ACK 的情况下，MQTT 桥接器重试发送 QoS1/QoS2 消息的延迟。",
+                    "example": "1h",
                     "type": "string"
                   },
                   "server": {
@@ -98289,7 +98305,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "CC12FBA0ED4D85C7",
+            "example": "1393EA8B14203DB2",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98352,7 +98368,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "CC12FBA0ED4D85C7",
+            "example": "1393EA8B14203DB2",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98766,7 +98782,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "CC12FBA0ED4D85C7",
+            "example": "1393EA8B14203DB2",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98852,7 +98868,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "CC12FBA0ED4D85C7",
+            "example": "1393EA8B14203DB2",
             "in": "path",
             "name": "site",
             "required": true,
