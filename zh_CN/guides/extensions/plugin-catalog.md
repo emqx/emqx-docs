@@ -42,6 +42,10 @@
 
 ## 消息传输
 
+[设备消息广播（Bcast）](./plugin-catalog/6.1/emqx-bcast.md)
+
+该插件向一个产品下所有在线且已订阅投递主题的设备广播消息，或向指定设备列表发送 QoS 0/1 消息，并支持离线重放和 Payload 复用。
+
 [同步请求](./plugin-catalog/6.1/emqx-sync-request.md)
 
 该插件允许 HTTP 调用方通过 EMQX REST API 发布一条 MQTT 请求，并同步等待第一条匹配的 MQTT 响应。

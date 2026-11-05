@@ -42,6 +42,10 @@ This plugin persists MQTT messages to MySQL or Redis so that subscribers can ret
 
 ## Messaging
 
+[Device Message Broadcasting (Bcast)](./plugin-catalog/6.1/emqx-bcast.md)
+
+This plugin broadcasts messages to all online subscribers to the delivery topic within a product or sends QoS 0/1 messages to a specified device list, with optional offline replay and payload reuse.
+
 [Sync Request](./plugin-catalog/6.1/emqx-sync-request.md)
 
 This plugin lets an HTTP caller publish one MQTT request through the EMQX REST API and wait synchronously for the first matching MQTT response.
