@@ -8,13 +8,12 @@ This section introduces what plugins are and how they are developed, customized,
 
 A plugin in EMQX is an Erlang/OTP application that runs inside EMQX nodes. Plugins interact with the EMQX core through hookpoints, which are predefined events such as client connection, message publish, authentication, and more.
 
-To be used in EMQX, a plugin must be:
+To use a plugin in EMQX, first build it as a release package. Then choose how each node manages it:
 
-1. **Built as a release** – a `.tar.gz` package containing the compiled plugin and metadata.
-2. **Installed** via the Dashboard, REST API, or CLI.
-3. **Managed** through configuration and lifecycle operations (start, stop, uninstall).
+- **Cluster-managed plugin**: Install the `.tar.gz` package through the Dashboard, REST API, or CLI. EMQX distributes the package and manages its lifecycle across the cluster.
+- **Node-pinned plugin**: Starting from EMQX 6.1.6, extract the package on a specific node and list its name and version in `node.pinned_plugins`. The node runs the plugin independently of the cluster plugin configuration.
 
-Upon startup, a plugin typically registers some of its functions as EMQX *callbacks* to modify or extend the behavior of EMQX. Plugins operate in isolation from EMQX core and from other plugins, ensuring they don’t interfere with each other. They are also lifecycle-aware, meaning they follow a defined process for installation, startup, shutdown, and removal. This makes them safer and easier to manage in production environments.
+Upon startup, a plugin typically registers some of its functions as EMQX *callbacks* to modify or extend the behavior of EMQX. Plugins operate in isolation from EMQX core and from other plugins, ensuring they don’t interfere with each other. Cluster-managed plugins follow a defined lifecycle for installation, startup, shutdown, and removal. Node-pinned plugins are pre-deployed on specific nodes and can be started or stopped locally. To remove one, delete its entry from `node.pinned_plugins`, remove the plugin from the node's deployment artifact, and then restart the node.
 
 ## Key Concepts
 
@@ -27,8 +26,8 @@ Upon startup, a plugin typically registers some of its functions as EMQX *callba
 1. Develop the plugin using the official [plugin template](https://github.com/emqx/emqx-plugin-template).
 2. Customize its logic to suit your use case (e.g., implement authentication).
 3. Build and package the plugin into a `.tar.gz` file using `make rel`.
-4. Install and start the plugin in EMQX using Dashboard, CLI, or API.
-5. Update configuration or stop/uninstall as needed.
+4. Install and start the plugin through the Dashboard, CLI, or API, or deploy and configure it as a node-pinned plugin.
+5. Configure and maintain the plugin according to the selected management mode.
 
 ## Learn More
 
