@@ -134,8 +134,9 @@ This section demonstrates how to enable **Last-Value Semantics**, which ensures 
 2. Locate the queue with the topic filter `demo/topic`.
 3. Click **Delete** in the **Actions** column.
 4. Confirm deletion in the prompt.
+5. Wait until the queue no longer appears in the queue list before proceeding to the next step.
 
-This removes the previous queue and its stored messages.
+Starting from EMQX 6.3.3, when you confirm the deletion, EMQX marks the queue for deletion and starts background cleanup. The queue remains in the queue list until the cleanup finishes.
 
 ### Step 2: Create a Queue with Last-Value Semantics
 

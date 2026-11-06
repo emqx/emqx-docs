@@ -219,6 +219,8 @@ This section demonstrates how Last-Value MQTT streams keep only the latest messa
 2. Locate the stream `my_stream`.
 3. Click **Delete** and confirm.
 
+Starting from EMQX 6.3.3, when you confirm the deletion, EMQX marks the stream for deletion and starts background cleanup. The stream may remain in the stream list until the cleanup finishes.
+
 ### Step 2: Create a Last-Value Message Stream
 
 1. Click **Create** on the **Streams** page.
