@@ -97,8 +97,8 @@ Here’s how it works, using password-based authentication as an example:
    - If credentials are found but invalid, the client is denied access.
    - If no credentials are found, EMQX moves to the next authenticator in the chain.
 
-3. **Skip on Error or Disabled:**
-   An authenticator will also be skipped if it is disabled, or if there is an internal error during execution, for example, if the database is unavailable.
+3. **Handle Disabled Authenticators and Backend Failures:**
+   EMQX skips a disabled authenticator. When an authenticator backend fails, for example, because its database is unavailable, EMQX follows the configured [backend failure handling](#configure-authentication-backend-failure-handling) to continue to the next authenticator or deny the client.
 4. **Fallback Behavior:**
    If all authenticators are skipped or none can authenticate the client, EMQX denies the connection by default.
 
@@ -147,6 +147,28 @@ is_jwt(password)
 ```
 
 Starting from EMQX 6.2.3, this precondition returns `true` only when the password is structurally a JWT. EMQX invokes the JWT authenticator for JWT passwords. If the password is not a JWT or is absent, EMQX skips the JWT authenticator and continues to the next authenticator in the chain.
+
+### Configure Authentication Backend Failure Handling <Badge type="tip" text="6.3.3+" />
+
+The `authentication_settings.ignore_backend_failures` setting determines what EMQX does when an authentication backend fails, for example, when a database is unreachable or a request times out. The setting applies under both security profiles:
+
+| Value | `legacy` | `hardened` |
+| --- | --- | --- |
+| `per_security_profile` (default) | Ignore the failure and continue to the next authenticator. | Deny the client. |
+| `true` | Ignore the failure and continue to the next authenticator. | Ignore the failure and continue to the next authenticator. |
+| `false` | Deny the client. | Deny the client. |
+
+For example, if no higher-priority configuration source overrides this setting, add the following to `base.hocon` to preserve the behavior selected by the active security profile:
+
+```hocon
+authentication_settings.ignore_backend_failures = per_security_profile
+```
+
+`GET /api/v5/authentication/settings` returns `ignore_backend_failures` as the JSON string `"per_security_profile"` or the JSON Boolean value `true` or `false`. `PUT /api/v5/authentication/settings` accepts the same values. When the setting is not configured, the `GET` request returns `"per_security_profile"`. Before EMQX 6.3.3, the field was a Boolean and the default response was `false`.
+
+::: warning Check Stored Values After an Upgrade
+Under the `legacy` profile, if the stored value is `false`, EMQX now denies the client when an authentication backend fails. Before EMQX 6.3.3, `false` had no effect under `legacy`, and an API client that sent the response from `GET /api/v5/authentication/settings` back in a `PUT` request could store this value. To preserve the previous `legacy` behavior, set the value to `per_security_profile` after every node has been upgraded. During a rolling upgrade, follow the [rolling upgrade precautions](../security-profile.md#rolling-upgrade).
+:::
 
 ## External Resource Cache
 
