@@ -154,9 +154,17 @@ Datalayers 数据集成具有以下特性与优势：
 
    - **启用 TLS**（可选）：是否启用加密连接。开启后可配置证书文件路径、校验证书等。有关 TLS 连接选项的详细信息，请参阅[启用 TLS 加密访问外部资源](../../guides/network/overview.md#启用-tls-加密访问外部资源)。
 
-     ::: tip
+     ::: warning Arrow Flight TLS 配置限制
 
-     使用 Arrow Flight SQL 协议连接 Datalayers 时，由于依赖库限制，不能跳过证书校验（即不支持 `verify_none` 模式）。请确保 Datalayers gRPC 服务端证书合法，Common Name 与服务器地址匹配。
+     从 EMQX 6.3.3 开始，为 `Arrow Flight` 驱动启用 TLS 时存在以下配置限制：
+
+     - EMQX 始终校验 Datalayers 服务端证书。Arrow Flight 不接受 `verify_none`，因此请保持**验证服务器证书**开启。如果任一字段未配置，EMQX 将分别应用对应的默认值：`verify = verify_peer` 或 `cacertfile = "system_default"`。
+     - `system_default` 使用 `node.trusted_certs` 指定的 CA 证书包。如果该证书包不包含签发 Datalayers 服务端证书的 CA，请在 **CA Cert** 中提供 PEM 格式的 CA 证书。更多信息，参见[出站 TLS 的受信任 CA 证书](../../guides/network/tls-certificate.md#出站-tls-的受信任-ca-证书)。
+     - 在**证书来源**中选择**手动输入**，并将 **TLS Cert** 和 **TLS Key** 留空。Arrow Flight 不支持客户端证书配置（`certfile` 和 `keyfile`）或托管证书包（`managed_certs`）。
+     - 不要将 `server_name_indication` 设置为 `disable`。服务端证书必须与连接器配置的主机名或显式配置的 SNI 服务器名称匹配。
+
+     以上限制仅适用于 `Arrow Flight` 驱动。`InfluxDB 行协议`驱动保持原有 TLS 行为。
+
      :::
 
 6. 若选择的是 `Arrow Flight` 驱动，还需设置是否**启用预处理语句**，用于控制是否允许 Sink 使用 SQL 模板方式写入数据；默认为开启。
