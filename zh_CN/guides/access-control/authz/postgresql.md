@@ -49,6 +49,20 @@ INSERT 0 1
 query = "SELECT permission, action, topic, qos, retain FROM mqtt_acl WHERE username = ${username}"
 ```
 
+::: tip 为数据库账户授予只读权限
+
+EMQX 对发布或订阅操作进行授权时只需要读取数据库。请将 `query` 配置为 `SELECT` 语句。EMQX 会以预处理语句的方式执行该查询。
+
+请配置 EMQX 使用专用数据库账户，仅授予该账户对查询所涉及表的 `SELECT` 权限，不要授予写入或管理权限：
+
+```sql
+GRANT USAGE ON SCHEMA public TO emqx_auth;
+GRANT SELECT ON mqtt_acl TO emqx_auth;
+```
+
+请使用单独的管理账户创建表并维护授权规则。即使 EMQX 配置中的数据库凭据泄露，攻击者也无法使用该只读账户修改或删除授权规则。
+:::
+
 ## 通过  Dashboard 配置
 
 您可以使用 EMQX Dashboard 配置如何使用 PostgreSQL 进行用户授权。

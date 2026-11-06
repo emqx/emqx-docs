@@ -98,8 +98,9 @@ LwM2M 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数�
 
 ## 认证
 
-由于 LwM2M 协议仅提供了客户端的 Endpoint Name，而没有提供用户名和密码。因此，
-LwM2M 网关仅支持 [HTTP Server 认证](../../guides/access-control/authn/http.md)。
+标准 LwM2M 注册请求仅提供客户端的 Endpoint Name，不定义用户名和密码。因此，LwM2M 网关仅支持 [HTTP Server 认证](../../guides/access-control/authn/http.md)。EMQX 还接受非标准注册参数 `device_id` 和 `imei`，并将其分别用作 EMQX Client ID 和 Username。
+
+从 EMQX 6.0.5 开始，客户端在现有连接上重新注册时，只有 Endpoint Name、EMQX Client ID 和 Username 均与连接已绑定的身份一致，EMQX 才会复用原有 LwM2M 会话。如果任一身份字段不同，EMQX 会返回未授权错误并拒绝此次重新注册，同时保持现有连接状态不变。
 
 例如，通过 REST API 或 `base.hocon` 为 LwM2M 网关创建 HTTP 认证：
 
@@ -814,7 +815,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m' \
 
 ::: tab 配置文件
 
-```properties
+```hocon
 gateway.lwm2m {
   blockwise {
     enable = true
@@ -834,8 +835,10 @@ Block-Wise 传输相关配置项说明如下：
 | ----------------------------- | ---------- | -------- | ------------------------------------------------------------ |
 | `blockwise.enable`            | Boolean    | `true`   | 是否启用 Block-Wise 传输。                                   |
 | `blockwise.max_block_size`    | Block Size | `1024`   | Block-Wise 传输使用的最大块大小。可选值为 `16`、`32`、`64`、`128`、`256`、`512`、`1024`。 |
-| `blockwise.max_body_size`     | Byte Size  | `"4MB"`  | 组装后消息体的最大大小。                                     |
-| `blockwise.exchange_lifetime` | Duration   | `"247s"` | Block-Wise 交换状态的保持时间。                              |
+| `blockwise.max_body_size`     | Byte Size  | `"4MB"`  | 重新组装后的最大负载大小。该值必须大于 `0`。超过此限制的负载将被拒绝。 |
+| `blockwise.exchange_lifetime` | Duration   | `"247s"` | 临时 Block-Wise 交换状态的保留时长。该值必须大于 `0`。状态过期后，其占用的资源将被释放。 |
+
+从 EMQX 6.2.4 开始，`blockwise.max_body_size` 和 `blockwise.exchange_lifetime` 必须大于 `0`。REST API 会拒绝非正数值，且不会更改已保存的网关配置。升级到 EMQX 6.2.4 前，请将所有零值或负数值改为正数。
 
 ## 用户层接口
 

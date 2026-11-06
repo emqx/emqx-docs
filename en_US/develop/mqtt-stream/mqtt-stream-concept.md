@@ -1,5 +1,9 @@
 # MQTT Streams
 
+::: warning Important Notice
+MQTT Streams is a Beta feature in EMQX 6.1. Its functionality and interfaces are subject to change.
+:::
+
 EMQX 6.1 introduces the MQTT Streams, a streaming and replay feature that extends MQTT’s real-time publish/subscribe model with persistent, replayable message streams. It enables Kafka-like streaming capabilities while preserving MQTT semantics.
 
 This page provides a complete overview of the MQTT Streams feature in EMQX, covering its design motivation, key concepts, internal architecture, message flow, and real-world application scenarios.

@@ -41,6 +41,17 @@ cmd = "HMGET mqtt:${username} password_hash salt is_superuser"
 そのため、`cmd` を `HMGET mqtt:${username} password salt is_superuser` と設定することも可能です。
 :::
 
+::: tip 読み取り専用データベース権限の付与
+
+EMQXはクライアント認証時にRedisへの読み取りアクセスのみを必要とします。`cmd`で許可されるのは`HGET`と`HMGET`のみです。Redis 6.0以降では、EMQX専用ユーザーにヘルスチェック、クエリ、および対象キーへのアクセスだけを許可してください。
+
+```bash
+redis-cli ACL SETUSER emqx_auth reset on '>PASSWORD' '~mqtt:*' +ping +hget +hmget
+```
+
+Redis Clusterでは`+cluster|slots`も必要です。SingleまたはSentinelモードでデータベース0以外を使用する場合は`+select`も付与してください。Sentinel用の認証情報は、Redisデータノード用の認証情報とは別に設定します。
+:::
+
 ## ダッシュボードでの設定
 
 EMQXダッシュボードを使って、Redisをパスワード認証に利用する設定が可能です。

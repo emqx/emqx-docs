@@ -167,6 +167,60 @@ CoAP 网关基于 [Publish-Subscribe Broker for the CoAP](https://datatracker.ie
 
 网关内无独立的发布订阅的权限控制，其对主题的权限控制需要统一在 [授权（Authorization）](../../guides/access-control/authz/authz.md) 中管理。
 
+## Block-Wise 传输
+
+CoAP 在 [RFC 7959](https://datatracker.ietf.org/doc/html/rfc7959) 中定义了 Block-Wise 传输机制，用于传输无法放入单个数据报的大负载。该机制将大负载拆分成较小的数据块，并在接收端重新组装。
+
+您可以通过 REST API 或配置文件配置 Block-Wise 传输。
+
+:::: tabs type:card
+
+::: tab REST API
+
+```bash
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/coap' \
+  -u <your-application-key>:<your-security-key> \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "coap",
+  "blockwise": {
+    "enable": true,
+    "max_block_size": 1024,
+    "max_body_size": "4MB",
+    "exchange_lifetime": "247s"
+  }
+}'
+```
+
+:::
+
+::: tab 配置文件
+
+```hocon
+gateway.coap {
+  blockwise {
+    enable = true
+    max_block_size = 1024
+    max_body_size = "4MB"
+    exchange_lifetime = "247s"
+  }
+}
+```
+
+:::
+
+::::
+
+Block-Wise 传输相关配置项说明如下：
+
+| 配置项                        | 类型       | 默认值   | 说明                                                         |
+| ----------------------------- | ---------- | -------- | ------------------------------------------------------------ |
+| `blockwise.enable`            | Boolean    | `true`   | 是否启用 Block-Wise 传输。                                   |
+| `blockwise.max_block_size`    | Block Size | `1024`   | Block-Wise 传输使用的最大块大小。可选值为 `16`、`32`、`64`、`128`、`256`、`512`、`1024`。 |
+| `blockwise.max_body_size`     | Byte Size  | `"4MB"`  | 重新组装后的最大负载大小。该值必须大于 `0`。超过此限制的负载将被拒绝。 |
+| `blockwise.exchange_lifetime` | Duration   | `"247s"` | 临时 Block-Wise 交换状态的保留时长。该值必须大于 `0`。状态过期后，其占用的资源将被释放。 |
+
+从 EMQX 6.2.4 开始，`blockwise.max_body_size` 和 `blockwise.exchange_lifetime` 必须大于 `0`。REST API 会拒绝非正数值，且不会更改已保存的网关配置。升级到 EMQX 6.2.4 前，请将所有零值或负数值改为正数。
 
 ## 用户层接口
 

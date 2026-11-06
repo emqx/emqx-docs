@@ -1,5 +1,9 @@
 # MQTT Streams Quick Start
 
+::: warning Important Notice
+MQTT Streams is a Beta feature in EMQX 6.1. Its functionality and interfaces are subject to change.
+:::
+
 This page walks you through how to use the MQTT Streams feature in EMQX 6.1. You’ll use MQTTX to simulate clients, create and manage streams from the EMQX Dashboard, and experience how messages can be stored, replayed, and compacted.
 
 ## Objectives
