@@ -383,6 +383,8 @@ The response contains a list of streams and pagination metadata.
 }
 ```
 
+Starting from EMQX 6.3.3, the API continues to include streams that are being deleted in its response until their background cleanup finishes. Each such stream includes a `deleted_at` field that records the deletion request time as a Unix timestamp in milliseconds. Streams that are not being deleted do not include this field.
+
 ### Update a Stream
 
 To update an existing stream, send a `PUT` request to the stream resource identified by its name. The topic filter must be URL-encoded.
@@ -410,7 +412,22 @@ curl -s -u key:secret \
   http://localhost:18083/api/v5/message_streams/streams/my_stream
 ```
 
-Once deleted, the stream stops collecting messages and its stored data is removed according to internal cleanup rules.
+Starting from EMQX 6.3.3, this operation is asynchronous. EMQX marks the stream for deletion, schedules background cleanup, and returns HTTP status code `204` without waiting for the stored data to be removed.
+
+Until background cleanup finishes:
+
+- EMQX stops writing published messages to the stream. Stream subscribers stop receiving messages from it.
+- The stream remains in the stream list with the `deleted_at` field. Requests to get or update the stream return HTTP status code `400`.
+- You cannot create another stream with the same name.
+- The stream counts toward `max_stream_count` until background cleanup finishes.
+
+If deletion fails or a node stops before the queued cleanup runs, send the `DELETE` request again to reschedule the cleanup. If deletion workers are unavailable, the request returns HTTP status code `503`, but the stream remains marked for deletion. Retry the request after the workers become available.
+
+::: warning Rolling Upgrade Limitation
+
+During a rolling upgrade, nodes that do not recognize the deletion marker may continue to route published messages to the stream and include it in API list responses until background cleanup finishes.
+
+:::
 
 ### Configure Streams Global Settings
 

@@ -103,7 +103,7 @@ Message Queue extends the MQTT protocol in EMQX. It allows messages to be persis
 
 - **Queue Deletion**
 
-   The removal of a queue along with all its stored messages and associated state.
+   The removal of a queue along with all its stored messages and associated state. Starting from EMQX 6.3.3, a deletion request marks the queue for deletion and starts removing its data in the background. Once marked for deletion, the queue no longer accepts or dispatches messages.
 
 - **Queue Properties**
 
