@@ -51,6 +51,17 @@ cmd = "HGETALL mqtt_acl:${username}"
 Redisオーソライザーに追加されるすべてのルールは**許可ルール**であり、Redisオーソライザーはホワイトリストモードで使用する必要があります。
 :::
 
+::: tip 読み取り専用データベース権限の付与
+
+EMQXは認可時にRedisへの読み取りアクセスのみを必要とします。`cmd`で許可されるのは`HMGET`と`HGETALL`のみです。Redis 6.0以降では、EMQX専用ユーザーにヘルスチェック、クエリ、および対象キーへのアクセスだけを許可してください。
+
+```bash
+redis-cli ACL SETUSER emqx_auth reset on '>PASSWORD' '~mqtt_acl:*' +ping +hmget +hgetall
+```
+
+Redis Clusterでは`+cluster|slots`も必要です。SingleまたはSentinelモードでデータベース0以外を使用する場合は`+select`も付与してください。Sentinel用の認証情報は、Redisデータノード用の認証情報とは別に設定します。
+:::
+
 ## ダッシュボードでの設定
 
 EMQXダッシュボードを使用して、Redisをユーザー認可に利用する設定が可能です。

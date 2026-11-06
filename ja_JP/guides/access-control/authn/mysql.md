@@ -58,6 +58,17 @@ password_hash_algorithm {
 query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
 ```
 
+::: tip 読み取り専用データベース権限の付与
+
+EMQXはクライアント認証時にデータベースへの読み取りアクセスのみを必要とします。`query`は`SELECT`文として設定し、EMQX用データベースアカウントには、クエリ対象テーブルに対する`SELECT`権限のみを付与してください。
+
+```sql
+GRANT SELECT ON mqtt.mqtt_user TO 'emqx_auth'@'%';
+```
+
+テーブル作成やユーザー管理には別の管理用アカウントを使用してください。
+:::
+
 ## ダッシュボードでの設定
 
 EMQXダッシュボードを使ってMySQLによるパスワード認証の設定が可能です。

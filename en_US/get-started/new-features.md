@@ -26,6 +26,10 @@ Learn more in the [Subscription Filters documentation](../develop/subscription-f
 
 ### MQTT Streams
 
+::: warning Important Notice
+MQTT Streams is currently a Beta feature. Its functionality and interfaces may undergo significant changes.
+:::
+
 MQTT Streams introduce a persistent, replayable streaming model to EMQX, extending MQTT’s real-time publish/subscribe paradigm with durable message storage and consumer-controlled replay.
 
 Unlike traditional MQTT delivery, which is transient and depends on subscriber availability, MQTT Streams continuously capture messages matching a topic filter into a named persistent stream. Each stream is identified by a unique name and managed independently of its topic filter.

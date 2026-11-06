@@ -354,6 +354,7 @@
     - guides/extensions/plugin-catalog/6.2/emqx-bridge-mqtt-dq
     - guides/extensions/plugin-catalog/6.2/emqx-maptabs
     - guides/extensions/plugin-catalog/6.2/emqx-offline-messages
+    - guides/extensions/plugin-catalog/6.2/emqx-bcast
     - guides/extensions/plugin-catalog/6.2/emqx-sync-request
     - guides/extensions/plugin-catalog/6.2/emqx-username-quota
     - guides/extensions/plugin-catalog/6.2/emqx-unsgov
@@ -668,8 +669,8 @@
       title_cn: 快速开始
       title_ja: クイックスタート
       path: develop/message-queue/message-queue-quick-start
-  - title_en: MQTT Streams
-    title_cn: MQTT 消息流
+  - title_en: MQTT Streams (Beta)
+    title_cn: MQTT 消息流 (Beta)
     title_ja: MQTT ストリーム
     path: develop/mqtt-stream/mqtt-stream-concept
     collapsed: true
