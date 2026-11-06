@@ -100,8 +100,9 @@ The LwM2M gateway only supports UDP and DTLS type listeners, for a complete list
 
 ## Authentication
 
-Since the LwM2M protocol only given the Endpoint Name of Client, there is no Username and Password.
-Therefore, the LwM2M gateway only supports [HTTP Server Authentication](../../guides/access-control/authn/http.md).
+The standard LwM2M registration request provides the client's Endpoint Name but does not define a username or password. The LwM2M gateway therefore supports only [HTTP Server Authentication](../../guides/access-control/authn/http.md). EMQX also accepts the non-standard registration parameters `device_id` and `imei` as the EMQX Client ID and Username, respectively.
+
+Starting from EMQX 6.0.5, when a client re-registers on an existing connection, EMQX reuses the LwM2M session only if the Endpoint Name, EMQX Client ID, and Username match the identity already bound to the connection. EMQX rejects the re-registration as unauthorized if any of these identity fields differ and keeps the existing connection state unchanged.
 
 For example, to create an HTTP authentication for LwM2M gateway via REST API or configuration file:
 
@@ -861,7 +862,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m' \
 
 ::: tab Configuration
 
-```properties
+```hocon
 gateway.lwm2m {
   blockwise {
     enable = true
@@ -882,10 +883,12 @@ The Block-Wise-related configuration options are described below:
 | ----------------------------- | ---------- | -------- | ------------------------------------------------------------ |
 | `blockwise.enable`            | Boolean    | `true`   | Whether to enable Block-Wise transfer.                       |
 | `blockwise.max_block_size`    | Block Size | `1024`   | Maximum block size used in Block-Wise transfer. Available values: `16`, `32`, `64`, `128`, `256`, `512`, `1024`. |
-| `blockwise.max_body_size`     | Byte Size  | `"4MB"`  | Maximum size of the reassembled message body.                |
-| `blockwise.exchange_lifetime` | Duration   | `"247s"` | Lifetime of the Block-Wise exchange state.                   |
+| `blockwise.max_body_size`     | Byte Size  | `"4MB"`  | Maximum payload size after reassembly. The value must be greater than `0`. Payloads that exceed this limit are rejected. |
+| `blockwise.exchange_lifetime` | Duration   | `"247s"` | How long the temporary Block-Wise exchange state is retained. The value must be greater than `0`. When the state expires, its resources are released. |
 
 When properly configured, Block-Wise transfer ensures reliable large-payload transmission over UDP while maintaining full transparency for MQTT applications.
+
+Starting from EMQX 6.2.4, `blockwise.max_body_size` and `blockwise.exchange_lifetime` must be greater than `0`. The REST API rejects non-positive values without changing the saved gateway configuration. Before upgrading to EMQX 6.2.4, replace any zero or negative values with positive values.
 
 ## User Interfaces
 

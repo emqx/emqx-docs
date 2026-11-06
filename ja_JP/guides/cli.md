@@ -428,9 +428,21 @@ ok
 
 プラグインのインストール状況を表示および管理するコマンドです。
 
+::: tip ノードピン留めプラグイン
+
+EMQX 6.2.4以降、`node.pinned_plugins`に設定されたプラグインに対して`plugins`コマンドは次のように動作します。
+
+- `plugins start`、`stop`、`restart`は、現在のノードに設定された正確なバージョンだけを管理します。
+- `plugins allow`、`install`、`uninstall`、`enable`、`disable`は`plugin_pinned`エラーを返します。
+- CLIで停止したプラグインは、ノード再起動やクラスター参加などで全プラグインが再起動されるまで停止したままです。
+
+詳細は[ノードピン留めプラグインの事前デプロイ](./extensions/plugin-management.md#pre-deploy-a-node-pinned-plugin)を参照してください。
+
+:::
+
 ### plugins list
 
-インストール済みのプラグインを一覧表示します。
+現在のノードで利用可能なプラグイン（ノードピン留めプラグインを含む）を一覧表示します。
 
 ```bash
 emqx ctl plugins list
