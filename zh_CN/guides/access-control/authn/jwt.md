@@ -15,6 +15,23 @@
 
 从 EMQX 版本 5.7.0 开始，JWT 认证包括一个在 JWT 过期后断开客户端连接的选项。配置参数 `disconnect_after_expire` 默认设置为 `true`。如果您希望客户端在 JWT 过期后仍然保持连接，可以将此参数设置为 `false`。
 
+## MQTT 5.0 增强认证
+
+JWT 认证器也可以作为 MQTT 5.0 [增强认证](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901256)方法使用。已连接的客户端可以在不重连的情况下更新即将过期的 JWT。
+
+- **连接。** 客户端将 `CONNECT` 报文的 `Authentication Method` 属性设置为 `JWT`，并把 Token 放在 `Authentication Data` 属性中。此时不使用 `Username` 和 `Password` 字段传递 Token。EMQX 在一轮内完成验证并返回 `CONNACK`，不会发送 `AUTH` 挑战。
+- **重新认证。** 客户端发送原因码为 `0x19`（重新认证）的 `AUTH` 报文，`Authentication Method` 设置为 `JWT`，`Authentication Data` 中携带新的 Token。成功后 EMQX 返回原因码为 `0x00` 的 `AUTH` 报文，保留会话、订阅、客户端 ID 和用户名，并应用新的 Token：
+  - 新 Token 的 `acl` 和 `is_superuser` 声明替换旧 Token 的对应内容。新 Token 没有 `acl` 声明时，旧的 ACL 规则被移除。
+  - 断开连接的时间点以新 Token 的 `exp` 声明为准。新 Token 没有 `exp` 声明时，客户端不再在旧 Token 的过期时间被断开。
+  - 新 Token 的 `client_attrs` 声明被忽略。客户端属性在连接时确定，并在整个会话内保持不变。
+  - 新 Token 的 `clientid_override` 声明与当前客户端 ID 不同时，重新认证失败，客户端被断开，原因码为 `0x87`（未授权）。
+  - 客户端的授权缓存被清空，新的权限在下一次发布或订阅时生效。
+- **失败。** 使用无效或已过期的 Token 重新认证时，客户端被断开，原因码为 `0x87`（未授权）。
+
+认证方法在客户端连接时确定。使用 `Password` 或 `Username` 字段携带 Token 连接的客户端，在会话中不能改用 `JWT` 重新认证，需要重连来更新 Token。使用 `JWT` 方法连接的客户端在每个 `AUTH` 报文中都必须在 `Authentication Data` 中携带 Token；`on_missing_jwt` 设置不适用于这一路径。
+
+无需额外配置。认证链中的 JWT 认证器同时处理 `Password`/`Username` 字段中的 Token 和 `JWT` 增强认证方法。
+
 ## 推荐用法
 
 由于 EMQX JWT 认证器只会检查 JWT 的签名，无法对客户端身份的合法性提供担保，因此推荐用户部署一个独立的认证服务器用来为客户端颁发 JWT。
