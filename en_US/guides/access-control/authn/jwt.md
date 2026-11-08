@@ -16,6 +16,23 @@ If the signature verification is successful, the JWT authenticator proceeds to c
 
 Starting from EMQX version 5.7.0, JWT authentication includes an option to disconnect clients after their JWT expires. The configuration parameter `disconnect_after_expire` is set to `true` by default. To keep clients connected even after their JWT has expired, you can set this parameter to `false`.
 
+## MQTT 5.0 Enhanced Authentication
+
+The JWT authenticator also works as an MQTT 5.0 [enhanced authentication](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901256) method. This lets a connected client renew an expiring JWT without a reconnect.
+
+- **Connect.** The client sets the `Authentication Method` property of the `CONNECT` packet to `JWT` and puts the token in the `Authentication Data` property. The `Username` and `Password` fields are not used for the token. EMQX validates the token in one round and answers with `CONNACK`. There is no `AUTH` challenge from the broker.
+- **Re-authenticate.** The client sends an `AUTH` packet with reason code `0x19` (Re-authentication), `Authentication Method` set to `JWT` and a new token in `Authentication Data`. On success EMQX answers with `AUTH` reason code `0x00`, keeps the session, the subscriptions, the client ID and the username, and applies the new token:
+  - The `acl` and `is_superuser` claims of the new token replace the ones of the previous token. When the new token has no `acl` claim, the previous ACL rules are removed.
+  - The disconnect deadline follows the `exp` claim of the new token. When the new token has no `exp` claim, the client is no longer disconnected at the deadline of the previous token.
+  - The `client_attrs` claim of the new token is ignored. Client attributes are set at connect and hold for the session.
+  - A `clientid_override` claim that differs from the current client ID fails the re-authentication. The client is disconnected with reason code `0x87` (Not authorized).
+  - The authorization cache of the client is cleared, so the new permissions apply to the next publish or subscribe.
+- **Failure.** A re-authentication with an invalid or expired token disconnects the client with reason code `0x87` (Not authorized).
+
+The authentication method is fixed when the client connects. A client that connected with the token in the `Password` or `Username` field cannot switch to `JWT` re-authentication later in the session. It must reconnect to renew the token. A client that connected with the `JWT` method must send a token in `Authentication Data` in every `AUTH` packet; the `on_missing_jwt` setting does not apply to this path.
+
+No extra configuration is needed. A JWT authenticator in the chain handles both the `Password`/`Username` field and the `JWT` enhanced authentication method.
+
 ## Best Practice
 
 The JWT authenticator essentially only checks the signature of the JWT, which means that the JWT authenticator does not guarantee the legitimacy of the client's identity.
