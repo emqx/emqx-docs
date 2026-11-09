@@ -89,6 +89,7 @@ The following steps assume that you run both EMQX and ClickHouse on the local ma
    - **Database Name**: `mqtt_data`
    - **Username**: `emqx`
    - **Password**: `public`
+   - **Enable TLS**: Available starting from EMQX 6.3.3. If the ClickHouse server uses HTTPS, enable this option. EMQX verifies the server certificate by default. If the certificate is signed by a private CA, configure the corresponding CA certificate. For more information, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).
 5. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the ClickHouse server.
 7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to ClickHouse. For detailed steps, see [Create a Rule with ClickHouse Sink](#create-a-rule-with-clickhouse-sink).

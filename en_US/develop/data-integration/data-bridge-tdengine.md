@@ -161,11 +161,13 @@ This section demonstrates how to create a Connector to connect the Sink to the T
    
       ::::
 
-5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+5. **Enable TLS**: Available starting from EMQX 6.3.3. If the TDengine server uses HTTPS, enable this option. EMQX verifies the server certificate by default. If the certificate is signed by a private CA, configure the corresponding CA certificate. For more information, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).
 
-6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the TDengine server.
+6. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
-7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to TDengine and to record client events. For detailed steps, see [Create a Rule with TDengine Sink for Message Storage](#create-a-rule-with-tdengine-sink-for-message-storage) and [Create a Rule with TDengine Sink for Events Recording](#create-a-rule-with-tdengine-sink-for-events-recording).
+7. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the TDengine server.
+
+8. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to TDengine and to record client events. For detailed steps, see [Create a Rule with TDengine Sink for Message Storage](#create-a-rule-with-tdengine-sink-for-message-storage) and [Create a Rule with TDengine Sink for Events Recording](#create-a-rule-with-tdengine-sink-for-events-recording).
 
 ## Create a Rule with TDengine Sink for Message Storage
 
