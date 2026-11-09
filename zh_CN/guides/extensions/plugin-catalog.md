@@ -42,7 +42,7 @@
 
 ## 消息传输
 
-[设备消息广播（Bcast）](./plugin-catalog/6.2/emqx-bcast.md)
+[设备消息广播（Bcast）](./plugin-catalog/6.3/emqx-bcast.md)
 
 该插件向一个产品下所有在线且已订阅投递主题的设备广播消息，或向指定设备列表发送 QoS 0/1 消息，并支持离线重放和 Payload 复用。
 
