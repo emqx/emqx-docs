@@ -55,6 +55,18 @@ SQL例：
 query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
 ```
 
+::: tip 読み取り専用データベース権限の付与
+
+EMQXはクライアント認証時にデータベースへの読み取りアクセスのみを必要とします。`query`は`SELECT`文として設定し、EMQX用データベースアカウントには、クエリ対象テーブルに必要な読み取り権限のみを付与してください。
+
+```sql
+GRANT USAGE ON SCHEMA public TO emqx_auth;
+GRANT SELECT ON mqtt_user TO emqx_auth;
+```
+
+テーブル作成やユーザー管理には別の管理用アカウントを使用してください。
+:::
+
 ## ダッシュボードでの設定
 
 EMQXダッシュボードを使用して、PostgreSQLをパスワード認証に利用する設定が可能です。

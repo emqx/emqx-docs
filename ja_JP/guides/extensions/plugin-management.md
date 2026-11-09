@@ -1,6 +1,11 @@
 # プラグインの管理
 
-このページでは、EMQXにおけるプラグインのライフサイクルについて説明し、Dashboard、CLI、REST APIを使用したプラグインのインストール、設定、起動、停止、アンインストール、アップグレード方法を解説します。
+このページでは、EMQXプラグインのデプロイおよび管理方法について説明します。プラグインはDashboard、CLI、REST APIを通じてクラスター全体で管理するか、事前にデプロイして個別ノードにピン留めできます。
+
+EMQXは次の管理方式をサポートします。
+
+- **クラスター管理プラグイン**：EMQXがプラグインパッケージと設定をクラスター内のノードへ配布し、有効状態を`plugins.states`に保存します。
+- **ノードピン留めプラグイン**：EMQX 6.2.4以降、名前とバージョンを`node.pinned_plugins`に設定した事前デプロイ済みプラグインを、クラスター設定から独立して各ノードで実行できます。
 
 ## プラグインのライフサイクル
 
@@ -230,38 +235,35 @@ emqx ctl plugins disallow $NAME-$VSN
    $ curl -s -u $KEY:$SECRET -X PUT "http://$EMQX_HOST:18083/api/v5/plugins/my_emqx_plugin-1.0.0/stop"
    ```
 
-### EMQX起動前にプラグインを事前インストールする
+### ノードピン留めプラグインの事前デプロイ
 
-EMQX起動時にプラグインを即座に利用可能にしたい場合（例：カスタムDockerイメージのビルド時など）、プラグインを事前に展開し、EMQX設定をあらかじめ行うことが可能です。
+EMQX 6.2.4以降、コンテナイメージなどノード固有のデプロイ成果物に組み込んだプラグインを、個別ノードへピン留めできます。
 
-以下はDockerfileの例ですが、deb/rpmやベアメタルなど他のデプロイ方法でも同様の手順が適用されます：
-
-1. プラグインtarballをコピーし、pluginsディレクトリに展開します：
+1. プラグインパッケージを`<plugins.install_dir>/<name-vsn>`に展開します。ディレクトリ直下に`release.json`が必要です。
 
    ```dockerfile
-   COPY --chown=emqx:emqx my_emqx_plugin-1.0.0.tar.gz /opt/emqx/plugins/my_emqx_plugin-1.0.0.tar.gz
+   COPY --chown=emqx:emqx my_emqx_plugin-1.0.0.tar.gz /tmp/my_emqx_plugin-1.0.0.tar.gz
 
-   RUN cd /opt/emqx/plugins && \
-       mkdir -p my_emqx_plugin-1.0.0 && \
-       tar zxf my_emqx_plugin-1.0.0.tar.gz -C my_emqx_plugin-1.0.0
+   RUN mkdir -p /opt/emqx/plugins/my_emqx_plugin-1.0.0 && \
+       tar zxf /tmp/my_emqx_plugin-1.0.0.tar.gz \
+       -C /opt/emqx/plugins/my_emqx_plugin-1.0.0
    ```
 
-2. EMQXの設定ファイルにプラグイン登録を追記し、起動時に自動的にプラグインが起動するようにします：
+2. 読み取り専用の`node.pinned_plugins`設定にプラグイン名とバージョンを追加します。コンテナでは環境変数を使用できます。
 
    ```dockerfile
-   RUN cat <<EOF >> /opt/emqx/etc/base.hocon
-   plugins {
-       states = [
-           {
-               name_vsn = "my_emqx_plugin-1.0.0"
-               enable = true
-           }
-       ]
-   }
-   EOF
+   ENV EMQX_NODE__PINNED_PLUGINS="my_emqx_plugin-1.0.0"
    ```
 
-   `enable = true`で自動起動、`enable = false`でインストールのみ（起動しない）状態になります。
+   または`emqx.conf`に設定します。
+
+   ```hocon
+   node.pinned_plugins = ["my_emqx_plugin-1.0.0"]
+   ```
+
+EMQXはリスト順にピン留めプラグインを起動し、その後`plugins.states`内のプラグインを起動します。設定変更にはノードの設定更新と再起動が必要です。
+
+ピン留めプラグインはローカルの展開済みディレクトリから直接実行され、クラスター参加時にパッケージや保存設定を他ノードへ配布しません。CLIの`start`、`stop`、`restart`は現在のノードのピン留めプラグインを操作できますが、DashboardとREST APIによるライフサイクル操作はHTTP `409`と`PLUGIN_PINNED`を返します。プラグインが見つからないか起動に失敗した場合、EMQXは`pinned_plugin_unavailable:<name-vsn>`アラームを発報してノードの起動を続行します。
 
 ## プラグインのアップグレード
 
@@ -273,5 +275,7 @@ EMQXでは同一プラグインの複数バージョンを同時にインスト�
 - その後、新バージョンをインストールします。
 
 プラグインの設定はインストール間で保持されます。
+
+EMQX 6.2.4以降、クラスター内の異なるノードで同じプラグインの異なるバージョンをピン留めできます。プラグイン開発者は、共有データベーステーブル、ノード間RPC、プラグイン設定形式についてバージョン間の互換性を確保する必要があります。
 
 <!-- **注意**：（EMQXエンタープライズ）プラグインはホットアップグレード後に再インストールが必要です。 -->

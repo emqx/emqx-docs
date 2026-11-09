@@ -46,6 +46,29 @@ cmd = "HGETALL mqtt_acl:${username}"
 Redis 授权器中添加的所有规则都是**允许**规则，即 Redis Authorizer 需要在白名单模式下使用。
 :::
 
+::: tip 为数据库账户授予只读权限
+
+EMQX 对发布或订阅操作进行授权时只需要读取 Redis。`cmd` 仅接受 `HMGET` 和 `HGETALL` 命令，其他命令都会被拒绝，因此授权过程不会向 Redis 写入数据。
+
+对于 Redis 6.0 及以上版本，请配置 EMQX 使用专用用户，并将其权限限制为 EMQX 使用的健康检查与查询命令，以及所配置 `cmd` 读取的键：
+
+```bash
+redis-cli ACL SETUSER emqx_auth reset on '>PASSWORD' '~mqtt_acl:*' +ping +hmget +hgetall
+```
+
+如果使用 Redis Cluster，还需授予 `+cluster|slots` 权限，因为 EMQX 会执行 `CLUSTER SLOTS` 命令来获取并更新哈希槽与 Redis 节点的映射，以便将查询发送到正确的节点：
+
+```bash
+redis-cli ACL SETUSER emqx_auth '+cluster|slots'
+```
+
+对于 Single 或 Sentinel 模式，如果 `database` 配置为非零索引，请为 Redis 数据节点用户额外授予 `+select` 权限，因为 EMQX 会在连接后执行 `SELECT` 命令。使用默认数据库 0 时不需要该权限。
+
+在 Sentinel 模式下，如果 Sentinel 节点启用了认证，请通过 `sentinel_username` 和 `sentinel_password` 配置 Sentinel 连接凭据。这些凭据独立于连接 Redis 数据节点所使用的 `username` 和 `password`。
+
+请使用单独的管理用户维护授权规则。即使 EMQX 配置中的 Redis 凭据泄露，攻击者也无法使用该只读用户修改或删除授权规则。
+:::
+
 ## 通过 Dashboard 配置
 
 你可以通过 EMQX Dashboard 配置 Redis 作为用户授权的后端。

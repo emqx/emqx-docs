@@ -11,7 +11,7 @@ EMQX公式プラグインは通常、EMQXモノレポ内で開発されます。
 - EMQXの[フック](./hooks.md)の知識
 - `make`を含む動作するビルド環境（例：`build_essential`）
 - [rebar3](https://www.rebar3.org/)
-- 対象とするEMQXリリースと同じメジャーバージョンのErlang/OTP。詳細はDockerの`org.opencontainers.image.otp.version`属性や、使用バージョンを記載した`.tool-versions`ファイル（例：https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions）を参照してください。Erlang/OTPのバージョン管理には[ASDF](https://asdf-vm.com/)の利用を推奨します。あるいは[こちらのコマンド](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh)を実行してemqx-builderイメージを取得できます。
+- 対象とするEMQXリリースと同じメジャーバージョンのErlang/OTP。詳細はDockerの`org.opencontainers.image.otp.version`属性や、使用バージョンを記載した[`.tool-versions`](https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions)ファイルを参照してください。Erlang/OTPのバージョン管理には[ASDF](https://asdf-vm.com/)の利用を推奨します。あるいは[こちらのコマンド](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh)を実行してemqx-builderイメージを取得できます。
 
 ## スタンドアロンプラグイン開発
 
@@ -432,6 +432,18 @@ tarballにはコンパイル済みアプリケーション（`rebar.config`の`r
     "with_config_schema": true
 }
 ```
+
+### 混在プラグインバージョン対応の設計
+
+EMQX 6.2.4以降、`node.pinned_plugins`を使って、ノードの起動前にプラグインを事前デプロイして設定できます。各ノードはピン留めプラグインを独立して管理できるため、同じプラグインの異なるバージョンをノードごとに実行できます。
+
+混在バージョンをサポートする場合は、次の互換性を維持してください。
+
+- 共有データベーステーブルと保存データ形式
+- 異なるノードのプラグイン間で交換されるRPC呼び出しとメッセージ
+- プラグインバージョン間の設定形式
+
+デプロイとライフサイクルの詳細は[ノードピン留めプラグインの事前デプロイ](./plugin-management.md#pre-deploy-a-node-pinned-plugin)を参照してください。
 
 ## プラグイン拡張APIとUI
 

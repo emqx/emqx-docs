@@ -55,6 +55,17 @@ Query OK, 1 row affected (0,01 sec)
 query = "SELECT action, permission, topic, ipaddress, qos, retain FROM mqtt_acl where username = ${username} and ipaddress = ${peerhost}"
 ```
 
+::: tip 読み取り専用データベース権限の付与
+
+EMQXは認可時にデータベースへの読み取りアクセスのみを必要とします。`query`は`SELECT`文として設定し、EMQX用アカウントには対象テーブルに対する`SELECT`権限のみを付与してください。
+
+```sql
+GRANT SELECT ON mqtt_user.mqtt_acl TO 'emqx_auth'@'%';
+```
+
+認可ルールの管理には別の管理用アカウントを使用してください。
+:::
+
 ## ダッシュボードでの設定
 
 EMQXダッシュボードを使用して、MySQLをユーザー認可に利用する方法を設定できます。

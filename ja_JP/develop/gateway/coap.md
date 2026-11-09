@@ -88,6 +88,59 @@ CoAP ゲートウェイは、[Publish-Subscribe Broker for the CoAP](https://dat
 
 詳細なパラメータは [Message Publish](#message-publish)、[Topic Subscribe](#topic-subscribe)、[Topic Unsubscribe](#topic-unsubscribe) を参照してください。
 
+## ブロックワイズ転送の設定
+
+ブロックワイズ転送は REST API または設定ファイルで有効化および設定できます。
+
+:::: tabs type:card
+
+::: tab REST API
+
+```bash
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/coap' \
+  -u <your-application-key>:<your-security-key> \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "coap",
+  "blockwise": {
+    "enable": true,
+    "max_block_size": 1024,
+    "max_body_size": "4MB",
+    "exchange_lifetime": "247s"
+  }
+}'
+```
+
+:::
+
+::: tab Configuration
+
+```hocon
+gateway.coap {
+  blockwise {
+    enable = true
+    max_block_size = 1024
+    max_body_size = "4MB"
+    exchange_lifetime = "247s"
+  }
+}
+```
+
+:::
+
+::::
+
+ブロックワイズ関連の設定項目は以下の通りです。
+
+| 設定項目                     | 型         | デフォルト | 説明 |
+| ---------------------------- | ---------- | ---------- | ---- |
+| `blockwise.enable`            | Boolean    | `true`     | ブロックワイズ転送を有効にするかどうか。 |
+| `blockwise.max_block_size`    | ブロックサイズ | `1024` | ブロックワイズ転送で使用する最大ブロックサイズ。利用可能な値：`16`、`32`、`64`、`128`、`256`、`512`、`1024`。 |
+| `blockwise.max_body_size`     | バイトサイズ | `"4MB"` | 再構築後の最大ペイロードサイズ。値は `0` より大きくなければなりません。これを超えるペイロードは拒否されます。 |
+| `blockwise.exchange_lifetime` | 期間       | `"247s"` | 一時的なブロックワイズ交換状態を保持する期間。値は `0` より大きくなければなりません。期限切れ後はリソースが解放されます。 |
+
+EMQX 6.2.4 以降、`blockwise.max_body_size` と `blockwise.exchange_lifetime` は `0` より大きい値でなければなりません。REST API は非正の値を拒否し、保存済みのゲートウェイ設定は変更しません。EMQX 6.2.4 へのアップグレード前に、ゼロまたは負の値を正の値に置き換えてください。
+
 ## CoAP ゲートウェイのカスタマイズ
 
 デフォルト設定に加え、EMQX はさまざまな設定オプションを提供し、特定のビジネス要件に柔軟に対応できます。本節では、**Gateways** ページにある各フィールドの詳細を説明します。スクリーンショット下の説明文もご参照ください。
