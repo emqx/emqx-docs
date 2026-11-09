@@ -361,6 +361,7 @@
     - guides/extensions/plugin-catalog/6.3/emqx-bridge-mqtt-dq
     - guides/extensions/plugin-catalog/6.3/emqx-maptabs
     - guides/extensions/plugin-catalog/6.3/emqx-offline-messages
+    - guides/extensions/plugin-catalog/6.2/emqx-bcast
     - guides/extensions/plugin-catalog/6.3/emqx-sync-request
     - guides/extensions/plugin-catalog/6.3/emqx-username-quota
     - guides/extensions/plugin-catalog/6.3/emqx-unsgov

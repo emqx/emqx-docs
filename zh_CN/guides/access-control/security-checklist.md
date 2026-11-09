@@ -47,6 +47,7 @@
   将客户端 ID 与认证身份绑定后，认证机制会在连接阶段拒绝身份不匹配的连接，从而阻止此类会话接管。该订阅继承风险不影响发布操作，因为 EMQX 会根据当前身份对每次发布执行授权检查。
 - 根据实际信任模型选择认证机制，例如 X.509、JWT、SCRAM，或基于安全后端数据库的密码认证。
 - 使用密码认证时，应存储加盐哈希后的密码，而不是明文密码，并优先采用 `bcrypt`、`pbkdf2` 等强哈希算法。
+- 为 EMQX 使用的数据库账户授予只读权限，使其仅能读取认证与授权所需的数据。EMQX 只需要读取这些数据：请将 SQL 后端配置为以预处理语句执行 `SELECT` 查询；MongoDB 后端执行 `find` 查询；Redis 认证与授权的 `cmd` 分别仅接受 `HGET` 和 `HMGET`，以及 `HMGET` 和 `HGETALL`。如果该账户拥有写入或管理权限，获得其凭据的攻击者或错误的自定义查询可能会修改认证数据或授权规则。请使用单独的管理账户创建表并维护记录。详见[认证](./authn/authn.md)与[授权](./authz/authz.md)。
 - 尽可能最小化主题权限范围，并谨慎审查通配符规则。详见[授权](./authz/authz.md)。
 - 当授权主题模板中包含 `${clientid}`、`${username}` 或 `${client_attrs.X}` 占位符时，除非占位符替换值必须包含相应字符，否则应将 `authorization.topic_template_allow.plus`、`authorization.topic_template_allow.hash` 和 `authorization.topic_template_allow.slash` 保持为 `false`。从 EMQX 6.3.0 开始，这些默认值可防止包含 MQTT 主题通配符（`+`、`#`）或主题层级分隔符（`/`）的客户端相关值扩大规则匹配的主题过滤器范围。例如，将客户端 ID `+` 或 `tenantA/+` 替换到 `clients/${clientid}/data` 中，可能使客户端访问其分配主题子树之外的主题。
 - 作为补充防护，在授权主题模板中使用客户端身份值之前，还应校验这些值的格式。可以使用 [Client-Info](./authn/cinfo.md) 规则或 JWT 声明的正则校验来限制格式，也可以配置 HTTP 认证器拒绝不合规的值。有关内置校验和安全配置方案行为，参见[主题占位符](./authz/authz.md#主题占位符)。

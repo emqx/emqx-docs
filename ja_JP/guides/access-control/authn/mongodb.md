@@ -49,6 +49,21 @@ EMQXのMongoDB認証機能は、認証データをMongoDBドキュメントと�
 - **Salt Field**：`salt`
 - **is_superuser Field**：`is_superuser`
 
+::: tip 読み取り専用データベース権限の付与
+
+EMQXはクライアント認証時にMongoDBへの読み取りアクセスのみを必要とし、設定されたコレクションに対して`find_one`クエリを実行します。MongoDBには、対象データベースに対する組み込みの`read`ロールのみを持つ専用ユーザーを作成してください。書き込み権限や管理者権限は付与しないでください。
+
+```js
+db.getSiblingDB("mqtt").createUser({
+  user: "emqx_auth",
+  pwd: "PASSWORD",
+  roles: [ { role: "read", db: "mqtt" } ]
+})
+```
+
+コレクションの作成やユーザーレコードの管理には、別の管理者ユーザーを使用してください。EMQX設定内のMongoDB認証情報が漏洩しても、読み取り専用ユーザーでは認証データを変更または削除できません。
+:::
+
 ## ダッシュボードでの設定
 
 EMQXダッシュボードを使用して、MongoDBをパスワード認証に利用する設定を行うことができます。
