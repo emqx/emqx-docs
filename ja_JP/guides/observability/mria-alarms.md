@@ -1,6 +1,6 @@
 # Mria ログとアラーム
 
-本書は Mria データベース管理システムによって報告されるログメッセージとアラームについて説明します。現在はネットワークパーティションイベントを対象としており、今後の改訂で追加のエラータイプが含まれる可能性があります。
+本ドキュメントでは、Mria データベース管理システムによって報告されるログメッセージとアラームについて説明します。現在はネットワークパーティションイベントを対象としており、将来的に追加のエラータイプが追加される可能性があります。
 
 ## ネットワークパーティション
 
@@ -16,7 +16,7 @@
 
 ### パーティション回復
 
-パーティションが回復すると、EMQX が以前に切断されたピアの再接続を検知し、すべての Core ノードで以下のログが表示されます。
+パーティションが回復すると、以前に切断されていたピアが再接続されたことを EMQX が検知し、すべての Core ノードで以下のログが表示されます。
 
 ```text
 [error] Mnesia('emqx@local.host'): ** ERROR ** mnesia_event got {inconsistent_database, running_partitioned_network, 'emqx@remote.host'}
@@ -32,7 +32,7 @@
 
 ### Core ノードのリカバリー
 
-マイノリティパーティションにある Core ノードでは、以下のログが表示されます。
+少数派のパーティションに属する Core ノードでは、以下のログが表示されます。
 
 ```text
 [notice] msg: Mria is restarting to join the cluster, seed: 'emqx@remote.node'
@@ -40,14 +40,14 @@
 [notice] msg: stopping_emqx_apps, ...
 ```
 
-マイノリティの再起動が完了すると、再起動した Core ノードは標準の EMQX の起動メッセージを出力します。
+少数派のリブートが完了すると、リブートされた Core ノードは標準の EMQX の起動メッセージを出力します。
 
 ```text
 ...
 Listener tcp:default on 0.0.0.0:1883 started.
 Listener ssl:default on 0.0.0.0:8883 started.
 Listener ws:default on 0.0.0.0:8083 started.
-Listener wss:default on 0.0.0.0:8084 started。
+Listener wss:default on 0.0.0.0:8084 started.
 ```
 
 ### Replicant ノードのリカバリー

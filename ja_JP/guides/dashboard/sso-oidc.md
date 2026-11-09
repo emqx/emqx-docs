@@ -10,21 +10,21 @@
 
 ## 対応するOIDCプロバイダー
 
-EMQXダッシュボードは、OIDCプロトコルをサポートするアイデンティティサービスと連携してOIDCベースのSSOを実現できます。例として以下があります。
+EMQXダッシュボードは、OIDCプロトコルをサポートするアイデンティティサービスと連携して、OIDCベースのSSOを実現できます。例として以下があります：
 
 - [Microsoft Entra ID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id)
 - [Okta](https://www.okta.com/)
 
 ## Microsoft Entra IDとの連携によるSSOの設定
 
-このセクションでは、Microsoft Entra IDをアイデンティティプロバイダー（IdP）として使用し、SSOを設定する方法を説明します。Microsoft側とEMQXダッシュボード側の両方で設定を完了する必要があります。
+このセクションでは、Microsoft Entra IDをアイデンティティプロバイダー（IdP）として使用し、SSOを設定する方法を案内します。Microsoft側とEMQXダッシュボード側の両方で設定を完了する必要があります。
 
-### ステップ1：EMQXダッシュボードでOIDCを有効化する
+### ステップ1：EMQXダッシュボードでOIDCを有効化
 
 1. EMQXダッシュボードで、**System** -> **SSO** に移動します。
 2. **OIDC**カードの**Enable**ボタンをクリックします。
 
-### ステップ2：Microsoft Entra IDにアプリケーションを登録する
+### ステップ2：Microsoft Entra IDにアプリケーションを登録
 
 1. 管理者として[MS Azureポータル](https://portal.azure.com/)にログインします。
 
@@ -36,44 +36,43 @@ EMQXダッシュボードは、OIDCプロトコルをサポートするアイデ
 
    <img src="./assets/entra_id_oidc_app_parameters.png" alt="entra_id_oidc_app_parameters" style="zoom:50%;" />
 
-4. **Register an application**ページで、サポートするアカウントタイプを選択し、EMQXダッシュボードの**ステップ1**で提供された情報を使って**Redirect URL**を設定します。
+4. **Register an application**ページで、サポートするアカウントタイプを選択し、EMQXダッシュボードの**ステップ1**で提供された情報を使って**Redirect URL**を設定します：
 
    - **Redirect URL**：`Web`を選択し、ダッシュボードで提供された**Sign-in Redirect URI**（例：`http://localhost:18083/api/v5/sso/oidc/callback`）を入力します。
 
-5. **Certificates and Secrets** -> **Client secrets**タブに移動し、**New client secret**をクリック、説明を入力し、有効期限を選択して**Add**をクリックします。生成されたシークレット値をコピーしてください。これは**ステップ3**で必要です。
+5. **Certificates and Secrets** -> **Client secrets**タブに移動し、**New client secret**をクリック、説明を入力し、有効期限を選択して**Add**をクリックします。生成されたシークレット値をコピーしてください。**ステップ3**で必要になります。
 
-### ステップ3：EMQXダッシュボードの設定を完了する
+### ステップ3：EMQXダッシュボードの設定を完了
 
-1. 設定ページで以下の情報を入力します。
-
+1. 設定ページで以下の情報を入力します：
    - **Provider**：`Generic`のままにします。
 
-   - **Issuer URL**：これは**OpenID Connect metadata document**に対応し、**ステップ2**のアプリケーション概要ページの**Endpoints**タブで確認できます。ただし、`/.well-known/openid-configuration`部分はEMQXが自動で追加するため含めません。例：`https://login.microsoftonline.com/<tenant_id>/v2.0`（`<tenant_id>`はディレクトリ（テナント）ID）。
+   - **Issuer URL**：これは**OpenID Connect metadata document**に対応し、**ステップ2**のアプリケーション概要ページの**Endpoints**タブで確認できます。ただし、`/.well-known/openid-configuration`の部分はEMQXが自動的に追加するため除きます。例：`https://login.microsoftonline.com/<tenant_id>/v2.0`（`<tenant_id>`はディレクトリ（テナント）ID）。
 
-   - **Client ID**：**ステップ2**のアプリケーション概要ページにある**Application (client) ID**を入力します。
+   - **Client ID**：**ステップ2**のアプリケーション概要ページにある**Application (client) ID**に対応します。
 
      <img src="./assets/entra_id_oidc_app_config.png" alt="entra_id_oidc_app_config" style="zoom:50%;" />
 
    - **Client Secret**：**ステップ2**で生成したシークレット値を使用します。
 
-   - **Dashboard Address**：ユーザーがダッシュボードにアクセスするためのベースURLを入力します（例：`http://localhost:18083`）。このアドレスはIdP側の設定用に**SSO Address**および**Metadata Address**の生成に自動で組み合わされます。
+   - **Dashboard Address**：ユーザーがダッシュボードにアクセスするためのベースURLを入力します（例：`http://localhost:18083`）。このアドレスはIdP側の設定用に**SSO Address**および**Metadata Address**の生成に自動的に組み合わされます。
 
      <img src="./assets/entra_id_oidc_dashboard.png" alt="entra_id_oidc_dashboard" style="zoom:50%;" />
 
-   - **Enable TLS**：**Issuer URL**が`https`スキームの場合はこのトグルをオンにし、`http`の場合はオフのままにします。EMQX 6.0.4以降では、Issuer URLのスキームとTLS設定が一致しない場合、OIDC設定の作成や更新を拒否します。
+   - **Enable TLS**：**Issuer URL**が`https`スキームの場合はこのトグルをオンにし、`http`の場合はオフにします。EMQX 6.0.4以降、Issuer URLのスキームとTLS設定が一致しない場合、OIDC設定の作成または更新時に拒否されます。
 
 2. **Update**をクリックして設定を完了します。
 
 ## Oktaとの連携によるSSOの設定
 
-このセクションでは、Oktaをアイデンティティプロバイダー（IdP）として使用し、SSOを設定する方法を説明します。Okta側とEMQXダッシュボード側の両方で設定を完了する必要があります。
+このセクションでは、Oktaをアイデンティティプロバイダー（IdP）として使用し、SSOを設定する方法を案内します。Okta側とEMQXダッシュボード側の両方で設定を完了する必要があります。
 
-### ステップ1：EMQXダッシュボードでOIDCを有効化する
+### ステップ1：EMQXダッシュボードでOIDCを有効化
 
 1. EMQXダッシュボードで、**System** -> **SSO** に移動します。
 2. **OIDC**カードの**Enable**ボタンをクリックします。
 
-### ステップ2：OktaのアプリケーションカタログにOIDCアプリケーションを追加する
+### ステップ2：OktaのアプリケーションカタログにOIDCアプリケーションを追加
 
 1. 管理者としてOktaにログインし、**Okta Admin Console**にアクセスします。
 
@@ -83,58 +82,56 @@ EMQXダッシュボードは、OIDCプロトコルをサポートするアイデ
 
 4. **General Settings**タブでアプリケーション名（例：`EMQX Dashboard`）を入力し、**Next**をクリックします。
 
-5. **LOGIN**タブで、EMQXダッシュボードから提供された情報を使って設定します。
+5. **LOGIN**タブで、EMQXダッシュボードで提供された情報を使って設定します：
 
    - **Sign-in redirect URIs**：ダッシュボードの**OIDC Settings**ページで提供された**Sign-in Redirect URI**（例：`http://localhost:18083/api/v5/sso/oidc/callback`）を入力します。
-   - その他の設定は任意で、必要に応じて構成してください。
+   - その他の設定は任意で、要件に応じて設定可能です。
 
 6. 設定内容を確認し、**Save**をクリックします。
 
-詳細な手順は[Oktaのドキュメント](https://help.okta.com/en-us/content/topics/apps/apps_app_integration_wizard_oidc.htm)を参照してください。
+詳細な手順は[Oktaドキュメント](https://help.okta.com/en-us/content/topics/apps/apps_app_integration_wizard_oidc.htm)を参照してください。
 
-### ステップ3：EMQXダッシュボードの設定を完了する
+### ステップ3：EMQXダッシュボードの設定を完了
 
-1. **OIDC Settings**ページで以下の情報を入力します。
-
-   - **Force MFA**：オプションで有効化すると、このバックエンドのすべてのユーザーにログイン時のTOTP検証を要求します。デフォルトは無効です。詳細は[SSOユーザーの強制MFA](../multi-factor-authn/multi-factor-authentication.md#forced-mfa-for-sso-users)を参照してください。
+1. **OIDC Settings**ページで以下の情報を入力します：
+   - **Force MFA**：任意で有効にすると、このバックエンドのすべてのユーザーにログイン時のTOTP認証を要求します。デフォルトは無効です。詳細は[SSOユーザーの強制MFA](../multi-factor-authn/multi-factor-authentication.md#forced-mfa-for-sso-users)を参照してください。
    - **Provider**：`Okta`を選択、または他のプロバイダーの場合は`Generic`を選択します。
-   - **Issuer URL**：Okta認可サーバーのURL（例：`https://example-org.okta.com`）を入力します。
+   - **Issuer URL**：Oktaの認可サーバーのURL（例：`https://example-org.okta.com`）を入力します。
    - **Client ID**：**ステップ2**で作成したアプリケーションからコピーします。
    - **Client Secret**：**ステップ2**で作成したアプリケーションからコピーします。
-   - **Dashboard Address**：ユーザーがダッシュボードにアクセスするためのベースURLを入力します（例：`http://localhost:18083`）。IdP側の設定用に**SSO Address**および**Metadata Address**の生成に自動で組み合わされます。
-   - **Enable TLS**：**Issuer URL**が`https`スキームの場合はオンにし、`http`の場合はオフにします。EMQX 6.0.4以降ではIssuer URLのスキームとTLS設定が一致しない場合、OIDC設定の作成や更新を拒否します。
-
+   - **Dashboard Address**：ユーザーがダッシュボードにアクセスするためのベースURLを入力します（例：`http://localhost:18083`）。このアドレスはIdP側の設定用に**SSO Address**および**Metadata Address**の生成に自動的に組み合わされます。
+   - **Enable TLS**：**Issuer URL**が`https`スキームの場合はこのトグルをオンにし、`http`の場合はオフにします。EMQX 6.0.4以降、Issuer URLのスキームとTLS設定が一致しない場合、OIDC設定の作成または更新時に拒否されます。
 2. **Update**をクリックして設定を完了します。
 
 ## 詳細設定
 
 **Advanced Settings**セクションでは、EMQXがOIDCプロバイダーからユーザー情報を取得する方法や認証動作を細かく調整できます。
 
-| フィールド名                         | 説明                                                         | デフォルト値                                         |
-| ------------------------------------ | ------------------------------------------------------------ | --------------------------------------------------- |
-| **Scopes**                           | 認証時に要求するOIDCスコープ。これらのスコープによりIdPが返すユーザー情報が決まります。OIDC認証には最低でも`openid`スコープが必要です。 | `openid`                                            |
-| **Name Variable**                    | OIDCユーザー属性をEMQXダッシュボードのユーザー名にマッピングするテンプレート。IdPから返されるクレームを参照できます。 | `${sub}`                                            |
-| **Name Variable Source**             | ダッシュボードのユーザー名を構築するためにユーザー情報を抽出するソースを指定します。利用可能なオプション：<br />**User Info Endpoint**：`/userinfo`エンドポイントから返されるユーザー情報を使用。<br />**ID Token**：認証時に返されるIDトークン内のクレームを使用。 | `User Info Endpoint`                                |
-| **Role Source**                     | ダッシュボードユーザーのロールを構築するためにユーザー情報を抽出するソースを指定します。利用可能なオプションは上記と同様です。 | `User Info Endpoint`                                |
-| **Role Expression**                  | [`jq`](https://jqlang.org/manual/)式でOIDCユーザー属性をEMQXダッシュボードのユーザーロールにマッピングします。プログラムはIdPから返されるクレームを参照可能で、正確に1つの文字列を返す必要があります。有効なロールは以下です：<br/> `"viewer"` <br/> `"administrator"` <br/>その他の結果の場合、ユーザーは作成されません。このフィールドが未設定の場合、EMQXはユーザーをviewerロールで作成するか、既存ユーザーの場合は既存のロールを保持します。 | 未設定                                              |
-| **Namespace Source**                | ダッシュボードユーザーのマルチテナンシーネームスペースを構築するためにユーザー情報を抽出するソースを指定します。利用可能なオプションは上記と同様です。 | `User Info Endpoint`                                |
-| **Namespace Expression**             | [jq](https://jqlang.org/manual/)式でOIDCユーザー属性をEMQXダッシュボードのユーザーネームスペースにマッピングします。式はIdPから返されるクレームを参照可能で、正確に1つの値を返す必要があります。文字列（既存のネームスペース名）またはnull（グローバルネームスペース）でなければなりません。その他の結果はユーザー作成を妨げます。このフィールドが未設定の場合、EMQXはユーザーをグローバルネームスペースに配置するか、既存ユーザーの場合は既存のネームスペースを保持します。 | 未設定                                              |
-| **Session Expiry**                  | ユーザーがOIDCでログイン後、ダッシュボードのセッションが有効な期間（秒単位）です。 | `30`秒                                             |
-| **Enable PKCE**                    | 認可コードフローのセキュリティ強化のためにProof Key for Code Exchange（PKCE）を有効化します。 | 無効                                               |
-| **Preferred Authentication Methods** | トークンエンドポイントと通信する際に使用するクライアント認証方法を定義します。複数の方法を設定可能で、順に試行されます。 | `client_secret_post`, `client_secret_basic`, `none` |
-| **Fallback Methods**               | プロバイダーのメタデータに署名アルゴリズムが明示されていない場合にIDトークンの検証に使用するフォールバック署名アルゴリズムを指定します。 | `RS256`                                            |
-| **JSON Web Key (JWK)**             | IdPがJWKSエンドポイントを提供しない場合にトークン署名の検証に使用するオプションの静的JSON Web Key設定です。 | `None`                                              |
+| フィールド名                           | 説明                                                  | デフォルト値                                       |
+| ------------------------------------ | ----------------------------------------------------- | ------------------------------------------------- |
+| **Scopes**                           | 認証時に要求するOIDCスコープ。これらのスコープによりIdPが返すユーザー情報が決まります。OIDC認証には最低でも`openid`スコープが必要です。 | `openid`                                          |
+| **Name Variable**                    | OIDCユーザー属性をEMQXダッシュボードのユーザー名にマッピングするためのテンプレート。IdPが返すクレームを参照可能です。 | `${sub}`                                          |
+| **Name Variable Source**             | ダッシュボードのユーザー名を構築するためにユーザー情報を抽出するソースを指定します。選択肢：<br />**User Info Endpoint**：`/userinfo`エンドポイントからのユーザー情報を使用。<br />**ID Token**：認証時に返されるIDトークンのクレームを使用。 | `User Info Endpoint`                              |
+| **Role Source**                     | ダッシュボードユーザーのロールを構築するためにユーザー情報を抽出するソースを指定します。選択肢は上記と同様です。 | `User Info Endpoint`                              |
+| **Role Expression**                  | [`jq`](https://jqlang.org/manual/)式でOIDCユーザー属性をEMQXダッシュボードのユーザーロールにマッピングします。IdPが返すクレームを参照可能で、結果は有効なロールの文字列1つでなければなりません。サポートされるロールは：<br/> `"viewer"` <br/> `"administrator"` <br/>それ以外の結果の場合、ユーザーは作成されません。このフィールドが未設定の場合、EMQXはユーザーをviewerロールで作成するか、既存ユーザーの場合は既存のロールを維持します。 | 未設定                                            |
+| **Namespace Source**                | ダッシュボードユーザーのマルチテナンシーネームスペースを構築するためにユーザー情報を抽出するソースを指定します。選択肢は上記と同様です。 | `User Info Endpoint`                              |
+| **Namespace Expression**             | [jq](https://jqlang.org/manual/)式でOIDCユーザー属性をEMQXダッシュボードのユーザーネームスペースにマッピングします。IdPが返すクレームを参照可能で、結果は既存のネームスペース名の文字列かグローバルネームスペースを示すnullのいずれかでなければなりません。その他の結果の場合、ユーザーは作成されません。このフィールドが未設定の場合、EMQXはユーザーをグローバルネームスペースに配置するか、既存ユーザーの場合は既存のネームスペースを維持します。 | 未設定                                            |
+| **Session Expiry**                  | OIDC経由でログインした後、ダッシュボードのセッションが有効な期間（秒単位）です。 | `30`秒                                            |
+| **Enable PKCE**                    | 認可コードフローのセキュリティを強化するためのProof Key for Code Exchange（PKCE）を有効にします。 | 無効                                              |
+| **Preferred Authentication Methods** | トークンエンドポイントと通信する際に使用するクライアント認証方法を定義します。複数の方法を設定でき、順に試行されます。 | `client_secret_post`, `client_secret_basic`, `none` |
+| **Fallback Methods**                | プロバイダーのメタデータに明示的な署名アルゴリズムがない場合にIDトークンの検証に使用するフォールバック署名アルゴリズムを指定します。 | `RS256`                                           |
+| **JSON Web Key (JWK)**              | IdPがJWKSエンドポイントを提供しない場合にトークン署名を検証するために使用する、オプションの静的JSON Web Key設定です。 | `None`                                            |
 
 ## ログインとユーザー管理
 
-OIDC SSOを有効化すると、EMQXダッシュボードのログインページにSSOオプションが表示されます。**OIDC**ボタンをクリックすると、プリセットされたOIDCプロバイダーのログインページに遷移し、割り当てられたユーザー資格情報でログインできます。
+OIDC SSOを有効にすると、EMQXダッシュボードのログインページにSSOオプションが表示されます。**OIDC**ボタンをクリックすると、プリセットされたOIDCプロバイダーのログインページに遷移し、ユーザーに割り当てられた認証情報を入力してログインできます。
 
 <img src="../assets/sso_oidc.png" alt="sso_oidc" style="zoom:67%;" />
 
 <img src="../assets/okta_login.png" alt="okta_login" style="zoom:67%;" />
 
-認証に成功すると、EMQXは自動的にダッシュボードユーザーを追加します。ユーザーは[Users](./system.md#users)で管理でき、ロールや権限の割り当ても可能です。OIDCユーザーにログイン時のTOTP二要素認証を必須にするには、[SSOユーザーの強制MFA](../multi-factor-authn/multi-factor-authentication.md#forced-mfa-for-sso-users)を参照してください。
+認証が成功すると、EMQXは自動的にダッシュボードユーザーを追加します。ユーザーは[Users](./system.md#users)で管理でき、ロールや権限の割り当てが可能です。OIDCユーザーにログイン時のTOTP二要素認証を必須にするには、[SSOユーザーの強制MFA](../multi-factor-authn/multi-factor-authentication.md#forced-mfa-for-sso-users)を参照してください。
 
 ## ログアウト
 
-ユーザーはダッシュボードの上部ナビゲーションバーのユーザー名をクリックし、ドロップダウンメニューの**Logout**ボタンをクリックしてログアウトできます。なお、これはダッシュボードからのログアウトのみであることにご注意ください。
+ユーザーはダッシュボードの上部ナビゲーションバーにあるユーザー名をクリックし、ドロップダウンメニューの**Logout**ボタンをクリックしてログアウトできます。これはダッシュボードからのログアウトのみであることにご注意ください。

@@ -1,25 +1,25 @@
 # エージェントの管理
 
-このページでは、A2Aレジストリの有効化方法と、ダッシュボードUI、CLI、またはMQTTを使用したエージェントの登録、表示、削除方法について説明します。
+このページでは、A2Aレジストリの有効化方法と、ダッシュボードUI、CLI、またはMQTTを使用してエージェントの登録、表示、削除を行う方法について説明します。
 
 ## 前提条件
 
-- EMQX 6.2.0以降。
-- ダッシュボードまたはEMQXノードへの管理者アクセス権。
+- EMQX 6.2.0以降
+- ダッシュボードまたはEMQXノードの管理者権限
 
 ## A2Aレジストリの有効化
 
 A2Aレジストリはデフォルトで無効になっています。エージェントを登録する前に有効化してください。
 
-### ダッシュボード経由
+### ダッシュボードから
 
-1. 左側のナビゲーションパネルで **A2A Registry** をクリックします。
+1. 左のナビゲーションパネルで **A2A Registry** をクリックします。
 2. **Settings** をクリックします。
 3. **Enable A2A Registry** をオンに切り替えます。
-4. **Validate Schema** はデフォルトで有効です。有効の場合、EMQXはエージェントカードのペイロードをA2Aスキーマに対して登録時に検証し、スキーマに準拠しないカードは拒否します。スキーマから逸脱したカードを受け入れる必要がある場合のみ無効にしてください。
+4. **Validate Schema** はデフォルトで有効です。有効にすると、EMQXは登録時にAgent CardのペイロードをA2Aスキーマに対して検証し、スキーマに準拠しないカードを拒否します。スキーマから逸脱したカードを受け入れる必要がある場合のみ無効にしてください。
 5. **Save Changes** をクリックします。
 
-### 設定ファイル経由
+### 設定ファイルから
 
 `emqx.conf` に以下を追加します。
 
@@ -35,39 +35,39 @@ a2a_registry {
 | パラメーター | 型 | デフォルト | 説明 |
 |---|---|---|---|
 | `enable` | Boolean | `false` | A2Aレジストリを有効化します。 |
-| `validate_schema` | Boolean | `true` | 登録時にエージェントカードのペイロードをA2Aスキーマに対して検証します。無効なカードは拒否されます。 |
-| `max_card_size` | Integer | `65536` | エージェントカードのペイロード最大サイズ（バイト単位）。 |
-| `registration_rate_limit` | Integer | `10` | エージェントごとの1分あたりの最大登録更新数。 |
-| `require_security_metadata` | Boolean | `false` | 有効にすると、エージェントカードのセキュリティメタデータ拡張に `jwksUri` の含有を必須とします。 |
-| `trusted_jkus` | Array | `[]` | 空でない場合、エージェントカード内の `jwksUri` はリスト内のいずれかのプレフィックスと一致する必要があります。空リストはJKUの強制を無効にします（許容モード）。 |
+| `validate_schema` | Boolean | `true` | 登録時にAgent CardのペイロードをA2Aスキーマに対して検証します。無効なカードは拒否されます。 |
+| `max_card_size` | Integer | `65536` | Agent Cardペイロードの最大サイズ（バイト単位） |
+| `registration_rate_limit` | Integer | `10` | エージェントごとの1分あたりの最大登録更新数 |
+| `require_security_metadata` | Boolean | `false` | 有効にすると、Agent Cardのセキュリティメタデータ拡張に `jwksUri` の記載を必須とします。 |
+| `trusted_jkus` | Array | `[]` | 空でない場合、Agent Card内の `jwksUri` はリスト内のいずれかのプレフィックスと一致する必要があります。空リストはJKU検証を無効化（許容モード）します。 |
 | `verify_jku_tls` | Boolean | `true` | JWKSエンドポイント取得時にTLS証明書を検証します。 |
 
 ## エージェントの登録
 
-エージェントは自身のエージェントカードをA2Aレジストリにパブリッシュすることで登録され、他のエージェントから検出可能になります。登録はダッシュボード、MQTT、またはCLIで行えます。
+エージェントは自身のAgent CardをA2Aレジストリにパブリッシュすることで登録され、他のエージェントから検出可能になります。登録はダッシュボード、MQTT、またはCLIで行えます。
 
-### ダッシュボード経由
+### ダッシュボードから
 
 1. **A2A Registry** -> **+ Register Agent** をクリックします。
-2. 識別フィールドを入力します：
+2. 識別情報を入力します：
 
-   - **Organization ID**：エージェントが所属する組織またはトラストドメイン。例：`com.example`。展開全体で一意になるようにリバースDNS表記を使用してください。
-   - **Unit ID**：組織内のサブディビジョン（事業部門や展開環境など）。例：`factory-a`。
-   - **Agent ID**：組織およびユニット内で一意のエージェント識別子。例：`iot-ops-agent-001`。
+   - **Organization ID**：エージェントが所属する組織またはトラストドメイン（例：`com.example`）。デプロイ間で一意になるようリバースDNS表記を推奨します。
+   - **Unit ID**：組織内のサブユニットや環境（例：`factory-a`）。
+   - **Agent ID**：組織・ユニット内で一意のエージェント識別子（例：`iot-ops-agent-001`）。
 
-   これら3つの値はすべて英数字、ハイフン、アンダースコア、ピリオド（`^[A-Za-z0-9._-]+$`）のみを含み、`/`、`+`、`#`、空白は含められません。これらを組み合わせてエージェントの完全なアドレス `{org_id}/{unit_id}/{agent_id}` を形成します。
+   これら3つの値は英数字、ハイフン、アンダースコア、ピリオド（`^[A-Za-z0-9._-]+$`）のみ使用可能で、`/`、`+`、`#`、空白は含められません。これらを組み合わせてエージェントのフルアドレス `{org_id}/{unit_id}/{agent_id}` となります。
 
-3. エージェントカードJSONをエディターに貼り付けます。必要なフィールドとテンプレートは **Help** ボタンで確認できます。
+3. Agent CardのJSONをエディターに貼り付けます。必要なフィールドやテンプレートは **Help** ボタンで確認できます。
 4. **Register Agent** をクリックします。
 
-### MQTTX経由
+### MQTTXを使って
 
-エージェントは自身のエージェントカードを保持メッセージとして発見用トピックにパブリッシュして登録します。要件は以下の通りです：
+エージェントは自身のAgent Cardを保持メッセージとして発見用トピックにパブリッシュして登録します。要件は以下の通りです：
 
-- MQTTプロトコルバージョン5。
-- クライアントIDは `{org_id}/{unit_id}/{agent_id}` に設定。
-- Retainフラグ有効、QoS 1。
-- ペイロードは `name`、`description`、`version`、`url`、`skills` を含むエージェントカードJSON。
+- MQTTプロトコルバージョン5
+- クライアントIDは `{org_id}/{unit_id}/{agent_id}`
+- Retainフラグ有効、QoS 1
+- ペイロードは少なくとも `name`、`description`、`version`、`url`、`skills` を含むAgent CardのJSON
 
 **[MQTTX Desktop](https://mqttx.app/downloads) を使用する場合：**
 
@@ -80,7 +80,7 @@ a2a_registry {
    - **Client ID**：`com.example/factory-a/iot-ops-agent-001`
    - **MQTT Version**：`5.0`
    
-   <img src="./assets/register_agent_mqttx_connection.png" alt="register_agent_mqttx_connection" style="zoom:67%;" />
+   <img src="./assets/register_agent_mqttx_connection.png" alt="MQTTX接続設定" style="zoom:67%;" />
    
 3. **Connect** をクリックします。
 
@@ -88,7 +88,7 @@ a2a_registry {
    - **Topic**：`$a2a/v1/discovery/com.example/factory-a/iot-ops-agent-001`
    - **QoS**：`1`
    - **Retain**：有効
-   - **Payload**：エージェントカードJSON（以下の例参照）
+   - **Payload**：Agent CardのJSON（以下の例を参照）
    
 5. 送信ボタンをクリックします。
 
@@ -108,7 +108,7 @@ a2a_registry {
 }
 ```
 
-<img src="./assets/register_agent_mqttx_send.png" alt="register_agent_mqttx_send" style="zoom:67%;" />
+<img src="./assets/register_agent_mqttx_send.png" alt="MQTTX送信画面" style="zoom:67%;" />
 
 **[MQTTX CLI](https://mqttx.app/cli) を使用する場合：**
 
@@ -122,15 +122,15 @@ mqttx pub \
   -q 1 -r
 ```
 
-**Validate Schema** が有効な場合、EMQXはペイロードを登録前に検証し、不正なカードはPUBACKの理由コードとともに拒否されます。
+**Validate Schema** が有効な場合、EMQXはペイロードを登録前に検証し、不正なカードはPUBACKの理由コード付きで拒否されます。
 
-### CLI経由
+### CLIから
 
 ```bash
 emqx ctl a2a-registry register <path-to-agent-card.json>
 ```
 
-JSONファイルにはエージェントカードのフィールドとルーティングに使用する識別フィールドを含める必要があります：
+JSONファイルにはAgent Cardのフィールドとルーティングに使う識別情報を含める必要があります：
 
 ```json
 {
@@ -153,19 +153,19 @@ JSONファイルにはエージェントカードのフィールドとルーテ�
 
 ## 登録済みエージェントの表示
 
-登録済みエージェントはダッシュボードで閲覧・検査でき、CLIでクエリを実行することも可能です。
+登録済みエージェントはダッシュボードで閲覧・検査でき、CLIでクエリも可能です。
 
-### ダッシュボード経由
+### ダッシュボードから
 
-**A2A Registry** ページにすべての登録済みエージェントが一覧表示されます。各行には **Agent Card JSON** と **Delete** の2つの操作ボタンがあります。
+**A2A Registry** ページに登録済みエージェントが一覧表示されます。各行には **Agent Card JSON** と **Delete** のアクションボタンがあります。
 
-上部の **Organization ID**、**Unit ID**、**Agent ID** のフィルターでリストを絞り込めます。
+画面上部の **Organization ID**、**Unit ID**、**Agent ID** のフィルターで絞り込み可能です。
 
-任意の行の **Agent Card JSON** をクリックすると、エージェントカードの生JSONがコピー可能な状態で表示されます。
+任意の行の **Agent Card JSON** をクリックすると、Agent Cardの生JSONがコピー可能な状態で表示されます。
 
 ![view_agent_via_dashboard](./assets/view_agent_via_dashboard.png)
 
-### CLI経由
+### CLIから
 
 ```bash
 # すべてのエージェントを一覧表示
@@ -174,7 +174,7 @@ emqx ctl a2a-registry list
 # 組織とステータスでフィルター
 emqx ctl a2a-registry list --org com.example --status online
 
-# 特定エージェントの完全なエージェントカードを取得
+# 特定エージェントのAgent Cardを取得
 emqx ctl a2a-registry get com.example factory-a iot-ops-agent-001
 
 # レジストリ統計を表示
@@ -183,23 +183,23 @@ emqx ctl a2a-registry stats
 
 ## エージェントの削除
 
-エージェントを削除するとA2Aレジストリから登録解除され、保持されたエージェントカードがクリアされるため、検出できなくなります。
+エージェントを削除するとA2Aレジストリから登録解除され、保持されたAgent Cardがクリアされて検出不能になります。
 
-### ダッシュボード経由
+### ダッシュボードから
 
-エージェント一覧で削除したいエージェントの削除操作をクリックし、確認ダイアログで完全な `{org_id}/{unit_id}/{agent_id}` を入力して確定します。
+エージェント一覧で削除したいエージェントの削除アクションをクリックし、確認画面でフルアドレス `{org_id}/{unit_id}/{agent_id}` を入力して確定します。
 
-### MQTT経由
+### MQTTから
 
-エージェントの発見トピックに空の保持メッセージをパブリッシュします。これにより保持カードがクリアされ、レジストリから削除されます。
+エージェントの発見用トピックに空の保持メッセージをパブリッシュします。これにより保持されたカードがクリアされ、レジストリから削除されます。
 
-**MQTTX Desktopを使用する場合：**
+**MQTTX Desktopを使う場合：**
 
-1. エージェントのクライアントID（`com.example/factory-a/iot-ops-agent-001`）で接続します。
-2. トピックを `$a2a/v1/discovery/com.example/factory-a/iot-ops-agent-001`、QoS `1`、**Retain** 有効、ペイロードは空のままに設定します。
+1. エージェントのクライアントID（例：`com.example/factory-a/iot-ops-agent-001`）で接続します。
+2. トピックを `$a2a/v1/discovery/com.example/factory-a/iot-ops-agent-001`、QoS `1`、**Retain** 有効に設定し、ペイロードは空にします。
 3. 送信ボタンをクリックします。
 
-**MQTTX CLIを使用する場合：**
+**MQTTX CLIを使う場合：**
 
 ```bash
 mqttx pub \
@@ -211,7 +211,7 @@ mqttx pub \
   -q 1 -r
 ```
 
-### CLI経由
+### CLIから
 
 ```bash
 emqx ctl a2a-registry delete com.example factory-a iot-ops-agent-001
@@ -219,21 +219,21 @@ emqx ctl a2a-registry delete com.example factory-a iot-ops-agent-001
 
 ## MQTTによるエージェントの検出
 
-クライアントエージェントはワイルドカードを使って発見トピックをサブスクライブし、利用可能なエージェントを検出します。カードは保持されているため、サブスクライブ直後に即座に配信されます。
+クライアントエージェントはワイルドカードを使って発見用トピックをサブスクライブし、利用可能なエージェントを検出します。カードは保持されているため、サブスクライブ直後に即座に受信可能です。
 
-**MQTTX Desktopを使用する場合：**
+**MQTTX Desktopを使う場合：**
 
 1. EMQXブローカーに接続します。
-2. **+ New Subscription** をクリックし、ワイルドカートピックを入力します。例：`$a2a/v1/discovery/com.example/+/+`（組織内のすべてのエージェントを検出）。
-3. **Confirm** をクリックします。保持されたエージェントカードがメッセージペインに即座に表示されます。
+2. **+ New Subscription** をクリックし、ワイルドカードトピック（例：`$a2a/v1/discovery/com.example/+/+`）を入力して組織内の全エージェントを検出します。
+3. **Confirm** をクリック。保持されたAgent Cardがメッセージペインに即座に表示されます。
 
-**MQTTX CLIを使用する場合：**
+**MQTTX CLIを使う場合：**
 
 ```bash
-# 組織内のすべてのエージェント
+# 組織内の全エージェント
 mqttx sub -h localhost -p 1883 -V 5 -t '$a2a/v1/discovery/com.example/+/+' -v
 
-# 特定ユニット内のすべてのエージェント
+# 特定ユニット内の全エージェント
 mqttx sub -h localhost -p 1883 -V 5 -t '$a2a/v1/discovery/com.example/factory-a/+' -v
 
 # 特定エージェント
@@ -242,12 +242,12 @@ mqttx sub -h localhost -p 1883 -V 5 -t '$a2a/v1/discovery/com.example/factory-a/
 
 `-v` フラグは受信したペイロードの前にトピック名を表示します。
 
-受信メッセージのペイロードはエージェントカードJSONで、EMQXは以下のMQTT v5ユーザープロパティを付加してエージェントのライブ状態を示します：
+受信する各メッセージのペイロードにはAgent CardのJSONが含まれ、EMQXは以下のMQTT v5ユーザープロパティを付加してエージェントの生存状態を示します：
 
 | ユーザープロパティ | 値 | 意味 |
 |---|---|---|
-| `a2a-status` | `online` | エージェントが現在接続中。 |
-| `a2a-status` | `offline` | エージェントが切断済み。 |
-| `a2a-status-source` | `broker` | EMQXが接続状態に基づいて設定したステータス。 |
-| `a2a-status-source` | `agent` | エージェント自身が積極的にパブリッシュしたステータス（例：正常なオフライン）。 |
-| `a2a-status-source` | `lwt` | Last Will and Testamentによって検出された異常切断を反映したステータス。 |
+| `a2a-status` | `online` | エージェントが現在接続中 |
+| `a2a-status` | `offline` | エージェントが切断済み |
+| `a2a-status-source` | `broker` | EMQXが接続状態に基づいて設定したステータス |
+| `a2a-status-source` | `agent` | エージェント自身が積極的にパブリッシュしたステータス（例：正常なオフライン） |
+| `a2a-status-source` | `lwt` | Last Will and Testamentにより検出された異常切断のステータス |
