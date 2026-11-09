@@ -1,39 +1,39 @@
 # 設定ファイル
 
-ユーザーは設定ファイルまたは環境変数を使ってEMQXを設定できます。本節では主にEMQXの設定ファイルについて紹介し、EMQXで最もよく使われる機能の基本的な設定方法を説明します。詳細な設定項目と解説については、[EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)をご参照ください。
+ユーザーは設定ファイルまたは環境変数を用いてEMQXを設定できます。本節では主にEMQXの設定ファイルについて紹介し、EMQXで最もよく使われる機能の基本的な設定方法を説明します。詳細な設定項目と解説については、[EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)を参照してください。
 
 ## 設定ディレクトリ
 
-EMQXをインストールすると、設定およびランタイムデータを管理するための一連のディレクトリが作成されます。これらのディレクトリは主に以下の2つのカテゴリに分かれています。
+EMQXをインストールすると、設定やランタイムデータを管理するための一連のディレクトリが作成されます。これらのディレクトリは主に以下の2つのカテゴリに分かれています。
 
-- **静的設定ディレクトリ（`etc`）**：読み取り専用で、不変または静的な設定ファイルを格納します。
-- **動的設定ディレクトリ（`data/configs`）**：書き込み可能で、ランタイムで生成または動的に更新される設定ファイルを格納します。
+- **静的設定ディレクトリ (`etc`)**：読み取り専用で、不変または静的な設定ファイルを格納します。
+- **動的設定ディレクトリ (`data/configs`)**：書き込み可能で、ランタイムで生成または動的に更新される設定ファイルを格納します。
 
-### 静的設定ディレクトリ（`etc`）
+### 静的設定ディレクトリ (`etc`)
 
-`etc`ディレクトリにはEMQXの初期設定を定義する設定ファイルが格納されます。これらのファイルは通常、デプロイやアップグレード時に変更され、ランタイム中は安定性を保つため読み取り専用となっています。`etc`ディレクトリの場所はインストール方法によって異なります。
+`etc`ディレクトリはEMQXの初期設定を定義する設定ファイルを格納します。これらのファイルは通常、デプロイ時やアップグレード時に変更され、ランタイム中は安定性を確保するため読み取り専用となります。`etc`ディレクトリの場所はインストール方法によって異なります。
 
-| インストール方法                           | パス              |
-| ------------------------------------------ | ----------------- |
-| RPMまたはDEBパッケージでインストール      | `/etc/emqx`       |
-| Dockerコンテナで実行                       | `/opt/emqx/etc`   |
-| ポータブル圧縮パッケージから展開          | `./etc`           |
+| インストール方法                            | パス               |
+| ------------------------------------------ | ------------------ |
+| RPMまたはDEBパッケージでインストール       | `/etc/emqx`        |
+| Dockerコンテナで実行                        | `/opt/emqx/etc`    |
+| ポータブル圧縮パッケージから展開           | `./etc`            |
 
-### 動的設定ディレクトリ（`data/configs`）
+### 動的設定ディレクトリ (`data/configs`)
 
-ランタイム中、EMQXはダッシュボード、REST API、CLIを通じて動的な再設定を可能にします。これらのツールで行われた変更は`data/configs`ディレクトリに保存され、セッションをまたいで永続化されます。このディレクトリの場所もインストール方法によって異なります。
+ランタイム中、EMQXはダッシュボード、REST API、CLIを通じて動的な再設定を許可しています。これらのツールで行った変更は`data/configs`ディレクトリに保存され、セッションをまたいで永続化されます。このディレクトリの場所もインストール方法に依存します。
 
-| インストール方法                           | パス                     |
-| ------------------------------------------ | ------------------------ |
-| RPMまたはDEBパッケージでインストール      | `/var/lib/emqx/configs`  |
-| Dockerコンテナで実行                       | `/opt/emqx/data/configs` |
-| ポータブル圧縮パッケージから展開          | `./data/configs`         |
+| インストール方法                            | パス                    |
+| ------------------------------------------ | ----------------------- |
+| RPMまたはDEBパッケージでインストール       | `/var/lib/emqx/configs` |
+| Dockerコンテナで実行                        | `/opt/emqx/data/configs`|
+| ポータブル圧縮パッケージから展開           | `./data/configs`        |
 
 ::: tip
-`node.data_dir`設定や環境変数`EMQX_NODE__DATA_DIR`を変更することで、データディレクトリの場所を変更可能です。ただし、クラスター運用時は全ノードで同じディレクトリパスを使用する必要があります。
+設定の`node.data_dir`を変更するか、環境変数`EMQX_NODE__DATA_DIR`を設定することで、データディレクトリの場所を変更可能です。ただし、クラスターを構成する場合は、すべてのノードで同じディレクトリパスを使用する必要があります。
 :::
 
-設定ファイルの内容が重複することは推奨されませんが、もし重複があった場合はあらかじめ定められた上書きルールに従って解決されます。詳細は[Config Override Rules](#config-override-rules)をご覧ください。
+設定ファイルの内容が重複することは推奨されませんが、重複した場合はあらかじめ定められた上書きルールに従って解決されます。詳細は[Config Override Rules](#config-override-rules)を参照してください。
 
 ## 設定例
 
@@ -44,11 +44,11 @@ EMQXをインストールすると、設定およびランタイムデータを�
 
 ## ベース設定ファイル
 
-EMQX 5.8.4以降、`etc`ディレクトリに`base.hocon`というベース設定ファイルが存在します。このファイルにはデフォルト設定が含まれており、ランタイム中に上位の設定ファイルで上書き可能です。
+EMQX 5.8.4以降、`etc`ディレクトリに`base.hocon`というベース設定ファイルが存在します。このファイルにはデフォルト設定が含まれ、ランタイム中により上位の設定ファイルで上書き可能です。
 
-例えば、基本的な認証設定でデプロイを開始し、その後ダッシュボードUIからより複雑な設定に上書きすることができます。
+例えば、基本的な認証設定でデプロイを開始し、その後ダッシュボードUIからより複雑な設定で上書きすることができます。
 
-`node`や`cluster`など不変の設定については、値がデプロイ固有でランタイム中に変更しない場合、環境変数を使うことも可能です。詳細は[Environment Variables](#environment-variables)および[Config Override Rules](#config-override-rules)をご参照ください。
+`node`や`cluster`のような不変設定については、値がデプロイ固有でランタイム中に変更すべきでない場合、環境変数を利用することも可能です。詳細は[Environment Variables](#environment-variables)および[Config Override Rules](#config-override-rules)を参照してください。
 
 ::: tip
 `base.hocon`ファイルはクラスター間で同期されず、そのノードにのみ適用されます。
@@ -56,23 +56,23 @@ EMQX 5.8.4以降、`etc`ディレクトリに`base.hocon`というベース設�
 
 ## 設定書き換えファイル
 
-`data/configs`ディレクトリの`cluster.hocon`ファイルにはクラスター全体の設定項目が含まれています。ダッシュボード、REST API、CLIからの設定変更はこのファイルに永続化されます。
+`data/configs`ディレクトリ内の`cluster.hocon`ファイルはクラスター全体の設定項目を含みます。ダッシュボード、REST API、CLIからの設定変更はこのファイルに永続化されます。
 
-クラスター内のノードが再起動されたり新しいノードが追加された場合、ノードは自動的に他のノードから`cluster.hocon`ファイルをコピーして適用します。そのため、このファイルを手動で編集することは推奨されません。
+クラスター内のノードが再起動されたり新しいノードが追加された場合、該当ノードは自動的に他のノードから`cluster.hocon`ファイルをコピーして適用します。このため、手動でのファイル編集は推奨されません。
 
-このファイルの設定は`base.hocon`の設定に上書きされる形で適用されます。設定の上書き階層については[Config Override Rules](#config-override-rules)をご覧ください。
+このファイルの設定は`base.hocon`の設定の上に適用されます。設定の上書き階層については[Config Override Rules](#config-override-rules)を参照してください。
 
-EMQX 5.1以降、クラスター設定の変更があると、上書き前に`cluster.hocon`ファイルのバックアップが作成されます。バックアップファイルはノードのローカル時間でタイムスタンプが付けられ、最大10個まで保持されます。
+EMQX 5.1以降、クラスター設定の変更があると`cluster.hocon`ファイルのバックアップが上書き前に自動で作成されます。バックアップファイルはノードのローカル時間でタイムスタンプが付けられ、最大10ファイルまで保持されます。
 
 ## 不変設定ファイル
 
-後方互換性のため、`emqx.conf`ファイルは`node`や`cluster`の重要なシステム設定に引き続き利用可能です。このファイルは`base.hocon`や`cluster.hocon`より優先度が高いですが、環境変数よりは低い優先度です。意図的にこの優先度を利用し、パッケージアップグレードでこのファイルのデフォルトが更新されることを理解している場合を除き、変更は避けてください。
+後方互換性のため、`emqx.conf`ファイルは`node`や`cluster`の重要なシステム設定に対して引き続き利用可能です。このファイルは`base.hocon`や`cluster.hocon`より優先度が高いですが、環境変数よりは低い優先度です。意図的にこの優先度を利用し、パッケージのアップグレードでこのファイルのデフォルトが更新される可能性を理解している場合を除き、変更は避けてください。
 
-設定の上書きについての詳細は[Config Override Rules](#config-override-rules)をご参照ください。
+設定の上書きに関する詳細は[Config Override Rules](#config-override-rules)を参照してください。
 
 ## 設定パス
 
-EMQXでは設定値をツリー構造のようにドット区切りのパスで参照できます。ルートは常にStructで、パスの各セグメントはフィールド名またはMapのキーを指します。配列要素の場合は1始まりのインデックスを使用します。
+EMQXでは設定値をドット区切りのパスで参照できます。これはツリー構造のようなもので、ルート（常にStruct）から始まり、各セグメントはフィールド名またはMapのキーを示します。配列要素の場合は1始まりのインデックスを使用します。
 
 設定パスの例：
 
@@ -84,11 +84,11 @@ authentication.1.enable = true
 
 ## HOCON設定フォーマット
 
-EMQX v5.0からは設定ファイルフォーマットとして[Human-Optimized Config Object Notation (HOCON)](https://github.com/emqx/hocon)を採用しています。
+EMQX v5.0以降、設定ファイルフォーマットとして[Human-Optimized Config Object Notation (HOCON)](https://github.com/emqx/hocon)を採用しています。
 
-HOCONは人間が読みやすいデータフォーマットでJSONのスーパーセットです。継承、結合、クォートなどの機能により設定作業をさらに簡素化します。
+HOCONは人間に読みやすいデータフォーマットであり、JSONのスーパーセットです。継承や結合、引用符などの機能により設定作業をさらに簡素化します。
 
-**HOCONの構文例：**
+**HOCON構文例：**
 
 JSONに似たオブジェクト形式で表現可能です。
 
@@ -110,17 +110,17 @@ node.cookie = "mysecret"
 node.cluster_call.retry_interval = "1m"
 ```
 
-このフラット形式は旧EMQXバージョンとの後方互換性がありますが、使い方に違いがあります。
+このフラット形式は旧バージョンのEMQXと互換性がありますが、使い方が異なります。
 
-HOCONでは文字列の両端にクォートを付けることを推奨します。特殊文字を含まない文字列はクォートなしでもよく、例えば`foo`や`foo_bar`のように記述できます。一方、フラット形式では`=`の右側のすべてを値として扱います。
+HOCONでは文字列の両端に引用符を付けることが推奨されます。特殊文字を含まない文字列は引用符なしでも構いません（例：`foo`、`foo_bar`）。一方、フラット形式では`=`の右側のすべてを値として扱います。
 
-HOCON構文の詳細は[HOCON Documentation](https://github.com/lightbend/config/blob/main/HOCON.md)をご参照ください。
+HOCON構文の詳細は[HOCON Documentation](https://github.com/lightbend/config/blob/main/HOCON.md)を参照してください。
 
 ## 環境変数
 
 設定ファイルのほかに、環境変数を使ってEMQXを設定することも可能です。
 
-例として、環境変数`EMQX_NODE__NAME=emqx2@127.0.0.1`は以下の設定を上書きします。
+例えば、環境変数`EMQX_NODE__NAME=emqx2@127.0.0.1`は以下の設定を上書きします。
 
 ```bash
 # emqx.conf
@@ -132,8 +132,8 @@ node {
 設定項目と環境変数の変換ルールは以下の通りです。
 
 1. 設定ファイルの`.`区切りは環境変数で使えないため、EMQXでは`__`（ダブルアンダースコア）を区切りとして使用します。
-2. 他の環境変数と区別するため、環境変数名の先頭に`EMQX_`を付けます。
-3. 環境変数の値はHOCON値として解析されるため、複雑なデータ型も渡せます。`:`、`=`、`#`などのHOCON特殊文字を含む値は必ずダブルクォート`"`で囲み、リテラル文字列として扱われるようにしてください。特に`#`はHOCONの行コメント開始文字なので、クォートなしだと`#`以降がコメントとして無視されます。
+2. 他の環境変数と区別するため、環境変数には`EMQX_`というプレフィックスが付加されます。
+3. 環境変数の値はHOCON値として解析されるため、複雑なデータ型も環境変数で渡せます。`:`、`=`、`#`などのHOCON特殊文字を含む値は、パーサーが文字列として扱うようにダブルクォート`"`で囲む必要があります。特に`#`はHOCONの行コメントを開始するため、引用符なしでは`#`以降がコメントとして無視されます。
 
 変換例：
 
@@ -160,33 +160,34 @@ listeners.ssl.default {
 
 ::: warning `#`、`:`、`=`を含む値について
 
-パスワードなどに`#`が含まれる場合、`#`はHOCONの行コメント開始文字なので、以下のようにすると`MQtt`だけがパースされ、`#123`はコメントとして無視されます。
+パスワードなどに`#`を含む場合の注意点です。`#`はHOCONの行コメントを開始するため、以下のように設定すると
 
 ```bash
 export EMQX_DASHBOARD__DEFAULT_PASSWORD="MQtt#123"
 ```
 
-リテラル値として渡すには、**HOCONレベルの**ダブルクォート（シェルのクォートではない）で囲み、パーサーに`"MQtt#123"`として認識させます。
+パスワードは`MQtt`として解析され、`#123`はコメントとして無視されます。文字列として正しく渡すには、**HOCONレベルの**ダブルクォートで囲み、パーサーに`"MQtt#123"`として認識させる必要があります。
 
 ```bash
 # 正しい例 — HOCONパーサーに渡される値は "MQtt#123"
 export EMQX_DASHBOARD__DEFAULT_PASSWORD='"MQtt#123"'
 
-# 同様の効果で、シェルの中で内側のクォートをエスケープ
+# 同じ効果、シェル用に内側の引用符をエスケープ
 export EMQX_DASHBOARD__DEFAULT_PASSWORD="\"MQtt#123\""
 ```
 
-`:`や`=`を含む値も同様です。URLエンコード（例：`%23`）は機能しません。EMQXは環境変数の値をURLデコードしません。
+`:`や`=`を含む値も同様です。URLエンコード（例：`%23`）は動作しません。EMQXは環境変数の値をURLデコードしません。
 
 :::
 
-::: tip なぜクォートなしの値が通る場合と通らない場合があるのか
+::: tip なぜ一部の引用なし値は通り、一部は通らないのか
 
-EMQXは環境変数の値を`fake_key=<値>`という形にラップしてHOCONとして解析します。解析に成功すればその値を使い、失敗すれば生の文字列を使います。
+EMQXは環境変数の値を`fake_key=<値>`の形でHOCONパーサーに渡します。パースに成功すれば解析結果を使い、失敗すれば生の文字列を使います。例えば、
 
-例えば、`EMQX_..._PASSWORD="abc#def"`は有効なHOCONで`#def`がコメント扱いされるため`abc`となりますが、`EMQX_..._PASSWORD=".abc#def"`は無効なHOCONなので生の文字列`.abc#def`が使われます。
+- `EMQX_..._PASSWORD="abc#def"`は有効なHOCONで`#def`がコメント扱いされるため`abc`となる。
+- `EMQX_..._PASSWORD=".abc#def"`は無効なHOCONでパース失敗し、生の文字列`.abc#def`が使われる。
 
-値をHOCONクォートで囲むと動作が確定的になります。
+HOCONの引用符で囲むと動作が確定的になります。
 
 :::
 
@@ -194,7 +195,7 @@ EMQXは環境変数の値を`fake_key=<値>`という形にラップしてHOCON�
 
 EMQXは未定義のルートパス（例：`EMQX_UNKNOWN_ROOT__FOOBAR`）を無視します。`UNKNOWN_ROOT`は事前定義されたルートパスではないためです。
 
-既知のルートパスに対して未知のフィールド名を設定すると、起動時に以下のような`warning`ログを出力します。例えば`enable`を誤って`enabled`とした場合：
+既知のルートパスに対して未知のフィールド名を設定すると、起動時に`warning`ログが出力されます。例えば`enable`を誤って`enabled`とした場合、以下のように出力されます。
 
 ```bash
 [warning] unknown_env_vars: ["EMQX_AUTHENTICATION__ENABLED"]
@@ -207,31 +208,31 @@ EMQXは未定義のルートパス（例：`EMQX_UNKNOWN_ROOT__FOOBAR`）を無�
 EMQXでは設定値は階層的に適用され、以下の上書きルールがあります。
 
 - 同一ファイル内では後に定義された値が前の値を上書きします。
-- 上位の設定が下位の設定を置き換えます。
+- 上位の設定ファイルが下位の設定を置き換えます。
 
 設定の優先順位は以下の通りです。
 
 `base.hocon < cluster.hocon < emqx.conf < 環境変数`
 
-つまり、`base.hocon`の設定は最も優先度が低く、上位の設定で上書きされます。`EMQX_`で始まる環境変数が最も優先されます。
+つまり、`base.hocon`の設定は最も優先度が低く、上位の設定で上書き可能です。`EMQX_`で始まる環境変数が最も優先されます。
 
 ::: tip
-バージョン5.8.4以前は`base.hocon`ファイルが存在しませんでした。優先順位は同じですが、`base.hocon`はありません。
+バージョン5.8.4以前は`base.hocon`ファイルが存在しませんでした。優先順位は同じですが`base.hocon`はありません。
 :::
 
 ダッシュボードUI、HTTP API、CLIからの変更はランタイム中に`cluster.hocon`に永続化され即時反映されます。ただし、`emqx.conf`や環境変数で同じ設定項目が異なる値に設定されている場合、ノード再起動後に変更が元に戻ることがあります。
 
-混乱を避けるため、**`emqx.conf`と`cluster.hocon`で設定を重複させないでください。**
+混乱を避けるため、`emqx.conf`と`cluster.hocon`間で設定が重複しないようにしてください。
 
 ::: tip
-1. 古いEMQXバージョン（例：5.0.2/v5.0.22以前）では、`cluster-override.conf`ファイルが存在し、設定優先順位は`emqx.conf < ENV < HTTP API (cluster-override.conf)`でした。
-2. これらの古いバージョンから最新バージョンにアップグレードする際、優先順位は変わらず、互換性維持のため`cluster.hocon`は作成されません。
-3. `cluster-override.conf`の仕組みはバージョン5.1で廃止されました。
+1. 古いEMQXバージョン（例：5.0.2/v5.0.22以前）では`cluster-override.conf`ファイルが存在し、設定優先順位は`emqx.conf < ENV < HTTP API (cluster-override.conf)`でした。
+2. これらの古いバージョンから最新にアップグレードしても優先順位は変わらず、互換性維持のため`cluster.hocon`は作成されません。
+3. `cluster-override.conf`機構はバージョン5.1で削除されました。
 :::
 
 ### 上書き例
 
-以下の設定では、最後の行で定義された`level`の`debug`が以前の`error`を上書きしますが、`enable`フィールドは変更されません。
+以下の設定では、最後の行で定義された`level`の`debug`が先の`error`を上書きしますが、`enable`フィールドは変更されません。
 
 ```bash
 log {
@@ -260,10 +261,10 @@ zones.zone1.mqtt.max_packet_size = 10M
 
 EMQXの配列は以下の2つの表現方法があります。
 
-- リスト形式（例：`[1, 2, 3]`）
-- マップ形式（サブスクライブ用、例：`{"1"=1, "2"=2, "3"=3}`）
+- リスト形式：例 `[1, 2, 3]`
+- マップ形式（サブスクライブ）：例 `{"1"=1, "2"=2, "3"=3}`
 
-以下の3つは同等です。
+以下の3つの形式は同等です。
 
 ```bash
 authentication.1 = {...}
@@ -271,7 +272,7 @@ authentication = {"1": {...}}
 authentication = [{...}]
 ```
 
-この特徴を利用し、配列の要素を簡単に上書きできます。例えば：
+この特徴を利用して、配列内の特定要素を簡単に上書きできます。
 
 ```bash
 authentication  = [
@@ -282,7 +283,7 @@ authentication  = [
   }
 ]
 
-# 1番目の要素の`enable`フィールドを以下のように上書き可能
+# 1番目の要素の`enable`フィールドを上書き
 authentication.1.enable = false
 ```
 
@@ -299,7 +300,7 @@ authentication = [
   }
 ]
 
-## 以下の方法では、1番目の要素の`enable`以外のフィールドはすべて失われる
+## 以下の設定では1番目の要素の`enable`以外のフィールドが失われる
 authentication = [{ enable = true }]
 ```
 
@@ -307,10 +308,10 @@ authentication = [{ enable = true }]
 
 ### ゾーンの上書き
 
-EMQXのゾーンは設定をグループ化する概念です。ゾーンはリスナーの`zone`フィールドに設定することで関連付けられ、そのゾーンに紐づくリスナーに接続したMQTTクライアントはゾーンの設定を継承し、グローバル設定を上書きすることがあります。
+EMQXのゾーンは設定をグループ化する概念です。リスナーに`zone`フィールドでゾーン名を設定すると、そのリスナーに接続するMQTTクライアントは該当ゾーンの設定を継承し、グローバル設定を上書きすることがあります。
 
 ::: tip
-デフォルトではリスナーは`default`という名前のゾーンに紐づいています。`default`ゾーンは論理的なグループであり、設定ファイル上には存在しません。
+デフォルトではリスナーは`default`という名前のゾーンに紐づいています。`default`ゾーンは論理的なグルーピングであり、設定ファイル上には存在しません。
 :::
 
 ゾーンレベルで上書き可能な設定項目は以下の通りです。
@@ -318,12 +319,12 @@ EMQXのゾーンは設定をグループ化する概念です。ゾーンはリ�
 - `mqtt`：MQTT接続やセッション設定。特定ゾーンでMQTTメッセージの最大パケットサイズを大きくするなど。
 - `force_shutdown`：強制シャットダウンのポリシー。
 - `force_gc`：Erlangプロセスのガベージコレクションの微調整。
-- `flapping_detect`：クライアントのフラッピング検出。
-- `durable_sessions`：MQTTセッションの永続化設定。特定ゾーンで永続化を有効にするなど。
+- `flapping_detect`：クライアントのフラッピング検知。
+- `durable_sessions`：セッション永続化設定。特定ゾーンでMQTTセッションの永続ストレージを有効化など。
 
-EMQXバージョン5のデフォルト設定ファイルにはゾーンは含まれていません。バージョン4では`internal`と`external`の2つのデフォルトゾーンが存在していました。
+EMQXバージョン5のデフォルト設定ファイルにはゾーンは含まれていません。バージョン4では`internal`と`external`の2つのデフォルトゾーンがありました。
 
-ゾーンを作成するには、設定ファイルで以下のように定義します。
+ゾーンを作成するには設定ファイルに定義します。例：
 
 ```bash
 zones {
@@ -339,7 +340,7 @@ zones {
       ...
     }
     durable_sessions {
-      # このゾーンでセッションの永続化を有効化
+      # このゾーンでセッション永続化を有効化
       enable = true
       ...
     }
@@ -350,7 +351,7 @@ zones {
 }
 ```
 
-リスナーの`zone`フィールドに作成済みのゾーン名を設定して関連付けます。
+リスナーで`zone`フィールドを設定し、作成済みのゾーンに紐づけます。
 
 ```bash
 listeners.tcp.default {
@@ -364,12 +365,12 @@ listeners.tcp.default {
 
 EMQXの設定をソース管理や自動化システムで管理する場合、以下のルールを推奨します。
 
-- 設定コードは`base.hocon`に置く。
+- 設定コードは`base.hocon`に記述する。
 - `cluster.hocon`を手動で編集したり、自分の`cluster.hocon`をマウントしない。
-- `emqx.conf`は優先度が高いこととアップグレード時の影響を理解した上でのみ変更する。
-- ランタイム中にダッシュボード、API、CLIから変更しない単純な上書きは環境変数で行う。
+- `emqx.conf`は優先度が高くアップグレード影響もあるため、理解した上でのみ変更する。
+- 簡単な上書きは環境変数で行い、ダッシュボードやAPI、CLIでのランタイム変更を想定しない。
 
-設定コードの真実の情報源は`base.hocon`です。ノード起動時に静的設定ディレクトリから読み込まれ、パッケージングやイメージビルド、構成管理、GitOpsワークフローで管理可能です。ダッシュボード、REST API、CLIからのランタイム変更は`cluster.hocon`に永続化され、`base.hocon`の上に重ねられます。
+設定コードの真実のソースは`base.hocon`です。ノード起動時に静的設定ディレクトリから読み込まれ、パッケージ管理やイメージビルド、構成管理、GitOpsワークフローで管理可能です。ランタイム中のダッシュボード、REST API、CLIからの変更は`cluster.hocon`に永続化され、`base.hocon`の上に重ねられます。
 
 例えば、リスナー、ログ、認証、認可、データ統合のベースライン設定を`base.hocon`に保持できます。
 
@@ -394,11 +395,11 @@ authentication = [
 ]
 ```
 
-`cluster.hocon`は設定コードの真実の情報源として使わないでください。EMQXがランタイムで管理するファイルであり、ダッシュボード、REST API、CLIが書き換え、EMQXは上書き前にバックアップを作成し、クラスター内のノード間でコピーされます。手動編集やマウントはランタイムの更新と競合したり上書きされる可能性があります。
+`cluster.hocon`は設定コードの真実のソースとして使わないでください。EMQXがランタイムで管理し、ダッシュボード、REST API、CLIが書き換え、上書き前にバックアップを作成し、クラスター内でノード間コピーも行います。手動編集やマウントはランタイム更新と競合し、上書きされる恐れがあります。
 
-`emqx.conf`は配布パッケージに同梱されるベースライン設定ファイルです。変更しなければアップグレード時に新しいEMQXバージョンの保守的なデフォルト変更を取り込めます。`emqx.conf`で設定した項目は`base.hocon`や`cluster.hocon`より優先度が高いため、ランタイム変更が反映されているように見えてもノード再起動後に元に戻ることがあります。意図的にこの動作が必要な場合のみ使用してください。
+`emqx.conf`は配布パッケージに同梱されるベースライン設定ファイルです。変更しないことでアップグレード時に新バージョンの保守的なデフォルト変更を取り込みやすくなります。`emqx.conf`で設定した項目は`base.hocon`や`cluster.hocon`より優先度が高いため、同じ項目のランタイム変更は動作してもノード再起動後に元に戻ることがあります。意図的にこの動作が必要な場合のみ使用してください。
 
-環境変数は最も優先度が高く、デプロイ固有の単純な値やランタイム中に変更すべきでない値に適しています。
+環境変数は最も優先度が高く、デプロイ固有の単純な値やランタイムで変更すべきでない値に適しています。
 
 ```bash
 export EMQX_NODE__NAME='emqx@node1.example.net'
@@ -407,53 +408,53 @@ export EMQX_CLUSTER__DISCOVERY_STRATEGY='static'
 export EMQX_CLUSTER__STATIC__SEEDS='["emqx@node1.example.net", "emqx@node2.example.net"]'
 ```
 
-環境変数はすべての設定ファイルを上書きするため、オペレーターが後からダッシュボード、API、CLIで調整することが想定される設定には使用を避けてください。
+環境変数はすべての設定ファイルを上書きするため、オペレーターが後からダッシュボードやAPI、CLIで調整することが想定される設定には使わないでください。
 
 ## スキーマ
 
-HOCONオブジェクトの型安全性を高めるため、EMQXはスキーマを導入しています。このスキーマはデータ型、フィールド名、メタデータを定義し、設定値の検証などに利用されます。
+HOCONオブジェクトの型安全性を高めるため、EMQXはスキーマを導入しています。このスキーマはデータ型、フィールド名、メタデータを定義し、設定値の検証などを可能にします。
 
 [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)はこのスキーマから生成されています。
 
 ::: tip
-ゾーン設定のスキーマは各グループで同一のため、設定マニュアルには含まれていません。例えば`zones.my_zone1.mqtt {...}`は`mqtt {...}`と同じスキーマです。
+ゾーンの設定スキーマは各グループで同一のため、設定マニュアルには含まれていません。例えば`zones.my_zone1.mqtt {...}`は`mqtt {...}`と同じスキーマです。
 :::
 
 ### プリミティブデータ型
 
-設定マニュアルに登場するプリミティブ型はほぼ自明で、最小限の説明で十分です。以下は全プリミティブ型の一覧です。
+設定マニュアルのプリミティブ型はほぼ自明であり、最小限の説明で十分です。以下に代表的な型を挙げます。
 
 #### Integer
 
-整数を表します。例：`42`、`-3`、`0`
+整数値。例：`42`、`-3`、`0`
 
 #### Integer(Min..Max)
 
-指定された範囲内の整数。例：`1..+inf`は1以上の正の整数を意味します。
+指定範囲内の整数。例：`1..+inf`は1以上の正の整数を意味します。
 
 #### Enum(symbol1, symbol2, ...)
 
-列挙型で、定義されたシンボルのいずれかのみを取れます。例：`Enum(debug,info,warning,error)`はログレベルの指定に使います。
+列挙型。定義済みのシンボルのいずれかのみ許容。例：`Enum(debug,info,warning,error)`はログレベルを定義。
 
 #### String
 
-文字列型で、複数の形式をサポートします。
+文字列型。複数の形式をサポートします。
 
-- **クォートなし**：特殊文字を含まない単純な識別子や名前向け（詳細は後述）。
-- **ダブルクォート文字列**：特殊文字や空白を含む場合に`"`で囲み、`\`でエスケープ可能。例：`"line1\nline2"`。
-- **トリプルクォート文字列**：`"""`で囲み、エスケープ不要（`\`は例外）。複雑な内容を含む場合に便利。トリプルクォートに隣接するクォートはエスケープが必要。
-- **インデント付きトリプルクォート文字列**：`"""~`と`~"""`で囲み、EMQX 5.6以降で導入。設定ファイル内でインデントを保持でき、多行や整形テキストに適しています。
+- **無引用符**：特殊文字を含まない単純な識別子や名前に適します（詳細は後述）。
+- **引用符付き文字列**：特殊文字や空白を含む場合はダブルクォート`"`で囲み、必要に応じてバックスラッシュ`\`でエスケープします。例：`"line1\nline2"`。
+- **三重引用符文字列**：`"""`で囲み、`\`以外のエスケープ不要で複雑な内容を含めやすい形式。三重引用符直後のクォートはエスケープが必要です。
+- **インデント付き三重引用符文字列**：`"""~`と`~"""`で囲み、EMQX 5.6以降で導入。設定ファイル内でのインデントを許容し、複数行や整形テキストに適します。
 
-**クォートなし文字列の注意点：**
+**無引用符文字列の注意点：**
 
-- 禁止文字：`$`、`"`、`{`、`}`、`[`、`]`、`:`、`=`、`,`、`+`、`#`、`` ` ``、`^`、`?`、`!`、`*`、`&`、`\`、空白
-- `//`で始めない（コメント扱いになるため）
-- `true`、`false`、`null`で始めない（ブール値やnullと誤認される可能性あり）
+- 禁止文字：`$`、`"`、`{`、`}`、`[`、`]`、`:`、`=`、`,`、`+`、`#`、`` ` ``、`^`、`?`、`!`、`*`、`&`、`\`、および空白。
+- `//`で始めない（コメント開始と誤認されるため）。
+- `true`、`false`、`null`で始めない（ブール値やnullと誤認される可能性あり）。
 
-**トリプルクォート文字列のガイドライン：**
+**三重引用符文字列のガイドライン：**
 
-- トリプルクォートに隣接するクォートはエスケープするか`~`区切りを使う
-- 複数行文字列はスペース（タブ不可）でインデント可能。インデントレベルは最小の先頭スペース数で決定
+- 三重引用符直後にクォートを含める場合はエスケープするか、`~`区切りを使う。
+- 複数行文字列はスペースによるインデントをサポート（タブ不可）。インデントレベルは最小の先頭スペース数で決定。
 
 例：
 
@@ -468,17 +469,17 @@ rule_xlu4 {
 }
 ```
 
-HOCONの文字列クォート規則の詳細は[HOCON仕様](https://github.com/lightbend/config/blob/main/HOCON.md#unquoted-strings)を参照してください。
+HOCONの文字列引用規則の詳細は[HOCON仕様](https://github.com/lightbend/config/blob/main/HOCON.md#unquoted-strings)を参照してください。
 
-EMQXのトリプルクォート文字列の拡張については[emqx/hocon.git README](https://github.com/emqx/hocon?tab=readme-ov-file#divergence-from-spec-and-caveats)を参照してください。
+EMQX独自のインデント付き三重引用符文字列の詳細は[emqx/hocon.git README](https://github.com/emqx/hocon?tab=readme-ov-file#divergence-from-spec-and-caveats)を参照してください。
 
 #### String("constant")
 
-定数文字列で、単一値の列挙型（Enum）として機能します。特定の設定やモードの静的値に使います。
+定数文字列。単一値の列挙型（`Enum`）のように振る舞います。特定の設定やモードの固定値に利用。
 
 #### Boolean
 
-`true`または`false`（大文字・小文字区別あり）
+`true`または`false`（大文字小文字を区別）。
 
 #### Float
 
@@ -486,37 +487,37 @@ EMQXのトリプルクォート文字列の拡張については[emqx/hocon.git 
 
 #### Duration
 
-人間が読みやすい形式の時間間隔。例やフォーマットの説明あり。
+人間が読みやすい時間の長さを表現。例やフォーマットの説明。
 
 #### Duration(s)
 
-秒単位の精度を持つDuration型。詳細と例あり。
+秒単位の精度を持つ`Duration`型。詳細と例。
 
 #### Secret
 
-パスワードやトークンなど機密情報用の型。用途と重要性の説明あり。
+パスワードやトークンなど機密情報用の型。使用方法と重要性の説明。
 
 ### 複合データ型
 
-EMQXのHOCON設定で使われる複合型は、他の複合型やプリミティブ値を含むデータ構造を表現します。階層的かつ柔軟なデータ表現を可能にします。
+EMQXのHOCON設定の複合型は、他の複合型やプリミティブ値を含むデータ構造を表現します。柔軟で階層的なデータ表現を可能にします。
 
 #### Struct `Struct(name)`
 
-中括弧`{}`で囲まれたフィールドを持つ構造体。`name`はスキーマで指定されたフィールド名と型を参照します。
+中括弧`{}`で囲まれたフィールドを持つ構造体。`name`はスキーマで定義されたフィールド名と型の参照。
 
 #### Map `Map($name->Type)`
 
-Structに似ていますが、フィールド名が事前定義されていません。
+`Struct`に似ていますが、フィールド名が事前定義されていません。
 
-`$name`はドット`.`を含まない任意の文字列キーを表し、エンティティや属性名を示します。`Type`はマップ内のすべての値が同一型であることを示し、均質なデータ集合を表現します。
+`$name`はドットを含まない任意の文字列キーを示し、エンティティや属性名を表します。`Type`はすべての値が同一型であることを示し、均一なデータ集合を表現可能。
 
 #### OneOf `OneOf(Type1, Type2, ...)`
 
-複数の型のいずれかを取るユニオン型。構造体のフィールドが複数の型のいずれかであることを示します。例：`String(infinity)`または`Duration`のどちらか。
+複数の型のいずれかを許容するユニオン型。構造体のフィールドが複数の型のいずれかになることを示します。例：`String(infinity)`または`Duration`のどちらか。
 
 #### Array `Array(Type)`
 
-指定された`Type`の要素からなる配列。
+指定型の要素からなる配列。
 
 ::: tip
 
@@ -533,34 +534,32 @@ myarray.2 = 75
 
 ### Variform式
 
-Variformは文字列操作やランタイム評価のための軽量で表現力豊かな言語です。完全なプログラミング言語ではなく、EMQXの設定内に埋め込んで動的に文字列操作を行うための専用ツールです。
+Variformは文字列操作とランタイム評価のための軽量で表現力豊かな言語です。完全なプログラミング言語ではなく、EMQXの設定内に埋め込んで動的な文字列操作を実現するための専門ツールです。
 
 ::: tip
-Variform式は特定の設定項目にのみ適用されます。指定がない限り使用しないでください。
+Variform式は特定の設定項目にのみ適用されます。明示されていない限り使用しないでください。
 :::
 
 ::: tip NULL値について
-Variform式では値のバインディング参照や部分式の評価が未定義値になることがあり、これは空文字列（`''`）で表されます。
+Variform式では値バインディング参照や部分式の評価が未定義値になることがあり、その場合は空文字列（`''`）で表現されます。
 
-JSONで`null`のフィールドは未定義値（`''`）として扱われ、文字列`"null"`とは異なります。
+JSONで`null`がデコードされた場合も未定義値（`''`）として扱われ、文字列`"null"`とは区別されます。
 :::
 
-#### 構文
-
-例：
+#### 構文例
 
 ```js
 function_call(clientid, another_function_call(username))
 ```
 
-これは`clientid`と`username`を組み合わせて新しい文字列値を生成します。
+これは`clientid`と`username`を組み合わせて新しい文字列値を生成する例です。
 
 Variformは以下のリテラルをサポートします。
 
 - ブール値：`true`または`false`
-- 整数：例`42`
-- 浮動小数点数：例`3.14`
-- 文字列：シングルクォート`'`またはダブルクォート`"`で囲むASCII文字列
+- 整数：例 `42`
+- 浮動小数点数：例 `3.14`
+- 文字列：シングルクォート`'`またはダブルクォート`"`で囲むASCII文字
 - 配列：`[`と`]`で囲み、カンマ`,`で区切る要素
 - 変数：事前定義された値の参照（例：`clientid`）
 - 関数：事前定義関数（例：`concat([...])`）
@@ -572,7 +571,7 @@ Variformは以下をサポートしません。
 - ユーザー定義変数
 - ユーザー定義関数
 - 例外処理やエラー回復
-- 文字列リテラル内のエスケープシーケンス（特殊文字のアンエスケープは`unescape`関数を呼び出す）
+- 文字列リテラル内のエスケープシーケンス（特殊文字のエスケープは`unescape`関数を使用）
 
 以下はVariform式を埋め込んだ設定例です。
 
@@ -580,7 +579,7 @@ Variformは以下をサポートしません。
 mqtt {
     client_attrs_init = [
         {
-            # client IDの最初の'-'より前の部分を抽出
+            # client IDの最初の'-'までのプレフィックスを抽出
             expression = "nth(1, tokens(clientid, '-'))"
             # client_attrs.groupとして設定
             set_as_attr = group
@@ -590,7 +589,7 @@ mqtt {
 ```
 
 ::: tip
-式内で`unescape`関数を使う場合、HOCON設定でトリプルクォート`"""`文字列を使うと二重エスケープを避けられます。
+エスケープ解除関数が必要な場合、HOCON設定で三重引用符`"""`文字列を使うと二重エスケープ不要で便利です。
 
 例：
 
@@ -602,74 +601,74 @@ expression = """nth(1, tokens(clientid, unescape('\n')))"""
 
 #### 事前定義関数
 
-EMQXはルールエンジンの文字列関数に似た豊富な文字列、配列、乱数、ハッシュ関数を備えています。これらは抽出したデータの操作や整形に使えます。例えば`lower()`、`upper()`、`concat()`は文字列のフォーマット調整に、`hash()`や`hash_to_range()`はハッシュ化や範囲マッピングに使います。
+EMQXはルールエンジンの文字列関数に似た豊富な文字列、配列、乱数、ハッシュ関数を提供しています。これらは抽出データの操作や整形に使えます。例えば、`lower()`、`upper()`、`concat()`は文字列のフォーマット調整に、`hash()`や`hash_to_range()`はハッシュ化や範囲マッピングに利用可能です。
 
-利用可能な関数一覧：
+利用可能な関数例：
 
 - **文字列関数**：
   - [文字列操作関数](../../develop/data-integration/rule-sql-builtin-functions.md#string-operation-functions)
-  - 新関数`any_to_string/1`は任意の中間非文字列値を文字列に変換します。
-- **配列関数**：`nth/2`など（[参照](../../develop/data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)）
+  - 新関数`any_to_string/1`：任意の中間非文字列値を文字列に変換
+- **配列関数**：`nth/2`など
 - **乱数関数**：`rand_str`、`rand_int`
 - **スキーマレスエンコード/デコード関数**：
-  - [bin2hexstr(Data)](../../develop/data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
-  - [hexstr2bin(Data)](../../develop/data-integration/rule-sql-builtin-functions.md#hexstr2bin-data-string-binary)
-  - [base64_decode(Data)](../../develop/data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)
-  - [base64_decode(Data, 'no_padding')](../../develop/data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)（6.0.2以降）
-  - [base64_decode(Data, 'no_padding', 'urlsafe')](../../develop/data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)（6.0.2以降）
-  - [base64_encode(Data)](../../develop/data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
-  - [base64_encode(Data, 'no_padding')](../../develop/data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)（6.0.2以降）
-  - [base64_encode(Data, 'no_padding', 'urlsafe')](../../develop/data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)（6.0.2以降）
-  - `int2hexstr(Integer)`：整数を16進文字列に変換。例：15は`F`（大文字）。
+  - `bin2hexstr(Data)`
+  - `hexstr2bin(Data)`
+  - `base64_decode(Data)`
+  - `base64_decode(Data, 'no_padding')`（6.0.2以降）
+  - `base64_decode(Data, 'no_padding', 'urlsafe')`（6.0.2以降）
+  - `base64_encode(Data)`
+  - `base64_encode(Data, 'no_padding')`（6.0.2以降）
+  - `base64_encode(Data, 'no_padding', 'urlsafe')`（6.0.2以降）
+  - `int2hexstr(Integer)`：整数を16進文字列に変換（例：15 → 'F'）
 - **ハッシュ関数**：
-  - `hash(Algorithm, Data)`：`Algorithm`は`md4`、`md5`、`sha`（`sha1`）、`sha224`、`sha256`、`sha384`、`sha512`、`sha3_224`、`sha3_256`、`sha3_384`、`sha3_512`、`shake128`、`shake256`、`blake2b`、`blake2s`のいずれか。
-  - `hash_to_range(Input, Min, Max)`：`sha256`でハッシュ化し、`Min`から`Max`の整数範囲にマッピング（`Min <= X <= Max`）。
-  - `map_to_range(Input, Min, Max)`：入力を`Min`から`Max`の整数範囲にマッピング。
+  - `hash(Algorithm, Data)`：`Algorithm`は`md4`、`md5`、`sha`（`sha1`）、`sha224`、`sha256`、`sha384`、`sha512`、`sha3_224`、`sha3_256`、`sha3_384`、`sha3_512`、`shake128`、`shake256`、`blake2b`、`blake2s`のいずれか
+  - `hash_to_range(Input, Min, Max)`：`sha256`でハッシュ化し、`Min`から`Max`の範囲にマッピング（`Min <= X <= Max`）
+  - `map_to_range(Input, Min, Max)`：入力を`Min`から`Max`の範囲にマッピング
 - **比較関数**：
-  - `num_eq(A, B)`：2つの数値が同じなら`true`、そうでなければ`false`
-  - `num_neq(A, B)`：2つの数値が異なれば`true`、そうでなければ`false`
-  - `num_gt(A, B)`：`A > B`なら`true`、そうでなければ`false`
-  - `num_gte(A, B)`：`A >= B`なら`true`、そうでなければ`false`
-  - `num_lt(A, B)`：`A < B`なら`true`、そうでなければ`false`
-  - `num_lte(A, B)`：`A <= B`なら`true`、そうでなければ`false`
-  - `str_eq(A, B)`：2つの文字列が同じなら`true`、そうでなければ`false`
-  - `str_neq(A, B)`：2つの文字列が異なれば`true`、そうでなければ`false`
-  - `str_gt(A, B)`：辞書順で`A > B`なら`true`、そうでなければ`false`
-  - `str_gte(A, B)`：辞書順で`A >= B`なら`true`、そうでなければ`false`
-  - `str_lt(A, B)`：辞書順で`A < B`なら`true`、そうでなければ`false`
-  - `str_lte(A, B)`：辞書順で`A <= B`なら`true`、そうでなければ`false`
-  - `is_empty_var(V)`：変数が空か判定。Variformで空とは未定義値（`undefined`）、JSONの`null`（文字列`"null"`は除く）、空文字列`""`を指す
-  - `not(Bool)`：`Bool`が`false`なら`true`、`true`なら`false`を返す。文字列も受け付け、入力が文字列なら出力も文字列になる。
+  - `num_eq(A, B)`：数値が等しい場合`true`、それ以外は`false`
+  - `num_neq(A, B)`：数値が異なる場合`true`、それ以外は`false`
+  - `num_gt(A, B)`：`A > B`なら`true`、それ以外は`false`
+  - `num_gte(A, B)`：`A >= B`なら`true`、それ以外は`false`
+  - `num_lt(A, B)`：`A < B`なら`true`、それ以外は`false`
+  - `num_lte(A, B)`：`A <= B`なら`true`、それ以外は`false`
+  - `str_eq(A, B)`：文字列が等しい場合`true`、それ以外は`false`
+  - `str_neq(A, B)`：文字列が異なる場合`true`、それ以外は`false`
+  - `str_gt(A, B)`：辞書順で`A > B`なら`true`、それ以外は`false`
+  - `str_gte(A, B)`：辞書順で`A >= B`なら`true`、それ以外は`false`
+  - `str_lt(A, B)`：辞書順で`A < B`なら`true`、それ以外は`false`
+  - `str_lte(A, B)`：辞書順で`A <= B`なら`true`、それ以外は`false`
+  - `is_empty_var(V)`：変数が空か判定。Variformの空は未定義値（`undefined`）、JSONの`null`（文字列`"null"`は除く）、空文字列`""`を含む
+  - `not(Bool)`：`Bool`が`false`なら`true`、`true`なら`false`。文字列も受け入れ、入力が文字列の場合出力も文字列
 
 - **システム関数**：
-  - `getenv(Name)`：環境変数`Name`の値を返す。ただしOS環境変数は`EMQXVAR_`プレフィックスを付けて読み込む。例：`getenv('FOO_BAR')`は`EMQXVAR_FOO_BAR`を読み込む。読み込み後は値は不変。
+  - `getenv(Name)`：環境変数`Name`の値を返す。ただしOS環境変数は`EMQXVAR_`プレフィックス付きで読み込み、一度読み込んだ値は不変
 
 - **データ抽出関数**：
-  - `json_value(Data, Path)`：JSON文字列からドット区切りパスでネスト構造を辿って値を抽出。例：`username`がJSONオブジェクトなら`json_value(username, 'shop.floor')`でフィールドにアクセス。
-  - `jwt_value(Data, Path)`：JWTトークンのペイロードをデコードし、ドット区切りパスでクレーム値を抽出。例：`password`がカスタムクレームを持つJWTなら`jwt_value(password, 'client_attrs.unitid')`でネスト値にアクセス。
-  - `is_jwt(Data)`（6.2.3以降）：`Data`がJWSコンパクト形式のJWT構造か判定。3つのドット区切りBase64URLデコード可能なセグメントを持ち、ヘッダーJSONに`alg`フィールドがある場合のみ`true`。署名検証やペイロード検査は行わず、未定義、null、空文字列、5セグメントのJWE、破損値は`false`。
+  - `json_value(Data, Path)`：JSON文字列からドット区切りパスで値を抽出。例：`username`がJSONオブジェクトなら`json_value(username, 'shop.floor')`
+  - `jwt_value(Data, Path)`：JWTトークンのペイロードからドット区切りパスでクレーム値を抽出。例：`password`がJWTでカスタムクレームを含む場合、`jwt_value(password, 'client_attrs.unitid')`
+  - `is_jwt(Data)`（6.2.3以降）：`Data`がJWSコンパクト形式のJWT構造か判定。3つのドット区切りBase64URLデコード可能なセグメントを持ち、ヘッダーJSONに`alg`フィールドがある場合に`true`を返す。署名検証やペイロード検査は行わず、未定義、null、空文字列、JWEトークン（5セグメント）、不正値は`false`。
 
 #### 条件式
 
-Variform式は包括的な制御フローを持ちませんが、以下の関数で基本的な値の選択が可能です。
+Variform式は包括的な制御構造を持ちませんが、以下の関数で基本的な条件分岐が可能です。
 
-- `iif(Condition, ThenExpression, ElseExpression)`：`Condition`が`true`または非空文字列なら`ThenExpression`を返し、それ以外は`ElseExpression`を返す。
-- `coalesce(Arg1, Arg2, ...)`：最初の非空引数を返す。
-- `coalesce([Element1, Element2, ...])`：最初の非空要素を返す。
+- `iif(Condition, ThenExpression, ElseExpression)`：`Condition`が`true`または空でない文字列なら`ThenExpression`を返し、それ以外は`ElseExpression`を返す。
+- `coalesce(Arg1, Arg2, ...)`：最初の空でない引数を返す。
+- `coalesce([Element1, Element2, ...])`：最初の空でない配列要素を返す。
 
 #### エラー処理
 
-Bashなどのスクリプト環境のデフォルト動作と同様、Variform式は未束縛変数参照や実行時例外が発生した場合は空文字列`""`を返す設計です。
+Bashなどのスクリプト環境と同様に、Variform式は未バインド変数や実行時例外が発生した場合、空文字列（`""`）を返す設計です。
 
-- 未束縛変数：定義されていない変数参照は空文字列として評価される。
-- 実行時例外：関数の誤用や型不一致などの例外は空文字列を返す。例：配列インデックス範囲外。
+- 未バインド変数：定義されていない変数を参照すると空文字列になる。
+- 実行時例外：関数の誤用や型不一致、配列インデックス範囲外などの例外が発生すると空文字列になる。
 
 #### 式の例
 
-- `nth(1, tokens(clientid, '.'))`：ドット区切りのclient IDのプレフィックスを抽出。
-- `strlen(username, 0, 5)`：usernameの部分文字列を抽出。
-- `coalesce(regex_extract(clientid,'[0-9]+'),'vin-1000')`：正規表現でclient IDから数字を抽出。空文字列なら`'000'`を返す。
-- `iif(true, "Value if true", "Value if false")`：`Value if true`を返す。
-- `iif("", "Value if true", "Value if false")`：`Value if false`を返す。
-- `iif("hello", "Value if true", "Value if false")`：`Value if true`を返す。
-- `iif(regex_match(clientid,'^foo\.+*'),'foo','bar')`：`clientid`が`foo.`で始まれば`foo`、そうでなければ`bar`を返す。
+- `nth(1, tokens(clientid, '.'))`：ドット区切りのclient IDの最初の部分を抽出
+- `strlen(username, 0, 5)`：usernameの先頭5文字を抽出
+- `coalesce(regex_extract(clientid,'[0-9]+'),'vin-1000')`：正規表現でclient IDから数字を抽出。空文字列なら`'000'`を返す
+- `iif(true, "Value if true", "Value if false")`：`Value if true`を返す
+- `iif("", "Value if true", "Value if false")`：`Value if false`を返す
+- `iif("hello", "Value if true", "Value if false")`：`Value if true`を返す
+- `iif(regex_match(clientid,'^foo\.+*'),'foo','bar')`：clientidが`foo.`で始まる場合`foo`、そうでなければ`bar`を返す

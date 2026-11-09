@@ -1,47 +1,47 @@
 # コマンドラインインターフェース
 
-このページでは、EMQXがサポートする各種起動および管理コマンドを紹介し、`ctl`管理コマンドについて詳細に解説します。
+このページでは、EMQXがサポートする各種起動および管理コマンドを紹介し、ctl管理コマンドについて詳しく解説します。
 
 ## 起動コマンド
 
-EMQXは基本的な起動および管理コマンドをサポートしており、`emqx <command>`コマンドで実行できます。
+EMQXは基本的な起動および管理コマンドをサポートしており、`emqx <command>` コマンドで実行できます。
 
 よく使われる起動および管理コマンドは以下の通りです：
 
 | コマンド    | 説明                                                         |
 | ---------- | ------------------------------------------------------------ |
-| start      | EMQXをデーモンモードで起動し、実行中に対話型シェルを必要としません。 |
+| start      | EMQXをデーモンモードで起動し、実行時に対話型シェルを必要としません。 |
 | console    | EMQXをErlangまたはElixirの対話型シェルで起動します。開発環境でのデバッグに使用し、EMQXとの対話が必要です。 |
 | foreground | EMQXをフォアグラウンドモードで起動し、対話型シェルは使用しません。開発環境でバックグラウンド実行せずに起動する際に使用します。 |
-| stop       | 実行中のEMQXノードを停止します。                           |
-| ctl        | EMQXの管理および監視を行います。`emqx ctl help`を実行すると詳細情報が得られます。 |
+| stop       | 実行中のEMQXノードを停止します。                          |
+| ctl        | EMQXの管理と監視を行います。`emqx ctl help`で詳細情報を取得できます。 |
 
-以下は開発やデバッグ向けの高度なコマンドで、通常のユーザーは意識する必要はありません：
+以下は開発やデバッグ用の高度なコマンドで、通常のユーザーは意識する必要はありません：
 
 | コマンド        | 説明                                                         |
 | -------------- | ------------------------------------------------------------ |
 | remote_console | リモートのEMQXノードの対話型シェルに接続します。             |
-| attach         | 実行中のEMQXノードにアタッチして対話操作を行います。         |
+| attach         | 実行中のEMQXノードにアタッチして対話操作を行います。          |
 | ertspath       | EMQXのErlangライブラリのパスを取得します。                   |
 | root_dir       | EMQXのルートディレクトリのパスを取得します。                 |
 | pid            | 実行中のEMQXノードのプロセスIDを取得します。                 |
-| ping           | EMQXノードが稼働中かどうかを確認します。                     |
+| ping           | EMQXノードが稼働中か確認します。                             |
 | check_config   | EMQXの設定ファイルが正しいか検証します。                     |
-| console_clean  | 対話型シェルのコンソール出力をクリアします。                 |
-| escript        | EMQXノード上でEscriptスクリプトを実行します。                 |
+| console_clean  | 対話型シェルコンソールの出力をクリアします。                 |
+| escript        | EMQXノード上でEscriptスクリプトを実行します。                |
 
 ## ctlコマンド
 
-EMQXの`ctl`コマンドは、EMQXの管理および監視のための複数のサブコマンドを提供します。`ctl`コマンドはEMQXサービス起動後に実行する必要があります。
+EMQXの`ctl`コマンドは、EMQXの管理と監視のための複数のサブコマンドを提供します。`ctl`コマンドはEMQXサービス起動後に実行する必要があります。
 
 > EMQXは`emqx_ctl`コマンドも提供しており、これは`emqx ctl`のエイリアスです。  
-> `ctl`コマンドは指定したEMQXノードにリモート接続するために隠れたErlangノードを起動し、Erlangのリモートコールを実行し、その結果を表示します。したがって、`ctl`コマンドの過剰な使用は避けることを推奨します。
+> `ctl`コマンドは、指定したEMQXノードにリモート接続するために隠れたErlangノードを起動し、Erlangのリモートコールを実行して結果を表示します。したがって、`ctl`コマンドの過度な使用は避けることが推奨されます。
 
-以下に`ctl`コマンドの全サブコマンドと簡単な説明を示します。詳細なパラメータ情報は`help`コマンドで確認してください。
+以下に`ctl`コマンドの全サブコマンドと簡単な説明を示します。このセクションはコマンドの機能紹介が目的であり、詳細なパラメータ情報は`help`コマンドで確認してください。
 
 ## status
 
-ブローカーが起動しているかを簡単に確認するコマンドです。
+ブローカーが起動しているかを素早く確認するコマンドです。
 
 ```bash
 $ emqx ctl status
@@ -199,14 +199,13 @@ session.discarded             : 0
 session.resumed               : 0
 session.takenover             : 0
 session.terminated            : 0
-
 ```
 
 ## cluster
 
-ノードのクラスター状態を表示および管理するコマンドです。
+ノードのクラスター状態を表示・管理するコマンドです。
 
-EMQXの`join`コマンドは、指定したノードに対してクラスター参加の「リクエスト」を送るものであり、「招待」ではありません。つまり、`emqx ctl cluster join <OneOfTheClusteredNodes>`は、`<OneOfTheClusteredNodes>`のクラスターに参加するリクエストを送るコマンドです。
+EMQXのクラスター参加コマンド`join`は、指定したノードに「参加要求」を送るものであり、「招待」ではありません。つまり、`emqx ctl cluster join <OneOfTheClusteredNodes>`は、`<OneOfTheClusteredNodes>`のクラスターに参加するよう要求を送るコマンドです。
 
 ### cluster join \<Node\>
 
@@ -230,7 +229,7 @@ Failed to leave the cluster: node_not_in_cluster
 
 ### cluster force-leave \<Node\>
 
-指定したノードを強制的にクラスターから除外します。
+指定ノードを強制的にクラスターから削除します。
 
 ::: tip 注意
 
@@ -247,7 +246,7 @@ Failed to remove the node from cluster: node_not_in_cluster
 
 EMQXクラスターの状態を表示します。
 
-オプションの`--json`パラメータを指定すると、JSON形式で表示されます。
+オプションの`--json`を指定すると、JSON形式で表示します。
 
 ```bash
 $ emqx ctl cluster status
@@ -277,11 +276,11 @@ Automatic cluster discovery enabled.
 
 ## clients
 
-接続中のクライアントを表示および管理するコマンドです。
+接続中のクライアントを表示・管理するコマンドです。
 
 ### clients list
 
-現在EMQXに接続中のすべてのクライアントを表示します。アクティブなクライアントや接続数の監視に利用できます。
+現在EMQXに接続している全クライアントを表示します。アクティブなクライアントや接続数の監視に利用できます。
 
 :::tip
 大量のクライアントが接続している場合、`list`コマンドは時間がかかりリソースを多く消費します。
@@ -295,7 +294,7 @@ Client(emqx_a, username=undefined, peername=127.0.0.1:59444, clean_start=true, k
 
 ### clients show \<ClientId\>
 
-特定のクライアントの詳細な接続情報を表示します。
+特定クライアントの詳細な接続情報を表示します。
 
 ```bash
 $ emqx ctl clients show emqx_c
@@ -313,7 +312,7 @@ ok
 
 ### clients stats --file <path/to/file.csv>
 
-クライアントごとの統計情報をCSVファイルに出力します。システム管理者がクライアントの活動を観察し、多忙なクライアントを特定するのに役立ちます。
+クライアントごとの統計情報をCSVファイルに出力します。システム管理者がクライアントの活動状況を観察し、負荷の高いクライアントを特定するのに役立ちます。
 
 ```bash
 $ emqx ctl clients stats path/to/file.csv
@@ -322,12 +321,12 @@ $ emqx ctl clients stats path/to/file.csv
 **引数:**
 
 - 出力先CSVファイルのパス
-- `--batch`オプションは一度に処理するクライアント数を制御します。小さい値はリソース使用量を減らしますが、実行時間が長くなります。（デフォルトは`1000`）
-- `--sleep`オプションはバッチ処理間の休止時間（ミリ秒）を制御します。値を大きくするとシステムへの影響をさらに減らせますが、実行時間が長くなります。（デフォルトは`10ms`）
+- `--batch`：一度に処理するクライアント数。小さい値はリソース消費を抑えますが処理時間が長くなります（デフォルトは`1000`）。
+- `--sleep`：バッチ処理間の待機時間（ミリ秒）。大きくするとシステム負荷をさらに軽減できますが実行時間が長くなります（デフォルトは`10ms`）。
 
 **出力フォーマット:**
 
-生成されるCSVファイルは以下のカラムを含みます：
+生成されるCSVファイルは以下のカラムを含みます。
 
 ```sql
 timestamp, clientid, recv_oct, recv_cnt, send_oct, send_cnt, subscriptions_cnt, awaiting_rel_cnt, mqueue_len, mqueue_dropped
@@ -343,14 +342,14 @@ timestamp, clientid, recv_oct, recv_cnt, send_oct, send_cnt, subscriptions_cnt, 
 - `send_cnt`: 送信したMQTTパケット数
 - `subscriptions_cnt`: クライアントが保持するサブスクリプション数
 - `awaiting_rel_cnt`: PUBRELを待つQoS 2メッセージ数
-- `mqueue_len`: クライアントのメモリ内セッションメッセージキューの長さ
-- `mqueue_dropped`: メモリ内セッションメッセージキューからドロップされたメッセージ数
+- `mqueue_len`: クライアントのメモリ上セッションメッセージキューの長さ
+- `mqueue_dropped`: メモリ上セッションメッセージキューからドロップされたメッセージ数
 
-**注意点:**
+**注意:**
 
-- このコマンドは可観測性向上のためのものであり、リアルタイムテレメトリではありません。
-- パフォーマンス低下を避けるため、ETSスキャンを周期的に休止（例：1000件ごとに10ms）して制御しています。
-- 生成されたCSVはオフライン分析や可視化、さらなる自動処理に利用できます。
+- このコマンドは監視用でありリアルタイムテレメトリではありません。
+- パフォーマンス低下を避けるため、ETSスキャンを周期的にスリープ（例：1000件ごとに10ms）して制御しています。
+- 生成されたCSVはオフライン分析や可視化、さらなる自動処理に利用可能です。
 
 ## topics
 
@@ -358,7 +357,7 @@ timestamp, clientid, recv_oct, recv_cnt, send_oct, send_cnt, subscriptions_cnt, 
 
 ### topics list
 
-すべてのトピックを一覧表示します。トピックの数や分布を監視するのに利用できます。
+すべてのトピックを一覧表示します。トピック数や分布の監視に利用できます。
 
 :::tip 注意
 
@@ -426,15 +425,15 @@ ok
 
 ## plugins
 
-プラグインのインストール状況を表示および管理するコマンドです。
+`plugins`コマンドでプラグインの表示・管理を行います。
 
 ::: tip ノードピン留めプラグイン
 
-EMQX 6.2.4以降、`node.pinned_plugins`に設定されたプラグインに対して`plugins`コマンドは次のように動作します。
+EMQX 6.2.4以降、`node.pinned_plugins`に設定されたプラグインに対する`plugins`コマンドの挙動が変わりました：
 
-- `plugins start`、`stop`、`restart`は、現在のノードに設定された正確なバージョンだけを管理します。
-- `plugins allow`、`install`、`uninstall`、`enable`、`disable`は`plugin_pinned`エラーを返します。
-- CLIで停止したプラグインは、ノード再起動やクラスター参加などで全プラグインが再起動されるまで停止したままです。
+- `plugins start`、`stop`、`restart`は現在のノードで`node.pinned_plugins`に設定されたバージョンのみを管理します。異なるバージョンのライフサイクルコマンドは拒否されます。
+- `plugins allow`、`install`、`uninstall`、`enable`、`disable`はノードピン留めプラグインに対して`plugin_pinned`エラーを返します。
+- CLIで停止したノードピン留めプラグインは、ノード再起動やクラスター参加後に全プラグインが再起動されるまで停止状態のままです。
 
 詳細は[ノードピン留めプラグインの事前デプロイ](./extensions/plugin-management.md#pre-deploy-a-node-pinned-plugin)を参照してください。
 
@@ -442,7 +441,7 @@ EMQX 6.2.4以降、`node.pinned_plugins`に設定されたプラグインに対�
 
 ### plugins list
 
-現在のノードで利用可能なプラグイン（ノードピン留めプラグインを含む）を一覧表示します。
+現在のノードで利用可能なプラグインを一覧表示します。ノードピン留めプラグインも含みます。
 
 ```bash
 emqx ctl plugins list
@@ -451,7 +450,7 @@ emqx ctl plugins list
 
 ### plugins describe \<Name-Vsn\>
 
-インストール済みプラグインの詳細情報を表示します。
+指定プラグインの詳細情報を表示します。
 
 ```bash
 emqx ctl plugins describe emqx_auth_mnesia-3.0.1
@@ -459,7 +458,7 @@ emqx ctl plugins describe emqx_auth_mnesia-3.0.1
 
 ### plugins allow \<Name-Vsn\>
 
-Dashboard経由で指定プラグインのインストールを許可します。
+Dashboardから指定プラグインのインストール許可を与えます。
 
 ```bash
 emqx ctl plugins allow emqx_auth_mnesia-3.0.1
@@ -472,7 +471,7 @@ emqx ctl plugins allow emqx_auth_mnesia-3.0.1
 
 ### plugins disallow \<Name-Vsn\>
 
-Dashboard経由で指定プラグインのインストールを禁止します。
+Dashboardから指定プラグインのインストール許可を取り消します。
 
 ```bash
 emqx ctl plugins disallow emqx_auth_mnesia-3.0.1
@@ -485,7 +484,7 @@ emqx ctl plugins disallow emqx_auth_mnesia-3.0.1
 
 ### plugins install \<Name-Vsn\> \[--cluster\]
 
-プラグインインストールディレクトリにあるプラグインパッケージをインストールします。`--cluster`オプションを指定すると、すべての稼働中ノードに配布してインストールします。
+プラグインインストールディレクトリにあるプラグインパッケージをインストールします。`--cluster`を指定すると、稼働中の全ノードに配布・インストールします。
 
 ```bash
 emqx ctl plugins install emqx_auth_mnesia-3.0.1
@@ -534,21 +533,21 @@ emqx ctl plugins disable emqx_auth_mnesia-3.0.1
 
 ### plugins enable \<Name-Vsn\> [Position]
 
-プラグインの自動起動を有効化し、起動順序の位置を指定します。
+プラグインの自動起動を有効化し、起動位置を指定します。
 
 ```bash
 emqx ctl plugins enable emqx_auth_mnesia-3.0.1 front
 ```
 
-`front`、`rear`、または`before Other-Vsn`を指定して起動順序の相対位置を調整できます。位置を指定しない場合は既存のプラグインの位置は変わらず、新規プラグインは末尾に追加されます。
+`front`、`rear`、または`before Other-Vsn`を指定して起動順序の相対位置を調整できます。Positionを指定しない場合は既存の配置を維持し、新規プラグインは末尾に追加されます。
 
 ## vm
 
-Erlang仮想マシンの統計情報を確認します。
+Erlang仮想マシンの統計データを確認します。
 
 ### vm all
 
-CPU負荷、メモリ使用量など、Erlang VMの全情報を表示します。
+CPU負荷、メモリ使用量などErlang VMの全情報を表示します。
 
 ```bash
 $ emqx ctl vm all
@@ -585,7 +584,7 @@ cpu/load15              : 1.05
 
 ### vm memory
 
-Erlang VMのメモリ使用量を表示します。総メモリ、プロセスメモリ、アトムメモリ、バイナリメモリ、ETSメモリを含みます。
+Erlang VMのメモリ使用状況を表示します。合計メモリ、プロセスメモリ、アトムメモリ、バイナリメモリ、ETSメモリを含みます。
 
 ```bash
 $ emqx ctl vm memory
@@ -612,7 +611,7 @@ process/count           : 870
 
 ### vm io
 
-Erlang VMのI/O情報を表示します。最大ファイルディスクリプタ数とアクティブなファイルディスクリプタ数を含みます。
+Erlang VMのI/O情報を表示します。最大ファイルディスクリプタ数とアクティブファイルディスクリプタ数を含みます。
 
 ```bash
 $ emqx ctl vm io
@@ -696,7 +695,7 @@ debug
 
 ### log primary-level
 
-現在のプライマリログレベルを表示します。`primary-level`はEMQXのデフォルトログレベルを示し、特定のログハンドラーで独立したレベルが設定されていない限り、全体のログ出力に影響します。
+現在のプライマリログレベルを表示します。`primary-level`はEMQXのデフォルトログレベルを示し、特定ハンドラーが独自のレベルを持たない限り全体に適用されます。
 
 ```bash
 $ emqx ctl log primary-level
@@ -714,7 +713,7 @@ info
 
 ### log handlers list
 
-ログハンドラーの一覧を表示します。ログハンドラーは独自にログレベルを設定でき、ログメッセージの処理や保存方法を定義します。
+ログハンドラー一覧を表示します。ハンドラーはログの処理・保存方法を定義し、独立したログレベルを持てます。
 
 ```bash
 $ emqx ctl log handlers list
@@ -724,7 +723,7 @@ LogHandler(id=console, level=debug, destination=console, status=started)
 
 ### log handlers start \<HandlerId\>
 
-指定したログハンドラーを起動します。
+特定ハンドラーを起動します。
 
 ```bash
 $ emqx ctl log handlers start console
@@ -733,7 +732,7 @@ log handler console started
 
 ### log handlers stop \<HandlerId\>
 
-指定したログハンドラーを停止します。
+特定ハンドラーを停止します。
 
 ```bash
 $ emqx ctl log handlers stop console
@@ -742,7 +741,7 @@ log handler console stopped
 
 ### log handlers set-level \<HandlerId\> \<Level\>
 
-指定したログハンドラーのログレベルを設定します。
+特定ハンドラーのログレベルを設定します。
 
 ```bash
 $ emqx ctl log handlers set-level console debug
@@ -751,11 +750,11 @@ debug
 
 ## trace
 
-特定のクライアントやトピックなどのイベントをトレース（ログ）するコマンドです。
+特定クライアントやトピックなどのイベントをトレース（ログ記録）するコマンドです。
 
 ### trace list
 
-ローカルノードで開始されたすべてのトレースを一覧表示します。
+ローカルノードで開始されているトレース一覧を表示します。
 
 ```bash
 $ emqx ctl trace list
@@ -817,21 +816,21 @@ stop tracing ip_address 127.0.0.1 successfully
 ```
 
 ::: tip
-コマンドラインから開始する際は、トレースログファイルに絶対パスを使用することを推奨します。  
+トレースログファイルはコマンドラインから開始する際に絶対パスを使用することを推奨します。  
 例：`emqx ctl trace start client foobar /abs/path/to/trace.log debug`
 :::
 
 ::: tip
-トレースはダッシュボードUIからも管理可能です。詳細は[Log Trace](./observability/tracer.md)を参照してください。
+トレースはダッシュボードUIからも管理可能です。[Log Trace](./observability/tracer.md)を参照してください。
 :::
 
 ## traces
 
-`trace`コマンドに似ていますが、クラスター内の全ノードでトレーサーを開始または停止します。
+`trace`コマンドに似ていますが、クラスター全ノードでトレーサーを開始・停止します。
 
 ### traces list
 
-クラスターで開始されたすべてのトレースを一覧表示します。
+クラスターで開始されているトレース一覧を表示します。
 
 ```bash
 $ emqx ctl traces list
@@ -840,7 +839,7 @@ Trace(mytraces_ip: ip_address=127.0.0.1, waiting, LogSize:#{'emqx@127.0.0.1' => 
 
 ### traces start \<Name\> client \<ClientId\> [\<Duration\>]
 
-クラスター内のクライアントに対するトレースを開始します。
+クラスター内のクライアントのトレースを開始します。
 
 ```bash
 $ emqx ctl traces start mytraces client emqx_c 1200
@@ -849,7 +848,7 @@ cluster_trace clientid emqx_c mytraces successfully
 
 ### traces start \<Name\> topic \<Topic\> [\<Duration\>]
 
-クラスター内のトピックに対するトレースを開始します。
+クラスター内のトピックのトレースを開始します。
 
 ```bash
 $ emqx ctl traces start mytraces_ip topic t/1 1200
@@ -858,7 +857,7 @@ cluster_trace topic t/1 mytraces_ip successfully
 
 ### traces start \<Name\> ip_address \<IPAddr\> [\<Duration\>]
 
-クラスター内のクライアントIPに対するトレースを開始します。
+クラスター内のクライアントIPのトレースを開始します。
 
 ```bash
 $ emqx ctl traces start mytraces_ip ip_address 127.0.0.1 1200
@@ -889,7 +888,7 @@ Del cluster_trace mytraces_ip successfully
 
 ### listeners
 
-すべてのリスナー情報を一覧表示します。
+全リスナーの情報を一覧表示します。
 
 ```bash
 $ emqx ctl listeners
@@ -926,7 +925,7 @@ wss:default
 
 #### 一般的なシャットダウン理由
 
-TCPリスナーでは、`shutdown_count`フィールドでクライアント切断数を理由別に記録しています。これにより、TCPリスナーからの切断理由を特定できます。
+TCPリスナーでは、`shutdown_count`フィールドにクライアント切断数が理由別に記録されます。これによりTCPリスナーからの切断原因を特定できます。
 
 ```bash
 shutdown_count  : [{takenover,2},{discarded,1}]
@@ -934,7 +933,7 @@ shutdown_count  : [{takenover,2},{discarded,1}]
 
 上記例では：
 
-- 2件は同じ`clientid`で新しいセッションが乗っ取ったため切断
+- 2件は同じ`clientid`で新しいセッションが既存セッションを引き継いだため切断
 - 1件は新しいクリーンセッションが既存セッションを置き換えたため切断
 
 以下はよくあるシャットダウン理由の一覧です。
@@ -942,32 +941,32 @@ shutdown_count  : [{takenover,2},{discarded,1}]
 | 理由                          | 説明                                                         |
 | ----------------------------- | ------------------------------------------------------------ |
 | `banned`                      | ACL違反、レート制限、IP制限によりクライアントがブラックリスト入り。 |
-| `closed`                      | サーバーまたはクライアントによる接続クローズ。             |
-| `discarded`                   | 同じ`clientid`かつ`clean_start = true`の新クライアントが接続し、既存セッションが破棄された。 |
-| `takenover`                   | 同じ`clientid`かつ`clean_start = false`の新クライアントが接続し、既存セッションが乗っ取られた。 |
-| `einval`                      | 無効な引数またはソケットエラー。既に閉じたソケットへの書き込みなどによる競合状態が原因。 |
-| `frame_too_large`             | MQTTパケットが最大許容フレームサイズを超過。                 |
+| `closed`                      | サーバーまたはクライアントによる接続クローズ。               |
+| `discarded`                   | 同じ`clientid`かつ`clean_start = true`の新クライアントが接続し、既存セッションを破棄。 |
+| `takenover`                   | 同じ`clientid`かつ`clean_start = false`の新クライアントが接続し、既存セッションを引き継ぎ。 |
+| `einval`                      | 無効な引数またはソケットエラー。既に閉じられたソケットへの書き込みなどで発生。 |
+| `frame_too_large`             | MQTTパケットが最大フレームサイズを超過。                      |
 | `connect_packet_too_large`    | CONNECTパケットが`mqtt.max_connect_packet_size`を超過。       |
 | `idle_timeout`                | TCP/SSL接続確立後、許容時間内にCONNECTパケットを受信できなかった。 |
-| `invalid_proto_name`          | CONNECTパケットのプロトコル名が無効、または`"MQTT"`でない。  |
-| `invalid_topic`               | クライアントが不正なトピックを使用（不正文字含む、ブローカーで禁止など）。 |
-| `keepalive_timeout`           | キープアライブ間隔内にパケット送信がなかった。               |
-| `malformed_packet`            | MQTTパケットが破損、またはMQTT仕様に準拠していない。         |
-| `not_authorized`              | クライアントの不正な操作がACLにより拒否された。               |
-| `ssl_closed`                  | SSL/TLS接続がピアによりクローズされた。                       |
-| `ssl_error`                   | SSL/TLSハンドシェイクまたはデータ送受信中にエラー発生。       |
-| `ssl_upgrade_timeout`         | SSL/TLSハンドシェイクが許容時間内に完了しなかった。           |
-| `unexpected_packet`           | 現在の接続状態で予期しないパケットが送信された。             |
-| `zero_remaining_len`          | パケットの残り長フィールドがゼロで、多くの文脈で無効。         |
+| `invalid_proto_name`          | CONNECTパケットのプロトコル名が無効または`"MQTT"`でない。     |
+| `invalid_topic`               | クライアントが不正なトピックを使用（例：禁止文字含む、ブローカーで禁止）。 |
+| `keepalive_timeout`           | キープアライブ間隔内にパケット送信がなかった。                 |
+| `malformed_packet`            | MQTTパケットが破損または仕様に準拠していない。                 |
+| `not_authorized`              | クライアントが認可されていない操作を試み、ACLで拒否。          |
+| `ssl_closed`                  | SSL/TLS接続がピアによりクローズ。                              |
+| `ssl_error`                   | SSL/TLSハンドシェイクまたはデータ送信中にエラー発生。          |
+| `ssl_upgrade_timeout`         | SSL/TLSハンドシェイクが許容時間内に完了しなかった。            |
+| `unexpected_packet`           | 現在の接続状態で予期しないパケットをクライアントが送信。       |
+| `zero_remaining_len`          | パケットの残り長さフィールドがゼロ（多くの文脈で無効）。        |
 | `bad_username_or_password`    | 認証失敗（ユーザー名またはパスワード誤り）。                   |
-| `client_identifier_not_valid` | 提供された`clientid`が無効、またはログイン時に他クライアントにロックされている。 |
-| `protocol_error`              | 一般的なMQTTプロトコル違反。                                 |
-| `tcp_closed`                  | TCP接続がクライアントまたはネットワーク障害によりクローズ。   |
-| `timeout`                     | 一般的なタイムアウト（認証中など）。                         |
+| `client_identifier_not_valid` | 指定された`clientid`が無効またはログイン時に他クライアントにロックされている。 |
+| `protocol_error`              | 一般的なMQTTプロトコル違反。                                  |
+| `tcp_closed`                  | TCP接続がクライアントまたはネットワーク障害でクローズ。        |
+| `timeout`                     | 認証などの一般的なタイムアウト。                              |
 
 ### listeners stop \<Identifier\>
 
-リスナーを停止します。識別子は`{type}:{name}`形式（例：`tcp:default`）。一時的な効果で、EMQX再起動後に元の状態に戻ります。
+リスナーを停止します。Identifierは`{type}:{name}`形式（例：`tcp:default`）。一時的な効果で、EMQX再起動後に元の状態に戻ります。
 
 ```bash
 $ emqx ctl listeners stop tcp:default
@@ -975,12 +974,12 @@ Stop tcp:default listener successfully.
 ```
 
 ::: tip
-リスナー停止により、接続中のすべてのクライアントが切断されます。
+リスナー停止は接続中の全クライアントを切断します。
 :::
 
 ### listeners start \<Identifier\>
 
-リスナーを起動します（一時的な効果で再起動後に元に戻る）。
+リスナーを起動します（一時的な効果）。
 
 ```bash
 $ emqx ctl listeners start tcp:default
@@ -997,12 +996,12 @@ Restarted tcp:default listener successfully.
 ```
 
 ::: tip
-リスナー再起動により、接続中のすべてのクライアントが切断されます。
+リスナー再起動は接続中の全クライアントを切断します。
 :::
 
 ### listeners enable \<Identifier\> \<true/false\>
 
-リスナーを有効化または無効化します（設定に永続化され、恒久的に有効）。
+リスナーを有効化または無効化します。設定に永続化され、恒久的に有効です。
 
 ```bash
 $ emqx ctl listeners enable tcp:default true
@@ -1016,7 +1015,7 @@ Disabled tcp:default listener successfully.
 
 ## authz cache-clean
 
-キャッシュされた認可（ACL）データを強制的に削除したい場合に使用します。
+認可（ACL）キャッシュを強制的にクリアしたい場合に有用なコマンドです。
 
 ### authz cache-clean all
 
@@ -1069,13 +1068,13 @@ emqx@127.0.0.1 PEM cache clean OK
 
 ## olp
 
-OLPはオーバーロード保護を意味します。  
-`olp`コマンドはオーバーロード状態の確認や、システムのオーバーロード保護の有効・無効を操作します。
+OLPはオーバーロード保護の略です。  
+`olp`コマンドはオーバーロード状態の確認やシステムのオーバーロード保護の有効/無効を操作します。
 
 詳細は`overload_protection`設定ドキュメントを参照してください。
 
 ::: tip
-`olp`はデフォルトで有効ではなく、CLIから有効化しても設定に永続化されません。
+`olp`はデフォルトで有効ではなく、CLIからの有効化は設定に永続化されません。
 :::
 
 ### olp status
@@ -1107,7 +1106,7 @@ Disable overload protetion 'emqx@127.0.0.1' : ok
 
 ## data
 
-ノードデータをtarアーカイブファイルにエクスポート／インポートするコマンドです。
+ノードのデータをtarアーカイブファイルにエクスポート／インポートするコマンドです。
 
 ### data export
 
@@ -1118,14 +1117,15 @@ data export \
   [--dir out_dir]
 ```
 
-EMQXノードからデータをtarアーカイブにエクスポートします。バックアップやノード間データ移行に便利です。
+EMQXノードのデータをtarアーカイブにエクスポートします。バックアップやノード間データ移行に便利です。
 
-含まれるデータ：  
-- クラスター設定  
-- EMQXデータディレクトリの追加ファイル（SSL証明書など）  
-- 組み込みデータベース  
+含まれるデータ：
 
-`--root-keys`および`--table-sets`オプションでエクスポート対象を指定可能。指定しない場合はすべてエクスポートされます。
+- クラスター設定
+- EMQXデータディレクトリの追加ファイル（SSL証明書など）
+- 組み込みデータベース
+
+`--root-keys`および`--table-sets`オプションでエクスポート対象を指定可能。指定しなければ全データをエクスポートします。
 
 ```bash
 emqx ctl data export --root-keys listeners,connectors,actions,rule_engine --dir /tmp
@@ -1148,7 +1148,7 @@ Data has been successfully exported to /tmp/emqx-export-2025-08-06-12-00-19.334.
 
 ### data import \<File\>
 
-指定したtarアーカイブファイルからデータをインポートします。バックアップからの復元や新ノードへの移行に使用します。
+指定したtarアーカイブファイルからデータをインポートします。バックアップからの復元や新ノードへのデータ移行に使用します。
 
 ```
 emqx ctl data import /tmp/emqx-export-2025-08-06-12-00-19.334.tar.gz
@@ -1212,15 +1212,15 @@ Durable Storageのレプリカセットを変更します。
 
 ### ds forget \<site\>
 
-既知のサイト一覧からサイトを削除します。
+既知のサイトリストからサイトを削除します。
 
 ## exclusive
 
-現在のシステムのすべてのexclusiveトピックを表示または削除するコマンドです。
+現在のシステム内のすべての排他トピックを表示したり、排他トピックを削除したりするコマンドです。
 
 ### exclusive list
 
-すべてのexclusiveトピックを一覧表示します。
+すべての排他トピックを一覧表示します。
 
 ```bash
 $ emqx ctl exclusive list
@@ -1229,7 +1229,7 @@ t/1 -> client1
 
 ### exclusive delete \<Topic\>
 
-exclusiveトピックを削除します。
+排他トピックを削除します。
 
 ```bash
 $ emqx ctl exclusive delete t/1
@@ -1238,11 +1238,11 @@ ok
 
 ## retainer
 
-retainerコマンドは保持されたメッセージの検査や管理に使用します。`emqx ctl retainer reindex`コマンドで保持メッセージのインデックス作成や更新も可能です。
+retainerコマンドは保持されたメッセージの検査や管理に使用できます。また、`emqx ctl retainer reindex`コマンドで保持メッセージのインデックス作成や更新が可能です。
 
 ### retainer info
 
-保持メッセージの数を表示します。
+保持メッセージ数を表示します。
 
 ```bash
 $ emqx ctl retainer info
@@ -1251,7 +1251,7 @@ Number of retained messages: 3
 
 ### retainer topics
 
-保持メッセージがあるすべてのトピックを表示します。
+保持メッセージが存在するすべてのトピックを表示します。
 
 ```bash
 $ emqx ctl retainer topics
@@ -1270,7 +1270,7 @@ emqx ctl retainer clean
 
 ### retainer clean \<Topic\>
 
-特定トピックフィルターに従って保持メッセージをクリアします。
+指定したトピックフィルターに従って保持メッセージをクリアします。
 
 ```bash
 emqx ctl retainer clean t/1
@@ -1278,7 +1278,7 @@ emqx ctl retainer clean t/1
 
 ### retainer reindex status
 
-インデックス作成処理の状態を表示します。
+インデックス再作成処理の状態を表示します。
 
 ```bash
 $ emqx ctl retainer reindex status
@@ -1287,7 +1287,7 @@ Reindexing is not running
 
 ### retainer reindex start [force]
 
-設定に基づき保持メッセージトピックの新しいインデックスを生成します。`true`を`<force>`パラメータに渡すと、既に開始されたインデックス作成を無視して強制的に開始します。
+設定に基づき保持メッセージトピックの新しいインデックスを生成します。`true`を`<force>`パラメータに渡すと、既存の再インデックス処理を無視して強制的に開始します。
 
 ```bash
 $ emqx ctl retainer reindex start true
@@ -1298,7 +1298,7 @@ Reindexing finished
 
 ## observer
 
-Erlang仮想マシンの状態を監視するコマンドで、Linuxの`top`コマンドのようなリアルタイムビューを提供します。
+Erlang仮想マシンの状態をリアルタイムで監視できるコマンドです。Linuxの`top`コマンドのようなビューを提供します。
 
 ### observer status
 
@@ -1310,7 +1310,7 @@ $ emqx ctl observer status
 
 ### observer bin_leak
 
-すべてのプロセスでガベージコレクションを強制実行し、最大量のバイナリデータを解放した上位100プロセスを表示します。メモリリークの可能性を調査できます。
+すべてのプロセスにガベージコレクションを強制し、最大量のバイナリデータを解放した上位100プロセスを表示します。メモリリークの可能性を調査できます。
 
 ```bash
 $ emqx ctl observer bin_leak
@@ -1329,7 +1329,7 @@ $ emqx ctl observer bin_leak
 
 ### observer load Mod
 
-EMQXクラスター内のすべてのノードに指定モジュールをロードします。クラスター全体でモジュールの利用を保証したい場合に使用します。
+EMQXクラスターの全ノードで指定モジュールをロードします。クラスター全体でモジュールを利用可能にする際に使用します。
 
 ```bash
 $ emqx ctl observer load Mod
@@ -1338,49 +1338,49 @@ Loaded 'Mod' module on []: ok
 
 ## conf
 
-EMQXクラスター設定の確認・変更に使用するコマンドです。
+EMQXクラスター設定の確認・変更に使用します。
 
 ### conf reload --replace|--merge
 
-ローカルノードの`etc/emqx.conf`をリロードします。デフォルトで新設定は既存設定に上書きされます。`--replace`を指定すると既存設定を完全に置き換えます。
+ローカルノードの`etc/emqx.conf`をリロードします。デフォルトでは新設定が既存設定にオーバーレイされます。`--replace`を指定すると既存設定を置き換えます。
 
 ### conf show_keys
 
-現在使用中のすべての設定キーを表示します。
+現在使用中の設定キーをすべて表示します。
 
 ### conf show [\<key\>]
 
-指定キー配下の設定（デフォルト値含む）を表示します。キー未指定時はすべて表示します。
+指定キー配下の使用中設定（デフォルト値含む）を表示します。キー未指定時は全キーを表示します。
 
 ### conf load --replace|--merge \<path\>
 
-HOCON形式の設定ファイルを読み込みます。デフォルトで新設定は既存設定に上書きされます。`--replace`を指定すると既存設定を完全に置き換えます。現在のノードがクラスター全体に設定変更を同期するトランザクションを開始します。
+HOCON形式の設定ファイルを読み込みます。デフォルトでは新設定が既存設定にオーバーレイされます。`--replace`で置換可能。現在のノードがクラスター全体に設定変更を同期するトランザクションを開始します。
 
-注意：ローリングアップグレード中はランタイム設定変更を行わないでください。
+注意：ローリングアップグレード中のランタイム設定変更は避けてください。
 
 ## conf cluster_sync
 
-クラスター内ノード間での設定同期に問題がある場合のトラブルシューティング用コマンドです。
+クラスター内ノード間の設定同期に問題がある際のトラブルシューティング用コマンドです。
 
 ::: tip
 
-EMQX 5.0.xではこのコマンドは`cluster_call`という名前でした。5.1でも利用可能ですが、ヘルプには表示されません。
+EMQX 5.0.xでは`cluster_call`という名前でした。EMQX 5.1でも利用可能ですが、ヘルプには表示されません。
 
 :::
 
-EMQXのHTTP APIは多くの設定変更に利用可能です。API呼び出し（Dashboard操作など）を受けたノードはまずローカルの`data/configs/cluster.hocon`に変更を書き込み、データベースに記録し、非同期で他ノードに転送します。
+EMQX HTTP APIやダッシュボード操作で設定変更が行われると、受け取ったノードはまずローカルの`data/configs/cluster.hocon`に書き込みます。その後、変更内容をデータベースに記録し、非同期で他ノードに転送します。
 
-何らかの理由でレプリケーションが他ノードに適用できない場合、このコマンドで状態確認や修正が可能です。
+何らかの理由で同期が失敗しているノードを調査・修正するためにこのコマンドを使います。
 
-EMQXはクラスター内の各設定変更にID（`tnx_id`）を付与し、クラスター内で厳密に増加します。Dashboardなどからの変更はすべてデータベースに記録されます。
+EMQXはクラスター内の各設定変更に対しID（`tnx_id`）を生成し、これはクラスター内で厳密に増加します。ダッシュボードからの変更もこのIDで管理されます。
 
 ::: tip
-`skip`や`fast_forward`コマンドはクラスター内ノード間で設定の不整合を引き起こす可能性があります。
+`skip`や`fast_forward`コマンドはクラスター内ノード間で設定の不整合を招く可能性があります。
 :::
 
 ### conf cluster_sync status
 
-すべてのノードのクラスター設定同期状態の概要を表示します。
+全ノードのクラスター設定同期状態の概要を表示します。
 
 ```bash
 $ emqx ctl conf cluster_sync status
@@ -1393,7 +1393,7 @@ All configuration synchronized(tnx_id=0) successfully
 
 指定した`tnx_id`の設定変更トランザクションの詳細を表示します。
 
-以下は2番目の変更（`tnx_id=2`）でTLSリスナーを有効化する操作を表示した例です。
+以下は2番目の変更（`tnx_id=2`）でTLSリスナー有効化操作の例です。
 
 ```bash
 $ emqx ctl conf cluster_sync inspect 2
@@ -1409,31 +1409,31 @@ $ emqx ctl conf cluster_sync inspect 2
 
 ### conf cluster_sync skip [node]
 
-指定ノードで現在失敗中のコミットをスキップして進めます。
+指定ノードで現在失敗しているコミットをインクリメントします。
 
 ::: warning 注意
 
-クラスター内ノード間で設定不整合が発生する可能性があります。
+クラスター内ノード間で設定不整合が生じる可能性があります。
 
 :::
 
 ### conf cluster_sync fast_forward [node] \<tnx_id\>
 
-指定ノードで指定`tnx_id`まで設定変更を高速進行させます。
+指定ノードで指定`tnx_id`まで設定変更を高速追従します。
 
 ::: warning 注意
 
-クラスター内ノード間で設定不整合が発生する可能性があります。
+クラスター内ノード間で設定不整合が生じる可能性があります。
 
 :::
 
 ### conf cluster_sync fix
 
-最も包括的な設定を持つノード（通常は最高の`tnx_id`を持つ設定リーダー）から他ノードへ同期します。
+最も包括的な設定を持つノード（通常は設定リーダー、最高`tnx_id`保持ノード）と他ノードを同期します。
 
 ## eviction status
 
-現在のノードのeviction状態を取得します。
+現在のノードのエビクション（強制切断）状態を取得します。
 
 ```bash
 $ emqx ctl eviction
@@ -1442,11 +1442,11 @@ Eviction status: disabled
 
 ## rebalance
 
-クラスター内の負荷を再分散するコマンドです。高負荷ノードから低負荷ノードへ接続やセッションを移行し、ノード間の負荷バランスを取ります。
+クラスター内の負荷分散を目的に、高負荷ノードから低負荷ノードへ接続やセッションを移行するコマンドです。
 
 ### rebalance start --evacuation
 
-現在ノードの避難（evacuation）を開始し、オプションで指定サーバーへのリダイレクトを行います。
+現在ノードの退避を開始し、指定サーバーへのリダイレクトをオプションで設定します。
 
 ```
 rebalance start --evacuation \
@@ -1460,7 +1460,7 @@ rebalance start --evacuation \
 
 ### rebalance start
 
-現在ノードをコーディネーターとして指定ノード群のリバランスを開始します。
+現在ノードをコーディネーターとして指定ノードでリバランスを開始します。
 
 ```
 rebalance start \
@@ -1485,19 +1485,19 @@ rebalance start \
 
 ### rebalance status
 
-クラスター全体のリバランス／避難処理の状態を取得します。
+クラスター全体の現在のリバランス／退避処理の状態を取得します。
 
 ### rebalance stop
 
-現在ノードの避難を停止します。
+現在ノードの退避を停止します。
 
 ## gateway
 
-ゲートウェイのロード状況や稼働状態を確認・管理するコマンドです。
+ゲートウェイのロード状況や稼働状態を検査・管理するコマンドです。
 
 ### gateway list
 
-すべてのゲートウェイ情報を一覧表示します。
+すべてのゲートウェイの情報を一覧表示します。
 
 ```bash
 $ emqx ctl gateway list
@@ -1510,7 +1510,7 @@ Gateway(name=stomp, status=unloaded)
 
 ### gateway lookup \<Name\>
 
-特定ゲートウェイの詳細情報を確認します。
+特定ゲートウェイの詳細情報を表示します。
 
 ```bash
 $ emqx ctl gateway lookup coap
@@ -1573,7 +1573,7 @@ ok
 
 システムに登録されているゲートウェイを一覧表示します。
 
-デフォルトでは以下5つのゲートウェイが登録されています：
+デフォルトで5つのゲートウェイが登録されています：
 
 * coap
 * exproto
@@ -1581,8 +1581,8 @@ ok
 * mqttsn
 * stomp
 
-EMQXはプラグイン可能な設計であり、より多くのゲートウェイをプラグインとしてインストールし、実行時にEMQXに登録できます。  
-登録後は管理APIやCLI（`gateway`コマンド参照）で管理可能です。
+EMQXはプラグイン可能な設計であり、追加のゲートウェイをプラグインとしてインストールし、ランタイムにEMQXへ登録できます。  
+登録後は管理APIやCLI（`gateway`コマンド）で管理可能です。
 
 ## gateway-clients
 
@@ -1590,11 +1590,11 @@ EMQXはプラグイン可能な設計であり、より多くのゲートウェ�
 
 ### gateway-clients list \<Name\>
 
-指定ゲートウェイのすべてのクライアントを一覧表示します。
+指定ゲートウェイの全クライアントを一覧表示します。
 
 ### gateway-clients lookup \<Name\> \<ClientId\>
 
-指定クライアントの情報を検索します。
+指定クライアントの情報を表示します。
 
 ### gateway-clients kick \<Name\> \<ClientId\>
 
@@ -1635,7 +1635,7 @@ emqx ctl license update <YOUR_LICENSE_STRING>
 
 ### license update default
 
-デフォルトのCommunity Licenseに戻します。
+デフォルトのCommunityライセンスに戻します。
 
 ```bash
 emqx ctl license update default
@@ -1643,14 +1643,14 @@ emqx ctl license update default
 
 ### license history
 
-セッションのハイウォーターマーク履歴を表示します。EMQX Enterpriseは日次ピークセッション数を記録し、課金監査のため少なくとも24ヶ月分を保持します。
+セッションのハイウォーターマーク履歴を表示します。EMQX Enterpriseは日次ピークセッション数を記録し、請求監査のため24ヶ月以上保持します。
 
 ```bash
 emqx ctl license history [N] [--period daily|monthly] [--json]
 ```
 
-- `N`: 省略可能な正の整数。返される行数の上限（デフォルトは月次期間で24）  
-- `--period daily|monthly`: 集計粒度。`daily`はカレンダー日ごとに1行、`monthly`は日次ピークを月次最大値に集約（デフォルトは`monthly`）  
+- `N`: オプションの正の整数。返される行数の上限（デフォルトは月次期間で24）
+- `--period daily|monthly`: 集計粒度。`daily`はカレンダー日ごとに1行、`monthly`は日次ピークを月次最大に折り畳み（デフォルトは`monthly`）
 - `--json`: プレーンテキストではなくJSON形式で出力
 
 **例：プレーンテキスト出力**
@@ -1678,7 +1678,7 @@ $ emqx ctl license history --json
 }
 ```
 
-まだデータが記録されていない場合、プレーンテキスト出力は以下のようになります。
+まだデータが記録されていない場合、プレーンテキスト出力は以下を表示します：
 
 ```
 No session high-watermark history recorded.
@@ -1686,17 +1686,15 @@ No session high-watermark history recorded.
 
 ## mt
 
-`mt`コマンドはEMQX Enterpriseのマルチテナンシー保守操作を提供します。
+`mt`コマンドはEMQX Enterpriseのマルチテナンシーのメンテナンス操作を提供します。
 
 ### mt purge_ns \<Namespace\>
 
-EMQX Enterprise 6.1.4以降、このコマンドは指定したネームスペースを削除し、そのクリーンアップ処理を同期的に実行します。  
-クリーンアップはネームスペース設定と組み込みデータベース内のネームスペーススコープのデータ（パスワード認証ユーザー、SCRAMユーザー、認可ルールなど）を削除します。  
-ネームスペースが存在しなくてもコマンドは実行されます。
+EMQX Enterprise 6.1.4以降、このコマンドは指定したネームスペースを削除し、そのクリーンアップ処理を同期的に実行します。クリーンアップはネームスペース設定と組み込みデータベース内のネームスペーススコープのデータ（パスワード認証ユーザー、SCRAMユーザー、認可ルールなど）を削除します。ネームスペースが存在しなくてもコマンドは実行されます。
 
 ネームスペース状態が変わっていなければ操作は冪等です。クリーンアップが完了しなかった場合、同名のネームスペースが再作成されていなければ再実行可能です。
 
-中断されたネームスペース削除による残存データを除去する最終手段として使用してください。通常のネームスペース削除はDashboardまたは`DELETE /mt/ns/<namespace>` REST APIを使用してください。
+中断されたネームスペース削除による残存データを除去する最後の手段として使用してください。通常のネームスペース削除はダッシュボードまたはREST APIの`DELETE /mt/ns/<namespace>`を使用してください。
 
 ::: warning 重要
 
@@ -1711,27 +1709,27 @@ EMQX Enterprise 6.1.4以降、このコマンドは指定したネームスペ�
 emqx ctl mt purge_ns tenant-a
 ```
 
-すべてのクリーンアップステップが成功すれば、出力JSONに`"result": "ok"`が含まれます。
+すべてのクリーンアップステップが成功すれば、出力JSONに`"result": "ok"`が含まれます：
 
 ```json
 {"namespace":"tenant-a","result":"ok"}
 ```
 
-クリーンアップに失敗したステップがあれば、出力JSONに`"error": "cleanup_incomplete"`が含まれます。
+クリーンアップのいずれかのステップが失敗すると、出力JSONに`"error": "cleanup_incomplete"`が含まれます：
 
 ```json
 {"error":"cleanup_incomplete","hint":"some cleanup steps failed; check logs and re-run the command to retry","namespace":"tenant-a"}
 ```
 
-失敗したクリーンアップステップはEMQXログを確認し、原因を解決してから再実行してください。
+EMQXログを確認し失敗原因を解消してから再実行してください。
 
 ## admins
 
-管理ユーザーを管理するコマンドです。
+管理者ユーザーを管理するコマンドです。
 
 ### admins add \<Username\> \<Password\> \<Description\>
 
-Dashboardユーザーを追加します。
+ダッシュボードユーザーを追加します。
 
 ```bash
 $ emqx ctl admins add emqx_u EMQemq@1172
@@ -1740,7 +1738,7 @@ ok
 
 ### admins passwd \<Username\> \<Password\>
 
-特定Dashboardユーザーのパスワードをリセットします。
+特定ダッシュボードユーザーのパスワードをリセットします。
 
 ```bash
 $ emqx ctl admins passwd emqx_u EMQemq@11721
@@ -1749,7 +1747,7 @@ ok
 
 ### admins del \<Username\>
 
-特定Dashboardユーザーを削除します。
+特定ダッシュボードユーザーを削除します。
 
 ```bash
 $ emqx ctl admins del emqx_u
@@ -1758,7 +1756,7 @@ ok
 
 ## api_keys
 
-REST APIキーをコマンドラインから管理するコマンドです。DashboardにログインせずAPIアクセスを初期設定する際に便利です。
+REST APIキーをコマンドラインから管理するコマンドです。ダッシュボードにログインせずAPIアクセスを初期化できます。
 
 ### api_keys list
 
@@ -1789,7 +1787,7 @@ $ emqx ctl api_keys show --name my-key
 
 ### api_keys add
 
-新しいAPIキーを作成します。生成された`api_key`と`api_secret`が出力されます。`api_secret`は作成時にのみ表示されます。
+新しいAPIキーを作成します。生成された`api_key`と`api_secret`が出力されます。`api_secret`は作成時のみ表示されます。
 
 ```bash
 $ emqx ctl api_keys add --name my-key --role viewer --valid-days 30 --desc "My API key"
@@ -1805,19 +1803,19 @@ $ emqx ctl api_keys add --name my-key --role viewer --valid-days 30 --desc "My A
 }
 ```
 
-オプション:
+オプション：
 
 | オプション | 説明 |
 | --- | --- |
 | `--name <Name>` | 必須。APIキーを識別する名前。 |
 | `--api-secret <Secret>` | 任意。シークレットキーを指定。省略時は自動生成。 |
-| `--valid-days <infinity\|days>` | 任意。有効期間。`infinity`は無期限（デフォルト）、または日数指定。 |
-| `--role <Role>` | 任意。`administrator`（デフォルト）、`viewer`、`publisher`のいずれか。[Roles and Permissions](./api.md#roles-and-permissions)参照。 |
+| `--valid-days <infinity\|days>` | 任意。有効期限。`infinity`で無期限（デフォルト）、または日数指定。 |
+| `--role <Role>` | 任意。`administrator`（デフォルト）、`viewer`、`publisher`のいずれか。詳細は[Roles and Permissions](./api.md#roles-and-permissions)参照。 |
 | `--desc <Desc>` | 任意。APIキーの説明。 |
 
 ### api_keys enable --name \<Name\>
 
-以前に無効化したAPIキーを有効化します。
+無効化されていたAPIキーを有効化します。
 
 ```bash
 $ emqx ctl api_keys enable --name my-key
