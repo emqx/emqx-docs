@@ -1,10 +1,10 @@
 # デバイスメッセージブロードキャスト（Bcast）
 
-`emqx_bcast` プラグインは、バックエンドアプリケーションがHTTPを介してIoTデバイスにコマンドや通知、その他のメッセージを配信できるようにします。製品全体へのブロードキャスト、ターゲットを絞ったバッチ配信、QoS 1のオフライン再生をサポートしているため、アプリケーションはMQTT接続を維持したり、独自の一時的なオフライン配信キューやMQTTのPUBACK追跡システムを構築する必要がありません。アプリケーションはペイロードを一度登録し、そのメッセージIDを後のバッチリクエストで再利用することも可能です。
+`emqx_bcast` プラグインは、バックエンドアプリケーションがHTTP経由でIoTデバイスにコマンド、通知、その他のメッセージを配信できるようにします。製品全体へのブロードキャスト、ターゲットを絞ったバッチ配信、QoS 1のオフライン再生をサポートしているため、アプリケーションはMQTT接続を維持したり、一時的なオフライン配信キューやMQTTのPUBACK追跡システムを独自に構築する必要がありません。アプリケーションはペイロードを一度登録し、そのメッセージIDを後のバッチリクエストで再利用することも可能です。
 
 このプラグインはEMQX Enterprise 6.3.3以降で利用可能です。
 
-典型的なユースケースには、製品内のデバイスへのサービス通知や設定更新信号のブロードキャスト、選択したデバイスへのコマンドや設定更新の送信、一時的にオフラインのデバイスが再接続した際のQoS 1コマンドの配信などがあります。
+典型的なユースケースには、製品内のデバイスへのサービス通知や設定更新信号のブロードキャスト、選択したデバイスへのコマンドや設定更新の送信、一時的にオフラインだったデバイスが再接続した際のQoS 1コマンドの配信などがあります。
 
 ## クイックスタート
 
@@ -12,7 +12,7 @@
 
 ### プラグインのインストールと起動
 
-このクイックスタートではクラスター管理プラグインモードを使用します。[Download](#download) に記載のパッケージをダウンロードし、EMQXのプラグインディレクトリにコピーして、`<version>` をダウンロードしたプラグインのバージョンに置き換えてください。
+このクイックスタートではクラスター管理プラグインモードを使用します。[Download](#download) に記載のパッケージをダウンロードし、EMQXのプラグインディレクトリにコピーして、`<version>` をダウンロードしたプラグインバージョンに置き換えてください。
 
 ```bash
 cp emqx_bcast-<version>.tar.gz "$EMQX_HOME/plugins/"
@@ -20,16 +20,16 @@ emqx ctl plugins install emqx_bcast-<version> --cluster
 emqx ctl plugins start emqx_bcast-<version>
 ```
 
-シングルノード展開の場合は `--cluster` を省略してください。プラグインはダッシュボードからもインストールおよび起動できます。ダッシュボードでのインストールに必要な認可を含む両方の方法の詳細は、[Install and Manage Plugins](../../plugin-management.md#install-and-manage-plugins) を参照してください。
+単一ノードのデプロイメントの場合は `--cluster` を省略してください。Dashboardからもプラグインのインストールと起動が可能です。Dashboardでのインストールに必要な認可を含む両方の方法の詳細は [Install and Manage Plugins](../../plugin-management.md#install-and-manage-plugins) を参照してください。
 
 ### デバイス識別マッピングの設定
 
-プラグインは各MQTTクライアントを以下の識別子にマッピングします：
+プラグインは各MQTTクライアントを以下の識別子にマッピングします。
 
 - `ProductKey`：クライアントの `client_attrs.tns` ネームスペース属性
 - `DeviceName`：MQTTクライアントID
 
-ダッシュボードで **Management** -> **MQTT Settings** -> **Client Attributes** に移動し、属性 `tns` を追加して、その式を `nth(1, tokens(username, '-'))` に設定します。これは、`ProductKey-DeviceName` 形式のユーザー名の最初のセグメントからネームスペースを導出する設定に相当します。
+Dashboardで **Management** -> **MQTT Settings** -> **Client Attributes** に移動し、属性 `tns` を追加して、その式を `nth(1, tokens(username, '-'))` に設定します。これは `ProductKey-DeviceName` 形式のユーザー名の最初のセグメントからネームスペースを導出する設定と同等です。
 
 ```hocon
 mqtt.client_attrs_init = [
@@ -37,21 +37,21 @@ mqtt.client_attrs_init = [
 ]
 ```
 
-この設定により、ユーザー名が `P1-device001`、クライアントIDが `device001` のクライアントは、`ProductKey` が `P1`、`DeviceName` が `device001` となります。
+この設定により、ユーザー名が `P1-device001`、クライアントIDが `device001` で接続するクライアントは、`ProductKey` が `P1`、`DeviceName` が `device001` となります。
 
-クライアント属性の設定方法の詳細は、[Set Client Attributes](../../../../develop/client-attributes/client-attributes.md#set-client-attributes) を参照してください。
+クライアント属性の設定方法の詳細は [Set Client Attributes](../../../../develop/client-attributes/client-attributes.md#set-client-attributes) を参照してください。
 
-設定適用後はクライアントを再接続し、EMQXが接続時に属性を初期化するようにしてください。
+この設定を適用後、クライアントを再接続するとEMQXが接続時に属性を初期化します。
 
 ### APIキーの作成
 
-ダッシュボードで **System** -> **API Keys** に移動し、**Administrator** ロールのAPIキーを作成します。**Namespace** は無効のままにしてグローバルキーを作成してください。**Custom Restricted Permissions** を選択し、`plugin_api` スコープを選択します。APIキーとシークレットはすぐに保存してください。詳細な手順は [Create API Keys](../../../api.md#create-api-keys) を参照してください。
+Dashboardで **System** -> **API Keys** に移動し、**Administrator** ロールのAPIキーを作成します。**Namespace** は無効のままにしてグローバルキーを作成してください。**Custom Restricted Permissions** を選択し、`plugin_api` スコープを選択します。APIキーとシークレットはすぐに保存してください。詳細な手順は [Create API Keys](../../../api.md#create-api-keys) を参照してください。
 
-`plugin_api` スコープは `/api/v5/plugin_api/emqx_bcast/*` 以下のBcastランタイムエンドポイントの認可を付与します。プラグイン管理エンドポイント `/api/v5/plugins*` は `system` スコープが必要です。
+`plugin_api` スコープは `/api/v5/plugin_api/emqx_bcast/*` 以下のBcastランタイムエンドポイントへの認可を付与します。プラグイン管理用の `/api/v5/plugins*` エンドポイントは `system` スコープが必要です。
 
 ### デバイスの接続とサブスクライブ
 
-以下のコマンドを実行し、`device001` をユーザー名 `P1-device001` で接続し、製品 `P1` のデフォルトブロードキャストトピックにサブスクライブします：
+以下のコマンドを実行して、`device001` をユーザー名 `P1-device001` で接続し、製品 `P1` のデフォルトブロードキャストトピックをサブスクライブします。
 
 ```bash
 mqttx sub -h 127.0.0.1 -p 1883 \
@@ -61,13 +61,13 @@ mqttx sub -h 127.0.0.1 -p 1883 \
   -q 1 -v
 ```
 
-MQTTリスナーが認証を必要とする場合は、対応するパスワードおよびTLSオプションを追加してください。デフォルトトピックで `BatchPub` メッセージを受信するには、代わりに `/P1/device001/user/get` をサブスクライブしてください。
+MQTTリスナーで認証が必要な場合は、対応するパスワードやTLSオプションを追加してください。デフォルトトピックで `BatchPub` メッセージを受信するには、代わりに `/P1/device001/user/get` をサブスクライブしてください。
 
-ターゲットクライアントは配信トピックにサブスクライブしている必要があります。プラグインはクライアントが接続しているだけではメッセージを配信しません。
+ターゲットクライアントは配信トピックをサブスクライブしている必要があります。プラグインはクライアントが接続しているだけではメッセージを配信しません。
 
-### ブロードキャストの送信と検証
+### ブロードキャストの送信と確認
 
-MQTTXクライアントを起動したまま、別のターミナルで `<api_key>` と `<api_secret>` を前のステップで作成した認証情報に置き換え、以下を実行します：
+MQTTXクライアントを起動したまま、別のターミナルで `<api_key>` と `<api_secret>` を先ほど作成した認証情報に置き換えて以下を実行します。
 
 ```bash
 curl -u '<api_key>:<api_secret>' \
@@ -76,9 +76,9 @@ curl -u '<api_key>:<api_secret>' \
   -d '{"Action":"PubBroadcast","ProductKey":"P1","MessageContent":"SGVsbG8="}'
 ```
 
-`MessageContent` はBase64エンコード済みである必要があります。この例の `SGVsbG8=` は `Hello` にデコードされます。
+`MessageContent` はBase64エンコードされた文字列でなければなりません。この例の `SGVsbG8=` は `Hello` にデコードされます。
 
-EMQXはHTTP `200` を返し、以下のようなレスポンスが返されます：
+EMQXはHTTP `200` と以下のようなレスポンスを返します。
 
 ```json
 {
@@ -90,29 +90,29 @@ EMQXはHTTP `200` を返し、以下のようなレスポンスが返されま�
 
 MQTTXクライアントはトピック `/sys/broadcast/P1` でペイロード `Hello` を受信します。
 
-HTTP `200` はEMQXがリクエストを受理したことを示しますが、配信を保証するものではありません。各QoSレベルの配信保証については [Delivery Semantics](#delivery-semantics) を参照してください。
+HTTP `200` はEMQXがリクエストを受理したことを意味し、配信の成功を保証するものではありません。各QoSレベルの配信保証については [Delivery Semantics](#delivery-semantics) を参照してください。
 
 ::: warning 重要なお知らせ
 
 Bcastはメッセージをクライアントチャネルに直接送信します。これらのメッセージはパブリッシュ認可チェックや通常のMQTTパブリッシュパイプライン（ルールエンジン、スキーマ検証、メッセージ変換、保持メッセージ、遅延パブリッシュを含む）をバイパスします。
 
-Bcast APIへのアクセスは信頼できる呼び出し元のみに許可し、呼び出しアプリケーション側でペイロードやターゲット識別子の検証を行ってください。
+Bcast APIへのアクセスは信頼できる呼び出し元のみに許可し、呼び出し元アプリケーションでペイロードやターゲット識別子を検証してください。
 
 :::
 
 ## メッセージアクション
 
-すべてのメッセージアクションは以下のエンドポイントを使用します：
+すべてのメッセージアクションは以下のエンドポイントを使用します。
 
 ```http
 POST /api/v5/plugin_api/emqx_bcast/pub
 ```
 
-JSONリクエストボディの `Action` フィールドで操作を選択します。`MessageContent` はBase64エンコード済みである必要があります。
+JSONリクエストボディの `Action` フィールドで操作を選択します。`MessageContent` はBase64エンコード済みでなければなりません。
 
 ### オンラインデバイスへのブロードキャスト
 
-`PubBroadcast` は、1つの製品内の配信トピックにサブスクライブしているすべてのオンラインサブスクライバーにメッセージを送信します。メッセージは保存されないため、オフラインデバイスには届きません。
+`PubBroadcast` は製品内の配信トピックにサブスクライブしているすべてのオンラインサブスクライバーにメッセージを送信します。メッセージは保存されないため、オフラインデバイスは受信しません。
 
 ```json
 {
@@ -122,13 +122,13 @@ JSONリクエストボディの `Action` フィールドで操作を選択しま
 }
 ```
 
-プラグインは設定された `broadcast_topic` テンプレート（デフォルト値は `/sys/broadcast/${productKey}`）を展開します。`TopicFullName` に具体的なカスタムトピックを設定することも可能です。`TopicFullName` にはワイルドカードやテンプレートプレースホルダーは使用できません。
+プラグインは設定された `broadcast_topic` テンプレート（デフォルトは `/sys/broadcast/${productKey}`）を展開します。`TopicFullName` に具体的なカスタムトピックを設定することも可能です。`TopicFullName` にはワイルドカードやテンプレートプレースホルダーは使用できません。
 
-デフォルトの最大デコード済みペイロードサイズは64KiBです。
+デコード後のペイロードの最大サイズはデフォルトで64KiBです。
 
 ### デバイスリストへの送信
 
-`BatchPub` は明示的なデバイスリストにメッセージを送信します。リクエストは最大 `max_device_count` 個のユニークなデバイス名を指定可能です。デフォルトの上限は10,000です。
+`BatchPub` は明示的なデバイスリストにメッセージを送信します。リクエストは最大 `max_device_count` 件のユニークなデバイス名を指定できます。デフォルトの上限は10,000です。
 
 ```json
 {
@@ -140,20 +140,20 @@ JSONリクエストボディの `Action` フィールドで操作を選択しま
 }
 ```
 
-以下のペイロードフィールドのうち、いずれか一つを指定してください：
+以下のペイロードフィールドのうちいずれか一つを指定してください。
 
-- `MessageContent`：インラインのBase64エンコード済みペイロード。デフォルトの最大デコード済みペイロードサイズは10KiBです。
+- `MessageContent`：インラインのBase64エンコード済みペイロード。デコード後の最大サイズは10KiBです。
 - `MessageId`：`RegisterMessage` または以前のQoS 1バッチリクエストで作成されたペイロードのID。
 
-`BatchPub` の配信トピックは以下の順で選択されます：
+`BatchPub` の配信トピックは以下の順序で選択されます。
 
-1. `TopicTemplateName`（`${productKey}` と `${deviceName}` を展開）
-2. `TopicShortName`（`/${productKey}/${deviceName}/user/${TopicShortName}` に展開）
+1. `${productKey}` と `${deviceName}` を展開した `TopicTemplateName`
+2. `/${productKey}/${deviceName}/user/${TopicShortName}` として展開される `TopicShortName`
 3. 設定された `batch_topic`（デフォルトは `/${productKey}/${deviceName}/user/get`）
 
 ### メッセージの登録と再利用
 
-`RegisterMessage` は後続の `BatchPub` リクエストで再利用可能なペイロードを保存します：
+`RegisterMessage` は後の `BatchPub` リクエストで再利用可能なペイロードを保存します。
 
 ```json
 {
@@ -164,7 +164,7 @@ JSONリクエストボディの `Action` フィールドで操作を選択しま
 
 レスポンスには `MessageId` が含まれます。同一内容の登録は同じIDを返し、TTLを更新します。保存されたペイロードは不変です。
 
-既存メッセージのTTLを更新するには、内容の代わりにIDを送信してください：
+既存メッセージのTTLを更新するには、内容の代わりにIDを送信してください。
 
 ```json
 {
@@ -173,7 +173,7 @@ JSONリクエストボディの `Action` フィールドで操作を選択しま
 }
 ```
 
-`MessageContent` と `MessageId` は排他です。
+`MessageContent` と `MessageId` は排他関係にあります。
 
 ## 配信セマンティクス
 
@@ -181,35 +181,35 @@ JSONリクエストボディの `Action` フィールドで操作を選択しま
 
 | 要求されたQoS | オンラインデバイス | オフラインデバイス | 保存と確認 |
 | --- | --- | --- | --- |
-| `0` | ターゲットがオンラインかつサブスクライブしている場合に配信される。 | スキップされる。 | 保存やアック追跡は行わない。 |
-| `1` | サブスクライブQoSが1の場合に配信およびPUBACKまで追跡される。 | 保存され、デバイスが再接続してサブスクライブ後に再生される。 | 保留中配信は `msg_ttl`（デフォルト15日）後に期限切れとなる。 |
+| `0` | 対象がオンラインかつサブスクライブしている場合に配信されます。 | スキップされます。 | 保存やアック追跡は行いません。 |
+| `1` | サブスクリプションのQoSが1の場合、配信されPUBACKまで追跡されます。 | デバイスが再接続しサブスクライブした後に保存されて再生されます。 | 保留中の配信は `msg_ttl`（デフォルト15日）経過で期限切れとなります。 |
 
-実際の配信QoSは要求QoSとターゲットのサブスクライブQoSの低い方になります。QoS 1リクエストがQoS 0サブスクライブに到達した場合、プラグインはクライアントチャネルにメッセージを渡した時点で配信完了と見なします。
+実際の配信QoSは、要求QoSとターゲットのサブスクリプションQoSの低い方になります。QoS 1のリクエストがQoS 0のサブスクリプションに到達した場合、プラグインはクライアントチャネルにメッセージを渡した時点で配信完了とみなします。
 
 PUBACKはMQTTプロトコルレベルでの受信確認です。デバイスアプリケーションがメッセージを処理したりコマンドを実行したことを保証するものではありません。
 
-QoS 1のバッチ配信は非同期かつ少なくとも1回配信です。クライアントは特に再接続やセッション引き継ぎ時に重複メッセージを許容する必要があります。HTTP `200` の成功レスポンスはEMQXが非同期処理のためにリクエストを受理したことを示しますが、メッセージが保存または配信済みであることを意味しません。受理ノードが保存完了前に障害で停止した場合、リクエストは失われる可能性があります。
+QoS 1のバッチ配信は非同期かつ少なくとも一回の配信を保証します。クライアントは特に再接続やセッション引き継ぎ時にメッセージの重複を許容する必要があります。HTTP `200` の成功レスポンスはEMQXが非同期処理のためにリクエストを受理したことを意味し、メッセージが保存または配信されたことを保証しません。受理したノードが保存完了前に障害が発生すると、リクエストが失われる可能性があります。
 
-保留中のQoS 1状態はコアノード間でメモリ内にレプリケートされます。1つのコアノード障害は耐えられますが、クラスター全体の再起動は耐えられません。プロデューサーはクラスター完全再起動後にメッセージを再送できる必要があります。
+保留中のQoS 1状態はコアノード間でメモリ上にレプリケートされます。1つのコアノード障害は耐えられますが、クラスター全体の再起動には耐えられません。プロデューサーはクラスター完全再起動後にメッセージを再送できる必要があります。
 
-QoS 0メッセージもセッション引き継ぎウィンドウ中に重複する可能性があります。
+QoS 0メッセージもセッション引き継ぎのウィンドウ中に重複することがあります。
 
 ## プラグインの設定
 
-以下の表は有効な設定項目とそのデフォルト値を示します：
+以下の表は有効な設定項目とそのデフォルト値を示します。
 
-| 設定名 | デフォルト | 説明 |
+| 設定項目 | デフォルト | 説明 |
 | --- | --- | --- |
 | `broadcast_topic` | `/sys/broadcast/${productKey}` | `PubBroadcast` 用のトピックテンプレート。 |
 | `batch_topic` | `/${productKey}/${deviceName}/user/get` | `BatchPub` のデフォルトトピックテンプレート。 |
-| `msg_ttl` | `15d` | 登録メッセージおよび保留中QoS 1配信のTTL。更新は更新後に作成されたレコードにのみ適用。 |
-| `cleanup_interval` | `60s` | 期限切れレコードを削除する間隔。 |
+| `msg_ttl` | `15d` | 登録メッセージと保留中QoS 1配信のTTL。更新は更新後に作成されたレコードにのみ適用。 |
+| `cleanup_interval` | `60s` | 期限切れレコード削除の間隔。 |
 | `max_device_count` | `10000` | 1回の `BatchPub` リクエストで指定可能な最大デバイス数。 |
-| `max_message_size_broadcast` | `65536` | ブロードキャストの最大デコード済みペイロードサイズ（バイト）。 |
-| `max_message_size_batch` | `10240` | バッチの最大デコード済みペイロードサイズ（バイト）。 |
+| `max_message_size_broadcast` | `65536` | ブロードキャストのデコード後ペイロード最大サイズ（バイト）。 |
+| `max_message_size_batch` | `10240` | バッチ配信のデコード後ペイロード最大サイズ（バイト）。 |
 | `max_pending_deliveries` | `10000000` | クラスター全体の保留中QoS 1配信の上限。 |
-| `max_pending_deliveries_per_device` | `100` | デバイスごとの保留中QoS 1配信の上限。値は10〜200の範囲にクランプされる。起動時やフェイルオーバー時にベストエフォートで適用。 |
-| `delivery_pool_size` | `0` | 各配信プールのワーカー数。`0` はErlangスケジューラー数に合わせて自動設定。変更時はプールが再起動される。 |
+| `max_pending_deliveries_per_device` | `100` | デバイスごとの保留中QoS 1配信の上限。値は10から200の範囲に制限。起動時やフェイルオーバー時にベストエフォートで適用。 |
+| `delivery_pool_size` | `0` | 各配信プールのワーカー数。`0` はErlangスケジューラー数に自動設定。変更時にプールが再起動。 |
 
 設定例：
 
@@ -226,17 +226,17 @@ max_pending_deliveries_per_device = 100
 delivery_pool_size = 0
 ```
 
-これらの設定は標準のプラグイン設定APIで更新可能です：
+これらの設定は標準のプラグイン設定APIで更新します。
 
 ```http
 PUT /api/v5/plugins/<name-vsn>/config
 ```
 
-インストール、起動、設定手順の詳細は [Install and Manage Plugins](../../plugin-management.md#install-and-manage-plugins) を参照してください。`/api/v5/plugins*` 以下のREST API操作には `system` スコープが必要です。ノードピン留めプラグインの場合、設定更新はサポートされますがREST APIでのライフサイクル管理はできません。
+インストール、起動、設定手順の詳細は [Install and Manage Plugins](../../plugin-management.md#install-and-manage-plugins) を参照してください。`/api/v5/plugins*` 以下のREST API操作は `system` スコープが必要です。ノードピン留めプラグインの場合、設定更新は可能ですがREST APIでのライフサイクル管理はできません。
 
 ## APIの呼び出し
 
-EMQXのAPIキーとシークレットを使ったHTTP Basic認証を利用します：
+EMQXのAPIキーとシークレットを使ったHTTP Basic認証で呼び出します。
 
 ```bash
 curl -u '<api_key>:<api_secret>' \
@@ -245,11 +245,11 @@ curl -u '<api_key>:<api_secret>' \
   -d '{"Action":"PubBroadcast","ProductKey":"P1","MessageContent":"SGVsbG8="}'
 ```
 
-ダッシュボードユーザーまたはAPIキーは `plugin_api` または `system` スコープを持ち、ロールとネームスペースの権限が要求されたHTTPメソッドを許可している必要があります。プラグインAPIゲートウェイは `system` を受け入れますが、Bcastランタイム呼び出しには制限付きの `plugin_api` スコープを推奨します。`plugin_api` スコープはプラグインのライフサイクルエンドポイント `/api/v5/plugins*` の認可は含みません。
+DashboardユーザーまたはAPIキーは `plugin_api` または `system` スコープを持ち、ロールとネームスペースの権限で要求されたHTTPメソッドが許可されている必要があります。プラグインAPIゲートウェイは `system` スコープを受け入れますが、Bcastのランタイム呼び出しには制限された `plugin_api` スコープの使用を推奨します。`plugin_api` スコープはプラグインのライフサイクルエンドポイント `/api/v5/plugins*` への認可は含みません。
 
-`plugin_api` スコープはプラグインAPIゲートウェイを通じて公開されるすべてのエンドポイントへのアクセスを許可します。Bcastではメッセージや配信の削除、メトリクスリセットのエンドポイントも含まれるため、付与前に公開される操作を十分に確認してください。
+`plugin_api` スコープはプラグインAPIゲートウェイ経由で公開されるすべてのエンドポイントへのアクセスを許可します。Bcastではメッセージや配信の削除、メトリクスリセットのエンドポイントも含まれるため、付与前にすべての公開操作を確認してください。
 
-成功したリクエストはHTTP `200` を返します：
+成功したリクエストはHTTP `200` を返します。
 
 ```json
 {
@@ -259,7 +259,7 @@ curl -u '<api_key>:<api_secret>' \
 }
 ```
 
-エラー応答は以下の形式です：
+エラー時のレスポンス例：
 
 ```json
 {
@@ -270,66 +270,66 @@ curl -u '<api_key>:<api_secret>' \
 }
 ```
 
-主なエラー例：
+よくあるエラー：
 
-| HTTPステータス | コード | 原因 |
+| HTTPステータス | Code | 原因 |
 | --- | --- | --- |
 | `400` | `InvalidProductKey`, `InvalidDeviceName`, `DuplicateDeviceName` | 製品またはデバイス識別子が欠落または無効、またはデバイスリストに重複がある。 |
-| `400` | `DeviceCountExceeded`, `MessageTooLarge`, `InvalidBase64` | リクエストが設定上限を超過、または無効なBase64が含まれる。 |
-| `400` | `InvalidTopicTemplate`, `InvalidQos` | トピックフィールドが無効、または `Qos` が `0` または `1` 以外。 |
+| `400` | `DeviceCountExceeded`, `MessageTooLarge`, `InvalidBase64` | リクエストが設定上限を超過、またはBase64が無効。 |
+| `400` | `InvalidTopicTemplate`, `InvalidQos` | トピックフィールドが無効、または `Qos` が `0` または `1` でない。 |
 | `400` | `MessageNotFound`, `MessageIdContentConflict`, `InvalidMessageId` | 参照されたメッセージが存在しない、ペイロードフィールドが競合、またはIDが無効。 |
-| `429` | `QuotaExceeded` | グローバルまたはデバイスごとの保留中配信上限に達した。 |
-| `429` | `Busy` | ローカルのQoS 1受付キューが満杯。後で再試行。 |
+| `429` | `QuotaExceeded` | グローバルまたはデバイスごとの保留配信上限に達した。 |
+| `429` | `Busy` | ローカルのQoS 1受け入れキューが満杯。後で再試行。 |
 
 ## メッセージと配信の管理
 
-管理エンドポイントはメタデータを公開しますが、メッセージペイロードの内容は返しません。
+管理用エンドポイントはメタデータを公開し、メッセージペイロードの内容は返しません。
 
 | メソッド | エンドポイント | 説明 |
 | --- | --- | --- |
-| `GET` | `/api/v5/plugin_api/emqx_bcast/messages?limit=100&cursor=<cursor>` | 登録済みメッセージ一覧。`limit` は1〜1000の範囲。 |
-| `GET` | `/api/v5/plugin_api/emqx_bcast/messages/:messageId` | メッセージメタデータと未配信数の取得。 |
-| `DELETE` | `/api/v5/plugin_api/emqx_bcast/messages/:messageId` | メッセージと関連する保留中配信の削除。 |
+| `GET` | `/api/v5/plugin_api/emqx_bcast/messages?limit=100&cursor=<cursor>` | 登録済みメッセージの一覧。`limit` は1〜1000の範囲。 |
+| `GET` | `/api/v5/plugin_api/emqx_bcast/messages/:messageId` | メッセージのメタデータと未配信数を取得。 |
+| `DELETE` | `/api/v5/plugin_api/emqx_bcast/messages/:messageId` | メッセージと関連する保留中配信を削除。 |
 | `GET` | `/api/v5/plugin_api/emqx_bcast/deliveries?product_key=<key>&device_name=<name>` | 1デバイスの保留中配信一覧。両クエリパラメータ必須。 |
-| `GET` | `/api/v5/plugin_api/emqx_bcast/deliveries/:deliveryId` | 1件の保留中配信の取得。 |
-| `DELETE` | `/api/v5/plugin_api/emqx_bcast/deliveries/:deliveryId` | 1件の保留中配信の削除。 |
+| `GET` | `/api/v5/plugin_api/emqx_bcast/deliveries/:deliveryId` | 1件の保留中配信を取得。 |
+| `DELETE` | `/api/v5/plugin_api/emqx_bcast/deliveries/:deliveryId` | 1件の保留中配信を削除。 |
 
-削除はすでに送信中の配信を取り消すことはできません。メッセージ削除は全稼働中コアノードの参加が必要です。コアが利用不可または非互換の場合、`500 InternalError` を返し、いかなるレコードも削除しません。
+削除はすでに配信中のものを取り消せません。メッセージ削除はすべての稼働中コアノードの参加が必要です。コアノードが利用不可または非互換の場合、`500 InternalError` を返し、いかなるレコードも削除しません。
 
-## Bcastの監視
+## Bcastのモニタリング
 
-プラグインはPrometheus形式のテキストメトリクスを以下で公開します：
+プラグインはPrometheus形式のテキストメトリクスを以下で公開します。
 
 ```http
 GET /api/v5/plugin_api/emqx_bcast/metrics
 ```
 
-メトリクスはノードローカルです。すべてのEMQXノードをスクレイプし、クラスター全体で集計してください。QoS 1カウンターは以下の関係を満たします：
+メトリクスはノードローカルです。すべてのEMQXノードをスクレイプし、クラスター全体で集計してください。QoS 1カウンターは以下の関係を満たします。
 
 ```text
 wanted = acked + auto_acked + ttl_expired + canceled + queued + inflight
 ```
 
-対応するメトリクス名は `bcast_batch_pub_qos1_` プレフィックスを使用します。`queued` と `inflight` ゲージはライブのバックログを示し、`redelivered` カウンターは重複配信試行を監視します。
+対応するメトリクス名は `bcast_batch_pub_qos1_` プレフィックスを使用します。`queued` と `inflight` ゲージはリアルタイムのバックログを示し、`redelivered` カウンターは重複配信試行を示します。
 
-以下のエンドポイントはすべての稼働ノードでメトリクスをリセットします：
+すべての稼働ノードでメトリクスをリセットするエンドポイント：
 
 ```http
 POST /api/v5/plugin_api/emqx_bcast/metrics/reset
 ```
 
-メンテナンスやテストウィンドウ中のみ使用してください。いずれかのノードに保留中または送信中の配信がある場合は `409 PendingDeliveries` を返します。リセットが一部ノードでのみ成功した場合は `500 PartialReset` を返し、影響を受けたノードを特定します。
+メンテナンスやテストウィンドウ中のみ使用してください。いずれかのノードに保留中または配信中の配信がある場合は `409 PendingDeliveries` を返します。リセットが一部のノードでのみ成功した場合は `500 PartialReset` を返し、影響を受けたノードを特定します。
 
 ## 制限事項
 
-- Bcastはリスナーのマウントポイントや `namespace_as_mountpoint` をサポートしません。これらの機能は保存されたサブスクリプションフィルターにプレフィックスを付与するため、Bcastのマウントされていない配信トピックとマッチしません。
-- ローリングアップグレード中、プラグインが稼働していないノードに接続しているクライアントは保留中のBcast配信を受信できません。プラグインを起動し、`GET /api/v5/plugin_api/emqx_bcast/metrics` が `200` を返すことを確認してから、そのノードにMQTTまたはBcast APIトラフィックを送ってください。
+- Bcastはリスナーのマウントポイントや `namespace_as_mountpoint` をサポートしません。これらは保存されたサブスクリプションフィルターにプレフィックスを付与するため、Bcastのアンマウント配信トピックとマッチしません。
+- ローリングアップグレード中、プラグインが起動していないノードに接続されたクライアントは保留中のBcast配信を受信できません。プラグインを起動し、`GET /api/v5/plugin_api/emqx_bcast/metrics` が `200` を返すことを確認してから、そのノードにMQTTまたはBcast APIトラフィックを送ってください。
 
 <!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
 
 ## ダウンロード
 
-各EMQXリリース向けのtarball：
+各EMQXリリースのtarball：
 
 | EMQXバージョン | プラグインバージョン | パッケージ |
 |---|---|---|
