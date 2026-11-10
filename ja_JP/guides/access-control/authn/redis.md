@@ -1,6 +1,6 @@
 # Redisとの統合
 
-EMQXはパスワード認証のためにRedisとの統合をサポートしています。EMQX Redis認証機能は現在、Single、[Redis Sentinel](https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/)、および[Redis Cluster](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/)の3つの異なるモードで動作するRedisへの接続をサポートしています。本節では、サポートされているデータスキーマの詳細と、EMQXダッシュボードおよび設定ファイルでの設定方法について説明します。
+EMQXはパスワード認証のためにRedisとの統合をサポートしています。EMQXのRedis認証機能は現在、Single、[Redis Sentinel](https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/)、および[Redis Cluster](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/)の3つの異なるモードで動作するRedisへの接続をサポートしています。本セクションでは、サポートされているデータスキーマの詳細と、EMQXダッシュボードおよび設定ファイルでの設定方法について説明します。
 
 ::: tip 前提条件：
 
@@ -10,11 +10,11 @@ EMQXはパスワード認証のためにRedisとの統合をサポートして�
 
 ## データスキーマとクエリ文
 
-Redis認証は、あらかじめ定義されたフィールド名を持つ[Redisハッシュ](https://redis.io/docs/latest/develop/data-types/hashes/)に格納された認証情報を利用します。
+Redis認証は、あらかじめ定義されたフィールド名を持つ[Redisハッシュ](https://redis.io/docs/latest/develop/data-types/hashes/)として保存された認証情報を使用します。
 
-- `password_hash`：必須；データベースに格納されるパスワード（プレーンテキストまたはハッシュ化されたもの）；
-- `salt`：任意；`salt = ""` またはこのフィールドを削除するとソルト値が追加されないことを示す；
-- `is_superuser`：任意；現在のクライアントがスーパーユーザーかどうかのフラグ；デフォルトは `false`。
+- `password_hash`：必須。データベースに保存されるパスワード（プレーンテキストまたはハッシュ化済み）。
+- `salt`：任意。`salt = ""` またはこのフィールドを削除すると、ソルト値が追加されないことを示します。
+- `is_superuser`：任意。現在のクライアントがスーパーユーザーかどうかのフラグ。デフォルトは `false`。
 
 例えば、ユーザー名 `user123`、パスワード `secret`、プレフィックスとしてのソルト `salt`、パスワードハッシュ `sha256` を持つスーパーユーザー（`is_superuser`: `true`）のドキュメントを追加する場合、クエリ文は以下のようになります。
 
@@ -36,70 +36,70 @@ cmd = "HMGET mqtt:${username} password_hash salt is_superuser"
 ```
 
 ::: tip
-`password_hash` という名前はハッシュ化されたパスワードを格納することを意図しています。しかし、RedisにはMySQLのような `as` 構文がないため、EMQX 5.0ではEMQX 4.xの互換性のために `password` フィールドも保持しています。
+`password_hash` という名前はハッシュ化されたパスワードを保存することを意図していますが、RedisにはMySQLのような `as` 構文がないため、EMQX 5.0では互換性を保つためにEMQX 4.xの `password` フィールドもサポートしています。
 
 そのため、`cmd` を `HMGET mqtt:${username} password salt is_superuser` と設定することも可能です。
 :::
 
-::: tip 読み取り専用データベース権限の付与
+::: tip 読み取り専用のデータベース権限を付与する
 
-EMQXはクライアント認証時にRedisへの読み取りアクセスのみを必要とします。`cmd`では`HGET`と`HMGET`のみを受け付け、他のコマンドは拒否するため、認証処理でRedisへの書き込みは行われません。
+EMQXはクライアント認証時にRedisへの読み取りアクセスのみを必要とします。`cmd` で許可されるコマンドは `HGET` と `HMGET` のみであり、その他のコマンドは拒否されるため、認証時にRedisへの書き込みは行われません。
 
-Redis 6.0以降では、EMQX専用ユーザーを設定してください。このユーザーには、EMQXが実行するヘルスチェックとクエリ、および設定された`cmd`が読み取るキーへのアクセスのみを許可します：
+Redis 6.0以降では、EMQX用に専用ユーザーを設定し、EMQXが実行するヘルスチェックやクエリコマンド、および `cmd` で読み取るキーに対してのみ権限を制限してください。
 
 ```bash
 redis-cli ACL SETUSER emqx_auth reset on '>PASSWORD' '~mqtt:*' +ping +hget +hmget
 ```
 
-Redis Clusterでは、EMQXが`CLUSTER SLOTS`を実行してハッシュスロットとRedisノードの対応関係を取得および更新するため、`+cluster|slots`も付与してください。これにより、各クエリが正しいノードに送信されます：
+Redis Clusterの場合、EMQXはハッシュスロットとRedisノード間のマッピングを取得・更新するために `CLUSTER SLOTS` を実行するため、`+cluster|slots` 権限も付与してください。
 
 ```bash
 redis-cli ACL SETUSER emqx_auth '+cluster|slots'
 ```
 
-SingleまたはSentinelモードで`database`に0以外のインデックスを設定する場合は、Redisデータノードのユーザーに`+select`を付与してください。EMQXが接続後に`SELECT`を実行するためです。デフォルトのデータベース0を使用する場合、この権限は不要です。
+SingleまたはSentinelモードで `database` が0以外に設定されている場合、EMQXは接続後に `SELECT` を実行するため、Redisデータノードのユーザーに `+select` 権限を付与してください。デフォルトのデータベース0を使用している場合は不要です。
 
-SentinelモードでSentinelノードの認証が有効な場合は、`sentinel_username`と`sentinel_password`でSentinel接続用の認証情報を設定してください。これらはRedisデータノードへの接続に使用する`username`および`password`とは別の認証情報です。
+SentinelモードでSentinelノードに認証が有効な場合は、Sentinel接続用の認証情報を `sentinel_username` と `sentinel_password` で設定してください。これらはRedisデータノード接続時の `username` と `password` とは別の認証情報です。
 
-ユーザーレコードの管理には別の管理者ユーザーを使用してください。EMQX設定内のRedis認証情報が漏洩しても、読み取り専用ユーザーでは認証データを変更または削除できません。
+ユーザーレコードの管理には別の管理ユーザーを使用してください。EMQX設定内のRedis認証情報が漏洩しても、読み取り専用ユーザーでは認証データの変更や削除はできません。
 :::
 
 ## ダッシュボードでの設定
 
-EMQXダッシュボードを使ってRedisをパスワード認証に利用する設定ができます。
+EMQXダッシュボードを使ってRedisをパスワード認証に利用する設定が可能です。
 
-1. EMQXダッシュボードの左側ナビゲーションメニューから **アクセス制御** -> **認証** をクリックします。
+1. EMQXダッシュボードの左ナビゲーションメニューから **アクセス制御** -> **認証** をクリックします。
 2. **認証** ページの右上にある **作成** をクリックします。
-3. **メカニズム** に **パスワードベース** を選択し、**バックエンド** に **Redis** を選択して、以下のように **設定** タブに進みます。
+3. **メカニズム** に **パスワードベース** を選択し、**バックエンド** に **Redis** を選択すると、以下のように **設定** タブが表示されます。
 
-<img src="./assets/authn-redis.png" alt="Redisによる認証" style="zoom:67%;" />
+<img src="./assets/authn-redis.png" alt="Redisを使った認証" style="zoom:67%;" />
 
-以下の指示に従って認証の設定を行います。
+以下の指示に従って認証の設定を行ってください。
 
 **接続**：Redisへの接続情報を入力します。
 
-- **Redisモード**：Redisの展開形態を選択します。`Single`、`Sentinel`、`Cluster` のいずれかを選択します。
+- **Redisモード**：Redisの展開形態を選択します。`Single`、`Sentinel`、`Cluster` のいずれかです。
 
 - **サーバー**：EMQXが接続するRedisサーバーのアドレスを指定します。**Redisモード** が `Sentinel` または `Cluster` の場合は、接続するすべてのRedisサーバーをカンマ（`,`）区切りで入力してください。
 
-- **Sentinel名**：使用する名前を指定します。文字列型。**Redisモード** を `Sentinel` に設定した場合のみ必要です。
+- **Sentinel名**：使用するSentinelの名前を指定します。文字列型で、**Redisモード** が `Sentinel` の場合のみ必要です。
 
-- **データベース**：Redisのデータベース名。文字列型。
+- **データベース**：Redisのデータベース名を指定します。文字列型です。
 
-- **ユーザー名**：Redisへの接続に使用するユーザー名を指定します。このフィールドは、Redis 6.0で導入された[Redis ACL](https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/#create-and-edit-user-acls-with-the-acl-setuser-command)を利用している場合に必須です。デフォルトユーザー（ACLが無効または適用されていない）を使用している場合は空欄のままで構いません。
+- **ユーザー名**：Redis接続に使用するユーザー名を指定します。Redis 6.0で導入された[Redis ACL](https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/#create-and-edit-user-acls-with-the-acl-setuser-command)を利用している場合は必須です。デフォルトユーザー（ACLが無効または適用されていない）を使用している場合は空欄のままで構いません。
 
   ::: tip
 
-  `username` フィールドはEMQX 5.2.0以降でサポートされています。Redis ACLを利用する場合はこのバージョン以降でのデプロイを推奨します。
+  `username` フィールドはEMQX 5.2.0以降でサポートされています。Redis ACLを利用する場合は、このバージョン以降でのデプロイを確認してください。
 
   :::
 
 - **パスワード**：Redisユーザーのパスワードを指定します。認証が有効なRedisインスタンスに接続する場合は必須です。
 
-  - ユーザー名を入力した場合、このパスワードはRedis ACL設定の認証情報と一致する必要があります。
-  - ユーザー名が指定されていない場合、このパスワードは `default` ユーザーの認証に使用されます（有効な場合）。
+  - ユーザー名を入力した場合は、Redis ACL設定の認証情報と一致する必要があります。
+  - ユーザー名がない場合は、`default` ユーザーとして認証されます（有効な場合）。
 
-**TLS設定**：TLSを有効にする場合はトグルスイッチをオンにします。TLSの有効化については[ネットワークとTLS](../../network/overview.md)を参照してください。
+**TLS設定**：TLSを有効にする場合はトグルスイッチをオンにしてください。TLSの有効化方法については、[ネットワークとTLS](../../network/overview.md)を参照してください。
 
 **接続設定**：同時接続数を設定します。
 
@@ -107,28 +107,28 @@ EMQXダッシュボードを使ってRedisをパスワード認証に利用す�
 
 **認証設定**：認証に関する設定を行います。
 
-- **パスワードハッシュ**：プレーンテキストのパスワードに適用され、結果がデータベースに格納される前にハッシュ化されるアルゴリズムを選択します。選択肢は `plain`、`md5`、`sha`、`sha256`、`sha512`、`bcrypt`、`pbkdf2` です。選択したアルゴリズムに応じて追加設定があります。
+- **パスワードハッシュ**：プレーンテキストのパスワードに適用され、データベースに保存される前に変換されるハッシュアルゴリズムを選択します。利用可能なオプションは `plain`、`md5`、`sha`、`sha256`、`sha512`、`bcrypt`、`pbkdf2` です。選択したアルゴリズムに応じて追加設定があります。
   - `md5`、`sha`、`sha256`、`sha512` の場合：
-    - **ソルト位置**：ソルト（ランダムデータ）をパスワードにどのように混ぜるかを指定します。`suffix`（後置）、`prefix`（前置）、`disable`（無効）から選択可能です。外部ストレージからEMQX組み込みデータベースにユーザー認証情報を移行する場合を除き、デフォルトのままで問題ありません。
-    - ハッシュ結果は16進数文字列として表現され、大文字小文字を区別せずに格納された認証情報と比較されます。
+    - **ソルト位置**：ソルト（ランダムデータ）をパスワードにどのように混ぜるかを指定します。`suffix`、`prefix`、`disable` のいずれかです。外部ストレージからEMQX組み込みデータベースにユーザー認証情報を移行する場合を除き、デフォルト値のままで問題ありません。
+    - ハッシュ結果は16進数文字列で表現され、大文字・小文字を区別せずに保存された認証情報と比較されます。
   - `plain` の場合：
-    - **ソルト位置** は `disable` に設定してください。
+    - **ソルト位置** は `disable` にしてください。
   - `bcrypt` の場合：
-    - **ソルトラウンド**：ハッシュ関数の適用回数を定義します。値は _2^ソルトラウンド_ で表され、「コストファクター」とも呼ばれます。デフォルトは `10`、許容範囲は `5` から `10` です。セキュリティ強化のためにはより高い値が推奨されます。コストファクターを1増やすと認証に必要な時間が倍増します。
+    - **ソルトラウンド数**：ハッシュ関数の適用回数を定義します。値は _2^ソルトラウンド数_ で表され、「コストファクター」とも呼ばれます。デフォルトは `10`、許容範囲は `5` から `10` です。セキュリティ強化のためにはより高い値が推奨されます。コストファクターを1上げるごとに認証に要する時間が倍増します。
   - `pbkdf2` の場合：
     - **疑似乱数関数**：キー生成に使用するハッシュ関数を選択します（例：`sha256`）。
-    - **反復回数**：ハッシュ関数を繰り返す回数を設定します。デフォルトは `4096` です。
-    - **派生キー長**（任意）：生成されるキーのバイト長を指定します。空欄の場合は選択した疑似乱数関数に基づく長さが使用されます。
-    - ハッシュ結果は16進数文字列として表現され、大文字小文字を区別せずに格納された認証情報と比較されます。
-- **CMD**：Redisクエリコマンド。
+    - **反復回数**：ハッシュ関数の実行回数を設定します。デフォルトは `4096` です。
+    - **生成キー長**（任意）：生成されるキーのバイト長を指定します。空欄の場合は疑似乱数関数により決定される長さになります。
+    - ハッシュ結果は16進数文字列で表現され、大文字・小文字を区別せずに保存された認証情報と比較されます。
+- **CMD**：Redisのクエリコマンドを指定します。
 
 設定が完了したら、**作成** をクリックしてください。
 
 ## 設定項目による設定
 
-EMQXの設定項目を使ってRedis認証機能を設定できます。<!--詳細な操作手順は [authn-redis:standalone](../../configuration/configuration-manual.html#authn-redis:standalone)、[authn-redis:sentinel](../../configuration/configuration-manual.html#authn-redis:sentinel)、および [authn-redis:cluster](../../configuration/configuration-manual.html#authn-redis:cluster) を参照してください。-->
+EMQXの設定項目を使ってRedis認証を設定できます。 <!--詳細な操作手順は [authn-redis:standalone](../../configuration/configuration-manual.html#authn-redis:standalone)、[authn-redis:sentinel](../../configuration/configuration-manual.html#authn-redis:sentinel)、および [authn-redis:cluster](../../configuration/configuration-manual.html#authn-redis:cluster) を参照してください。-->
 
-Redis認証は `mechanism = password_based` および `backend = redis` で識別されます。
+Redis認証は `mechanism = password_based` と `backend = redis` で識別されます。
 
 EMQXは3種類のRedisインストール形態に対応しています。
 
