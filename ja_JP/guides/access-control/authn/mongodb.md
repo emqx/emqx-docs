@@ -1,6 +1,6 @@
 # MongoDBとの統合
 
-EMQXはパスワード認証のためにMongoDBとの統合をサポートしています。EMQXのMongoDB認証機能は、現在、Single、[レプリカセット](https://www.mongodb.com/docs/manual/reference/replica-configuration/)および[シャーディング](https://www.mongodb.com/docs/manual/sharding/)の3つの異なるモードで稼働するMongoDBへの接続をサポートしています。本ページでは、サポートされるデータスキーマの詳細と、EMQXダッシュボードおよび設定ファイルでの設定方法について説明します。
+EMQXはパスワード認証のためにMongoDBとの統合をサポートしています。EMQXのMongoDB認証機能は、現在、Single、[レプリカセット](https://www.mongodb.com/docs/manual/reference/replica-configuration/)、および[シャーディング](https://www.mongodb.com/docs/manual/sharding/)の3つの異なるモードで動作するMongoDBへの接続をサポートしています。本ページでは、サポートされるデータスキーマの詳細と、EMQXダッシュボードおよび設定ファイルでの設定方法について説明します。
 
 ::: tip
 
@@ -12,11 +12,11 @@ EMQXはパスワード認証のためにMongoDBとの統合をサポートして
 
 EMQXのMongoDB認証機能は、認証データをMongoDBドキュメントとして保存することをサポートしています。ユーザーはクエリ文のテンプレートを提供し、以下のフィールドが含まれていることを確認する必要があります。
 
-- `password_hash`：必須。データベースに保存されるパスワード（プレーンテキストまたはハッシュ化済み）。このフィールドは名前の変更が可能です。
+- `password_hash`：必須。データベースに保存されるパスワード（プレーンテキストまたはハッシュ化されたもの）。このフィールドは名前の変更が可能です。
 - `salt`：任意。`salt = ""` またはこのフィールドを削除すると、ソルト値が追加されないことを示します。このフィールドは名前の変更が可能です。
-- `is_superuser`：任意。現在のクライアントがスーパーユーザーかどうかを示すフラグ。デフォルトは `false`。このフィールドは名前の変更が可能です。
+- `is_superuser`：任意。現在のクライアントがスーパーユーザーかどうかのフラグ。デフォルトは `false`。このフィールドは名前の変更が可能です。
 
-例えば、ユーザー名が `user123`、パスワードが `secret`、ソルトが接尾辞として `salt_foo123`、パスワードハッシュが `sha256` で、スーパーユーザー（`is_superuser`: `true`）のドキュメントを追加したい場合、クエリ文は以下のようになります。
+例えば、ユーザー名が `user123`、パスワードが `secret`、サフィックスとしてのソルトが `salt_foo123`、パスワードハッシュが `sha256` のスーパーユーザー（`is_superuser`: `true`）のドキュメントを追加したい場合、クエリ文は以下のようになります。
 
 ```
 > db.mqtt_user.insertOne(
@@ -33,25 +33,27 @@ EMQXのMongoDB認証機能は、認証データをMongoDBドキュメントと�
 }
 ```
 
-:::tip 
+:::tip
 
-システム内のユーザー数が多い場合は、クエリの応答時間を短縮しEMQXの負荷を軽減するために、事前にテーブルの最適化およびインデックス作成を行ってください。
+システム内のユーザー数が多い場合は、クエリ応答時間を短縮しEMQXへの負荷を軽減するために、事前にテーブルの最適化およびインデックス作成を行ってください。
 
- :::
+:::
 
 このMongoDBデータスキーマに対応するダッシュボードの設定パラメータは以下の通りです。
 
-- **Password Hash**：`sha256`
-- **Salt Position**：`suffix`
-- **Collection**：`mqtt_user`
-- **Filter**：`{ username = "${username}" }`
-- **Password Hash field**：`password_hash`
-- **Salt Field**：`salt`
-- **is_superuser Field**：`is_superuser`
+- **Password Hash**: `sha256`
+- **Salt Position**: `suffix`
+- **Collection**: `mqtt_user`
+- **Filter**: `{ username = "${username}" }`
+- **Password Hash field**: `password_hash`
+- **Salt Field**: `salt`
+- **is_superuser Field**： `is_superuser`
 
-::: tip 読み取り専用データベース権限の付与
+::: tip 読み取り専用のデータベース権限を付与する
 
-EMQXはクライアント認証時にMongoDBへの読み取りアクセスのみを必要とし、設定されたコレクションに対して`find_one`クエリを実行します。MongoDBには、対象データベースに対する組み込みの`read`ロールのみを持つ専用ユーザーを作成してください。書き込み権限や管理者権限は付与しないでください。
+EMQXはクライアント認証時にMongoDBへの読み取りアクセスのみを必要とします。設定されたコレクションに対して `find_one` クエリを1回実行し、ドキュメントの挿入、更新、削除は行いません。
+
+MongoDBには組み込みの `read` ロールを持つ専用のデータベースユーザーを作成し、EMQXにそのユーザーを使用させてください。書き込みや管理者権限は付与しないでください。
 
 ```js
 db.getSiblingDB("mqtt").createUser({
@@ -61,68 +63,69 @@ db.getSiblingDB("mqtt").createUser({
 })
 ```
 
-コレクションの作成やユーザーレコードの管理には、別の管理者ユーザーを使用してください。EMQX設定内のMongoDB認証情報が漏洩しても、読み取り専用ユーザーでは認証データを変更または削除できません。
+コレクションの作成やユーザーレコードの管理は別の管理ユーザーで行ってください。EMQX設定のデータベース認証情報が漏洩しても、読み取り専用ユーザーでは認証データの変更や削除はできません。
+
 :::
 
 ## ダッシュボードでの設定
 
-EMQXダッシュボードを使用して、MongoDBをパスワード認証に利用する設定を行うことができます。
+EMQXダッシュボードを使用して、MongoDBをパスワード認証に利用する設定が可能です。
 
-1. EMQXダッシュボードの左側ナビゲーションメニューから **Access Control** -> **Authentication** をクリックします。
-2. **Authentication** ページの右上にある **Create** をクリックします。
-3. **Mechanism** に **Password-Based** を選択し、**Backend** に **MongoDB** を選択すると、以下のように **Configuration** タブに移動します。
+1. EMQXダッシュボードの左側ナビゲーションメニューから **アクセス制御** -> **認証** をクリックします。
+2. **認証** ページの右上にある **作成** をクリックします。
+3. **メカニズム** に **パスワードベース** を選択し、**バックエンド** に **MongoDB** を選択すると、以下のように **設定** タブに遷移します。
 
 ![authn-MongoDB_ee](./assets/authn-MongoDB_ee.png)
 
-4. 以下の指示に従って認証バックエンドを設定してください。
+4. 以下の手順に従って認証バックエンドを設定してください。
 
-   - MongoDBへの接続情報を入力します：
-     - **MongoDB Mode**：MongoDBの展開方法を選択します。`Single`、`Replica Set`、`Sharding` のいずれかです。
-     - **Server**：EMQXが接続するMongoDBサーバーのアドレスを指定します。**MongoDB Mode** が `Replica Set` または `Sharding` の場合、接続するすべてのMongoDBサーバーをカンマ（`,`）で区切って入力する必要があります。
-     - **Replica Set Name**：使用するレプリカセット名を指定します。文字列型で、**MongoDB Mode** が `Replica Set` の場合にのみ必要です。
-     - **Database**：MongoDBのデータベース名。文字列型です。
-     - **Collection**：認証ルールが保存されているMongoDBコレクション名。文字列型です。
-     - **Username**：MongoDBのユーザー名を指定します。
-     - **Password**：MongoDBのユーザーパスワードを指定します。
-     - **Read Mode**（任意）：**MongoDB Mode** が `Replica Set` の場合にのみ必要です。デフォルトは `master`。選択肢は `master` と `slave_ok` です。
-       - **master**：各クエリは最新のデータ（マスター／プライマリサーバー）からのみ読み取ります。接続先がマスターでない場合、最初の読み取りは失敗し、その後の操作は中止されます。
-       - **slave_ok**：セカンダリ／スレーブサーバーからの古いデータまたはマスターからの最新データの読み取りを許可します。
-     - **Write Mode**（任意）：**MongoDB Mode** が `Replica Set` の場合にのみ必要です。選択肢は `unsafe` と `safe`。デフォルトは `safe` です。
+   - MongoDB接続情報を入力します：
+     - **MongoDBモード**：MongoDBの展開形態を選択します。`Single`、`Replica Set`、`Sharding` があります。
+     - **サーバー**：EMQXが接続するMongoDBサーバーのアドレスを指定します。**MongoDBモード**が `Replica Set` または `Sharding` の場合は、接続する全てのMongoDBサーバーをカンマ区切りで入力してください。
+     - **レプリカセット名**：`Replica Set` モードの場合に指定するレプリカセット名。文字列型です。
+     - **データベース**：MongoDBのデータベース名。文字列型です。
+     - **コレクション**：認証ルールを保存するMongoDBコレクション名。文字列型です。
+     - **ユーザー名**：MongoDBのユーザー名を指定します。
+     - **パスワード**：MongoDBのユーザーパスワードを指定します。
+     - **読み取りモード**（任意）：`Replica Set` モードの場合に指定。デフォルトは `master`。選択肢は `master`、`slave_ok`。
+       - **master**：クエリはすべてマスター（プライマリ）サーバーから最新データを読み取ります。接続先がマスターでない場合、最初の読み取りが失敗し、その後の操作は中止されます。
+       - **slave_ok**：セカンダリ（スレーブ）サーバーからの古いデータまたはマスターからの最新データの読み取りを許可します。
+     - **書き込みモード**（任意）：`Replica Set` モードの場合に指定。選択肢は `unsafe`、`safe`。デフォルトは `safe`。
 
    - 認証に関する設定を行います：
-     - **Password Hash Field**：パスワードのフィールド名を指定します。
-     - **Password Hash**：プレーンテキストパスワードに適用し、データベースに保存する前のハッシュアルゴリズムを選択します。利用可能なオプションは `plain`、`md5`、`sha`、`sha256`、`sha512`、`bcrypt`、`pbkdf2` です。選択したアルゴリズムに応じて追加設定があります。
+     - **パスワードハッシュフィールド**：パスワードのフィールド名を指定します。
+     - **パスワードハッシュ**：プレーンテキストパスワードに適用され、データベースに保存されるハッシュアルゴリズムを選択します。選択肢は `plain`、`md5`、`sha`、`sha256`、`sha512`、`bcrypt`、`pbkdf2` です。選択したアルゴリズムに応じて追加設定があります。
        - `md5`、`sha`、`sha256`、`sha512` の場合：
-         - **Salt Position**：ソルト（ランダムデータ）をパスワードにどのように混ぜるかを指定します。`suffix`、`prefix`、`disable` のいずれかです。外部ストレージからEMQX組み込みデータベースにユーザー認証情報を移行する場合を除き、デフォルト値のままで問題ありません。
-         - ハッシュ結果は16進数文字列で表され、大文字・小文字を区別せずに保存された認証情報と比較されます。
+         - **ソルト位置**：ソルト（ランダムデータ）をパスワードにどのように混ぜるかを指定します。`suffix`（後置）、`prefix`（前置）、`disable`（無効）のいずれかです。外部ストレージからEMQX内蔵データベースにユーザー資格情報を移行する場合を除き、デフォルト値のままで問題ありません。
+         - ハッシュ結果は16進数文字列として表現され、大文字小文字を区別せずに保存された資格情報と比較されます。
        - `plain` の場合：
-         - **Salt Position** は `disable` に設定してください。
+         - **ソルト位置**：`disable` に設定してください。
        - `bcrypt` の場合：
-         - **Salt Rounds**：ハッシュ関数が適用される回数を定義します。値は _2<sup>Salt Rounds</sup>_ で表され、「コストファクター」とも呼ばれます。デフォルトは `10`、許容範囲は `5` から `10` です。セキュリティ強化のためにより高い値が推奨されます。注：コストファクターを1増やすごとに認証にかかる時間は倍増します。
+         - **ソルトラウンド数**：ハッシュ関数を適用する回数を定義します。値は _2^ソルトラウンド数_ で表され、「コストファクター」とも呼ばれます。デフォルトは `10`、許容範囲は `5` から `10` です。セキュリティを高めるためには高い値が推奨されます。注意：コストファクターを1増やすと認証にかかる時間が約2倍になります。
        - `pbkdf2` の場合：
-         - **Pseudorandom Function**：キーを生成するハッシュ関数を選択します。例：`sha256`。
-         - **Iteration Count**：ハッシュ関数を実行する回数を設定します。デフォルトは `4096`。
-         - **Derived Key Length**（任意）：生成されるキーのバイト長を指定します。空欄の場合は選択した疑似乱数関数により決定されます。
-         - ハッシュ結果は16進数文字列で表され、大文字・小文字を区別せずに保存された認証情報と比較されます。
-     - **Salt Field**：MongoDBのソルトフィールドを指定します。
-     - **is_superuser Field**：ユーザーがスーパーユーザーかどうかを判定するフィールドを指定します。
-     - **Client ID Override Field**：MongoDB認証結果の中で、MQTTクライアント接続のClient IDを上書きするために使用されるフィールド名を指定します。これにより認証データに基づいてユニークなClient IDを割り当て、多重テナントなどのセッション競合を防止できます。
-     - **Precondition**：[Variform式](../../configuration/configuration.md#variform-expressions)を用いて、このMongoDB認証機能をクライアント接続に適用するかどうかを制御します。式はクライアントの属性（`username`、`clientid`、`listener`など）に対して評価され、結果が文字列 `"true"` の場合にのみ認証機能が呼び出されます。それ以外の場合はスキップされます。詳細は[Authenticator Preconditions](./authn.md#authenticator-preconditions)を参照してください。
-     - **Enable TLS**：TLSを有効にする場合はスイッチをオンにします。TLS有効化の詳細は[Network and TLS](../../network/overview.md)を参照してください。
-     - **Filter**：認証情報検索のためのMongoDBセレクターとして解釈されるマップ。[プレースホルダー](./authn.md#authentication-placeholders)がサポートされています。
-     - **Advanced Settings**：以下の任意の接続設定を行います。
-       - **Auth Source**：ユーザー認証情報を保存しているMongoDBデータベースを指定します。例えば、ユーザーが `admin` データベースで作成されている場合は `admin` と入力します。
-       - **Use Legacy Protocol**：EMQXがMongoDBのレガシープロトコルを使用する方法を選択します。`auto` はEMQXがサーバーの対応プロトコルを検出し、`true` はレガシープロトコルを使用、`false` は使用しません。デフォルトは `auto` です。
-       - **Connection Pool Size**：EMQXノードからMongoDBサーバーへの同時接続数を指定します。デフォルトは `8` です。
-       - **Connect Timeout**：接続確立までの待機時間を指定します。単位はミリ秒、秒、分、時間がサポートされます。デフォルトは `20` 秒です。
+         - **疑似乱数関数**：鍵生成に用いるハッシュ関数を選択します（例：`sha256`）。
+         - **反復回数**：ハッシュ関数の実行回数を設定します。デフォルトは `4096`。
+         - **派生鍵長**（任意）：生成される鍵の長さ（バイト単位）を指定します。空欄の場合は疑似乱数関数により決定される長さになります。
+         - ハッシュ結果は16進数文字列として表現され、大文字小文字を区別せずに保存された資格情報と比較されます。
+     - **ソルトフィールド**：MongoDB内のソルトフィールドを指定します。
+     - **is_superuserフィールド**：ユーザーがスーパーユーザーかどうかを判定するフィールドを指定します。
+     - **クライアントID上書きフィールド**：MongoDB認証結果内のフィールド名を指定し、MQTTクライアント接続のクライアントIDを上書きします。これにより認証データに基づいてユニークなクライアントIDを割り当て、多重テナントなどのセッション競合を防止できます。
+     - **前提条件**：[Variform式](../../configuration/configuration.md#variform-expressions)を用いて、このMongoDB認証機能をクライアント接続に適用するかどうかを制御します。式はクライアントの属性（`username`、`clientid`、`listener`など）に対して評価され、結果が文字列 `"true"` の場合のみ認証機能が呼び出されます。それ以外はスキップされます。詳細は[認証機能の前提条件](./authn.md#authenticator-preconditions)を参照してください。
+     - **TLSを有効化**：TLSを有効にする場合はトグルスイッチをオンにします。TLS有効化の詳細は[ネットワークとTLS](../../network/overview.md)を参照してください。
+     - **フィルター**：認証情報検索のためのMongoDBセレクターとして解釈されるマップ。[プレースホルダー](./authn.md#authentication-placeholders)が利用可能です。
+     - **詳細設定**：以下の任意の接続設定を行います。
+       - **認証ソース**：ユーザー認証資格情報が保存されているMongoDBデータベース名を指定します。例：ユーザーが `admin` データベースで作成されている場合は `admin` を入力します。
+       - **レガシープロトコルを使用**：EMQXがMongoDBのレガシープロトコルを使用する方法を選択します。`auto` はサーバーがサポートするプロトコルを自動検出、`true` はレガシープロトコルを使用、`false` は使用しません。デフォルトは `auto`。
+       - **接続プールサイズ**：EMQXノードからMongoDBサーバーへの同時接続数を指定します。デフォルトは `8`。
+       - **接続タイムアウト**：接続確立までの待機時間を指定します。単位はミリ秒、秒、分、時間がサポートされています。デフォルトは `20` 秒。
 
-5. 設定が完了したら、**Create** をクリックします。
+5. 設定が完了したら、**作成** をクリックしてください。
 
-## 設定ファイルでの設定
+## 設定項目による構成
 
-EMQXのMongoDB認証機能は設定ファイルの設定項目で構成することも可能です。 <!--詳細な操作手順は [authn-mongodb:standalone](../../configuration/configuration-manual.html#authn-mongodb:standalone)、[authn-mongodb:sharded-cluster](../../configuration/configuration-manual.html#authn-mongodb:sharded-cluster)、[authn-mongodb:replica-set](../../configuration/configuration-manual.html#authn-mongodb:replica-set) を参照してください。-->
+EMQXのMongoDB認証機能は、設定項目によっても構成可能です。 <!--詳細な操作手順は [authn-mongodb:standalone](../../configuration/configuration-manual.html#authn-mongodb:standalone)、[authn-mongodb:sharded-cluster](../../configuration/configuration-manual.html#authn-mongodb:sharded-cluster)、[authn-mongodb:replica-set](../../configuration/configuration-manual.html#authn-mongodb:replica-set) を参照してください。-->
 
-以下は参照用のコード例です。
+以下は参考となるコード例です。
 
 :::: tabs type:card
 
