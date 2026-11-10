@@ -14,6 +14,14 @@ EMQX 规则 SQL 通过以下函数集成了 jq：
 
 > 默认执行超时可通过 `rule_engine.jq_function_default_timeout` 配置。
 
+::: warning 规则 SQL 中的 jq 程序无法访问环境变量
+
+从 EMQX 6.3.3 开始，在规则 SQL 执行的 jq 程序中，`env` 和 `$ENV` 均求值为空对象。通过二者访问具体环境变量（例如 `$ENV.MY_VAR` 或 `env.MY_VAR`）时，返回值为 `null`。
+
+如需读取操作系统环境变量，请在 jq 程序外调用规则 SQL 的 [`getenv(Name)`](./rule-sql-builtin-functions.md#系统函数)。EMQX 读取变量时会自动添加 `EMQXVAR_` 前缀。例如，`getenv('FOO')` 读取 `EMQXVAR_FOO`。
+
+:::
+
 jq 同时也是一个图灵完备的编程语言，[jq 官方文档](https://jqlang.org/manual/v1.8/) 是学习如何编写 jq 的最佳指南，您也可以[在 jq Playground](https://jqplay.org/) 或本地安装后进行学习与测试。
 
 以下是一些简单的 `jq` 函数调用及其结果的示例。
