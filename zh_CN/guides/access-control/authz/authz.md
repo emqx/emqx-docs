@@ -125,7 +125,7 @@ authorization {
 
 ### 配置授权故障处理 <Badge type="tip" text="6.3.3+" />
 
-`authorization.ignore_backend_failures` 配置项决定授权数据源遇到以下情况时 EMQX 的处理方式：后端错误、无效的后端响应、数据库不可达或请求超时。该配置项在两种[安全配置方案](../security-profile.md)下均生效：
+`authorization.ignore_backend_failures` 配置项决定 EMQX 如何处理授权后端故障。此类故障包括后端错误、无效的后端响应、数据库不可达和请求超时。该配置项在两种[安全配置方案](../security-profile.md)下均生效。对于授权后端故障，各取值的处理方式如下：
 
 | 取值 | `legacy` | `hardened` |
 | --- | --- | --- |
@@ -143,8 +143,10 @@ authorization.ignore_backend_failures = per_security_profile
 
 `GET /api/v5/authorization/settings` 返回的 `ignore_backend_failures` 可以是 JSON 字符串 `"per_security_profile"`，也可以是 JSON 布尔值 `true` 或 `false`。`PUT /api/v5/authorization/settings` 接受相同的值。未配置该字段时，`GET` 请求返回 `"per_security_profile"`。在 EMQX 6.3.3 之前，该字段为布尔类型，默认返回值为 `false`。
 
-::: warning 升级后检查已存储的值
-在 `legacy` 方案下，如果已存储的值为 `false`，授权后端故障或规则渲染失败会导致 EMQX 拒绝操作。在 EMQX 6.3.3 之前，通过 REST API 或 Dashboard 保存授权设置时，即使未修改该配置项，也可能存储 `false`。要保留原有的 `legacy` 行为，请在所有节点完成升级后将该值设置为 `per_security_profile`。滚动升级期间，请遵循[滚动升级注意事项](../security-profile.md#滚动升级)。
+::: warning 升级后检查已存储的配置值
+在 EMQX 6.3.3 之前，通过 REST API 或 Dashboard 保存授权设置时，即使未修改该配置项，也可能存储 `false`。升级到 EMQX 6.3.3 后，已存储的 `false` 会导致 `legacy` 方案在授权后端故障或规则渲染失败时拒绝操作。要保留原有的 `legacy` 行为，请在所有节点完成升级后将该值设置为 `per_security_profile`。
+
+滚动升级期间，请遵循[滚动升级注意事项](../security-profile.md#滚动升级)。
 :::
 
 ## 授权规则变更的生效范围
@@ -333,7 +335,7 @@ authorization.topic_template_allow {
 }
 ```
 
-将 `authorization.topic_template_allow.slash` 设为 `true`，可允许占位符替换值包含 `/`。使用 `authorization.topic_template_allow.plus` 可允许 `+`，使用 `authorization.topic_template_allow.hash` 可允许 `#`。仅当占位符替换值必须包含对应字符时，才启用该配置项。启用这些配置项后，客户端相关值可能扩大授权规则的主题过滤器匹配范围。在主题模板中使用用户名、客户端 ID 或客户端属性值之前，应先校验这些值。
+将 `authorization.topic_template_allow.slash` 设为 `true`，可允许占位符替换值包含 `/`。将 `authorization.topic_template_allow.plus` 设为 `true` 可允许 `+`，将 `authorization.topic_template_allow.hash` 设为 `true` 可允许 `#`。仅当占位符替换值必须包含对应字符时，才启用该配置项。启用这些配置项后，客户端相关值可能扩大授权规则的主题过滤器匹配范围。在主题模板中使用用户名、客户端 ID 或客户端属性值之前，应先校验这些值。
 
 <!-- TODO 调查与 4.x 版本是否存在差异-->
 

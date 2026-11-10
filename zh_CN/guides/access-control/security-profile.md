@@ -136,10 +136,15 @@ node.default_listener_address = "all"
 2. 在所有节点上完成滚动升级。
 3. 之后再按照下文的迁移步骤将集群切换到 `hardened`。
 
-::: warning 滚动升级到 EMQX 6.3.3
-所有节点升级到 EMQX 6.3.3 或更高版本之前，不要将 `authentication_settings.ignore_backend_failures` 或 `authorization.ignore_backend_failures` 写为 `per_security_profile`。运行较早版本的节点会拒绝该值，导致集群配置事务失败。滚动升级期间，通过 Dashboard 或 `PUT /api/v5/authorization/settings` 保存授权设置时，即使请求中省略该字段，也可能写入新的默认值。
+::: warning 滚动升级期间不要更新故障处理配置
+所有节点升级到 EMQX 6.3.3 或更高版本之前：
 
-所有节点完成升级后，检查这两个配置项。在 `legacy` 方案下，如果任一配置项已存储为 `false`，相应故障发生时，EMQX 会拒绝客户端或操作。要保留早期版本的行为，请将该值设置为 `per_security_profile`。
+- 不要将 `authentication_settings.ignore_backend_failures` 或 `authorization.ignore_backend_failures` 设置为 `per_security_profile`。
+- 不要通过 Dashboard 保存授权设置，也不要调用 `PUT /api/v5/authorization/settings`。即使请求体中未包含该字段，EMQX 也可能补入默认值 `per_security_profile` 并将其写入配置。
+
+运行较早版本的节点会拒绝 `per_security_profile`，导致集群配置事务失败。
+
+所有节点完成升级后，检查这两个配置项。如果集群使用 `legacy` 方案，且任一配置项的值为 `false`，请将其设置为 `per_security_profile`，以保留早期版本的行为。否则，相应故障发生时，EMQX 会拒绝客户端或操作。
 :::
 
 ## 迁移

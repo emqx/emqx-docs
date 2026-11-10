@@ -136,10 +136,15 @@ When performing a rolling upgrade from a version before 6.3:
 2. Complete the rolling upgrade on every node.
 3. Switch the cluster to `hardened` afterwards by following the migration steps below.
 
-::: warning Rolling Upgrade to EMQX 6.3.3
-Do not write `per_security_profile` to `authentication_settings.ignore_backend_failures` or `authorization.ignore_backend_failures` until every node has been upgraded to EMQX 6.3.3 or later. Nodes running an earlier version reject this value, which causes the cluster configuration transaction to fail. Saving authorization settings through the Dashboard or `PUT /api/v5/authorization/settings` during the rolling upgrade can write the new default even if the field is omitted.
+::: warning Avoid Updating Failure-Handling Settings During a Rolling Upgrade
+Until all nodes run EMQX 6.3.3 or later:
 
-After every node has been upgraded, check both settings. Under the `legacy` profile, if either stored value is `false`, EMQX now denies the client or operation when the corresponding failure occurs. Set the value to `per_security_profile` to preserve the behavior of earlier releases.
+- Do not set `authentication_settings.ignore_backend_failures` or `authorization.ignore_backend_failures` to `per_security_profile`.
+- Do not save authorization settings through the Dashboard or call `PUT /api/v5/authorization/settings`. EMQX might insert and persist the default value `per_security_profile` even if the request body does not include the field.
+
+Nodes running an earlier version reject `per_security_profile`, causing the cluster configuration transaction to fail.
+
+After all nodes have been upgraded, check both settings. If the cluster uses the `legacy` profile and either value is `false`, set it to `per_security_profile` to preserve the behavior of earlier releases. Otherwise, EMQX denies the client or operation when the corresponding failure occurs.
 :::
 
 ## Migration

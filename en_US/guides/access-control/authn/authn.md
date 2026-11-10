@@ -166,8 +166,10 @@ authentication_settings.ignore_backend_failures = per_security_profile
 
 `GET /api/v5/authentication/settings` returns `ignore_backend_failures` as the JSON string `"per_security_profile"` or the JSON Boolean value `true` or `false`. `PUT /api/v5/authentication/settings` accepts the same values. When the setting is not configured, the `GET` request returns `"per_security_profile"`. Before EMQX 6.3.3, the field was a Boolean and the default response was `false`.
 
-::: warning Check Stored Values After an Upgrade
-Under the `legacy` profile, if the stored value is `false`, EMQX now denies the client when an authentication backend fails. Before EMQX 6.3.3, `false` had no effect under `legacy`, and an API client that sent the response from `GET /api/v5/authentication/settings` back in a `PUT` request could store this value. To preserve the previous `legacy` behavior, set the value to `per_security_profile` after every node has been upgraded. During a rolling upgrade, follow the [rolling upgrade precautions](../security-profile.md#rolling-upgrade).
+::: warning Check the Stored Value After Upgrading
+Before EMQX 6.3.3, `GET /api/v5/authentication/settings` returned `ignore_backend_failures` as `false` by default. If an API client submitted the complete response as the body of a `PUT` request, EMQX might have persisted `false` even if the user did not explicitly set the field. After upgrading to EMQX 6.3.3, a stored value of `false` causes the `legacy` profile to deny the client when an authentication backend fails. To preserve the previous `legacy` behavior, set the value to `per_security_profile` after all nodes have been upgraded.
+
+During a rolling upgrade, follow the [rolling upgrade precautions](../security-profile.md#rolling-upgrade).
 :::
 
 ## External Resource Cache

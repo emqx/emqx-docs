@@ -126,13 +126,13 @@ In this example:
 
 ### Configure Authorization Failure Handling <Badge type="tip" text="6.3.3+" />
 
-The `authorization.ignore_backend_failures` setting determines what EMQX does when an authorization source encounters a backend error, an invalid backend response, an unreachable database, or a request timeout. The setting applies under both [security profiles](../security-profile.md):
+The `authorization.ignore_backend_failures` setting determines how EMQX handles authorization backend failures. These failures include backend errors, invalid backend responses, unreachable databases, and request timeouts. The setting applies under both [security profiles](../security-profile.md). For authorization backend failures, it has the following effects:
 
 | Value | `legacy` | `hardened` |
 | --- | --- | --- |
-| `per_security_profile` (default) | Ignore the failure and continue to the next authorization source. | Deny the action. |
+| `per_security_profile` (default) | Ignore the failure and continue to the next authorization source. | Deny the operation. |
 | `true` | Ignore the failure and continue to the next authorization source. | Ignore the failure and continue to the next authorization source. |
-| `false` | Deny the action. | Deny the action. |
+| `false` | Deny the operation. | Deny the operation. |
 
 This setting also controls how EMQX handles authorization rule-render failures, such as a missing placeholder value or a disallowed character in a topic-template substitution. A rule-render failure occurs while EMQX evaluates a rule and is different from a failure of the authorization backend. For details about topic-template substitutions, see [Topic Placeholders](#topic-placeholders).
 
@@ -144,8 +144,10 @@ authorization.ignore_backend_failures = per_security_profile
 
 `GET /api/v5/authorization/settings` returns `ignore_backend_failures` as the JSON string `"per_security_profile"` or the JSON Boolean value `true` or `false`. `PUT /api/v5/authorization/settings` accepts the same values. When the setting is not configured, the `GET` request returns `"per_security_profile"`. Before EMQX 6.3.3, the field was a Boolean and the default response was `false`.
 
-::: warning Check Stored Values After an Upgrade
-Under the `legacy` profile, if the stored value is `false`, EMQX now denies the action when an authorization backend failure or a rule-render failure occurs. Before EMQX 6.3.3, saving authorization settings through the REST API or Dashboard could store `false` even if you did not change this setting. To preserve the previous `legacy` behavior, set the value to `per_security_profile` after every node has been upgraded. During a rolling upgrade, follow the [rolling upgrade precautions](../security-profile.md#rolling-upgrade).
+::: warning Check the Stored Value After Upgrading
+Before EMQX 6.3.3, saving authorization settings through the REST API or Dashboard could store `false` even if the user did not change this setting. After upgrading to EMQX 6.3.3, a stored value of `false` causes the `legacy` profile to deny the operation when an authorization backend failure or a rule-render failure occurs. To preserve the previous `legacy` behavior, set the value to `per_security_profile` after all nodes have been upgraded.
+
+During a rolling upgrade, follow the [rolling upgrade precautions](../security-profile.md#rolling-upgrade).
 :::
 
 ## When Authorization Rule Changes Take Effect
@@ -307,7 +309,7 @@ Starting from EMQX 6.3.0, EMQX validates values interpolated into authorization 
 
 For example, when the client ID is `device-001`, EMQX renders `devices/${clientid}/#` as `devices/device-001/#`. If the client ID is `tenant-a/device-001`, EMQX cannot render the template because the interpolated value contains `/`.
 
-With the default `authorization.ignore_backend_failures = per_security_profile`, if an interpolated value contains a disallowed `/`, `+`, or `#`, EMQX handles the render failure according to the active security profile:
+With the default `authorization.ignore_backend_failures = per_security_profile`, EMQX handles render failures caused by a disallowed character (`/`, `+`, or `#`) according to the active security profile:
 
 - With the `legacy` profile, EMQX skips the topic filter that failed to render and continues checking the remaining topic filters in the same rule. If none of them match, EMQX continues with the remaining authorization rules and sources.
 - With the `hardened` profile, EMQX denies the publish or subscribe operation.
@@ -326,7 +328,7 @@ authorization.topic_template_allow {
 }
 ```
 
-Set `authorization.topic_template_allow.slash` to `true` to allow `/` in interpolated values. Use `authorization.topic_template_allow.plus` for `+` and `authorization.topic_template_allow.hash` for `#`. Enable an option only if interpolated values must contain the corresponding character. Enabling these options can allow a client-derived value to broaden the topic filter matched by an authorization rule. Validate usernames, client IDs, and client attributes before using their values in topic templates.
+Set `authorization.topic_template_allow.slash` to `true` to allow `/` in interpolated values. Set `authorization.topic_template_allow.plus` to `true` to allow `+`, and set `authorization.topic_template_allow.hash` to `true` to allow `#`. Enable an option only if interpolated values must contain the corresponding character. Enabling these options can allow a client-derived value to broaden the topic filter matched by an authorization rule. Validate usernames, client IDs, and client attributes before using their values in topic templates.
 
 To avoid placeholder interpolation, starting from EMQX 5.4, you can escape `$` as `${$}`. For example, `t/${$}{username}` is treated as `t/${username}` literally without interpolation, rather than the topic name with `username` replaced.
 
