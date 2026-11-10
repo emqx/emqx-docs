@@ -136,6 +136,7 @@ Before adding a Bigtable Sink action, create a Bigtable connector to establish t
          - **OAuth Token Endpoint URI**: OAuth token endpoint URI of the OIDC provider.
          - **OAuth Request Scope**: `scope` used when requesting an access token from the OAuth server. Fill it in if required by the provider.
          - **OAuth Request Audience**: `audience` used when requesting an access token from the OAuth server. Fill it in if required by the provider.
+         - **Enable TLS**: Available starting from EMQX 6.3.3. Configure TLS options for initial token requests to the OIDC token endpoint. TLS and server certificate verification are enabled by default. If the endpoint uses a certificate signed by a private CA, configure the corresponding CA certificate. For more information, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).
      - **Attached Service Account**: No additional fields are required. EMQX automatically retrieves the GCP project ID and an access token from the instance metadata endpoint. For prerequisites, see [Attached Service Account Prerequisites](#attached-service-account-prerequisites).
    - **Enable TLS**: Enable TLS if it is required by your deployment.
    - **Advanced Settings**: Expand this section to configure advanced connection options.

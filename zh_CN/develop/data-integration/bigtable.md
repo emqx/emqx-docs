@@ -136,6 +136,7 @@ EMQX 通过规则引擎和 Sink 将 MQTT 数据转发至 Bigtable，完整流程
          - **OAuth Token 端点 URI**：OIDC 提供商的 OAuth Token 端点 URI。
          - **OAuth 请求范围**：向 OAuth 服务器请求访问令牌时指定的 `scope`（如提供商要求则需填写）。
          - **OAuth 请求受众 (Audience)**：向 OAuth 服务器请求访问令牌时指定的 `audience`（如提供商要求则需填写）。
+         - **启用 TLS**：从 EMQX 6.3.3 开始提供。可配置向 OIDC Token 端点请求初始令牌时使用的 TLS 选项。TLS 和服务器证书校验默认启用。如果端点使用私有 CA 签发的证书，请配置相应的 CA 证书。更多信息请参阅[启用 TLS 加密访问外部资源](../../guides/network/overview.md#启用-tls-加密访问外部资源)。
      - **附加服务账号**：无需填写额外字段。EMQX 会自动从实例元数据端点获取 GCP 项目 ID 和访问令牌。前提条件请参见[附加服务账号前提条件](#附加服务账号前提条件)。
    - **启用 TLS**：如果您的部署需要 TLS，可启用该选项。
    - **高级设置**：展开该区域可配置高级连接选项。
