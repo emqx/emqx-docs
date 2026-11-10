@@ -5778,7 +5778,19 @@
             "oneOf": [
               {
                 "enum": [
-                  "doris"
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
                 ],
                 "type": "string"
               },
@@ -5790,13 +5802,7 @@
               },
               {
                 "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigquery"
+                  "confluent_producer"
                 ],
                 "type": "string"
               },
@@ -5808,19 +5814,37 @@
               },
               {
                 "enum": [
-                  "cockroachdb"
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
                 ],
                 "type": "string"
               },
@@ -5838,49 +5862,7 @@
               },
               {
                 "enum": [
-                  "bigtable"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
+                  "bigquery"
                 ],
                 "type": "string"
               },
@@ -5892,19 +5874,43 @@
               },
               {
                 "enum": [
-                  "azure_event_grid"
+                  "http"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "cassandra"
+                  "mongodb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "elasticsearch"
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "quasardb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
                 ],
                 "type": "string"
               },
@@ -5928,31 +5934,7 @@
               },
               {
                 "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "emqx_tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -5964,13 +5946,13 @@
               },
               {
                 "enum": [
-                  "iotdb"
+                  "emqx_tables"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "tablestore"
+                  "cassandra"
                 ],
                 "type": "string"
               },
@@ -5982,13 +5964,31 @@
               },
               {
                 "enum": [
-                  "alloydb"
+                  "clickhouse"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "opents"
+                  "bigtable"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
                 ],
                 "type": "string"
               },
@@ -6000,13 +6000,19 @@
               },
               {
                 "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "influxdb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "rabbitmq"
+                  "snowflake"
                 ],
                 "type": "string"
               },
@@ -6018,13 +6024,7 @@
               },
               {
                 "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "quasardb"
+                  "azure_event_grid"
                 ],
                 "type": "string"
               },
@@ -6036,25 +6036,25 @@
               },
               {
                 "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
                 ],
                 "type": "string"
               }
@@ -42239,7 +42239,7 @@
         "properties": {
           "site": {
             "description": "站点的标识符。",
-            "example": "7FAFB3E5CEFF3997",
+            "example": "BE6F76028A3550BB",
             "type": "string"
           },
           "status": {
@@ -62050,7 +62050,7 @@
   "info": {
     "description": "A request accepts at most 100 query parameters in total, including repeated and pagination parameters.",
     "title": "EMQX Enterprise API",
-    "version": "6.3.3-rc.4"
+    "version": "6.3.3-rc.5"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -62666,106 +62666,106 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "azure_event_hub_producer",
-                      "matrix",
-                      "kinesis",
                       "s3tables",
-                      "tdengine",
-                      "quasardb",
-                      "couchbase",
-                      "rocketmq",
-                      "rabbitmq",
-                      "influxdb",
-                      "mysql",
-                      "opents",
-                      "alloydb",
-                      "dynamo",
-                      "tablestore",
-                      "iotdb",
-                      "oracle",
-                      "clickhouse",
-                      "emqx_tables",
-                      "timescale",
                       "snowflake_streaming",
+                      "syskeeper_forwarder",
+                      "doris",
+                      "tdengine",
+                      "azure_event_grid",
+                      "rocketmq",
+                      "snowflake",
+                      "influxdb",
                       "sqlserver",
+                      "mysql",
+                      "cockroachdb",
+                      "redis",
+                      "iotdb",
+                      "bigtable",
+                      "clickhouse",
+                      "dynamo",
+                      "cassandra",
+                      "emqx_tables",
+                      "oracle",
+                      "kafka_producer",
                       "greptimedb",
                       "datalayers",
                       "disk_log",
-                      "elasticsearch",
-                      "cassandra",
-                      "azure_event_grid",
-                      "aws_timestream",
-                      "kafka_producer",
+                      "timescale",
+                      "kinesis",
+                      "rabbitmq",
+                      "quasardb",
+                      "alloydb",
                       "mongodb",
-                      "redshift",
                       "http",
-                      "pgsql",
-                      "snowflake",
-                      "syskeeper_forwarder",
-                      "bigtable",
+                      "aws_timestream",
+                      "bigquery",
                       "mqtt",
                       "azure_blob_storage",
-                      "confluent_producer",
                       "s3",
-                      "cockroachdb",
+                      "redshift",
+                      "matrix",
+                      "azure_event_hub_producer",
+                      "elasticsearch",
+                      "pgsql",
                       "gcp_pubsub_producer",
-                      "bigquery",
-                      "redis",
+                      "confluent_producer",
                       "pulsar",
-                      "doris"
+                      "couchbase",
+                      "opents",
+                      "tablestore"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "azure_event_hub_producer",
-                      "matrix",
-                      "kinesis",
                       "s3tables",
-                      "tdengine",
-                      "quasardb",
-                      "couchbase",
-                      "rocketmq",
-                      "rabbitmq",
-                      "influxdb",
-                      "mysql",
-                      "opents",
-                      "alloydb",
-                      "dynamo",
-                      "tablestore",
-                      "iotdb",
-                      "oracle",
-                      "clickhouse",
-                      "emqx_tables",
-                      "timescale",
                       "snowflake_streaming",
+                      "syskeeper_forwarder",
+                      "doris",
+                      "tdengine",
+                      "azure_event_grid",
+                      "rocketmq",
+                      "snowflake",
+                      "influxdb",
                       "sqlserver",
+                      "mysql",
+                      "cockroachdb",
+                      "redis",
+                      "iotdb",
+                      "bigtable",
+                      "clickhouse",
+                      "dynamo",
+                      "cassandra",
+                      "emqx_tables",
+                      "oracle",
+                      "kafka_producer",
                       "greptimedb",
                       "datalayers",
                       "disk_log",
-                      "elasticsearch",
-                      "cassandra",
-                      "azure_event_grid",
-                      "aws_timestream",
-                      "kafka_producer",
+                      "timescale",
+                      "kinesis",
+                      "rabbitmq",
+                      "quasardb",
+                      "alloydb",
                       "mongodb",
-                      "redshift",
                       "http",
-                      "pgsql",
-                      "snowflake",
-                      "syskeeper_forwarder",
-                      "bigtable",
+                      "aws_timestream",
+                      "bigquery",
                       "mqtt",
                       "azure_blob_storage",
-                      "confluent_producer",
                       "s3",
-                      "cockroachdb",
+                      "redshift",
+                      "matrix",
+                      "azure_event_hub_producer",
+                      "elasticsearch",
+                      "pgsql",
                       "gcp_pubsub_producer",
-                      "bigquery",
-                      "redis",
+                      "confluent_producer",
                       "pulsar",
-                      "doris"
+                      "couchbase",
+                      "opents",
+                      "tablestore"
                     ],
                     "type": "string"
                   },
@@ -98325,7 +98325,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "7FAFB3E5CEFF3997",
+            "example": "BE6F76028A3550BB",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98388,7 +98388,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "7FAFB3E5CEFF3997",
+            "example": "BE6F76028A3550BB",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98802,7 +98802,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "7FAFB3E5CEFF3997",
+            "example": "BE6F76028A3550BB",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98888,7 +98888,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "7FAFB3E5CEFF3997",
+            "example": "BE6F76028A3550BB",
             "in": "path",
             "name": "site",
             "required": true,
