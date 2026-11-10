@@ -150,7 +150,7 @@ Starting from EMQX 6.2.3, this precondition returns `true` only when the passwor
 
 ### Configure Authentication Backend Failure Handling <Badge type="tip" text="6.3.3+" />
 
-The `authentication_settings.ignore_backend_failures` setting determines what EMQX does when an authentication backend fails, for example, when a database is unreachable or a request times out. The setting applies under both security profiles:
+The `authentication_settings.ignore_backend_failures` setting determines how EMQX handles authentication backend failures. These failures include backend errors, malformed backend responses, precondition evaluation errors, unavailable JWT verification keys, unreachable databases, and request timeouts. The setting applies under both [security profiles](../security-profile.md):
 
 | Value | `legacy` | `hardened` |
 | --- | --- | --- |

@@ -125,7 +125,7 @@ authorization {
 
 ### 配置授权故障处理 <Badge type="tip" text="6.3.3+" />
 
-`authorization.ignore_backend_failures` 配置项决定授权后端发生故障时 EMQX 的处理方式，例如数据库不可达或请求超时。该配置项在两种安全配置方案下均生效：
+`authorization.ignore_backend_failures` 配置项决定授权数据源遇到以下情况时 EMQX 的处理方式：后端错误、无效的后端响应、数据库不可达或请求超时。该配置项在两种[安全配置方案](../security-profile.md)下均生效：
 
 | 取值 | `legacy` | `hardened` |
 | --- | --- | --- |
@@ -312,9 +312,9 @@ EMQX 还允许在主题中使用占位符，在匹配规则时将当前客户端
 
 从 EMQX 6.3.0 开始，EMQX 会校验授权主题模板中的占位符替换值。默认情况下，这些值不能包含主题层级分隔符（`/`）或 MQTT 主题过滤器通配符（`+`、`#`）。该限制不适用于直接写在模板中的分隔符和通配符。
 
-例如，当用户名为 `alice` 时，EMQX 会将 `tenant/${username}/#` 替换为 `tenant/alice/#`。如果用户名为 `tenant/alice` 或 `+`，由于占位符替换值包含不允许的字符，EMQX 无法完成模板替换。
+例如，当客户端 ID 为 `device-001` 时，EMQX 会将 `devices/${clientid}/#` 替换为 `devices/device-001/#`。如果客户端 ID 为 `tenant-a/device-001`，由于占位符替换值包含 `/`，EMQX 无法完成模板替换。
 
-使用默认配置 `authorization.ignore_backend_failures = per_security_profile` 时，EMQX 根据当前安全配置方案处理包含不允许字符的替换值：
+使用默认配置 `authorization.ignore_backend_failures = per_security_profile` 时，如果占位符替换值包含不允许的 `/`、`+` 或 `#`，EMQX 会根据当前安全配置方案处理渲染失败：
 
 - 使用 `legacy` 配置方案时，EMQX 跳过渲染失败的主题过滤器，并继续检查同一规则中的其他主题过滤器。如果其他过滤器也不匹配，EMQX 将继续检查其余授权规则和授权数据源。
 - 使用 `hardened` 配置方案时，EMQX 拒绝此次发布或订阅操作。
@@ -333,7 +333,7 @@ authorization.topic_template_allow {
 }
 ```
 
-仅当占位符替换值必须包含某个字符时，才将对应配置项设为 `true`。启用这些配置项后，客户端相关值可能扩大授权规则的主题过滤器匹配范围。在主题模板中使用用户名、客户端 ID 或客户端属性值之前，应先校验这些值。
+将 `authorization.topic_template_allow.slash` 设为 `true`，可允许占位符替换值包含 `/`。使用 `authorization.topic_template_allow.plus` 可允许 `+`，使用 `authorization.topic_template_allow.hash` 可允许 `#`。仅当占位符替换值必须包含对应字符时，才启用该配置项。启用这些配置项后，客户端相关值可能扩大授权规则的主题过滤器匹配范围。在主题模板中使用用户名、客户端 ID 或客户端属性值之前，应先校验这些值。
 
 <!-- TODO 调查与 4.x 版本是否存在差异-->
 

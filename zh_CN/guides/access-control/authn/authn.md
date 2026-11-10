@@ -138,7 +138,7 @@ is_jwt(password)
 
 ### 配置认证后端故障处理 <Badge type="tip" text="6.3.3+" />
 
-`authentication_settings.ignore_backend_failures` 配置项决定认证后端发生故障时 EMQX 的处理方式，例如数据库不可达或请求超时。该配置项在两种安全配置方案下均生效：
+`authentication_settings.ignore_backend_failures` 配置项决定 EMQX 如何处理认证后端故障。此类故障包括后端错误、后端响应格式错误、前置条件求值错误、JWT 验证密钥不可用、数据库不可达和请求超时。该配置项在两种[安全配置方案](../security-profile.md)下均生效：
 
 | 取值 | `legacy` | `hardened` |
 | --- | --- | --- |
