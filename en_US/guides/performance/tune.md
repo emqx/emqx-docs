@@ -218,6 +218,36 @@ Additionally, if you observe warning log messages like the following, increasing
 [warning] msg: busy_dist_port ...
 ```
 
+### Compress Cluster RPC Traffic <Badge type="tip" text="6.3.3+" />
+
+EMQX can compress data that nodes send to each other over remote procedure call (RPC) connections, including forwarded MQTT messages. Compression reduces RPC traffic between nodes but consumes more CPU on both the sending and receiving nodes. Enable compression when inter-node bandwidth is limited or inter-node data transfer incurs charges, such as when a cluster spans availability zones.
+
+Configure RPC compression in `etc/emqx.conf`:
+
+```hocon
+rpc {
+  compress_level = 1
+  compress_threshold = 1KB
+}
+```
+
+The `rpc` root is read-only. Configure these settings on each node where you want to enable RPC compression, and restart the node for the changes to take effect.
+
+`rpc.compress_level` accepts an integer from `0` to `9`:
+
+- `0` is the default and disables compression. Existing deployments keep the same behavior after an upgrade.
+- `1` is the fastest compression level and is the recommended starting point.
+- `9` produces the smallest output. Higher levels usually provide only a small additional size reduction and consume much more CPU for large messages.
+
+`rpc.compress_threshold` sets the minimum RPC packet size to compress. The default is `1KB`; EMQX sends smaller packets without compression. Set the value to `0` to compress every packet. This setting takes effect only when `rpc.compress_level` is greater than `0`.
+
+The threshold applies to a complete RPC packet, not to an individual MQTT message. RPC can batch multiple messages sent to the same node, so a packet can exceed the threshold even when each message is smaller than the configured value.
+
+Payloads that are already compressed or encrypted do not become smaller through RPC compression. Compressing such payloads only increases CPU usage.
+
+::: tip
+Start with compression level `1` and the default threshold of `1KB`. Measure CPU usage and inter-node RPC traffic under a representative workload before increasing the compression level or lowering the threshold.
+:::
 
 ## Client Machine Tuning
 

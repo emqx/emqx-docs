@@ -66,3 +66,5 @@ cluster {
 EMQX 提供了更多配置项以更好地满足定制化需求。详情请参见 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 :::
+
+如需在节点间带宽受限或节点间数据传输按流量计费时减少集群 RPC 流量，参见[压缩集群 RPC 流量](../performance/tune.md#压缩集群-rpc-流量)。

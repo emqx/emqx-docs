@@ -67,3 +67,5 @@ EMQX offers more configuration items to better serve customized needs. For detai
 
 :::
 
+To reduce cluster RPC traffic when inter-node bandwidth is limited or inter-node data transfer incurs charges, see [Compress Cluster RPC Traffic](../performance/tune.md#compress-cluster-rpc-traffic).
+
