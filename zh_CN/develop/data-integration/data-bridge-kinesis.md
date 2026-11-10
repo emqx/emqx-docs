@@ -35,14 +35,18 @@ EMQX 与 AWS Kinesis Data Streams 的数据集成可以为您的业务带来以�
 
 ## 准备工作
 
-本节介绍了在 EMQX 中创建 Amazon Kinesis Sink 之前需要做的准备工作，包括如何创建 Kinesis 数据流并在本地模拟数据流服务。
+在 EMQX 中创建 Amazon Kinesis 数据集成前，请先了解相关前提条件，使用 AWS 或 LocalStack 准备 Kinesis 数据流，并为连接器选择凭证获取方式。
 
 ### 前置准备
 
 - 了解[规则](./rules.md)。
 - 了解[数据集成](./data-bridges.md)。
 
-### 在 Amazon Kinesis Data Streams 中创建数据流
+### 准备 Kinesis 数据流
+
+使用以下任一方式准备 Kinesis 数据流。
+
+#### 在 Amazon Kinesis Data Streams 中创建数据流
 
 按照以下步骤通过 AWS 管理控制台创建数据流（详细信息请参阅[本教程](https://docs.aws.amazon.com/zh_cn/streams/latest/dev/how-do-i-create-a-stream.html)）。
 
@@ -51,7 +55,7 @@ EMQX 与 AWS Kinesis Data Streams 的数据集成可以为您的业务带来以�
 3. 选择**创建数据流**。
 4. 在**创建 Kinesis 流**页面，为您的数据流输入名称，然后选择**按需**容量模式。
 
-### 在本地模拟 Amazon Kinesis Data Streams
+#### 在本地模拟 Amazon Kinesis Data Streams
 
 为了便于开发和测试，您可以通过 [LocalStack](https://localstack.cloud/) 在本地模拟 Amazon Kinesis Data Streams 服务。有了 LocalStack，您可以在本地机器上运行 AWS 应用，无需连接到远程云提供商。
 
@@ -71,6 +75,19 @@ EMQX 与 AWS Kinesis Data Streams 的数据集成可以为您的业务带来以�
    awslocal kinesis create-stream --stream-name "my_stream" --shard-count 1
    ```
 
+### 选择凭证获取方式 <Badge type="tip" text="6.3.3+" />
+
+Amazon Kinesis 连接器支持以下凭证获取方式。请根据 EMQX 的部署环境选择一种方式：
+
+- **手动配置访问密钥**：在连接器中填写 **AWS 访问密钥 ID**和**AWS 秘密访问密钥**，并确保这些凭证具备目标 Kinesis 资源的访问权限。有关如何创建和管理访问密钥，请参阅 [AWS 官方文档：管理访问密钥](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)。如果使用 LocalStack，请在每个字段中输入任意非空值，无需使用 AWS 访问密钥。此方式适用于本地部署、非 AWS 环境，以及不使用 ECS 任务角色或 EC2 实例角色的部署环境。
+- **自动获取临时凭证**：如果 EMQX 作为 Amazon ECS 任务运行或部署在 Amazon EC2 实例上，请配置具备目标 Kinesis 资源访问权限的 ECS 任务角色或 EC2 实例角色，并在连接器中将 **AWS 访问密钥 ID**和**AWS 秘密访问密钥**留空。EMQX 将通过 ECS 任务角色或 EC2 实例元数据服务（IMDSv2）获取临时凭证，并在凭证过期前自动刷新。
+
+::: warning 重要提示
+
+**AWS 访问密钥 ID**和**AWS 秘密访问密钥**必须同时填写或同时留空。只填写其中一项会导致连接器配置无效。
+
+:::
+
 ## 创建连接器
 
 在添加 Amazon Kinesis Sink 前，您需要创建连接器用于将 Sink 连接到 Amazone Kinesis Data Streams 服务。
@@ -85,8 +102,7 @@ EMQX 与 AWS Kinesis Data Streams 的数据集成可以为您的业务带来以�
 
 5. 配置连接信息。
 
-   - **AWS 访问密钥 ID**：输入[访问密钥 ID](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html)。如果使用 LocalStack，可输入任何值。
-   - **AWS 秘密访问密钥**：输入[密钥](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html)。如果使用 LocalStack，可输入任何值。
+   - **AWS 访问密钥 ID**和**AWS 秘密访问密钥**：如需使用静态凭证，请输入访问密钥 ID 和秘密访问密钥。如果使用 LocalStack，请在每个字段中输入任意非空值。如需使用 ECS 任务角色或 EC2 实例角色，请将两个字段留空。详情请参见[选择凭证获取方式](#选择凭证获取方式)。
    - **Amazon Kinesis 端点**：输入 Kinesis 服务的[终端节点](https://docs.aws.amazon.com/zh_cn/general/latest/gr/ak.html)。如果使用 [LocalStack](#在本地模拟-amazon-kinesis-data-streams)，输入`http://localhost:4566`。
 
 6. 在点击**创建**之前，您可以点击测试连接**以测试连接器是否能连接到 Amazon Kinesis Data Streams 服务。
