@@ -65,6 +65,7 @@ docker run -d --name opentsdb -p 4242:4242 petergrace/opentsdb-docker
 
    - 输入连接器名称，应为大写和小写字母及数字的组合，例如：`my_opentsdb`。
    - **服务器地址**填写 `http://127.0.0.1:4242`，如果您在远程运行 OpenTSDB 服务器，需填写实际地址。
+   - **启用 TLS**：从 EMQX 6.3.3 开始提供。如果 OpenTSDB 服务器使用 HTTPS，请开启此选项。启用后，EMQX 默认校验服务器证书。如果证书由私有 CA 签发，请配置相应的 CA 证书。更多信息请参阅[启用 TLS 加密访问外部资源](../../guides/network/overview.md#启用-tls-加密访问外部资源)。
    - 其他选项使用默认值即可。
 
 4. 高级配置（可选），根据情况配置连接池等参数，详细请参考 [Sink 的特性](./data-bridges.md)。

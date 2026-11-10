@@ -65,6 +65,7 @@ The following steps assume that you run both EMQX and OpenTSDB on the local mach
 4. In the **Configuration** step, configure the following information:
    - Enter the connector name, which should be a combination of upper and lower case letters and numbers, for example: `my_opentsdb`.
    - Enter `http://127.0.0.1:4242` as the **Server Host**, or the actual URL if the OpenTSDB server runs remotely.
+   - **Enable TLS**: Available starting from EMQX 6.3.3. If the OpenTSDB server uses HTTPS, enable this option. EMQX verifies the server certificate by default. If the certificate is signed by a private CA, configure the corresponding CA certificate. For more information, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).
    - Leave other options as default.
 5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the OpenTSDB server.
