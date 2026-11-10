@@ -502,11 +502,23 @@ ok
 
 ## plugins
 
-プラグインのインストール状況を表示および管理するコマンドです。
+`plugins`コマンドでプラグインを表示および管理します。
+
+::: tip ノードピン留めプラグイン
+
+EMQX 6.2.4以降、`node.pinned_plugins`に設定されたプラグインに対する`plugins`コマンドの動作は以下のとおりです：
+
+- `plugins start`、`plugins stop`、`plugins restart`は、現在のノードで`node.pinned_plugins`に設定されたバージョンのみを管理します。同じプラグインの別バージョンを対象とするライフサイクルコマンドは拒否されます。
+- `plugins allow`、`plugins install`、`plugins uninstall`、`plugins enable`、`plugins disable`は、ノードピン留めプラグインに対して`plugin_pinned`エラーを返します。
+- CLIで停止したノードピン留めプラグインは、ノードの再起動やクラスターへの参加などによってノードがすべてのプラグインを再起動するまで、停止したままになります。
+
+詳細は[ノードピン留めプラグインの事前デプロイ](./extensions/plugin-management.md#pre-deploy-a-node-pinned-plugin)を参照してください。
+
+:::
 
 ### plugins list
 
-インストール済みプラグインを一覧表示します。
+現在のノードで使用可能なプラグインを一覧表示します。ノードピン留めプラグインも含まれます。
 
 ```bash
 emqx ctl plugins list
@@ -515,7 +527,7 @@ emqx ctl plugins list
 
 ### plugins describe \<Name-Vsn\>
 
-インストール済みプラグインの詳細情報を表示します。
+現在のノードで使用可能なプラグインの詳細情報を表示します。
 
 ```bash
 emqx ctl plugins describe emqx_auth_mnesia-3.0.1

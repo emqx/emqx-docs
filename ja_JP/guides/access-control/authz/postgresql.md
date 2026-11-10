@@ -48,6 +48,20 @@ INSERT 0 1
 query = "SELECT permission, action, topic, ipaddress, qos, retain FROM mqtt_acl WHERE username = ${username} and ipaddress = ${peerhost}"
 ```
 
+::: tip 読み取り専用のデータベース権限を付与する
+
+EMQXはパブリッシュやサブスクライブ操作の認可時にデータベースへの読み取りアクセスのみを必要とします。`query`は`SELECT`文として設定してください。EMQXはプリペアドステートメントとしてクエリを実行します。
+
+EMQXが使用するデータベースアカウントには、クエリが読み取るテーブルに対する`SELECT`権限のみを付与し、書き込みや管理権限は付与しないでください。
+
+```sql
+GRANT USAGE ON SCHEMA public TO emqx_auth;
+GRANT SELECT ON mqtt_acl TO emqx_auth;
+```
+
+テーブル作成や認可ルール管理には別の管理アカウントを使用してください。EMQX設定のデータベース認証情報が漏洩しても、読み取り専用アカウントでは認可ルールの変更や削除はできません。
+:::
+
 ## ダッシュボードでの設定
 
 EMQXダッシュボードを使ってPostgreSQLをユーザー認可に利用する設定が可能です。

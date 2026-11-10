@@ -50,6 +50,21 @@ filter { username = "${username}" }
 
 このMongoDBデータスキーマに対応するダッシュボードの設定パラメータは **Filter**：`{ username = "${username}" }` です。
 
+::: tip 読み取り専用データベース権限の付与
+
+EMQXはパブリッシュまたはサブスクライブ操作の認可時にMongoDBへの読み取りアクセスのみを必要とし、設定されたコレクションに対して`find`クエリを実行します。MongoDBには、対象データベースに対する組み込みの`read`ロールのみを持つ専用ユーザーを作成してください。
+
+```js
+db.getSiblingDB("mqtt").createUser({
+  user: "emqx_auth",
+  pwd: "PASSWORD",
+  roles: [ { role: "read", db: "mqtt" } ]
+})
+```
+
+コレクションの作成や認可ルールの管理には別の管理者ユーザーを使用してください。EMQX設定内のMongoDB認証情報が漏洩しても、読み取り専用ユーザーでは認可ルールを変更または削除できません。
+:::
+
 ## ダッシュボードでの設定
 
 EMQXダッシュボードを使用して、MongoDBをユーザー認可に利用する設定が可能です。

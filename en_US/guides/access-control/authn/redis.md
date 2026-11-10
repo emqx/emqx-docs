@@ -41,6 +41,29 @@ The name `password_hash` conveys our preference for storing hashed passwords. Bu
 So, we can also configure `cmd` as `HMGET mqtt:${username} password salt is_superuser`.
 :::
 
+::: tip Grant Read-Only Database Privileges
+
+EMQX only needs read access to Redis when it authenticates a client. It accepts only `HGET` and `HMGET` in `cmd` and rejects any other command, so authentication does not write to Redis.
+
+For Redis 6.0 or later, configure EMQX to use a dedicated user. Limit the user to the health check and query commands that EMQX runs and to the keys that the configured `cmd` reads:
+
+```bash
+redis-cli ACL SETUSER emqx_auth reset on '>PASSWORD' '~mqtt:*' +ping +hget +hmget
+```
+
+For Redis Cluster, also grant `+cluster|slots` because EMQX runs `CLUSTER SLOTS` to obtain and update the mapping between hash slots and Redis nodes, ensuring that each query is sent to the correct node:
+
+```bash
+redis-cli ACL SETUSER emqx_auth '+cluster|slots'
+```
+
+For Single or Sentinel mode, if `database` is set to a nonzero index, grant `+select` to the Redis data-node user because EMQX runs `SELECT` after connecting. This permission is not required when using the default database 0.
+
+In Sentinel mode, if authentication is enabled on the Sentinel nodes, configure the Sentinel connection credentials with `sentinel_username` and `sentinel_password`. These credentials are separate from the `username` and `password` used to connect to the Redis data nodes.
+
+Use a separate administrative user to manage user records. If the Redis credentials in the EMQX configuration are compromised, an attacker cannot use the read-only user to change or delete authentication data.
+:::
+
 ## Configure with Dashboard
 
 You can use EMQX Dashboard to configure how to use Redis for password authentication.

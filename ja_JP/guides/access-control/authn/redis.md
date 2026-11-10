@@ -41,6 +41,29 @@ cmd = "HMGET mqtt:${username} password_hash salt is_superuser"
 そのため、`cmd` を `HMGET mqtt:${username} password salt is_superuser` と設定することも可能です。
 :::
 
+::: tip 読み取り専用データベース権限の付与
+
+EMQXはクライアント認証時にRedisへの読み取りアクセスのみを必要とします。`cmd`では`HGET`と`HMGET`のみを受け付け、他のコマンドは拒否するため、認証処理でRedisへの書き込みは行われません。
+
+Redis 6.0以降では、EMQX専用ユーザーを設定してください。このユーザーには、EMQXが実行するヘルスチェックとクエリ、および設定された`cmd`が読み取るキーへのアクセスのみを許可します：
+
+```bash
+redis-cli ACL SETUSER emqx_auth reset on '>PASSWORD' '~mqtt:*' +ping +hget +hmget
+```
+
+Redis Clusterでは、EMQXが`CLUSTER SLOTS`を実行してハッシュスロットとRedisノードの対応関係を取得および更新するため、`+cluster|slots`も付与してください。これにより、各クエリが正しいノードに送信されます：
+
+```bash
+redis-cli ACL SETUSER emqx_auth '+cluster|slots'
+```
+
+SingleまたはSentinelモードで`database`に0以外のインデックスを設定する場合は、Redisデータノードのユーザーに`+select`を付与してください。EMQXが接続後に`SELECT`を実行するためです。デフォルトのデータベース0を使用する場合、この権限は不要です。
+
+SentinelモードでSentinelノードの認証が有効な場合は、`sentinel_username`と`sentinel_password`でSentinel接続用の認証情報を設定してください。これらはRedisデータノードへの接続に使用する`username`および`password`とは別の認証情報です。
+
+ユーザーレコードの管理には別の管理者ユーザーを使用してください。EMQX設定内のRedis認証情報が漏洩しても、読み取り専用ユーザーでは認証データを変更または削除できません。
+:::
+
 ## ダッシュボードでの設定
 
 EMQXダッシュボードを使ってRedisをパスワード認証に利用する設定ができます。
