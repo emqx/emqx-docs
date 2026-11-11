@@ -339,9 +339,9 @@ Descriptions of each field:
 - `timestamp`: UNIX timestamp in milliseconds when the data was collected
 - `clientid`: MQTT client ID
 - `recv_oct`: Total bytes received from the client
-- `recv_cnt`: Number of received messages (or message fragments)
+- `recv_cnt`: Starting from EMQX 6.3.3, this field reports the number of MQTT packets received and has the same value as the client's `recv_pkt` statistic. Before EMQX 6.3.3, it reported the number of socket `recv()` calls. The field is retained for backward compatibility.
 - `send_oct`: Total bytes sent to the client
-- `send_cnt`: Number of sent MQTT packets.
+- `send_cnt`: Starting from EMQX 6.3.3, this field reports the number of MQTT packets sent and has the same value as the client's `send_pkt` statistic. Before EMQX 6.3.3, it reported the number of socket `send()` calls. The field is retained for backward compatibility.
 - `subscriptions_cnt`: Number of subscriptions held by the client
 - `awaiting_rel_cnt`: Number of QoS 2 messages awaiting PUBREL
 - `mqueue_len`: Length of the client’s in-memory session message queue
