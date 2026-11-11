@@ -282,6 +282,8 @@ curl -s -u key:secret -X GET -H "Content-Type: application/json" \
 http://localhost:18083/api/v5/message_queues | jq
 ```
 
+Starting from EMQX 6.3.3, the API continues to include queues that are being deleted in its response until their background cleanup finishes. Each such queue includes a `deleted_at` field that records the deletion request time as a Unix timestamp in milliseconds. Queues that are not being deleted do not include this field.
+
 ### Update a Queue
 
 Update the properties of an existing queue, such as its dispatch strategy:
@@ -294,14 +296,29 @@ http://localhost:18083/api/v5/message_queues/my_queue \
 
 ### Delete a Queue
 
-Remove a message queue and all messages retained in it:
+Send a request to delete a message queue and all messages retained in it:
 
 ```bash
 curl -s -u key:secret -X DELETE \
 http://localhost:18083/api/v5/message_queues/my_queue
 ```
 
-Once deleted, the queue stops accepting new messages and its stored data is removed.
+Starting from EMQX 6.3.3, this operation is asynchronous. EMQX marks the queue for deletion, schedules background cleanup, and returns HTTP status code `204` without waiting for the stored data to be removed.
+
+Until background cleanup finishes:
+
+- EMQX stops writing published messages to the queue. The queue consumer stops and does not restart.
+- The queue remains in the queue list with the `deleted_at` field. Requests to get or update the queue return HTTP status code `400`.
+- You cannot create another queue with the same name.
+- The queue counts toward `max_queue_count` until background cleanup finishes.
+
+If deletion fails or a node stops before the queued cleanup runs, send the `DELETE` request again to reschedule the cleanup.
+
+::: warning Rolling Upgrade Limitation
+
+During a rolling upgrade, nodes that do not recognize the deletion marker may continue to route published messages to the queue and include it in API list responses until background cleanup finishes.
+
+:::
 
 ## FAQ and Troubleshooting
 
