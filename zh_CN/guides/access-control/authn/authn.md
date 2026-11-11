@@ -85,8 +85,8 @@ EMQX 允许创建多个认证器构成一条认证链，认证器将按照在链
    - 如果找到了凭证且验证通过（如密码正确），则认证成功，允许客户端连接；
    - 如果找到了凭证但验证失败，则拒绝连接；
    - 如果未找到凭证，则继续尝试下一个认证器。
-3. **错误或禁用时跳过：**
-    如果认证器被禁用，或在执行过程中出现内部错误（如数据库不可用），该认证器也将被跳过。
+3. **处理已禁用的认证器和后端故障：**
+    EMQX 会跳过已禁用的认证器。认证器后端发生故障（例如数据库不可用）时，EMQX 根据[后端故障处理配置](#配置认证后端故障处理)，继续执行下一个认证器或拒绝客户端。
 4. **回退行为：**
     如果所有认证器都被跳过或均未能认证成功，EMQX 默认会拒绝客户端连接。
 
@@ -135,6 +135,30 @@ is_jwt(password)
 ```
 
 从 EMQX 6.2.3 开始，仅当密码在结构上是 JWT 时，该调用条件才返回 `true`。对于 JWT 密码，EMQX 会执行 JWT 认证器。如果密码不是 JWT 或未提供密码，EMQX 会跳过 JWT 认证器，并继续执行认证链中的下一个认证器。
+
+### 配置认证后端故障处理 <Badge type="tip" text="6.3.3+" />
+
+`authentication_settings.ignore_backend_failures` 配置项决定 EMQX 如何处理认证后端故障。此类故障包括后端错误、后端响应格式错误、前置条件求值错误、JWT 验证密钥不可用、数据库不可达和请求超时。该配置项在两种[安全配置方案](../security-profile.md)下均生效：
+
+| 取值 | `legacy` | `hardened` |
+| --- | --- | --- |
+| `per_security_profile`（默认值） | 忽略故障并继续执行下一个认证器。 | 拒绝客户端。 |
+| `true` | 忽略故障并继续执行下一个认证器。 | 忽略故障并继续执行下一个认证器。 |
+| `false` | 拒绝客户端。 | 拒绝客户端。 |
+
+例如，如果没有更高优先级的配置源覆盖该配置项，可在 `base.hocon` 中添加以下配置，使处理方式遵循当前安全配置方案：
+
+```hocon
+authentication_settings.ignore_backend_failures = per_security_profile
+```
+
+`GET /api/v5/authentication/settings` 返回的 `ignore_backend_failures` 可以是 JSON 字符串 `"per_security_profile"`，也可以是 JSON 布尔值 `true` 或 `false`。`PUT /api/v5/authentication/settings` 接受相同的值。未配置该字段时，`GET` 请求返回 `"per_security_profile"`。在 EMQX 6.3.3 之前，该字段为布尔类型，默认返回值为 `false`。
+
+::: warning 升级后检查已存储的配置值
+在 EMQX 6.3.3 之前，`GET /api/v5/authentication/settings` 默认返回 `ignore_backend_failures: false`。如果 API 客户端将完整响应作为 `PUT` 请求体重新提交，即使用户没有主动设置该字段，EMQX 也可能已经将 `false` 持久化。升级到 EMQX 6.3.3 后，已存储的 `false` 会导致 `legacy` 方案在认证后端故障时拒绝客户端。要保留原有的 `legacy` 行为，请在所有节点完成升级后将该值设置为 `per_security_profile`。
+
+滚动升级期间，请遵循[滚动升级注意事项](../security-profile.md#滚动升级)。
+:::
 
 ## 外部资源缓存
 

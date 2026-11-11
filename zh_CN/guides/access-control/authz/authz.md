@@ -62,9 +62,8 @@ EMQX 授权支持与多种数据源集成，包括内置数据库、文件、MyS
 2. 当前授权检查器执行时检索到了客户端的权限信息，匹配当前执行的操作与客户端的权限信息：
    - 操作与权限匹配，根据权限允许或拒绝客户端的操作；
    - 操作与权限不匹配，交由下一授权检查器继续检查。
-3. 当前授权检查器执行时没有检索到客户端的权限信息，EMQX 将继续检查授权链中是否还有其他授权检查器：
-   - 如有，EMQX 将跳过当前授权检查器，并将请求交由下一授权检查器继续检查；
-   - 如当前授权检查器是链中最后一个授权检查器：根据**未匹配时执行**（ `no_match` ）配置决定检查结果（允许或拒绝）。
+3. 当前授权检查器没有检索到匹配的权限信息时，EMQX 将继续检查下一个授权检查器。如果所有授权检查器均未返回匹配结果，EMQX 根据**未匹配时执行**（`no_match`）配置允许或拒绝操作。
+4. 授权后端发生故障时，EMQX 根据[故障处理配置](#配置授权故障处理)，继续检查下一个授权数据源或拒绝操作。
 
 有关如何调整授权链中授权检查器顺序以及查看其运行统计指标，可查看 [管理授权检查器](#管理授权检查器) 章节。
 
@@ -123,6 +122,32 @@ authorization {
 
 - `iif(str_eq(client_attrs.biz, 'orders'), str_eq(action, 'publish'), false)`：当客户端属性 `client_attrs.biz` 等于 `orders`，且当前授权动作为 `publish` 时，表达式结果为 `true`。
 - `topic_match(topic, topic_join(['devices', clientid, '#']))`：当当前授权请求的主题匹配 `devices/${clientid}/#` 主题过滤器时，表达式结果为 `true`。
+
+### 配置授权故障处理 <Badge type="tip" text="6.3.3+" />
+
+`authorization.ignore_backend_failures` 配置项决定 EMQX 如何处理授权后端故障。此类故障包括后端错误、无效的后端响应、数据库不可达和请求超时。该配置项在两种[安全配置方案](../security-profile.md)下均生效。对于授权后端故障，各取值的处理方式如下：
+
+| 取值 | `legacy` | `hardened` |
+| --- | --- | --- |
+| `per_security_profile`（默认值） | 忽略故障并继续检查下一个授权数据源。 | 拒绝操作。 |
+| `true` | 忽略故障并继续检查下一个授权数据源。 | 忽略故障并继续检查下一个授权数据源。 |
+| `false` | 拒绝操作。 | 拒绝操作。 |
+
+该配置项还决定 EMQX 如何处理授权规则渲染失败，例如占位符没有对应值，或主题模板替换值包含不允许的字符。规则渲染失败发生在 EMQX 评估规则时，与授权后端本身的故障不同。有关主题模板替换的详细信息，参见[主题占位符](#主题占位符)。
+
+例如，如果没有更高优先级的配置源覆盖该配置项，可在 `base.hocon` 中添加以下配置，使处理方式遵循当前安全配置方案：
+
+```hocon
+authorization.ignore_backend_failures = per_security_profile
+```
+
+`GET /api/v5/authorization/settings` 返回的 `ignore_backend_failures` 可以是 JSON 字符串 `"per_security_profile"`，也可以是 JSON 布尔值 `true` 或 `false`。`PUT /api/v5/authorization/settings` 接受相同的值。未配置该字段时，`GET` 请求返回 `"per_security_profile"`。在 EMQX 6.3.3 之前，该字段为布尔类型，默认返回值为 `false`。
+
+::: warning 升级后检查已存储的配置值
+在 EMQX 6.3.3 之前，通过 REST API 或 Dashboard 保存授权设置时，即使未修改该配置项，也可能存储 `false`。升级到 EMQX 6.3.3 后，已存储的 `false` 会导致 `legacy` 方案在授权后端故障或规则渲染失败时拒绝操作。要保留原有的 `legacy` 行为，请在所有节点完成升级后将该值设置为 `per_security_profile`。
+
+滚动升级期间，请遵循[滚动升级注意事项](../security-profile.md#滚动升级)。
+:::
 
 ## 授权规则变更的生效范围
 
@@ -289,14 +314,16 @@ EMQX 还允许在主题中使用占位符，在匹配规则时将当前客户端
 
 从 EMQX 6.3.0 开始，EMQX 会校验授权主题模板中的占位符替换值。默认情况下，这些值不能包含主题层级分隔符（`/`）或 MQTT 主题过滤器通配符（`+`、`#`）。该限制不适用于直接写在模板中的分隔符和通配符。
 
-例如，当用户名为 `alice` 时，EMQX 会将 `tenant/${username}/#` 替换为 `tenant/alice/#`。如果用户名为 `tenant/alice` 或 `+`，由于占位符替换值包含不允许的字符，EMQX 无法完成模板替换。
+例如，当客户端 ID 为 `device-001` 时，EMQX 会将 `devices/${clientid}/#` 替换为 `devices/device-001/#`。如果客户端 ID 为 `tenant-a/device-001`，由于占位符替换值包含 `/`，EMQX 无法完成模板替换。
 
-如果占位符替换值包含不允许的字符，EMQX 会根据当前安全配置方案处理该授权规则：
+使用默认配置 `authorization.ignore_backend_failures = per_security_profile` 时，如果占位符替换值包含不允许的 `/`、`+` 或 `#`，EMQX 会根据当前安全配置方案处理渲染失败：
 
-- 使用 `legacy` 配置方案时，该规则不匹配，EMQX 继续检查其余授权规则和授权数据源。
-- 使用 `hardened` 配置方案时，EMQX 拒绝此次发布或订阅操作。如果将 `authorization.ignore_backend_failures` 设为 `true`，EMQX 会改为将该规则视为不匹配。
+- 使用 `legacy` 配置方案时，EMQX 跳过渲染失败的主题过滤器，并继续检查同一规则中的其他主题过滤器。如果其他过滤器也不匹配，EMQX 将继续检查其余授权规则和授权数据源。
+- 使用 `hardened` 配置方案时，EMQX 拒绝此次发布或订阅操作。
 
-EMQX 6.3.0 默认使用 `legacy` 安全配置方案，`authorization.ignore_backend_failures` 的默认值为 `false`。升级到 EMQX 6.3.0 后，如果升级前配置的规则使用了包含不允许字符的占位符替换值，该规则在默认 `legacy` 配置方案下不再匹配。最终结果取决于其余授权规则、授权数据源和 `authorization.no_match`。升级前应检查这些设置，确认回退行为符合预期。
+从 EMQX 6.3.3 开始，`authorization.ignore_backend_failures` 在两种安全配置方案下都决定 EMQX 如何处理此类规则渲染失败。设置为 `true` 时，EMQX 在两种方案下都跳过渲染失败的主题过滤器，并继续检查同一规则中的其他过滤器；设置为 `false` 时，EMQX 在两种方案下都拒绝操作。虽然 EMQX 6.3.3 使用同一个配置项控制这两类情况，但规则渲染失败并不是授权后端故障。有关完整取值矩阵和升级注意事项，参见[配置授权故障处理](#配置授权故障处理)。
+
+从早于 EMQX 6.3.0 的版本升级时，请检查已有的授权主题模板。如果占位符替换值包含默认不允许的字符，EMQX 将按上述方式处理渲染失败。忽略失败时，最终结果取决于同一规则中的其他主题过滤器、后续规则和授权数据源，以及 `authorization.no_match`。
 
 `authorization.topic_template_allow` 配置控制占位符替换值中允许使用的字符。所有配置项的默认值均为 `false`：
 
@@ -308,7 +335,7 @@ authorization.topic_template_allow {
 }
 ```
 
-仅当占位符替换值必须包含某个字符时，才将对应配置项设为 `true`。启用这些配置项后，客户端相关值可能扩大授权规则的主题过滤器匹配范围。在主题模板中使用用户名、客户端 ID 或客户端属性值之前，应先校验这些值。
+将 `authorization.topic_template_allow.slash` 设为 `true`，可允许占位符替换值包含 `/`。将 `authorization.topic_template_allow.plus` 设为 `true` 可允许 `+`，将 `authorization.topic_template_allow.hash` 设为 `true` 可允许 `#`。仅当占位符替换值必须包含对应字符时，才启用该配置项。启用这些配置项后，客户端相关值可能扩大授权规则的主题过滤器匹配范围。在主题模板中使用用户名、客户端 ID 或客户端属性值之前，应先校验这些值。
 
 <!-- TODO 调查与 4.x 版本是否存在差异-->
 

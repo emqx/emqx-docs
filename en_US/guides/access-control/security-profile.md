@@ -61,15 +61,14 @@ This setting also applies to gateway listeners, whose default bind address is no
 ### Authentication
 
 - **Explicit authentication is required.** Clients are denied when no authenticators are configured, or when all authenticators are disabled. To explicitly allow anonymous access on a listener, set the listener's `enable_authn = false`.
-- **Authentication backend failures deny access.** Authenticator backend errors, malformed backend responses, errors evaluating authenticator preconditions, and unavailable JWT verification keys deny the client instead of continuing to the next authenticator. Set `authentication_settings.ignore_backend_failures = true` to allow fallback to later authenticators.
+- **Authentication backend failures deny access.** Under the `hardened` profile, an authentication backend failure denies the client instead of continuing to the next authenticator. Starting from EMQX 6.3.3, configure this behavior with `authentication_settings.ignore_backend_failures`. For details, see [Configure Authentication Backend Failure Handling](./authn/authn.md#configure-authentication-backend-failure-handling).
 - **Missing JWTs are not ignored by the JWT authenticator.** The JWT authenticator denies clients that omit the configured JWT field. Set the authenticator's `on_missing_jwt = ignore` to allow those clients to continue to the next authenticator.
 - **Non-JWT credentials must skip JWT authenticators in mixed authentication chains.** A JWT authenticator fails authentication when it receives a malformed JWT. When a JWT authenticator and a later password-based authenticator read a JWT or a password from the same field, for example `password`, set the JWT authenticator's `precondition = "is_jwt(password)"` so that plain passwords continue to the next authenticator.
 - **Outbound JWKS TLS is verified.** The JWT authenticator verifies peer certificates and hostnames when it fetches keys from a JWKS HTTPS endpoint. Endpoints with untrusted certificates become unavailable. Set `ssl.verify = verify_none` on a specific JWKS endpoint to disable verification.
 
 ### Authorization
 
-- **Authorization backend failures deny the operation.** Authorization backend errors, malformed rules, and template evaluation errors deny the publish or subscribe operation instead of continuing to later sources or falling back to the no-match behavior. Set `authorization.ignore_backend_failures = true` to ignore backend failures and proceed to the next authorization source.
-- **Forbidden characters in authorization topic-template substitutions deny the operation.** By default, a substituted value that contains `/`, `+`, or `#` causes the rule to return no match under `legacy` and to deny the operation under `hardened`. For example, a client with client ID `i/am/+/good/#` matched against the rule `{allow, all, all, ["t/${clientid}/#"]}.`. Allow individual characters with `authorization.topic_template_allow.slash`, `authorization.topic_template_allow.plus`, or `authorization.topic_template_allow.hash`.
+- **Authorization backend and rule-render failures deny the operation.** Under the `hardened` profile, an authorization backend failure or rule-render failure denies the publish or subscribe operation. Starting from EMQX 6.3.3, `authorization.ignore_backend_failures` controls both cases. For details, see [Configure Authorization Failure Handling](./authz/authz.md#configure-authorization-failure-handling).
 - **The default file authorization source is deny-by-default.** The default `acl.conf` ends with the rule `{allow, {security_profile, legacy}}.`, which allows the operation under the `legacy` profile and does not apply under `hardened`. Under `hardened`, operations that match no rule fall through to `authorization.no_match`, which defaults to `deny`. Change the final rule to `{allow, all}.` for permissive behavior. The `{security_profile, legacy}` and `{security_profile, hardened}` conditions can be used in any `acl.conf` rule, including within `and` and `or` expressions, to apply custom rules only under the selected profile.
 - **Internal subscriptions are authorized.** Subscriptions made by features such as Auto Subscribe undergo topic validation, authorization, capability checks, and subscribe hooks. Privileged management force-subscribe operations continue to bypass MQTT authorization.
 
@@ -136,6 +135,17 @@ When performing a rolling upgrade from a version before 6.3:
 1. Do not set `EMQX_SECURITY_PROFILE=hardened` on the upgraded nodes. Leave the variable unset, or set it to `legacy`, so that upgraded nodes behave the same as the nodes that still run the old version.
 2. Complete the rolling upgrade on every node.
 3. Switch the cluster to `hardened` afterwards by following the migration steps below.
+
+::: warning Avoid Updating Failure-Handling Settings During a Rolling Upgrade
+Until all nodes run EMQX 6.3.3 or later:
+
+- Do not set `authentication_settings.ignore_backend_failures` or `authorization.ignore_backend_failures` to `per_security_profile`.
+- Do not save authorization settings through the Dashboard or call `PUT /api/v5/authorization/settings`. EMQX might insert and persist the default value `per_security_profile` even if the request body does not include the field.
+
+Nodes running an earlier version reject `per_security_profile`, causing the cluster configuration transaction to fail.
+
+After all nodes have been upgraded, check both settings. If the cluster uses the `legacy` profile and either value is `false`, set it to `per_security_profile` to preserve the behavior of earlier releases. Otherwise, EMQX denies the client or operation when the corresponding failure occurs.
+:::
 
 ## Migration
 
