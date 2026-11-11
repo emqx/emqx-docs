@@ -421,7 +421,7 @@ Until background cleanup finishes:
 - You cannot create another stream with the same name.
 - The stream counts toward `max_stream_count` until background cleanup finishes.
 
-If deletion fails or a node stops before the queued cleanup runs, send the `DELETE` request again to reschedule the cleanup. If deletion workers are unavailable, the request returns HTTP status code `503`, but the stream remains marked for deletion. Retry the request after the workers become available.
+If deletion fails or a node stops before the queued cleanup runs, send the `DELETE` request again to reschedule the cleanup.
 
 ::: warning Rolling Upgrade Limitation
 

@@ -312,7 +312,7 @@ Until background cleanup finishes:
 - You cannot create another queue with the same name.
 - The queue counts toward `max_queue_count` until background cleanup finishes.
 
-If deletion fails or a node stops before the queued cleanup runs, send the `DELETE` request again to reschedule the cleanup. If deletion workers are unavailable, the request returns HTTP status code `503`, but the queue remains marked for deletion. Retry the request after the workers become available.
+If deletion fails or a node stops before the queued cleanup runs, send the `DELETE` request again to reschedule the cleanup.
 
 ::: warning Rolling Upgrade Limitation
 
