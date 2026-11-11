@@ -160,9 +160,16 @@ The steps below assume that both EMQX and Datalayers are running locally. If you
 
    - **Enable TLS** (Optional): Toggle to enable encrypted connections. When enabled, you can configure certificate paths and validation options. For more details, see [Enable TLS for External Resources](../../guides/network/overview.md#tls-for-external-resource-access).
 
-     ::: tip Note
+     ::: warning Arrow Flight TLS Requirements
 
-     When using the Arrow Flight SQL protocol, certificate validation cannot be skipped (i.e., `verify_none` is not supported due to library constraints). Ensure the gRPC server’s certificate has a valid Common Name (CN) that matches the server host.
+     Starting from EMQX 6.3.3, the following requirements apply when TLS is enabled for the `Arrow Flight` driver:
+
+     - EMQX always verifies the Datalayers server certificate. Keep **TLS Verify** enabled because Arrow Flight rejects `verify_none`. If either field is not configured, EMQX applies its corresponding default: `verify = verify_peer` or `cacertfile = "system_default"`.
+     - `system_default` uses the CA bundle selected by `node.trusted_certs`. If the CA bundle does not contain the CA that issued the Datalayers server certificate, provide a PEM-encoded CA certificate in **CA Cert**. For more information, see [Trusted CA Certificates for Outbound TLS](../../guides/network/tls-certificate.md#trusted-ca-certificates-for-outbound-tls).
+     - Under **Certificate Source**, select **Enter Manually**. Leave **TLS Cert** and **TLS Key** empty. Arrow Flight does not support client certificate settings (`certfile` and `keyfile`) or managed certificate bundles (`managed_certs`).
+     - Do not set `server_name_indication` to `disable`. The server certificate must match the connector host or an explicitly configured SNI server name.
+
+     These requirements apply only to the `Arrow Flight` driver. The `InfluxDB Line Protocol` driver retains its existing TLS behavior.
 
      :::
 
