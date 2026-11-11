@@ -72,5 +72,7 @@ Tarballs for each EMQX release:
 |---|---|---|
 | 6.3.0 | 0.1.3 | [emqx_backup_sync-0.1.3.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.0/emqx_backup_sync-0.1.3.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.0/emqx_backup_sync-0.1.3.sha256)) |
 | 6.3.1 | 0.1.3 | [emqx_backup_sync-0.1.3.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.1/emqx_backup_sync-0.1.3.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.1/emqx_backup_sync-0.1.3.sha256)) |
+| 6.3.2 | 0.1.3 | [emqx_backup_sync-0.1.3.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.2/emqx_backup_sync-0.1.3.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.2/emqx_backup_sync-0.1.3.sha256)) |
+| 6.3.3 | 0.1.4 | [emqx_backup_sync-0.1.4.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.3/emqx_backup_sync-0.1.4.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.3/emqx_backup_sync-0.1.4.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
