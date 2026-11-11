@@ -159,7 +159,7 @@
                     },
                     {
                       "default": "gen_tcp",
-                      "doc": "指示监听器应使用哪个 TCP 后端。\n\n- `socket`：自 6.3.0 起（在 Unix/Linux 上）的默认后端，可改善消息延迟和计算资源使用。\n    部分 `tcp_options` 在不同后端下行为不同。例如，`high_watermark` 由 EMQX 用于发送队列拥塞处理，而 `send_timeout_close` 在此后端下无效。\n\n- `gen_tcp`：非 Unix 系统上的默认后端。\n\n更改后端需要重启监听器，这将终止其所有活动连接。",
+                      "doc": "指示监听器应使用哪个 TCP 后端。\n\n- `gen_tcp`：默认后端，在所有系统上均可用。\n\n- `socket`：仅在 Unix/Linux 上可用。它可改善消息延迟和计算资源使用，代价是每个连接占用更多内存。目前仅在建立连接但不产生消息流量的测试中测量过该内存开销；尚未在产生消息流量的测试中测量。\n    部分 `tcp_options` 在不同后端下行为不同。例如，`high_watermark` 由 EMQX 用于发送队列拥塞处理，而 `send_timeout_close` 在此后端下无效。\n\n更改后端需要重启监听器，这将终止其所有活动连接。",
                       "hash": "V-listeners-S-listeners-tcp-S-mqtt_tcp_listener-tcp_backend",
                       "text": "tcp_backend",
                       "type": "Enum(gen_tcp,socket)"
@@ -226,7 +226,7 @@
                             },
                             {
                               "default": "packet",
-                              "doc": "Receive buffer retention strategy for the `socket` TCP backend.\n\n- `packet`: Do not keep the *receive buffer* while waiting for the next packet.\n- `always`: Always keep the *receive buffer* while waiting for data.",
+                              "doc": "`socket` TCP 后端的接收缓冲区保留策略。\n\n- `packet`：在等待下一个报文期间不保留*接收缓冲区*。\n- `always`：在等待数据期间始终保留*接收缓冲区*。",
                               "hash": "V-listeners-S-listeners-tcp-S-mqtt_tcp_listener-tcp_options-S-tcp_opts-buffer_retention_strategy",
                               "text": "buffer_retention_strategy",
                               "type": "Enum(always,packet)"
@@ -239,7 +239,7 @@
                               "type": "Bytesize"
                             },
                             {
-                              "doc": "The amount of queued outgoing data below which a congested connection is considered recovered.\n\nThis option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.\n\nWhen this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.\n\nThe `socket` TCP backend ignores this option.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。\n\n此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。\n\n未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。\n\n`socket` TCP 后端会忽略此选项。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-listeners-S-listeners-tcp-S-mqtt_tcp_listener-tcp_options-S-tcp_opts-low_watermark",
                               "text": "low_watermark",
                               "type": "Bytesize"
@@ -499,7 +499,7 @@
                             },
                             {
                               "default": "packet",
-                              "doc": "Receive buffer retention strategy for the `socket` TCP backend.\n\n- `packet`: Do not keep the *receive buffer* while waiting for the next packet.\n- `always`: Always keep the *receive buffer* while waiting for data.",
+                              "doc": "`socket` TCP 后端的接收缓冲区保留策略。\n\n- `packet`：在等待下一个报文期间不保留*接收缓冲区*。\n- `always`：在等待数据期间始终保留*接收缓冲区*。",
                               "hash": "V-listeners-S-listeners-ssl-S-mqtt_ssl_listener-tcp_options-S-tcp_opts-buffer_retention_strategy",
                               "text": "buffer_retention_strategy",
                               "type": "Enum(always,packet)"
@@ -512,7 +512,7 @@
                               "type": "Bytesize"
                             },
                             {
-                              "doc": "The amount of queued outgoing data below which a congested connection is considered recovered.\n\nThis option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.\n\nWhen this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.\n\nThe `socket` TCP backend ignores this option.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。\n\n此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。\n\n未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。\n\n`socket` TCP 后端会忽略此选项。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-listeners-S-listeners-ssl-S-mqtt_ssl_listener-tcp_options-S-tcp_opts-low_watermark",
                               "text": "low_watermark",
                               "type": "Bytesize"
@@ -561,7 +561,7 @@
                           "fields": [
                             {
                               "default": "\"${EMQX_ETC_DIR}/certs/cacert.pem\"",
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-listeners-S-listeners-ssl-S-mqtt_ssl_listener-ssl_options-S-listener_ssl_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -1040,7 +1040,7 @@
                             },
                             {
                               "default": "packet",
-                              "doc": "Receive buffer retention strategy for the `socket` TCP backend.\n\n- `packet`: Do not keep the *receive buffer* while waiting for the next packet.\n- `always`: Always keep the *receive buffer* while waiting for data.",
+                              "doc": "`socket` TCP 后端的接收缓冲区保留策略。\n\n- `packet`：在等待下一个报文期间不保留*接收缓冲区*。\n- `always`：在等待数据期间始终保留*接收缓冲区*。",
                               "hash": "V-listeners-S-listeners-ws-S-mqtt_ws_listener-tcp_options-S-tcp_opts-buffer_retention_strategy",
                               "text": "buffer_retention_strategy",
                               "type": "Enum(always,packet)"
@@ -1053,7 +1053,7 @@
                               "type": "Bytesize"
                             },
                             {
-                              "doc": "The amount of queued outgoing data below which a congested connection is considered recovered.\n\nThis option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.\n\nWhen this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.\n\nThe `socket` TCP backend ignores this option.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。\n\n此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。\n\n未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。\n\n`socket` TCP 后端会忽略此选项。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-listeners-S-listeners-ws-S-mqtt_ws_listener-tcp_options-S-tcp_opts-low_watermark",
                               "text": "low_watermark",
                               "type": "Bytesize"
@@ -1473,7 +1473,7 @@
                             },
                             {
                               "default": "packet",
-                              "doc": "Receive buffer retention strategy for the `socket` TCP backend.\n\n- `packet`: Do not keep the *receive buffer* while waiting for the next packet.\n- `always`: Always keep the *receive buffer* while waiting for data.",
+                              "doc": "`socket` TCP 后端的接收缓冲区保留策略。\n\n- `packet`：在等待下一个报文期间不保留*接收缓冲区*。\n- `always`：在等待数据期间始终保留*接收缓冲区*。",
                               "hash": "V-listeners-S-listeners-wss-S-mqtt_wss_listener-tcp_options-S-tcp_opts-buffer_retention_strategy",
                               "text": "buffer_retention_strategy",
                               "type": "Enum(always,packet)"
@@ -1486,7 +1486,7 @@
                               "type": "Bytesize"
                             },
                             {
-                              "doc": "The amount of queued outgoing data below which a congested connection is considered recovered.\n\nThis option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.\n\nWhen this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.\n\nThe `socket` TCP backend ignores this option.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。\n\n此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。\n\n未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。\n\n`socket` TCP 后端会忽略此选项。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-listeners-S-listeners-wss-S-mqtt_wss_listener-tcp_options-S-tcp_opts-low_watermark",
                               "text": "low_watermark",
                               "type": "Bytesize"
@@ -1535,7 +1535,7 @@
                           "fields": [
                             {
                               "default": "\"${EMQX_ETC_DIR}/certs/cacert.pem\"",
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-listeners-S-listeners-wss-S-mqtt_wss_listener-ssl_options-S-listener_wss_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -1939,7 +1939,7 @@
                           "fields": [
                             {
                               "default": "\"${EMQX_ETC_DIR}/certs/cacert.pem\"",
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-listeners-S-listeners-quic-S-mqtt_quic_listener-ssl_options-S-listener_quic_ssl_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -2183,7 +2183,7 @@
           "fields": [
             {
               "default": "\"15s\"",
-              "doc": "设置连接被断开或进入休眠状态前的等待时间，空闲超时后，\n  - 如暂未收到客户端的 CONNECT 报文，连接将断开；\n  - 如已收到客户端的 CONNECT 报文，连接将进入休眠模式以节省系统资源。\n\n注意：请合理设置该参数值，如等待时间设置过长，可能造成系统资源的浪费。",
+              "doc": "新连接在尚未收到 CONNECT 报文时可保持的时长。如果在此时间内没有收到 CONNECT 报文，EMQX 将关闭该连接。\n收到 CONNECT 报文之后，此选项不再生效。休眠由 `hibernate_after` 控制，统计定时器由 `stats_emit_interval` 控制。\n注意：时间设置得越长，静默连接占用资源的时间也越长。",
               "hash": "V-mqtt-S-mqtt-idle_timeout",
               "text": "idle_timeout",
               "type": "OneOf(String(\"infinity\"),Duration)"
@@ -2856,7 +2856,7 @@
                   "doc": "Socket options for SSL clients.",
                   "fields": [
                     {
-                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                       "hash": "V-authentication-S-mysql-ssl-S-ssl_client_opts-cacertfile",
                       "text": "cacertfile",
                       "type": "String"
@@ -3173,7 +3173,7 @@
                   "doc": "Socket options for SSL clients.",
                   "fields": [
                     {
-                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                       "hash": "V-authentication-S-postgresql-ssl-S-ssl_client_opts-cacertfile",
                       "text": "cacertfile",
                       "type": "String"
@@ -3615,7 +3615,7 @@
                   "doc": "Socket options for SSL clients.",
                   "fields": [
                     {
-                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                       "hash": "V-authentication-S-mongo_single-ssl-S-ssl_client_opts-cacertfile",
                       "text": "cacertfile",
                       "type": "String"
@@ -4070,7 +4070,7 @@
                   "doc": "Socket options for SSL clients.",
                   "fields": [
                     {
-                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                       "hash": "V-authentication-S-mongo_rs-ssl-S-ssl_client_opts-cacertfile",
                       "text": "cacertfile",
                       "type": "String"
@@ -4512,7 +4512,7 @@
                   "doc": "Socket options for SSL clients.",
                   "fields": [
                     {
-                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                       "hash": "V-authentication-S-mongo_sharded-ssl-S-ssl_client_opts-cacertfile",
                       "text": "cacertfile",
                       "type": "String"
@@ -4823,7 +4823,7 @@
                   "doc": "Socket options for SSL clients.",
                   "fields": [
                     {
-                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                       "hash": "V-authentication-S-redis_single-ssl-S-ssl_client_opts-cacertfile",
                       "text": "cacertfile",
                       "type": "String"
@@ -5127,7 +5127,7 @@
                   "doc": "Socket options for SSL clients.",
                   "fields": [
                     {
-                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                       "hash": "V-authentication-S-redis_cluster-ssl-S-ssl_client_opts-cacertfile",
                       "text": "cacertfile",
                       "type": "String"
@@ -5456,7 +5456,7 @@
                   "doc": "Socket options for SSL clients.",
                   "fields": [
                     {
-                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                       "hash": "V-authentication-S-redis_sentinel-ssl-S-ssl_client_opts-cacertfile",
                       "text": "cacertfile",
                       "type": "String"
@@ -5694,7 +5694,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-authentication-S-http_get-oauth2-S-client_credentials-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -5973,7 +5973,7 @@
                   "doc": "Socket options for SSL clients.",
                   "fields": [
                     {
-                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                       "hash": "V-authentication-S-http_get-ssl-S-ssl_client_opts-cacertfile",
                       "text": "cacertfile",
                       "type": "String"
@@ -6244,7 +6244,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-authentication-S-http_post-oauth2-S-client_credentials-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -6523,7 +6523,7 @@
                   "doc": "Socket options for SSL clients.",
                   "fields": [
                     {
-                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                       "hash": "V-authentication-S-http_post-ssl-S-ssl_client_opts-cacertfile",
                       "text": "cacertfile",
                       "type": "String"
@@ -6898,7 +6898,7 @@
                   "doc": "SSL 选项。",
                   "fields": [
                     {
-                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                       "hash": "V-authentication-S-jwt_jwks-ssl-S-jwks_client_ssl_opts-cacertfile",
                       "text": "cacertfile",
                       "type": "String"
@@ -7255,7 +7255,7 @@
                   "doc": "启用 SSL 连接。",
                   "fields": [
                     {
-                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                       "hash": "V-authentication-S-ldap-ssl-S-ssl-cacertfile",
                       "text": "cacertfile",
                       "type": "String"
@@ -7571,7 +7571,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-authentication-S-scram_restapi_get-oauth2-S-client_credentials-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -7883,7 +7883,7 @@
                   "doc": "Socket options for SSL clients.",
                   "fields": [
                     {
-                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                       "hash": "V-authentication-S-scram_restapi_get-ssl-S-ssl_client_opts-cacertfile",
                       "text": "cacertfile",
                       "type": "String"
@@ -8121,7 +8121,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-authentication-S-scram_restapi_post-oauth2-S-client_credentials-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -8433,7 +8433,7 @@
                   "doc": "Socket options for SSL clients.",
                   "fields": [
                     {
-                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                       "hash": "V-authentication-S-scram_restapi_post-ssl-S-ssl_client_opts-cacertfile",
                       "text": "cacertfile",
                       "type": "String"
@@ -9015,7 +9015,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-authorization-S-authorization-sources-S-http_get-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -9246,7 +9246,7 @@
                                   "doc": "Socket options for SSL clients.",
                                   "fields": [
                                     {
-                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                       "hash": "V-authorization-S-authorization-sources-S-http_get-oauth2-S-client_credentials-ssl-S-ssl_client_opts-cacertfile",
                                       "text": "cacertfile",
                                       "type": "String"
@@ -9559,7 +9559,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-authorization-S-authorization-sources-S-http_post-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -9790,7 +9790,7 @@
                                   "doc": "Socket options for SSL clients.",
                                   "fields": [
                                     {
-                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                       "hash": "V-authorization-S-authorization-sources-S-http_post-oauth2-S-client_credentials-ssl-S-ssl_client_opts-cacertfile",
                                       "text": "cacertfile",
                                       "type": "String"
@@ -10024,7 +10024,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-authorization-S-authorization-sources-S-redis_single-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -10281,7 +10281,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-authorization-S-authorization-sources-S-redis_sentinel-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -10513,7 +10513,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-authorization-S-authorization-sources-S-redis_cluster-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -10778,7 +10778,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-authorization-S-authorization-sources-S-mysql-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -11016,7 +11016,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-authorization-S-authorization-sources-S-postgresql-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -11365,7 +11365,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-authorization-S-authorization-sources-S-mongo_single-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -11727,7 +11727,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-authorization-S-authorization-sources-S-mongo_rs-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -12076,7 +12076,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-authorization-S-authorization-sources-S-mongo_sharded-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -12337,7 +12337,7 @@
                           "doc": "启用 SSL 连接。",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-authorization-S-authorization-sources-S-ldap-ssl-S-ssl-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -12630,14 +12630,14 @@
             },
             {
               "default": "\"15m\"",
-              "doc": "全局垃圾回收的周期性执行间隔。设置为 <code>disabled</code> 可禁用此功能。<br/>仅当 EMQX 的内存使用持续增长且明显超过正常水平，并且手动触发垃圾回收确实能释放大量内存时，才建议使用此功能作为临时解决方案。",
+              "doc": "全局垃圾回收的周期性执行间隔。设置为 <code>disabled</code> 可禁用此功能。<br/>\n每一轮会遍历所有进程，并对其中处于等待状态的进程强制执行一次垃圾回收。该轮操作被分散到间隔的前一半时间内执行，因此其开销只占节点 CPU 时间的一小部分，而不会形成尖峰。",
               "hash": "V-node-S-node-global_gc_interval",
               "text": "global_gc_interval",
               "type": "OneOf(String(\"disabled\"),Duration)"
             },
             {
               "default": "system_default",
-              "doc": "The CA certificates that outbound TLS clients trust when their own configuration names no CA.\nIt applies to the built-in HTTP client and to each TLS client that sets <code>verify = verify_peer</code> and leaves <code>cacertfile</code> empty.\n\n- <code>system_default</code>: use the CA bundle file of the operating system.\n  EMQX looks for the file when it starts, in the same locations that Erlang/OTP checks,\n  for example <code>/etc/ssl/certs/ca-certificates.crt</code> on Debian and Ubuntu,\n  and <code>/etc/pki/tls/certs/ca-bundle.crt</code> on RHEL.\n  When no file is found, EMQX logs a warning and the clients use the CA certificates that Erlang/OTP loads from the operating system.\n- <code>file:///absolute/path</code>: use this PEM file. The path must be absolute, and the file must exist and be readable by the user that runs EMQX.\n  The path must be the same on all nodes in the cluster. EMQX does not copy the file to the other nodes.\n\nTLS reads the file again when it changes, so an update of the operating system CA bundle takes effect without a restart.",
+              "doc": "当出站 TLS 客户端自身的配置未指定 CA 时所信任的 CA 证书。\n此配置适用于内置 HTTP 客户端，以及所有设置了 <code>verify = verify_peer</code> 且 <code>cacertfile</code> 留空的 TLS 客户端。\n\n- <code>system_default</code>：使用操作系统的 CA 证书包文件。\n  EMQX 在启动时按 Erlang/OTP 检查的相同位置查找该文件，\n  例如 Debian 和 Ubuntu 上的 <code>/etc/ssl/certs/ca-certificates.crt</code>，\n  以及 RHEL 上的 <code>/etc/pki/tls/certs/ca-bundle.crt</code>。\n  当未找到文件时，EMQX 会记录一条警告日志，客户端将使用 Erlang/OTP 从操作系统加载的 CA 证书。\n- <code>file:///absolute/path</code>：使用指定的 PEM 文件。该路径必须是绝对路径，且文件必须存在并可被运行 EMQX 的用户读取。\n  集群中所有节点上的该路径必须相同，EMQX 不会将该文件复制到其他节点。\n\n当文件发生变化时，TLS 会重新读取该文件，因此更新操作系统的 CA 证书包无需重启即可生效。",
               "hash": "V-node-S-node-trusted_certs",
               "text": "trusted_certs",
               "type": "String"
@@ -12821,7 +12821,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-cluster-S-cluster-etcd-S-cluster_etcd-ssl_options-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -13098,7 +13098,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-cluster-S-cluster-links-S-link-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -14288,22 +14288,22 @@
                               "type": "Integer(1..+inf)"
                             },
                             {
-                              "doc": "Overload protection settings for the transaction manager.",
+                              "doc": "事务管理器的过载保护设置。",
                               "hash": "V-durable_storage-S-durable_storage-messages-S-builtin_raft_messages-transaction-S-optimistic_transaction-overload_protection",
                               "refs": [
                                 {
-                                  "doc": "Overload protection settings for the transaction manager.",
+                                  "doc": "事务管理器的过载保护设置。",
                                   "fields": [
                                     {
                                       "default": "1000",
-                                      "doc": "Maximum message queue length of the optimistic transaction leader process used by built-in durable storage backends.\nWhen this limit is reached, the leader starts automatically aborting new pending transactions and prompting clients to retry later.",
+                                      "doc": "内置持久存储后端所使用的乐观事务 leader 进程的最大消息队列长度。\n达到此上限时，leader 会开始自动中止新的待处理事务，并提示客户端稍后重试。",
                                       "hash": "V-durable_storage-S-durable_storage-messages-S-builtin_raft_messages-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_mql",
                                       "text": "max_mql",
                                       "type": "OneOf(Integer(1..+inf),String(\"infinity\"))"
                                     },
                                     {
                                       "default": "10000",
-                                      "doc": "Maximum number of operations allowed in a transaction.",
+                                      "doc": "单个事务中允许的最大操作数量。",
                                       "hash": "V-durable_storage-S-durable_storage-messages-S-builtin_raft_messages-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_ops",
                                       "text": "max_ops",
                                       "type": "Integer(1..+inf)"
@@ -14464,22 +14464,22 @@
                               "type": "Integer(1..+inf)"
                             },
                             {
-                              "doc": "Overload protection settings for the transaction manager.",
+                              "doc": "事务管理器的过载保护设置。",
                               "hash": "V-durable_storage-S-durable_storage-messages-S-builtin_local_messages-transaction-S-optimistic_transaction-overload_protection",
                               "refs": [
                                 {
-                                  "doc": "Overload protection settings for the transaction manager.",
+                                  "doc": "事务管理器的过载保护设置。",
                                   "fields": [
                                     {
                                       "default": "1000",
-                                      "doc": "Maximum message queue length of the optimistic transaction leader process used by built-in durable storage backends.\nWhen this limit is reached, the leader starts automatically aborting new pending transactions and prompting clients to retry later.",
+                                      "doc": "内置持久存储后端所使用的乐观事务 leader 进程的最大消息队列长度。\n达到此上限时，leader 会开始自动中止新的待处理事务，并提示客户端稍后重试。",
                                       "hash": "V-durable_storage-S-durable_storage-messages-S-builtin_local_messages-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_mql",
                                       "text": "max_mql",
                                       "type": "OneOf(Integer(1..+inf),String(\"infinity\"))"
                                     },
                                     {
                                       "default": "10000",
-                                      "doc": "Maximum number of operations allowed in a transaction.",
+                                      "doc": "单个事务中允许的最大操作数量。",
                                       "hash": "V-durable_storage-S-durable_storage-messages-S-builtin_local_messages-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_ops",
                                       "text": "max_ops",
                                       "type": "Integer(1..+inf)"
@@ -14670,22 +14670,22 @@
                               "type": "Integer(1..+inf)"
                             },
                             {
-                              "doc": "Overload protection settings for the transaction manager.",
+                              "doc": "事务管理器的过载保护设置。",
                               "hash": "V-durable_storage-S-durable_storage-sessions-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection",
                               "refs": [
                                 {
-                                  "doc": "Overload protection settings for the transaction manager.",
+                                  "doc": "事务管理器的过载保护设置。",
                                   "fields": [
                                     {
                                       "default": "1000",
-                                      "doc": "Maximum message queue length of the optimistic transaction leader process used by built-in durable storage backends.\nWhen this limit is reached, the leader starts automatically aborting new pending transactions and prompting clients to retry later.",
+                                      "doc": "内置持久存储后端所使用的乐观事务 leader 进程的最大消息队列长度。\n达到此上限时，leader 会开始自动中止新的待处理事务，并提示客户端稍后重试。",
                                       "hash": "V-durable_storage-S-durable_storage-sessions-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_mql",
                                       "text": "max_mql",
                                       "type": "OneOf(Integer(1..+inf),String(\"infinity\"))"
                                     },
                                     {
                                       "default": "10000",
-                                      "doc": "Maximum number of operations allowed in a transaction.",
+                                      "doc": "单个事务中允许的最大操作数量。",
                                       "hash": "V-durable_storage-S-durable_storage-sessions-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_ops",
                                       "text": "max_ops",
                                       "type": "Integer(1..+inf)"
@@ -14816,22 +14816,22 @@
                               "type": "Integer(1..+inf)"
                             },
                             {
-                              "doc": "Overload protection settings for the transaction manager.",
+                              "doc": "事务管理器的过载保护设置。",
                               "hash": "V-durable_storage-S-durable_storage-sessions-S-builtin_local-transaction-S-optimistic_transaction-overload_protection",
                               "refs": [
                                 {
-                                  "doc": "Overload protection settings for the transaction manager.",
+                                  "doc": "事务管理器的过载保护设置。",
                                   "fields": [
                                     {
                                       "default": "1000",
-                                      "doc": "Maximum message queue length of the optimistic transaction leader process used by built-in durable storage backends.\nWhen this limit is reached, the leader starts automatically aborting new pending transactions and prompting clients to retry later.",
+                                      "doc": "内置持久存储后端所使用的乐观事务 leader 进程的最大消息队列长度。\n达到此上限时，leader 会开始自动中止新的待处理事务，并提示客户端稍后重试。",
                                       "hash": "V-durable_storage-S-durable_storage-sessions-S-builtin_local-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_mql",
                                       "text": "max_mql",
                                       "type": "OneOf(Integer(1..+inf),String(\"infinity\"))"
                                     },
                                     {
                                       "default": "10000",
-                                      "doc": "Maximum number of operations allowed in a transaction.",
+                                      "doc": "单个事务中允许的最大操作数量。",
                                       "hash": "V-durable_storage-S-durable_storage-sessions-S-builtin_local-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_ops",
                                       "text": "max_ops",
                                       "type": "Integer(1..+inf)"
@@ -14992,22 +14992,22 @@
                               "type": "Integer(1..+inf)"
                             },
                             {
-                              "doc": "Overload protection settings for the transaction manager.",
+                              "doc": "事务管理器的过载保护设置。",
                               "hash": "V-durable_storage-S-durable_storage-timers-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection",
                               "refs": [
                                 {
-                                  "doc": "Overload protection settings for the transaction manager.",
+                                  "doc": "事务管理器的过载保护设置。",
                                   "fields": [
                                     {
                                       "default": "1000",
-                                      "doc": "Maximum message queue length of the optimistic transaction leader process used by built-in durable storage backends.\nWhen this limit is reached, the leader starts automatically aborting new pending transactions and prompting clients to retry later.",
+                                      "doc": "内置持久存储后端所使用的乐观事务 leader 进程的最大消息队列长度。\n达到此上限时，leader 会开始自动中止新的待处理事务，并提示客户端稍后重试。",
                                       "hash": "V-durable_storage-S-durable_storage-timers-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_mql",
                                       "text": "max_mql",
                                       "type": "OneOf(Integer(1..+inf),String(\"infinity\"))"
                                     },
                                     {
                                       "default": "10000",
-                                      "doc": "Maximum number of operations allowed in a transaction.",
+                                      "doc": "单个事务中允许的最大操作数量。",
                                       "hash": "V-durable_storage-S-durable_storage-timers-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_ops",
                                       "text": "max_ops",
                                       "type": "Integer(1..+inf)"
@@ -15138,22 +15138,22 @@
                               "type": "Integer(1..+inf)"
                             },
                             {
-                              "doc": "Overload protection settings for the transaction manager.",
+                              "doc": "事务管理器的过载保护设置。",
                               "hash": "V-durable_storage-S-durable_storage-timers-S-builtin_local-transaction-S-optimistic_transaction-overload_protection",
                               "refs": [
                                 {
-                                  "doc": "Overload protection settings for the transaction manager.",
+                                  "doc": "事务管理器的过载保护设置。",
                                   "fields": [
                                     {
                                       "default": "1000",
-                                      "doc": "Maximum message queue length of the optimistic transaction leader process used by built-in durable storage backends.\nWhen this limit is reached, the leader starts automatically aborting new pending transactions and prompting clients to retry later.",
+                                      "doc": "内置持久存储后端所使用的乐观事务 leader 进程的最大消息队列长度。\n达到此上限时，leader 会开始自动中止新的待处理事务，并提示客户端稍后重试。",
                                       "hash": "V-durable_storage-S-durable_storage-timers-S-builtin_local-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_mql",
                                       "text": "max_mql",
                                       "type": "OneOf(Integer(1..+inf),String(\"infinity\"))"
                                     },
                                     {
                                       "default": "10000",
-                                      "doc": "Maximum number of operations allowed in a transaction.",
+                                      "doc": "单个事务中允许的最大操作数量。",
                                       "hash": "V-durable_storage-S-durable_storage-timers-S-builtin_local-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_ops",
                                       "text": "max_ops",
                                       "type": "Integer(1..+inf)"
@@ -15314,22 +15314,22 @@
                               "type": "Integer(1..+inf)"
                             },
                             {
-                              "doc": "Overload protection settings for the transaction manager.",
+                              "doc": "事务管理器的过载保护设置。",
                               "hash": "V-durable_storage-S-durable_storage-shared_subs-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection",
                               "refs": [
                                 {
-                                  "doc": "Overload protection settings for the transaction manager.",
+                                  "doc": "事务管理器的过载保护设置。",
                                   "fields": [
                                     {
                                       "default": "1000",
-                                      "doc": "Maximum message queue length of the optimistic transaction leader process used by built-in durable storage backends.\nWhen this limit is reached, the leader starts automatically aborting new pending transactions and prompting clients to retry later.",
+                                      "doc": "内置持久存储后端所使用的乐观事务 leader 进程的最大消息队列长度。\n达到此上限时，leader 会开始自动中止新的待处理事务，并提示客户端稍后重试。",
                                       "hash": "V-durable_storage-S-durable_storage-shared_subs-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_mql",
                                       "text": "max_mql",
                                       "type": "OneOf(Integer(1..+inf),String(\"infinity\"))"
                                     },
                                     {
                                       "default": "10000",
-                                      "doc": "Maximum number of operations allowed in a transaction.",
+                                      "doc": "单个事务中允许的最大操作数量。",
                                       "hash": "V-durable_storage-S-durable_storage-shared_subs-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_ops",
                                       "text": "max_ops",
                                       "type": "Integer(1..+inf)"
@@ -15460,22 +15460,22 @@
                               "type": "Integer(1..+inf)"
                             },
                             {
-                              "doc": "Overload protection settings for the transaction manager.",
+                              "doc": "事务管理器的过载保护设置。",
                               "hash": "V-durable_storage-S-durable_storage-shared_subs-S-builtin_local-transaction-S-optimistic_transaction-overload_protection",
                               "refs": [
                                 {
-                                  "doc": "Overload protection settings for the transaction manager.",
+                                  "doc": "事务管理器的过载保护设置。",
                                   "fields": [
                                     {
                                       "default": "1000",
-                                      "doc": "Maximum message queue length of the optimistic transaction leader process used by built-in durable storage backends.\nWhen this limit is reached, the leader starts automatically aborting new pending transactions and prompting clients to retry later.",
+                                      "doc": "内置持久存储后端所使用的乐观事务 leader 进程的最大消息队列长度。\n达到此上限时，leader 会开始自动中止新的待处理事务，并提示客户端稍后重试。",
                                       "hash": "V-durable_storage-S-durable_storage-shared_subs-S-builtin_local-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_mql",
                                       "text": "max_mql",
                                       "type": "OneOf(Integer(1..+inf),String(\"infinity\"))"
                                     },
                                     {
                                       "default": "10000",
-                                      "doc": "Maximum number of operations allowed in a transaction.",
+                                      "doc": "单个事务中允许的最大操作数量。",
                                       "hash": "V-durable_storage-S-durable_storage-shared_subs-S-builtin_local-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_ops",
                                       "text": "max_ops",
                                       "type": "Integer(1..+inf)"
@@ -15636,22 +15636,22 @@
                               "type": "Integer(1..+inf)"
                             },
                             {
-                              "doc": "Overload protection settings for the transaction manager.",
+                              "doc": "事务管理器的过载保护设置。",
                               "hash": "V-durable_storage-S-durable_storage-mq_states-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection",
                               "refs": [
                                 {
-                                  "doc": "Overload protection settings for the transaction manager.",
+                                  "doc": "事务管理器的过载保护设置。",
                                   "fields": [
                                     {
                                       "default": "1000",
-                                      "doc": "Maximum message queue length of the optimistic transaction leader process used by built-in durable storage backends.\nWhen this limit is reached, the leader starts automatically aborting new pending transactions and prompting clients to retry later.",
+                                      "doc": "内置持久存储后端所使用的乐观事务 leader 进程的最大消息队列长度。\n达到此上限时，leader 会开始自动中止新的待处理事务，并提示客户端稍后重试。",
                                       "hash": "V-durable_storage-S-durable_storage-mq_states-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_mql",
                                       "text": "max_mql",
                                       "type": "OneOf(Integer(1..+inf),String(\"infinity\"))"
                                     },
                                     {
                                       "default": "10000",
-                                      "doc": "Maximum number of operations allowed in a transaction.",
+                                      "doc": "单个事务中允许的最大操作数量。",
                                       "hash": "V-durable_storage-S-durable_storage-mq_states-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_ops",
                                       "text": "max_ops",
                                       "type": "Integer(1..+inf)"
@@ -15782,22 +15782,22 @@
                               "type": "Integer(1..+inf)"
                             },
                             {
-                              "doc": "Overload protection settings for the transaction manager.",
+                              "doc": "事务管理器的过载保护设置。",
                               "hash": "V-durable_storage-S-durable_storage-mq_states-S-builtin_local-transaction-S-optimistic_transaction-overload_protection",
                               "refs": [
                                 {
-                                  "doc": "Overload protection settings for the transaction manager.",
+                                  "doc": "事务管理器的过载保护设置。",
                                   "fields": [
                                     {
                                       "default": "1000",
-                                      "doc": "Maximum message queue length of the optimistic transaction leader process used by built-in durable storage backends.\nWhen this limit is reached, the leader starts automatically aborting new pending transactions and prompting clients to retry later.",
+                                      "doc": "内置持久存储后端所使用的乐观事务 leader 进程的最大消息队列长度。\n达到此上限时，leader 会开始自动中止新的待处理事务，并提示客户端稍后重试。",
                                       "hash": "V-durable_storage-S-durable_storage-mq_states-S-builtin_local-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_mql",
                                       "text": "max_mql",
                                       "type": "OneOf(Integer(1..+inf),String(\"infinity\"))"
                                     },
                                     {
                                       "default": "10000",
-                                      "doc": "Maximum number of operations allowed in a transaction.",
+                                      "doc": "单个事务中允许的最大操作数量。",
                                       "hash": "V-durable_storage-S-durable_storage-mq_states-S-builtin_local-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_ops",
                                       "text": "max_ops",
                                       "type": "Integer(1..+inf)"
@@ -15958,22 +15958,22 @@
                               "type": "Integer(1..+inf)"
                             },
                             {
-                              "doc": "Overload protection settings for the transaction manager.",
+                              "doc": "事务管理器的过载保护设置。",
                               "hash": "V-durable_storage-S-durable_storage-mq_messages-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection",
                               "refs": [
                                 {
-                                  "doc": "Overload protection settings for the transaction manager.",
+                                  "doc": "事务管理器的过载保护设置。",
                                   "fields": [
                                     {
                                       "default": "1000",
-                                      "doc": "Maximum message queue length of the optimistic transaction leader process used by built-in durable storage backends.\nWhen this limit is reached, the leader starts automatically aborting new pending transactions and prompting clients to retry later.",
+                                      "doc": "内置持久存储后端所使用的乐观事务 leader 进程的最大消息队列长度。\n达到此上限时，leader 会开始自动中止新的待处理事务，并提示客户端稍后重试。",
                                       "hash": "V-durable_storage-S-durable_storage-mq_messages-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_mql",
                                       "text": "max_mql",
                                       "type": "OneOf(Integer(1..+inf),String(\"infinity\"))"
                                     },
                                     {
                                       "default": "10000",
-                                      "doc": "Maximum number of operations allowed in a transaction.",
+                                      "doc": "单个事务中允许的最大操作数量。",
                                       "hash": "V-durable_storage-S-durable_storage-mq_messages-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_ops",
                                       "text": "max_ops",
                                       "type": "Integer(1..+inf)"
@@ -16104,22 +16104,22 @@
                               "type": "Integer(1..+inf)"
                             },
                             {
-                              "doc": "Overload protection settings for the transaction manager.",
+                              "doc": "事务管理器的过载保护设置。",
                               "hash": "V-durable_storage-S-durable_storage-mq_messages-S-builtin_local-transaction-S-optimistic_transaction-overload_protection",
                               "refs": [
                                 {
-                                  "doc": "Overload protection settings for the transaction manager.",
+                                  "doc": "事务管理器的过载保护设置。",
                                   "fields": [
                                     {
                                       "default": "1000",
-                                      "doc": "Maximum message queue length of the optimistic transaction leader process used by built-in durable storage backends.\nWhen this limit is reached, the leader starts automatically aborting new pending transactions and prompting clients to retry later.",
+                                      "doc": "内置持久存储后端所使用的乐观事务 leader 进程的最大消息队列长度。\n达到此上限时，leader 会开始自动中止新的待处理事务，并提示客户端稍后重试。",
                                       "hash": "V-durable_storage-S-durable_storage-mq_messages-S-builtin_local-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_mql",
                                       "text": "max_mql",
                                       "type": "OneOf(Integer(1..+inf),String(\"infinity\"))"
                                     },
                                     {
                                       "default": "10000",
-                                      "doc": "Maximum number of operations allowed in a transaction.",
+                                      "doc": "单个事务中允许的最大操作数量。",
                                       "hash": "V-durable_storage-S-durable_storage-mq_messages-S-builtin_local-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_ops",
                                       "text": "max_ops",
                                       "type": "Integer(1..+inf)"
@@ -16280,22 +16280,22 @@
                               "type": "Integer(1..+inf)"
                             },
                             {
-                              "doc": "Overload protection settings for the transaction manager.",
+                              "doc": "事务管理器的过载保护设置。",
                               "hash": "V-durable_storage-S-durable_storage-streams_messages-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection",
                               "refs": [
                                 {
-                                  "doc": "Overload protection settings for the transaction manager.",
+                                  "doc": "事务管理器的过载保护设置。",
                                   "fields": [
                                     {
                                       "default": "1000",
-                                      "doc": "Maximum message queue length of the optimistic transaction leader process used by built-in durable storage backends.\nWhen this limit is reached, the leader starts automatically aborting new pending transactions and prompting clients to retry later.",
+                                      "doc": "内置持久存储后端所使用的乐观事务 leader 进程的最大消息队列长度。\n达到此上限时，leader 会开始自动中止新的待处理事务，并提示客户端稍后重试。",
                                       "hash": "V-durable_storage-S-durable_storage-streams_messages-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_mql",
                                       "text": "max_mql",
                                       "type": "OneOf(Integer(1..+inf),String(\"infinity\"))"
                                     },
                                     {
                                       "default": "10000",
-                                      "doc": "Maximum number of operations allowed in a transaction.",
+                                      "doc": "单个事务中允许的最大操作数量。",
                                       "hash": "V-durable_storage-S-durable_storage-streams_messages-S-builtin_raft-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_ops",
                                       "text": "max_ops",
                                       "type": "Integer(1..+inf)"
@@ -16426,22 +16426,22 @@
                               "type": "Integer(1..+inf)"
                             },
                             {
-                              "doc": "Overload protection settings for the transaction manager.",
+                              "doc": "事务管理器的过载保护设置。",
                               "hash": "V-durable_storage-S-durable_storage-streams_messages-S-builtin_local-transaction-S-optimistic_transaction-overload_protection",
                               "refs": [
                                 {
-                                  "doc": "Overload protection settings for the transaction manager.",
+                                  "doc": "事务管理器的过载保护设置。",
                                   "fields": [
                                     {
                                       "default": "1000",
-                                      "doc": "Maximum message queue length of the optimistic transaction leader process used by built-in durable storage backends.\nWhen this limit is reached, the leader starts automatically aborting new pending transactions and prompting clients to retry later.",
+                                      "doc": "内置持久存储后端所使用的乐观事务 leader 进程的最大消息队列长度。\n达到此上限时，leader 会开始自动中止新的待处理事务，并提示客户端稍后重试。",
                                       "hash": "V-durable_storage-S-durable_storage-streams_messages-S-builtin_local-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_mql",
                                       "text": "max_mql",
                                       "type": "OneOf(Integer(1..+inf),String(\"infinity\"))"
                                     },
                                     {
                                       "default": "10000",
-                                      "doc": "Maximum number of operations allowed in a transaction.",
+                                      "doc": "单个事务中允许的最大操作数量。",
                                       "hash": "V-durable_storage-S-durable_storage-streams_messages-S-builtin_local-transaction-S-optimistic_transaction-overload_protection-S-otx_olp-max_ops",
                                       "text": "max_ops",
                                       "type": "Integer(1..+inf)"
@@ -16981,7 +16981,7 @@
                           "fields": [
                             {
                               "default": "system_default",
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-opents-S-config_connector-ssl-S-client_tls_verify_peer-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -17251,7 +17251,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-emqx_tables-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -17704,7 +17704,7 @@
                                           "fields": [
                                             {
                                               "default": "system_default",
-                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                               "hash": "V-connectors-S-connectors-bigtable-S-config_connector-authentication-S-auth_wif-initial_token-S-auth_wif_oidc_client_credentials-ssl-S-client_tls_verify_peer-cacertfile",
                                               "text": "cacertfile",
                                               "type": "String"
@@ -17911,7 +17911,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-bigtable-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -18189,7 +18189,7 @@
                           "fields": [
                             {
                               "default": "system_default",
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-clickhouse-S-config_connector-ssl-S-client_tls_verify_peer-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -18641,7 +18641,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-redis-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -18865,7 +18865,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-elasticsearch-S-config-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -19167,7 +19167,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-iotdb-S-config_restapi-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -19584,7 +19584,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-iotdb-S-config_thrift-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -19906,7 +19906,7 @@
                                           "fields": [
                                             {
                                               "default": "system_default",
-                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                               "hash": "V-connectors-S-connectors-gcp_pubsub_consumer-S-config_connector-authentication-S-auth_wif-initial_token-S-auth_wif_oidc_client_credentials-ssl-S-client_tls_verify_peer-cacertfile",
                                               "text": "cacertfile",
                                               "type": "String"
@@ -20154,7 +20154,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-gcp_pubsub_consumer-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -20615,7 +20615,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-aws_timestream-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -20886,7 +20886,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-alloydb-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -21170,7 +21170,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-redshift-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -21453,7 +21453,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-greptimedb-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -21776,7 +21776,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-couchbase-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -22008,7 +22008,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-rocketmq-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -22363,7 +22363,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-cockroachdb-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -22647,7 +22647,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-matrix-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -23281,7 +23281,7 @@
                           "doc": "Confluent 客户端的 TLS/SSL 选项。",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-confluent_producer-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -23708,7 +23708,7 @@
                                   "doc": "Socket options for SSL clients.",
                                   "fields": [
                                     {
-                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                       "hash": "V-connectors-S-connectors-http-S-config_connector-oauth2-S-client_credentials-ssl-S-ssl_client_opts-cacertfile",
                                       "text": "cacertfile",
                                       "type": "String"
@@ -23924,7 +23924,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-http-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -24202,7 +24202,7 @@
                           "fields": [
                             {
                               "default": "system_default",
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-tablestore-S-config_connector-ssl-S-client_tls_verify_peer-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -24473,7 +24473,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-timescale-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -24808,7 +24808,7 @@
                                           "fields": [
                                             {
                                               "default": "system_default",
-                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                               "hash": "V-connectors-S-connectors-gcp_pubsub_producer-S-config_connector-authentication-S-auth_wif-initial_token-S-auth_wif_oidc_client_credentials-ssl-S-client_tls_verify_peer-cacertfile",
                                               "text": "cacertfile",
                                               "type": "String"
@@ -25056,7 +25056,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-gcp_pubsub_producer-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -25343,7 +25343,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-pulsar-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -25614,7 +25614,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-mysql-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -25879,7 +25879,7 @@
                           "fields": [
                             {
                               "default": "system_default",
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-tdengine-S-config_connector-ssl-S-client_tls_verify_peer-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -26229,7 +26229,7 @@
                           "doc": "用于 Azure Event Hubs 客户端的 TLS/SSL 选项。",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-azure_event_hub_producer-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -26719,7 +26719,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-mqtt-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -26946,7 +26946,7 @@
                           "doc": "启用 SSL 连接。",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-doris-S-config_connector-ssl-S-ssl-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -27309,7 +27309,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-snowflake_streaming-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -27638,7 +27638,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-influxdb-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -28180,7 +28180,7 @@
                           "doc": "Kafka 客户端的 TLS/SSL 选项",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-kafka_producer-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -28644,7 +28644,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-mongodb-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -28945,7 +28945,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-datalayers-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -29251,7 +29251,7 @@
                                           "doc": "Socket options for SSL clients.",
                                           "fields": [
                                             {
-                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                               "hash": "V-connectors-S-connectors-s3tables-S-config_connector-s3_client-S-s3_client_params-transport_options-S-transport_options-ssl-S-ssl_client_opts-cacertfile",
                                               "text": "cacertfile",
                                               "type": "String"
@@ -29730,7 +29730,7 @@
                           "doc": "Kafka 客户端的 TLS/SSL 选项",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-kafka_consumer-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -30095,7 +30095,7 @@
                                           "fields": [
                                             {
                                               "default": "system_default",
-                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                               "hash": "V-connectors-S-connectors-bigquery-S-config_connector-authentication-S-auth_wif-initial_token-S-auth_wif_oidc_client_credentials-ssl-S-client_tls_verify_peer-cacertfile",
                                               "text": "cacertfile",
                                               "type": "String"
@@ -30302,7 +30302,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-bigquery-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -30696,7 +30696,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-rabbitmq-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -30967,7 +30967,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-pgsql-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -31351,7 +31351,7 @@
                       "type": "Integer(1..+inf)"
                     },
                     {
-                      "doc": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.\n\nWhen this field is set, its value takes precedence over the region inferred from the endpoint host.\nOtherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.\n\nSet this field when the endpoint host does not contain the region, for example a custom domain name.",
+                      "doc": "用于对 S3 端点请求进行签名的区域，例如 `us-west-2`。\n\n当设置了此字段时，其取值优先于根据端点主机推断出的区域。\n否则，区域将根据端点主机推断；如果无法推断出区域，则使用 `us-east-1`。\n\n当端点主机不包含区域信息时（例如使用自定义域名），请设置此字段。",
                       "hash": "V-connectors-S-connectors-s3-S-config_connector-region",
                       "text": "region",
                       "type": "String"
@@ -31406,7 +31406,7 @@
                                   "doc": "Socket options for SSL clients.",
                                   "fields": [
                                     {
-                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                       "hash": "V-connectors-S-connectors-s3-S-config_connector-transport_options-S-transport_options-ssl-S-ssl_client_opts-cacertfile",
                                       "text": "cacertfile",
                                       "type": "String"
@@ -31703,7 +31703,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-cassandra-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -31923,7 +31923,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-azure_event_grid-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -32501,7 +32501,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-connectors-S-connectors-snowflake-S-config_connector-ssl-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -34691,7 +34691,7 @@
                             },
                             {
                               "default": "2",
-                              "doc": "如果发送请求时出错，最大的重试次数。",
+                              "doc": "单次动作查询中 HTTP 请求失败后的最大重试次数。\n因连接正常关闭过程中发生的竞态条件而产生的重试不计入此配额。\n动作缓冲区可能会独立地重试可恢复的错误，直到请求 TTL 到期。",
                               "hash": "V-actions-S-actions-elasticsearch-S-action_config-parameters-S-action_create-max_retries",
                               "text": "max_retries",
                               "type": "Integer(0..+inf)"
@@ -34729,7 +34729,7 @@
                             },
                             {
                               "default": "2",
-                              "doc": "如果发送请求时出错，最大的重试次数。",
+                              "doc": "单次动作查询中 HTTP 请求失败后的最大重试次数。\n因连接正常关闭过程中发生的竞态条件而产生的重试不计入此配额。\n动作缓冲区可能会独立地重试可恢复的错误，直到请求 TTL 到期。",
                               "hash": "V-actions-S-actions-elasticsearch-S-action_config-parameters-S-action_delete-max_retries",
                               "text": "max_retries",
                               "type": "Integer(0..+inf)"
@@ -34786,7 +34786,7 @@
                             },
                             {
                               "default": "2",
-                              "doc": "如果发送请求时出错，最大的重试次数。",
+                              "doc": "单次动作查询中 HTTP 请求失败后的最大重试次数。\n因连接正常关闭过程中发生的竞态条件而产生的重试不计入此配额。\n动作缓冲区可能会独立地重试可恢复的错误，直到请求 TTL 到期。",
                               "hash": "V-actions-S-actions-elasticsearch-S-action_config-parameters-S-action_update-max_retries",
                               "text": "max_retries",
                               "type": "Integer(0..+inf)"
@@ -35139,7 +35139,7 @@
                             },
                             {
                               "default": "2",
-                              "doc": "如果发送请求时出错，最大的重试次数。",
+                              "doc": "单次动作查询中 HTTP 请求失败后的最大重试次数。\n因连接正常关闭过程中发生的竞态条件而产生的重试不计入此配额。\n动作缓冲区可能会独立地重试可恢复的错误，直到请求 TTL 到期。",
                               "hash": "V-actions-S-actions-iotdb-S-action_config-parameters-S-action_parameters_tree-max_retries",
                               "text": "max_retries",
                               "type": "Integer(0..+inf)"
@@ -35219,7 +35219,7 @@
                             },
                             {
                               "default": "2",
-                              "doc": "如果发送请求时出错，最大的重试次数。",
+                              "doc": "单次动作查询中 HTTP 请求失败后的最大重试次数。\n因连接正常关闭过程中发生的竞态条件而产生的重试不计入此配额。\n动作缓冲区可能会独立地重试可恢复的错误，直到请求 TTL 到期。",
                               "hash": "V-actions-S-actions-iotdb-S-action_config-parameters-S-action_parameters_table-max_retries",
                               "text": "max_retries",
                               "type": "Integer(0..+inf)"
@@ -40475,7 +40475,7 @@
                             },
                             {
                               "default": "2",
-                              "doc": "如果发送请求时出错，最大的重试次数。",
+                              "doc": "单次动作查询中 HTTP 请求失败后的最大重试次数。\n因连接正常关闭过程中发生的竞态条件而产生的重试不计入此配额。\n动作缓冲区可能会独立地重试可恢复的错误，直到请求 TTL 到期。",
                               "hash": "V-actions-S-actions-http-S-http_action-parameters-S-parameters_opts-max_retries",
                               "text": "max_retries",
                               "type": "Integer(0..+inf)"
@@ -49813,7 +49813,7 @@
                 "deliver_rate"
               ],
               "default": "\"1000/s\"",
-              "doc": "发送保留消息的最大速率",
+              "doc": "为通配符主题过滤器读取保留消息时，每秒最多检查的存储记录数。\n订阅不含通配符的主题时，读取其保留消息不受此限制。",
               "hash": "V-retainer-S-retainer-delivery_rate",
               "text": "delivery_rate",
               "type": "String"
@@ -50145,7 +50145,7 @@
                                   "fields": [
                                     {
                                       "default": "\"${EMQX_ETC_DIR}/certs/cacert.pem\"",
-                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                       "hash": "V-dashboard-S-dashboard-listeners-S-listeners-https-S-https-ssl_options-S-ssl_options-cacertfile",
                                       "text": "cacertfile",
                                       "type": "String"
@@ -50467,7 +50467,7 @@
             },
             {
               "default": "true",
-              "doc": "Report the release version with its preview suffix in the REST API.\nWhen set to `false`, the REST API removes the `-preview.N` suffix from the version that it reports.\nFor example, `6.1.5-preview.1` is reported as `6.1.5`.\nThe setting has no effect on a release version without the suffix.",
+              "doc": "在 REST API 中报告带预览后缀的发布版本号。\n设置为 `false` 时，REST API 会从其报告的版本号中移除 `-preview.N` 后缀。\n例如，`6.1.5-preview.1` 将报告为 `6.1.5`。\n此设置对不带该后缀的发布版本号无效。",
               "hash": "V-dashboard-S-dashboard-show_preview_version",
               "text": "show_preview_version",
               "type": "Boolean"
@@ -50574,7 +50574,7 @@
                                   "doc": "启用 SSL 连接。",
                                   "fields": [
                                     {
-                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                       "hash": "V-dashboard-S-dashboard-sso-S-sso-ldap-S-ldap-ssl-S-ssl-cacertfile",
                                       "text": "cacertfile",
                                       "type": "String"
@@ -50923,7 +50923,7 @@
                                   "doc": "Socket options for SSL clients.",
                                   "fields": [
                                     {
-                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                       "hash": "V-dashboard-S-dashboard-sso-S-sso-oidc-S-oidc-ssl-S-ssl_client_opts-cacertfile",
                                       "text": "cacertfile",
                                       "type": "String"
@@ -51258,28 +51258,28 @@
                             },
                             {
                               "default": "\"4MB\"",
-                              "doc": "重组后的最终负载最大大小。\n超过此大小的消息将被拒绝以保护内存。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "重组后的最终负载最大大小。必须大于零。\n超过此大小的消息将被拒绝以保护内存。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-gateway-S-gateway-coap-S-coap-blockwise-S-coap_blockwise-max_body_size",
                               "text": "max_body_size",
                               "type": "Bytesize"
                             },
                             {
                               "default": "16",
-                              "doc": "Maximum number of block-wise exchanges retained by one client session.\nWhen full, new uploads receive 4.29 and downlink notifications wait in the Observe queue.",
+                              "doc": "单个客户端会话可保留的最大分块传输数量。\n达到上限时，新的上行传输会收到 4.29 响应，下行通知则在 Observe 队列中等待。",
                               "hash": "V-gateway-S-gateway-coap-S-coap-blockwise-S-coap_blockwise-max_concurrent_exchanges",
                               "text": "max_concurrent_exchanges",
                               "type": "Integer(1..+inf)"
                             },
                             {
                               "default": "\"16MB\"",
-                              "doc": "Maximum total payload bytes retained by block-wise exchanges in one client session. Must be greater than zero.\nWhen full, uploads receive 4.13 and downlink notifications wait if they can fit later.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "单个客户端会话中，所有分块传输可保留的负载总字节数上限。必须大于零。\n达到上限时，上行传输会收到 4.13 响应，下行通知若之后能够容纳则继续等待。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-gateway-S-gateway-coap-S-coap-blockwise-S-coap_blockwise-max_total_size",
                               "text": "max_total_size",
                               "type": "Bytesize"
                             },
                             {
                               "default": "\"247s\"",
-                              "doc": "临时分块状态的保留时长。\n过短可能导致慢速传输中断；过长会占用更多内存。<br/>表示时间持续的字符串，例如：<code>10s</code>、<code>2.5m</code>、<code>1h30m</code>、<code>1W2D</code> 或 <code>2345ms</code>，其中 <code>ms</code> 是最小单位。每个配置项都有其自己的最小精度。设置值中超过精度的部分将被忽略。\n\n例如，如果一个类型为 <code>Duration(s)</code> 的配置项被设置为 <code>1200ms</code>，则最终有效值将是 <code>1s</code> 而不是 <code>1.2s</code>。\n\nDuration 等同于 Duration(ms)。单位部分不区分大小写。",
+                              "doc": "临时分块状态的保留时长。必须大于零。\n过短可能导致慢速传输中断；过长会占用更多内存。<br/>表示时间持续的字符串，例如：<code>10s</code>、<code>2.5m</code>、<code>1h30m</code>、<code>1W2D</code> 或 <code>2345ms</code>，其中 <code>ms</code> 是最小单位。每个配置项都有其自己的最小精度。设置值中超过精度的部分将被忽略。\n\n例如，如果一个类型为 <code>Duration(s)</code> 的配置项被设置为 <code>1200ms</code>，则最终有效值将是 <code>1s</code> 而不是 <code>1.2s</code>。\n\nDuration 等同于 Duration(ms)。单位部分不区分大小写。",
                               "hash": "V-gateway-S-gateway-coap-S-coap-blockwise-S-coap_blockwise-exchange_lifetime",
                               "text": "exchange_lifetime",
                               "type": "Duration"
@@ -51569,7 +51569,7 @@
                                           "fields": [
                                             {
                                               "default": "\"${EMQX_ETC_DIR}/certs/cacert.pem\"",
-                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                               "hash": "V-gateway-S-gateway-coap-S-coap-listeners-S-udp_listeners-dtls-S-dtls_listener-dtls_options-S-dtls_opts-cacertfile",
                                               "text": "cacertfile",
                                               "type": "String"
@@ -52017,7 +52017,7 @@
                                             },
                                             {
                                               "default": "packet",
-                                              "doc": "Receive buffer retention strategy for the `socket` TCP backend.\n\n- `packet`: Do not keep the *receive buffer* while waiting for the next packet.\n- `always`: Always keep the *receive buffer* while waiting for data.",
+                                              "doc": "`socket` TCP 后端的接收缓冲区保留策略。\n\n- `packet`：在等待下一个报文期间不保留*接收缓冲区*。\n- `always`：在等待数据期间始终保留*接收缓冲区*。",
                                               "hash": "V-gateway-S-gateway-gbt32960-S-gbt32960-listeners-S-tcp_listeners-tcp-S-tcp_listener-tcp_options-S-tcp_opts-buffer_retention_strategy",
                                               "text": "buffer_retention_strategy",
                                               "type": "Enum(always,packet)"
@@ -52030,7 +52030,7 @@
                                               "type": "Bytesize"
                                             },
                                             {
-                                              "doc": "The amount of queued outgoing data below which a congested connection is considered recovered.\n\nThis option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.\n\nWhen this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.\n\nThe `socket` TCP backend ignores this option.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。\n\n此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。\n\n未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。\n\n`socket` TCP 后端会忽略此选项。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-gbt32960-S-gbt32960-listeners-S-tcp_listeners-tcp-S-tcp_listener-tcp_options-S-tcp_opts-low_watermark",
                                               "text": "low_watermark",
                                               "type": "Bytesize"
@@ -52203,7 +52203,7 @@
                                             },
                                             {
                                               "default": "packet",
-                                              "doc": "Receive buffer retention strategy for the `socket` TCP backend.\n\n- `packet`: Do not keep the *receive buffer* while waiting for the next packet.\n- `always`: Always keep the *receive buffer* while waiting for data.",
+                                              "doc": "`socket` TCP 后端的接收缓冲区保留策略。\n\n- `packet`：在等待下一个报文期间不保留*接收缓冲区*。\n- `always`：在等待数据期间始终保留*接收缓冲区*。",
                                               "hash": "V-gateway-S-gateway-gbt32960-S-gbt32960-listeners-S-tcp_listeners-ssl-S-ssl_listener-tcp_options-S-tcp_opts-buffer_retention_strategy",
                                               "text": "buffer_retention_strategy",
                                               "type": "Enum(always,packet)"
@@ -52216,7 +52216,7 @@
                                               "type": "Bytesize"
                                             },
                                             {
-                                              "doc": "The amount of queued outgoing data below which a congested connection is considered recovered.\n\nThis option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.\n\nWhen this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.\n\nThe `socket` TCP backend ignores this option.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。\n\n此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。\n\n未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。\n\n`socket` TCP 后端会忽略此选项。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-gbt32960-S-gbt32960-listeners-S-tcp_listeners-ssl-S-ssl_listener-tcp_options-S-tcp_opts-low_watermark",
                                               "text": "low_watermark",
                                               "type": "Bytesize"
@@ -52320,7 +52320,7 @@
                                           "fields": [
                                             {
                                               "default": "\"${EMQX_ETC_DIR}/certs/cacert.pem\"",
-                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                               "hash": "V-gateway-S-gateway-gbt32960-S-gbt32960-listeners-S-tcp_listeners-ssl-S-ssl_listener-ssl_options-S-listener_ssl_opts-cacertfile",
                                               "text": "cacertfile",
                                               "type": "String"
@@ -52896,7 +52896,7 @@
                                             },
                                             {
                                               "default": "packet",
-                                              "doc": "Receive buffer retention strategy for the `socket` TCP backend.\n\n- `packet`: Do not keep the *receive buffer* while waiting for the next packet.\n- `always`: Always keep the *receive buffer* while waiting for data.",
+                                              "doc": "`socket` TCP 后端的接收缓冲区保留策略。\n\n- `packet`：在等待下一个报文期间不保留*接收缓冲区*。\n- `always`：在等待数据期间始终保留*接收缓冲区*。",
                                               "hash": "V-gateway-S-gateway-jt808-S-jt808-listeners-S-tcp_listeners-tcp-S-tcp_listener-tcp_options-S-tcp_opts-buffer_retention_strategy",
                                               "text": "buffer_retention_strategy",
                                               "type": "Enum(always,packet)"
@@ -52909,7 +52909,7 @@
                                               "type": "Bytesize"
                                             },
                                             {
-                                              "doc": "The amount of queued outgoing data below which a congested connection is considered recovered.\n\nThis option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.\n\nWhen this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.\n\nThe `socket` TCP backend ignores this option.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。\n\n此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。\n\n未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。\n\n`socket` TCP 后端会忽略此选项。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-jt808-S-jt808-listeners-S-tcp_listeners-tcp-S-tcp_listener-tcp_options-S-tcp_opts-low_watermark",
                                               "text": "low_watermark",
                                               "type": "Bytesize"
@@ -53082,7 +53082,7 @@
                                             },
                                             {
                                               "default": "packet",
-                                              "doc": "Receive buffer retention strategy for the `socket` TCP backend.\n\n- `packet`: Do not keep the *receive buffer* while waiting for the next packet.\n- `always`: Always keep the *receive buffer* while waiting for data.",
+                                              "doc": "`socket` TCP 后端的接收缓冲区保留策略。\n\n- `packet`：在等待下一个报文期间不保留*接收缓冲区*。\n- `always`：在等待数据期间始终保留*接收缓冲区*。",
                                               "hash": "V-gateway-S-gateway-jt808-S-jt808-listeners-S-tcp_listeners-ssl-S-ssl_listener-tcp_options-S-tcp_opts-buffer_retention_strategy",
                                               "text": "buffer_retention_strategy",
                                               "type": "Enum(always,packet)"
@@ -53095,7 +53095,7 @@
                                               "type": "Bytesize"
                                             },
                                             {
-                                              "doc": "The amount of queued outgoing data below which a congested connection is considered recovered.\n\nThis option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.\n\nWhen this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.\n\nThe `socket` TCP backend ignores this option.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。\n\n此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。\n\n未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。\n\n`socket` TCP 后端会忽略此选项。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-jt808-S-jt808-listeners-S-tcp_listeners-ssl-S-ssl_listener-tcp_options-S-tcp_opts-low_watermark",
                                               "text": "low_watermark",
                                               "type": "Bytesize"
@@ -53199,7 +53199,7 @@
                                           "fields": [
                                             {
                                               "default": "\"${EMQX_ETC_DIR}/certs/cacert.pem\"",
-                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                               "hash": "V-gateway-S-gateway-jt808-S-jt808-listeners-S-tcp_listeners-ssl-S-ssl_listener-ssl_options-S-listener_ssl_opts-cacertfile",
                                               "text": "cacertfile",
                                               "type": "String"
@@ -53762,28 +53762,28 @@
                             },
                             {
                               "default": "\"4MB\"",
-                              "doc": "重组后的最终负载最大大小。\n超过此大小的消息将被拒绝以保护内存。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "重组后的最终负载最大大小。必须大于零。\n超过此大小的消息将被拒绝以保护内存。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-gateway-S-gateway-lwm2m-S-lwm2m-blockwise-S-lwm2m_blockwise-max_body_size",
                               "text": "max_body_size",
                               "type": "Bytesize"
                             },
                             {
                               "default": "16",
-                              "doc": "Maximum number of block-wise exchanges retained by one client session.\nWhen full, new uploads receive 4.29 and downlink commands wait in the session queue.",
+                              "doc": "单个客户端会话可保留的最大分块传输数量。\n达到上限时，新的上行传输会收到 4.29 响应，下行命令则在会话队列中等待。",
                               "hash": "V-gateway-S-gateway-lwm2m-S-lwm2m-blockwise-S-lwm2m_blockwise-max_concurrent_exchanges",
                               "text": "max_concurrent_exchanges",
                               "type": "Integer(1..+inf)"
                             },
                             {
                               "default": "\"16MB\"",
-                              "doc": "Maximum total payload bytes retained by block-wise exchanges in one client session. Must be greater than zero.\nWhen full, uploads receive 4.13 and downlink commands wait if they can fit later.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "单个客户端会话中分块传输可保留的负载总字节数上限。必须大于零。\n达到上限时，上行传输会收到 4.13 响应，下行命令若之后能够容纳则继续等待。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-gateway-S-gateway-lwm2m-S-lwm2m-blockwise-S-lwm2m_blockwise-max_total_size",
                               "text": "max_total_size",
                               "type": "Bytesize"
                             },
                             {
                               "default": "\"247s\"",
-                              "doc": "临时分块状态的保留时长。\n过短可能导致慢速传输中断；过长会占用更多内存。<br/>表示时间持续的字符串，例如：<code>10s</code>、<code>2.5m</code>、<code>1h30m</code>、<code>1W2D</code> 或 <code>2345ms</code>，其中 <code>ms</code> 是最小单位。每个配置项都有其自己的最小精度。设置值中超过精度的部分将被忽略。\n\n例如，如果一个类型为 <code>Duration(s)</code> 的配置项被设置为 <code>1200ms</code>，则最终有效值将是 <code>1s</code> 而不是 <code>1.2s</code>。\n\nDuration 等同于 Duration(ms)。单位部分不区分大小写。",
+                              "doc": "临时分块状态的保留时长。必须大于零。\n过短可能导致慢速传输中断；过长会占用更多内存。<br/>表示时间持续的字符串，例如：<code>10s</code>、<code>2.5m</code>、<code>1h30m</code>、<code>1W2D</code> 或 <code>2345ms</code>，其中 <code>ms</code> 是最小单位。每个配置项都有其自己的最小精度。设置值中超过精度的部分将被忽略。\n\n例如，如果一个类型为 <code>Duration(s)</code> 的配置项被设置为 <code>1200ms</code>，则最终有效值将是 <code>1s</code> 而不是 <code>1.2s</code>。\n\nDuration 等同于 Duration(ms)。单位部分不区分大小写。",
                               "hash": "V-gateway-S-gateway-lwm2m-S-lwm2m-blockwise-S-lwm2m_blockwise-exchange_lifetime",
                               "text": "exchange_lifetime",
                               "type": "Duration"
@@ -54073,7 +54073,7 @@
                                           "fields": [
                                             {
                                               "default": "\"${EMQX_ETC_DIR}/certs/cacert.pem\"",
-                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                               "hash": "V-gateway-S-gateway-lwm2m-S-lwm2m-listeners-S-udp_listeners-dtls-S-dtls_listener-dtls_options-S-dtls_opts-cacertfile",
                                               "text": "cacertfile",
                                               "type": "String"
@@ -54750,7 +54750,7 @@
                                           "fields": [
                                             {
                                               "default": "\"${EMQX_ETC_DIR}/certs/cacert.pem\"",
-                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                               "hash": "V-gateway-S-gateway-mqttsn-S-mqttsn-listeners-S-udp_listeners-dtls-S-dtls_listener-dtls_options-S-dtls_opts-cacertfile",
                                               "text": "cacertfile",
                                               "type": "String"
@@ -55282,7 +55282,7 @@
                                             },
                                             {
                                               "default": "packet",
-                                              "doc": "Receive buffer retention strategy for the `socket` TCP backend.\n\n- `packet`: Do not keep the *receive buffer* while waiting for the next packet.\n- `always`: Always keep the *receive buffer* while waiting for data.",
+                                              "doc": "`socket` TCP 后端的接收缓冲区保留策略。\n\n- `packet`：在等待下一个报文期间不保留*接收缓冲区*。\n- `always`：在等待数据期间始终保留*接收缓冲区*。",
                                               "hash": "V-gateway-S-gateway-ocpp-S-ocpp-listeners-S-ws_listeners-ws-S-ws_listener-tcp_options-S-tcp_opts-buffer_retention_strategy",
                                               "text": "buffer_retention_strategy",
                                               "type": "Enum(always,packet)"
@@ -55295,7 +55295,7 @@
                                               "type": "Bytesize"
                                             },
                                             {
-                                              "doc": "The amount of queued outgoing data below which a congested connection is considered recovered.\n\nThis option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.\n\nWhen this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.\n\nThe `socket` TCP backend ignores this option.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。\n\n此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。\n\n未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。\n\n`socket` TCP 后端会忽略此选项。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-ocpp-S-ocpp-listeners-S-ws_listeners-ws-S-ws_listener-tcp_options-S-tcp_opts-low_watermark",
                                               "text": "low_watermark",
                                               "type": "Bytesize"
@@ -55628,7 +55628,7 @@
                                             },
                                             {
                                               "default": "packet",
-                                              "doc": "Receive buffer retention strategy for the `socket` TCP backend.\n\n- `packet`: Do not keep the *receive buffer* while waiting for the next packet.\n- `always`: Always keep the *receive buffer* while waiting for data.",
+                                              "doc": "`socket` TCP 后端的接收缓冲区保留策略。\n\n- `packet`：在等待下一个报文期间不保留*接收缓冲区*。\n- `always`：在等待数据期间始终保留*接收缓冲区*。",
                                               "hash": "V-gateway-S-gateway-ocpp-S-ocpp-listeners-S-ws_listeners-wss-S-wss_listener-tcp_options-S-tcp_opts-buffer_retention_strategy",
                                               "text": "buffer_retention_strategy",
                                               "type": "Enum(always,packet)"
@@ -55641,7 +55641,7 @@
                                               "type": "Bytesize"
                                             },
                                             {
-                                              "doc": "The amount of queued outgoing data below which a congested connection is considered recovered.\n\nThis option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.\n\nWhen this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.\n\nThe `socket` TCP backend ignores this option.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。\n\n此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。\n\n未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。\n\n`socket` TCP 后端会忽略此选项。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-ocpp-S-ocpp-listeners-S-ws_listeners-wss-S-wss_listener-tcp_options-S-tcp_opts-low_watermark",
                                               "text": "low_watermark",
                                               "type": "Bytesize"
@@ -55745,7 +55745,7 @@
                                           "fields": [
                                             {
                                               "default": "\"${EMQX_ETC_DIR}/certs/cacert.pem\"",
-                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                               "hash": "V-gateway-S-gateway-ocpp-S-ocpp-listeners-S-ws_listeners-wss-S-wss_listener-ssl_options-S-listener_wss_opts-cacertfile",
                                               "text": "cacertfile",
                                               "type": "String"
@@ -56348,7 +56348,7 @@
                                             },
                                             {
                                               "default": "packet",
-                                              "doc": "Receive buffer retention strategy for the `socket` TCP backend.\n\n- `packet`: Do not keep the *receive buffer* while waiting for the next packet.\n- `always`: Always keep the *receive buffer* while waiting for data.",
+                                              "doc": "`socket` TCP 后端的接收缓冲区保留策略。\n\n- `packet`：在等待下一个报文期间不保留*接收缓冲区*。\n- `always`：在等待数据期间始终保留*接收缓冲区*。",
                                               "hash": "V-gateway-S-gateway-stomp-S-stomp-listeners-S-tcp_listeners-tcp-S-tcp_listener-tcp_options-S-tcp_opts-buffer_retention_strategy",
                                               "text": "buffer_retention_strategy",
                                               "type": "Enum(always,packet)"
@@ -56361,7 +56361,7 @@
                                               "type": "Bytesize"
                                             },
                                             {
-                                              "doc": "The amount of queued outgoing data below which a congested connection is considered recovered.\n\nThis option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.\n\nWhen this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.\n\nThe `socket` TCP backend ignores this option.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。\n\n此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。\n\n未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。\n\n`socket` TCP 后端会忽略此选项。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-stomp-S-stomp-listeners-S-tcp_listeners-tcp-S-tcp_listener-tcp_options-S-tcp_opts-low_watermark",
                                               "text": "low_watermark",
                                               "type": "Bytesize"
@@ -56534,7 +56534,7 @@
                                             },
                                             {
                                               "default": "packet",
-                                              "doc": "Receive buffer retention strategy for the `socket` TCP backend.\n\n- `packet`: Do not keep the *receive buffer* while waiting for the next packet.\n- `always`: Always keep the *receive buffer* while waiting for data.",
+                                              "doc": "`socket` TCP 后端的接收缓冲区保留策略。\n\n- `packet`：在等待下一个报文期间不保留*接收缓冲区*。\n- `always`：在等待数据期间始终保留*接收缓冲区*。",
                                               "hash": "V-gateway-S-gateway-stomp-S-stomp-listeners-S-tcp_listeners-ssl-S-ssl_listener-tcp_options-S-tcp_opts-buffer_retention_strategy",
                                               "text": "buffer_retention_strategy",
                                               "type": "Enum(always,packet)"
@@ -56547,7 +56547,7 @@
                                               "type": "Bytesize"
                                             },
                                             {
-                                              "doc": "The amount of queued outgoing data below which a congested connection is considered recovered.\n\nThis option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.\n\nWhen this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.\n\nThe `socket` TCP backend ignores this option.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。\n\n此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。\n\n未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。\n\n`socket` TCP 后端会忽略此选项。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-stomp-S-stomp-listeners-S-tcp_listeners-ssl-S-ssl_listener-tcp_options-S-tcp_opts-low_watermark",
                                               "text": "low_watermark",
                                               "type": "Bytesize"
@@ -56651,7 +56651,7 @@
                                           "fields": [
                                             {
                                               "default": "\"${EMQX_ETC_DIR}/certs/cacert.pem\"",
-                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                               "hash": "V-gateway-S-gateway-stomp-S-stomp-listeners-S-tcp_listeners-ssl-S-ssl_listener-ssl_options-S-listener_ssl_opts-cacertfile",
                                               "text": "cacertfile",
                                               "type": "String"
@@ -57412,7 +57412,7 @@
                                             },
                                             {
                                               "default": "packet",
-                                              "doc": "Receive buffer retention strategy for the `socket` TCP backend.\n\n- `packet`: Do not keep the *receive buffer* while waiting for the next packet.\n- `always`: Always keep the *receive buffer* while waiting for data.",
+                                              "doc": "`socket` TCP 后端的接收缓冲区保留策略。\n\n- `packet`：在等待下一个报文期间不保留*接收缓冲区*。\n- `always`：在等待数据期间始终保留*接收缓冲区*。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-ws-S-ws_listener-tcp_options-S-tcp_opts-buffer_retention_strategy",
                                               "text": "buffer_retention_strategy",
                                               "type": "Enum(always,packet)"
@@ -57425,7 +57425,7 @@
                                               "type": "Bytesize"
                                             },
                                             {
-                                              "doc": "The amount of queued outgoing data below which a congested connection is considered recovered.\n\nThis option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.\n\nWhen this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.\n\nThe `socket` TCP backend ignores this option.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。\n\n此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。\n\n未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。\n\n`socket` TCP 后端会忽略此选项。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-ws-S-ws_listener-tcp_options-S-tcp_opts-low_watermark",
                                               "text": "low_watermark",
                                               "type": "Bytesize"
@@ -57758,7 +57758,7 @@
                                             },
                                             {
                                               "default": "packet",
-                                              "doc": "Receive buffer retention strategy for the `socket` TCP backend.\n\n- `packet`: Do not keep the *receive buffer* while waiting for the next packet.\n- `always`: Always keep the *receive buffer* while waiting for data.",
+                                              "doc": "`socket` TCP 后端的接收缓冲区保留策略。\n\n- `packet`：在等待下一个报文期间不保留*接收缓冲区*。\n- `always`：在等待数据期间始终保留*接收缓冲区*。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-wss-S-wss_listener-tcp_options-S-tcp_opts-buffer_retention_strategy",
                                               "text": "buffer_retention_strategy",
                                               "type": "Enum(always,packet)"
@@ -57771,7 +57771,7 @@
                                               "type": "Bytesize"
                                             },
                                             {
-                                              "doc": "The amount of queued outgoing data below which a congested connection is considered recovered.\n\nThis option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.\n\nWhen this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.\n\nThe `socket` TCP backend ignores this option.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。\n\n此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。\n\n未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。\n\n`socket` TCP 后端会忽略此选项。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-wss-S-wss_listener-tcp_options-S-tcp_opts-low_watermark",
                                               "text": "low_watermark",
                                               "type": "Bytesize"
@@ -57875,7 +57875,7 @@
                                           "fields": [
                                             {
                                               "default": "\"${EMQX_ETC_DIR}/certs/cacert.pem\"",
-                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-wss-S-wss_listener-ssl_options-S-listener_wss_opts-cacertfile",
                                               "text": "cacertfile",
                                               "type": "String"
@@ -58159,7 +58159,7 @@
                                             },
                                             {
                                               "default": "packet",
-                                              "doc": "Receive buffer retention strategy for the `socket` TCP backend.\n\n- `packet`: Do not keep the *receive buffer* while waiting for the next packet.\n- `always`: Always keep the *receive buffer* while waiting for data.",
+                                              "doc": "`socket` TCP 后端的接收缓冲区保留策略。\n\n- `packet`：在等待下一个报文期间不保留*接收缓冲区*。\n- `always`：在等待数据期间始终保留*接收缓冲区*。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-tcp-S-tcp_listener-tcp_options-S-tcp_opts-buffer_retention_strategy",
                                               "text": "buffer_retention_strategy",
                                               "type": "Enum(always,packet)"
@@ -58172,7 +58172,7 @@
                                               "type": "Bytesize"
                                             },
                                             {
-                                              "doc": "The amount of queued outgoing data below which a congested connection is considered recovered.\n\nThis option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.\n\nWhen this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.\n\nThe `socket` TCP backend ignores this option.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。\n\n此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。\n\n未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。\n\n`socket` TCP 后端会忽略此选项。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-tcp-S-tcp_listener-tcp_options-S-tcp_opts-low_watermark",
                                               "text": "low_watermark",
                                               "type": "Bytesize"
@@ -58345,7 +58345,7 @@
                                             },
                                             {
                                               "default": "packet",
-                                              "doc": "Receive buffer retention strategy for the `socket` TCP backend.\n\n- `packet`: Do not keep the *receive buffer* while waiting for the next packet.\n- `always`: Always keep the *receive buffer* while waiting for data.",
+                                              "doc": "`socket` TCP 后端的接收缓冲区保留策略。\n\n- `packet`：在等待下一个报文期间不保留*接收缓冲区*。\n- `always`：在等待数据期间始终保留*接收缓冲区*。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-ssl-S-ssl_listener-tcp_options-S-tcp_opts-buffer_retention_strategy",
                                               "text": "buffer_retention_strategy",
                                               "type": "Enum(always,packet)"
@@ -58358,7 +58358,7 @@
                                               "type": "Bytesize"
                                             },
                                             {
-                                              "doc": "The amount of queued outgoing data below which a congested connection is considered recovered.\n\nThis option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.\n\nWhen this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.\n\nThe `socket` TCP backend ignores this option.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。\n\n此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。\n\n未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。\n\n`socket` TCP 后端会忽略此选项。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-ssl-S-ssl_listener-tcp_options-S-tcp_opts-low_watermark",
                                               "text": "low_watermark",
                                               "type": "Bytesize"
@@ -58462,7 +58462,7 @@
                                           "fields": [
                                             {
                                               "default": "\"${EMQX_ETC_DIR}/certs/cacert.pem\"",
-                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-ssl-S-ssl_listener-ssl_options-S-listener_ssl_opts-cacertfile",
                                               "text": "cacertfile",
                                               "type": "String"
@@ -59389,7 +59389,7 @@
                           "doc": "SSL client configuration.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-exhook-S-exhook-servers-S-server-ssl-S-ssl_conf-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -59988,7 +59988,7 @@
                                   "doc": "Socket options for SSL clients.",
                                   "fields": [
                                     {
-                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                       "hash": "V-opentelemetry-S-opentelemetry_dynatrace-exporter-S-otel_exporter_dynatrace-auth-S-dynatrace_oauth2-ssl-S-ssl_client_opts-cacertfile",
                                       "text": "cacertfile",
                                       "type": "String"
@@ -60157,7 +60157,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-opentelemetry-S-opentelemetry_dynatrace-exporter-S-otel_exporter_dynatrace-ssl_options-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -60587,7 +60587,7 @@
                           "doc": "Socket options for SSL clients.",
                           "fields": [
                             {
-                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                               "hash": "V-opentelemetry-S-opentelemetry-exporter-S-otel_exporter-ssl_options-S-ssl_client_opts-cacertfile",
                               "text": "cacertfile",
                               "type": "String"
@@ -61031,7 +61031,7 @@
                             },
                             {
                               "default": "2",
-                              "doc": "如果发送请求时出错，最大的重试次数。",
+                              "doc": "单次动作查询中 HTTP 请求失败后的最大重试次数。\n因连接正常关闭过程中发生的竞态条件而产生的重试不计入此配额。\n动作缓冲区可能会独立地重试可恢复的错误，直到请求 TTL 到期。",
                               "hash": "V-schema_registry-S-schema_registry-schemas-S-external_http-parameters-S-external_http_params-max_retries",
                               "text": "max_retries",
                               "type": "Integer(0..+inf)"
@@ -61094,7 +61094,7 @@
                                   "doc": "Socket options for SSL clients.",
                                   "fields": [
                                     {
-                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                      "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                       "hash": "V-schema_registry-S-schema_registry-schemas-S-external_http-parameters-S-external_http_params-ssl-S-ssl_client_opts-cacertfile",
                                       "text": "cacertfile",
                                       "type": "String"
@@ -61798,7 +61798,7 @@
                                               "type": "Integer(1..+inf)"
                                             },
                                             {
-                                              "doc": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.\n\nWhen this field is set, its value takes precedence over the region inferred from the endpoint host.\nOtherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.\n\nSet this field when the endpoint host does not contain the region, for example a custom domain name.",
+                                              "doc": "用于对 S3 端点请求进行签名的区域，例如 `us-west-2`。\n\n当设置了此字段时，其取值优先于根据端点主机推断出的区域。\n否则，区域将根据端点主机推断；如果无法推断出区域，则使用 `us-east-1`。\n\n当端点主机不包含区域信息时（例如使用自定义域名），请设置此字段。",
                                               "hash": "V-file_transfer-S-file_transfer-storage-S-storage_backend-local-S-local_storage-exporter-S-local_storage_exporter_backend-s3-S-s3_exporter-region",
                                               "text": "region",
                                               "type": "String"
@@ -61853,7 +61853,7 @@
                                                           "doc": "Socket options for SSL clients.",
                                                           "fields": [
                                                             {
-                                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。",
+                                                              "doc": "受信任的 PEM 格式 CA  证书捆绑文件<br/>\n此文件中的证书用于验证 TLS 对等方的证书。\n如果要信任新 CA，请将新证书附加到文件中。\n无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/>\n注意：从文件中失效（删除）证书不会影响已建立的连接。<br/>\nTLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
                                                               "hash": "V-file_transfer-S-file_transfer-storage-S-storage_backend-local-S-local_storage-exporter-S-local_storage_exporter_backend-s3-S-s3_exporter-transport_options-S-transport_options-ssl-S-ssl_client_opts-cacertfile",
                                                               "text": "cacertfile",
                                                               "type": "String"
@@ -62587,19 +62587,19 @@
             },
             {
               "default": "{lastvalue = false, regular = false}",
-              "doc": "当订阅队列主题时，如果消息队列不存在，自动创建的设置",
+              "doc": "当订阅队列主题时，如果消息队列不存在，自动创建的设置。\n自动创建默认处于禁用状态。设置 <code>regular</code> 或 <code>lastvalue</code> 之一即可启用，两者不能同时启用。",
               "hash": "V-mq-S-mq-auto_create",
               "refs": [
                 {
-                  "doc": "当订阅队列主题时，如果消息队列不存在，自动创建的设置",
+                  "doc": "当订阅队列主题时，如果消息队列不存在，自动创建的设置。\n自动创建默认处于禁用状态。设置 <code>regular</code> 或 <code>lastvalue</code> 之一即可启用，两者不能同时启用。",
                   "fields": [
                     {
                       "default": "false",
-                      "doc": "自动创建常规消息队列的设置",
+                      "doc": "自动创建常规消息队列的设置。\n设置为 <code>false</code> 表示不自动创建常规消息队列。",
                       "hash": "V-mq-S-mq-auto_create-S-auto_create-regular",
                       "refs": [
                         {
-                          "doc": "自动创建常规消息队列的设置",
+                          "doc": "自动创建常规消息队列的设置。\n设置为 <code>false</code> 表示不自动创建常规消息队列。",
                           "fields": [
                             {
                               "default": "\"7d\"",
@@ -62655,11 +62655,11 @@
                     },
                     {
                       "default": "false",
-                      "doc": "自动创建最后值消息队列的设置",
+                      "doc": "自动创建最后值消息队列的设置。\n设置为 <code>false</code> 表示不自动创建最后值消息队列。",
                       "hash": "V-mq-S-mq-auto_create-S-auto_create-lastvalue",
                       "refs": [
                         {
-                          "doc": "自动创建最后值消息队列的设置",
+                          "doc": "自动创建最后值消息队列的设置。\n设置为 <code>false</code> 表示不自动创建最后值消息队列。",
                           "fields": [
                             {
                               "default": "\"7d\"",
@@ -62772,19 +62772,19 @@
             },
             {
               "default": "{lastvalue = false, regular = false}",
-              "doc": "在订阅队列主题时，如果消息流不存在，自动创建的设置。",
+              "doc": "在订阅队列主题时，如果消息流不存在，自动创建的设置。\n自动创建默认处于禁用状态。设置 <code>regular</code> 或 <code>lastvalue</code> 之一即可启用，两者不能同时启用。",
               "hash": "V-streams-S-streams-auto_create",
               "refs": [
                 {
-                  "doc": "在订阅队列主题时，如果消息流不存在，自动创建的设置。",
+                  "doc": "在订阅队列主题时，如果消息流不存在，自动创建的设置。\n自动创建默认处于禁用状态。设置 <code>regular</code> 或 <code>lastvalue</code> 之一即可启用，两者不能同时启用。",
                   "fields": [
                     {
                       "default": "false",
-                      "doc": "常规消息流自动创建的设置",
+                      "doc": "常规消息流自动创建的设置。\n设置为 <code>false</code> 表示不自动创建常规消息流。",
                       "hash": "V-streams-S-streams-auto_create-S-auto_create-regular",
                       "refs": [
                         {
-                          "doc": "常规消息流自动创建的设置",
+                          "doc": "常规消息流自动创建的设置。\n设置为 <code>false</code> 表示不自动创建常规消息流。",
                           "fields": [
                             {
                               "default": "\"message.from\"",
@@ -62840,11 +62840,11 @@
                     },
                     {
                       "default": "false",
-                      "doc": "最后值消息流自动创建的设置",
+                      "doc": "最后值消息流自动创建的设置。\n设置为 <code>false</code> 表示不自动创建最后值消息流。",
                       "hash": "V-streams-S-streams-auto_create-S-auto_create-lastvalue",
                       "refs": [
                         {
-                          "doc": "最后值消息流自动创建的设置",
+                          "doc": "最后值消息流自动创建的设置。\n设置为 <code>false</code> 表示不自动创建最后值消息流。",
                           "fields": [
                             {
                               "default": "\"message.from\"",

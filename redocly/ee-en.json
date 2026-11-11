@@ -5796,7 +5796,7 @@
               },
               {
                 "enum": [
-                  "bigquery"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
@@ -5862,7 +5862,13 @@
               },
               {
                 "enum": [
-                  "sqlserver"
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
@@ -5880,7 +5886,19 @@
               },
               {
                 "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -5898,12 +5916,6 @@
               },
               {
                 "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "timescale"
                 ],
                 "type": "string"
@@ -5916,12 +5928,6 @@
               },
               {
                 "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "datalayers"
                 ],
                 "type": "string"
@@ -5929,12 +5935,6 @@
               {
                 "enum": [
                   "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -5959,6 +5959,12 @@
               {
                 "enum": [
                   "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
                 ],
                 "type": "string"
               },
@@ -6000,18 +6006,6 @@
               },
               {
                 "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "mysql"
                 ],
                 "type": "string"
@@ -6048,13 +6042,19 @@
               },
               {
                 "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "doris"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "syskeeper_forwarder"
+                  "s3tables"
                 ],
                 "type": "string"
               }
@@ -42239,7 +42239,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "8F3FA2BA05B07EF1",
+            "example": "3F643A2D2B17930A",
             "type": "string"
           },
           "status": {
@@ -62050,7 +62050,7 @@
   "info": {
     "description": "A request accepts at most 100 query parameters in total, including repeated and pagination parameters.",
     "title": "EMQX Enterprise API",
-    "version": "6.3.3-rc.5"
+    "version": "6.3.3"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -62666,39 +62666,39 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "syskeeper_forwarder",
+                      "s3tables",
                       "doris",
+                      "sqlserver",
                       "tdengine",
                       "azure_event_grid",
                       "rocketmq",
                       "snowflake",
                       "influxdb",
                       "mysql",
-                      "snowflake_streaming",
-                      "s3tables",
                       "cockroachdb",
                       "redis",
                       "iotdb",
                       "bigtable",
                       "clickhouse",
                       "dynamo",
+                      "snowflake_streaming",
                       "cassandra",
                       "emqx_tables",
                       "oracle",
                       "s3",
-                      "kafka_producer",
                       "greptimedb",
                       "datalayers",
-                      "rabbitmq",
                       "disk_log",
                       "timescale",
-                      "kinesis",
                       "quasardb",
                       "alloydb",
+                      "kafka_producer",
                       "mongodb",
+                      "kinesis",
                       "http",
                       "aws_timestream",
-                      "sqlserver",
+                      "syskeeper_forwarder",
+                      "bigquery",
                       "mqtt",
                       "azure_blob_storage",
                       "redshift",
@@ -62709,7 +62709,7 @@
                       "gcp_pubsub_producer",
                       "confluent_producer",
                       "pulsar",
-                      "bigquery",
+                      "rabbitmq",
                       "couchbase",
                       "opents",
                       "tablestore"
@@ -62719,39 +62719,39 @@
                 "schema": {
                   "items": {
                     "enum": [
-                      "syskeeper_forwarder",
+                      "s3tables",
                       "doris",
+                      "sqlserver",
                       "tdengine",
                       "azure_event_grid",
                       "rocketmq",
                       "snowflake",
                       "influxdb",
                       "mysql",
-                      "snowflake_streaming",
-                      "s3tables",
                       "cockroachdb",
                       "redis",
                       "iotdb",
                       "bigtable",
                       "clickhouse",
                       "dynamo",
+                      "snowflake_streaming",
                       "cassandra",
                       "emqx_tables",
                       "oracle",
                       "s3",
-                      "kafka_producer",
                       "greptimedb",
                       "datalayers",
-                      "rabbitmq",
                       "disk_log",
                       "timescale",
-                      "kinesis",
                       "quasardb",
                       "alloydb",
+                      "kafka_producer",
                       "mongodb",
+                      "kinesis",
                       "http",
                       "aws_timestream",
-                      "sqlserver",
+                      "syskeeper_forwarder",
+                      "bigquery",
                       "mqtt",
                       "azure_blob_storage",
                       "redshift",
@@ -62762,7 +62762,7 @@
                       "gcp_pubsub_producer",
                       "confluent_producer",
                       "pulsar",
-                      "bigquery",
+                      "rabbitmq",
                       "couchbase",
                       "opents",
                       "tablestore"
@@ -98325,7 +98325,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "8F3FA2BA05B07EF1",
+            "example": "3F643A2D2B17930A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98388,7 +98388,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "8F3FA2BA05B07EF1",
+            "example": "3F643A2D2B17930A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98802,7 +98802,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "8F3FA2BA05B07EF1",
+            "example": "3F643A2D2B17930A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98888,7 +98888,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "8F3FA2BA05B07EF1",
+            "example": "3F643A2D2B17930A",
             "in": "path",
             "name": "site",
             "required": true,
