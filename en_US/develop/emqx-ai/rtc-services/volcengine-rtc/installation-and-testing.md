@@ -313,10 +313,10 @@ See: [Integrate Real-Time Conversational AI (Software Applications)](https://www
 | Platform | SDK               | Documentation                                                |
 | -------- | ----------------- | ------------------------------------------------------------ |
 | Web      | `@volcengine/rtc` | [Web SDK Docs](https://www.volcengine.com/docs/6348/104398)  |
-| iOS      | VolcEngineRTC     | [iOS SDK Docs](https://www.volcengine.com/docs/6348/70080)   |
+| iOS      | VolcEngineRTC     | [iOS SDK Docs](https://docs.volcengine.com/docs/real-time-communication/ios-sample-project?lang=en)   |
 | Android  | VolcEngineRTC     | [Android SDK Docs](https://www.volcengine.com/docs/6348/70082) |
 | Windows  | VolcEngineRTC     | [Windows SDK Docs](https://www.volcengine.com/docs/6348/70084) |
-| macOS    | VolcEngineRTC     | [macOS SDK Docs](https://www.volcengine.com/docs/6348/70086) |
+| macOS    | VolcEngineRTC     | [macOS SDK Docs](https://docs.volcengine.com/docs/real-time-communication/macos-sample-project?lang=en) |
 | Linux    | VolcEngineRTC     | [Linux SDK Docs](https://www.volcengine.com/docs/6348/113623) |
 | Flutter  | volc_engine_rtc   | [Flutter SDK Docs](https://www.volcengine.com/docs/6348/113661) |
 | Electron | @volcengine/rtc   | [Electron SDK Docs](https://www.volcengine.com/docs/6348/112063) |

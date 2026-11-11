@@ -1,5 +1,31 @@
 # Incompatible Changes in EMQX 6.3
 
+## 6.3.3
+
+- [#18788](https://github.com/emqx/emqx/pull/18788) Disabled automatic creation by default for `mq.auto_create` and `streams.auto_create` as a security enhancement.
+
+  Previously, subscribing to a `$queue/...` topic created a last-value message queue, and subscribing
+  to a `$stream/...` topic created a last-value message stream, when the queue or stream did not exist.
+  Both now default to `false`, so a subscription no longer creates anything implicitly.
+
+  To keep the previous behaviour, enable automatic creation explicitly:
+
+  ```
+  mq.auto_create.lastvalue = {}
+  streams.auto_create.lastvalue = {}
+  ```
+
+  Set `regular` instead of `lastvalue` to automatically create regular queues or streams. Only one of
+  the two can be enabled at a time. Message queues and streams that already exist are not affected.
+
+- [#18974](https://github.com/emqx/emqx/pull/18974) Added `mqtt.max_connect_user_properties`, which limits the number of MQTT v5 User Property pairs accepted separately in CONNECT properties and Will properties. The default is 100; set it to `infinity` to disable the limit.
+
+- [#19774](https://github.com/emqx/emqx/pull/19774) For in-memory sessions, renamed the internal message header `deliver_begin_at` to `deliver_begin_at_us` and changed its timestamp unit from milliseconds to microseconds.
+
+  Plugins and hook handlers that read this header must use the new name and adapt to the new precision.
+
+- [#19910](https://github.com/emqx/emqx/pull/19910) Fixed an issue where the RabbitMQ connector's `heartbeat` value was converted to milliseconds before being passed to the RabbitMQ client, which interprets the value as seconds. When the remote AMQP server proposed a heartbeat of `0`, idle connections could time out and reconnect repeatedly. EMQX now passes the configured value in seconds.
+
 ## 6.3.1
 
 - [#18465](https://github.com/emqx/emqx/pull/18465) Improved validation and safe rendering of templated `INSERT` statements in ClickHouse, TDengine, and SQL Server actions, and in MySQL actions when batch insert is enabled.

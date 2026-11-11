@@ -312,10 +312,10 @@ audioElement.srcObject = stream
 | 平台 | SDK | 文档 |
 |------|-----|------|
 | Web | `@volcengine/rtc` | [Web SDK 文档](https://www.volcengine.com/docs/6348/104398) |
-| iOS | VolcEngineRTC | [iOS SDK 文档](https://www.volcengine.com/docs/6348/70080) |
+| iOS | VolcEngineRTC | [iOS SDK 文档](https://docs.volcengine.com/docs/real-time-communication/ios-sample-project?lang=en) |
 | Android | VolcEngineRTC | [Android SDK 文档](https://www.volcengine.com/docs/6348/70082) |
 | Windows | VolcEngineRTC | [Windows SDK 文档](https://www.volcengine.com/docs/6348/70084) |
-| macOS | VolcEngineRTC | [macOS SDK 文档](https://www.volcengine.com/docs/6348/70086) |
+| macOS | VolcEngineRTC | [macOS SDK 文档](https://docs.volcengine.com/docs/real-time-communication/macos-sample-project?lang=en) |
 | Linux | VolcEngineRTC | [Linux SDK 文档](https://www.volcengine.com/docs/6348/113623) |
 | Flutter | volc_engine_rtc | [Flutter SDK 文档](https://www.volcengine.com/docs/6348/113661) |
 | Electron | @volcengine/rtc | [Electron SDK 文档](https://www.volcengine.com/docs/6348/112063) |

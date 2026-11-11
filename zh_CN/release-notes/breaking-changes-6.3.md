@@ -1,5 +1,28 @@
 # EMQX 6.3 中的不兼容变更
 
+## 6.3.3
+
+- [#18788](https://github.com/emqx/emqx/pull/18788) 出于安全考虑，默认禁用了 `mq.auto_create` 和 `streams.auto_create` 的自动创建功能。
+
+  此前，订阅不存在的 `$queue/...` 主题会创建一个末值消息队列，订阅不存在的 `$stream/...` 主题会创建一个末值 Stream。现在，这两个配置项的默认值均为 `false`，订阅操作不再隐式创建消息队列或 Stream。
+
+  如需保留此前的行为，请显式启用自动创建：
+
+  ```hocon
+  mq.auto_create.lastvalue = {}
+  streams.auto_create.lastvalue = {}
+  ```
+
+  如需自动创建普通消息队列或 Stream，请将 `lastvalue` 替换为 `regular`。两种类型只能启用一种。已存在的消息队列和 Stream 不受影响。
+
+- [#18974](https://github.com/emqx/emqx/pull/18974) 新增配置项 `mqtt.max_connect_user_properties`，分别限制 CONNECT 属性和 Will 属性中允许的 MQTT v5 User Property 对数量。默认值为 100；设置为 `infinity` 可禁用此限制。
+
+- [#19774](https://github.com/emqx/emqx/pull/19774) 对于内存会话，内部消息头 `deliver_begin_at` 已重命名为 `deliver_begin_at_us`，时间戳单位也从毫秒改为微秒。
+
+  读取该消息头的插件和 Hook 处理程序必须改用新名称，并适配新的时间精度。
+
+- [#19910](https://github.com/emqx/emqx/pull/19910) 修复了 RabbitMQ 连接器将 `heartbeat` 配置值转换为毫秒后再传给 RabbitMQ 客户端的问题。RabbitMQ 客户端会将该值解释为秒。当远程 AMQP 服务器建议的心跳值为 `0` 时，空闲连接可能超时并反复重连。EMQX 现在会按秒传递配置值。
+
 ## 6.3.1
 
 - [#18465](https://github.com/emqx/emqx/pull/18465) 改进了 ClickHouse、TDengine 和 SQL Server 动作，以及启用批量插入的 MySQL 动作中模板化 `INSERT` 语句的校验与安全渲染。
