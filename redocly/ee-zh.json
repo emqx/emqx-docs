@@ -5808,7 +5808,7 @@
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -5862,7 +5862,7 @@
               },
               {
                 "enum": [
-                  "bigquery"
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
@@ -5886,6 +5886,12 @@
               },
               {
                 "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "alloydb"
                 ],
                 "type": "string"
@@ -5893,18 +5899,6 @@
               {
                 "enum": [
                   "quasardb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
                 ],
                 "type": "string"
               },
@@ -5922,6 +5916,12 @@
               },
               {
                 "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "datalayers"
                 ],
                 "type": "string"
@@ -5929,12 +5929,6 @@
               {
                 "enum": [
                   "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -5994,6 +5988,18 @@
               },
               {
                 "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "mysql"
                 ],
                 "type": "string"
@@ -6007,6 +6013,12 @@
               {
                 "enum": [
                   "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
                 ],
                 "type": "string"
               },
@@ -6042,19 +6054,7 @@
               },
               {
                 "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
                 ],
                 "type": "string"
               }
@@ -7970,7 +7970,7 @@
       "authn.jwks_client_ssl_opts": {
         "properties": {
           "cacertfile": {
-            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。",
+            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。<br/><br/>TLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
             "type": "string"
           },
           "cacerts": {
@@ -12196,7 +12196,7 @@
       "bridge_azure_event_hub.ssl_client_opts": {
         "properties": {
           "cacertfile": {
-            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。",
+            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。<br/><br/>TLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
             "type": "string"
           },
           "cacerts": {
@@ -14898,7 +14898,7 @@
           },
           "max_retries": {
             "default": 2,
-            "description": "如果发送请求时出错，最大的重试次数。",
+            "description": "单次动作查询中 HTTP 请求失败后的最大重试次数。<br/>因连接正常关闭过程中发生的竞态条件而产生的重试不计入此配额。<br/>动作缓冲区可能会独立地重试可恢复的错误，直到请求 TTL 到期。",
             "minimum": 0,
             "type": "integer"
           },
@@ -14944,7 +14944,7 @@
           },
           "max_retries": {
             "default": 2,
-            "description": "如果发送请求时出错，最大的重试次数。",
+            "description": "单次动作查询中 HTTP 请求失败后的最大重试次数。<br/>因连接正常关闭过程中发生的竞态条件而产生的重试不计入此配额。<br/>动作缓冲区可能会独立地重试可恢复的错误，直到请求 TTL 到期。",
             "minimum": 0,
             "type": "integer"
           },
@@ -15078,7 +15078,7 @@
           },
           "max_retries": {
             "default": 2,
-            "description": "如果发送请求时出错，最大的重试次数。",
+            "description": "单次动作查询中 HTTP 请求失败后的最大重试次数。<br/>因连接正常关闭过程中发生的竞态条件而产生的重试不计入此配额。<br/>动作缓冲区可能会独立地重试可恢复的错误，直到请求 TTL 到期。",
             "minimum": 0,
             "type": "integer"
           },
@@ -16354,7 +16354,7 @@
           },
           "max_retries": {
             "default": 2,
-            "description": "如果发送请求时出错，最大的重试次数。",
+            "description": "单次动作查询中 HTTP 请求失败后的最大重试次数。<br/>因连接正常关闭过程中发生的竞态条件而产生的重试不计入此配额。<br/>动作缓冲区可能会独立地重试可恢复的错误，直到请求 TTL 到期。",
             "minimum": 0,
             "type": "integer"
           },
@@ -17479,7 +17479,7 @@
           },
           "max_retries": {
             "default": 2,
-            "description": "如果发送请求时出错，最大的重试次数。",
+            "description": "单次动作查询中 HTTP 请求失败后的最大重试次数。<br/>因连接正常关闭过程中发生的竞态条件而产生的重试不计入此配额。<br/>动作缓冲区可能会独立地重试可恢复的错误，直到请求 TTL 到期。",
             "minimum": 0,
             "type": "integer"
           },
@@ -17522,7 +17522,7 @@
           },
           "max_retries": {
             "default": 2,
-            "description": "如果发送请求时出错，最大的重试次数。",
+            "description": "单次动作查询中 HTTP 请求失败后的最大重试次数。<br/>因连接正常关闭过程中发生的竞态条件而产生的重试不计入此配额。<br/>动作缓冲区可能会独立地重试可恢复的错误，直到请求 TTL 到期。",
             "minimum": 0,
             "type": "integer"
           },
@@ -18913,7 +18913,7 @@
       "bridge_kafka.ssl_client_opts": {
         "properties": {
           "cacertfile": {
-            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。",
+            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。<br/><br/>TLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
             "type": "string"
           },
           "cacerts": {
@@ -24124,7 +24124,7 @@
             "type": "integer"
           },
           "region": {
-            "description": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.<br/><br/>When this field is set, its value takes precedence over the region inferred from the endpoint host.<br/>Otherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.<br/><br/>Set this field when the endpoint host does not contain the region, for example a custom domain name.",
+            "description": "用于对 S3 端点请求进行签名的区域，例如 `us-west-2`。<br/><br/>当设置了此字段时，其取值优先于根据端点主机推断出的区域。<br/>否则，区域将根据端点主机推断；如果无法推断出区域，则使用 `us-east-1`。<br/><br/>当端点主机不包含区域信息时（例如使用自定义域名），请设置此字段。",
             "type": "string"
           },
           "resource_opts": {
@@ -24293,7 +24293,7 @@
             "type": "integer"
           },
           "region": {
-            "description": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.<br/><br/>When this field is set, its value takes precedence over the region inferred from the endpoint host.<br/>Otherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.<br/><br/>Set this field when the endpoint host does not contain the region, for example a custom domain name.",
+            "description": "用于对 S3 端点请求进行签名的区域，例如 `us-west-2`。<br/><br/>当设置了此字段时，其取值优先于根据端点主机推断出的区域。<br/>否则，区域将根据端点主机推断；如果无法推断出区域，则使用 `us-east-1`。<br/><br/>当端点主机不包含区域信息时（例如使用自定义域名），请设置此字段。",
             "type": "string"
           },
           "resource_opts": {
@@ -24430,7 +24430,7 @@
             "type": "integer"
           },
           "region": {
-            "description": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.<br/><br/>When this field is set, its value takes precedence over the region inferred from the endpoint host.<br/>Otherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.<br/><br/>Set this field when the endpoint host does not contain the region, for example a custom domain name.",
+            "description": "用于对 S3 端点请求进行签名的区域，例如 `us-west-2`。<br/><br/>当设置了此字段时，其取值优先于根据端点主机推断出的区域。<br/>否则，区域将根据端点主机推断；如果无法推断出区域，则使用 `us-east-1`。<br/><br/>当端点主机不包含区域信息时（例如使用自定义域名），请设置此字段。",
             "type": "string"
           },
           "resource_opts": {
@@ -28167,7 +28167,7 @@
       "confluent.ssl_client_opts": {
         "properties": {
           "cacertfile": {
-            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。",
+            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。<br/><br/>TLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
             "type": "string"
           },
           "cacerts": {
@@ -31382,7 +31382,7 @@
       "connector_doris.ssl": {
         "properties": {
           "cacertfile": {
-            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。",
+            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。<br/><br/>TLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
             "type": "string"
           },
           "cacerts": {
@@ -33627,7 +33627,7 @@
         "properties": {
           "cacertfile": {
             "default": "system_default",
-            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。",
+            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。<br/><br/>TLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
             "type": "string"
           },
           "cacerts": {
@@ -34810,7 +34810,7 @@
           },
           "show_preview_version": {
             "default": true,
-            "description": "Report the release version with its preview suffix in the REST API.<br/>When set to `false`, the REST API removes the `-preview.N` suffix from the version that it reports.<br/>For example, `6.1.5-preview.1` is reported as `6.1.5`.<br/>The setting has no effect on a release version without the suffix.",
+            "description": "在 REST API 中报告带预览后缀的发布版本号。<br/>设置为 `false` 时，REST API 会从其报告的版本号中移除 `-preview.N` 后缀。<br/>例如，`6.1.5-preview.1` 将报告为 `6.1.5`。<br/>此设置对不带该后缀的发布版本号无效。",
             "type": "boolean"
           },
           "sso": {
@@ -35059,7 +35059,7 @@
         "properties": {
           "cacertfile": {
             "default": "${EMQX_ETC_DIR}/certs/cacert.pem",
-            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。",
+            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。<br/><br/>TLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
             "type": "string"
           },
           "cacerts": {
@@ -36310,7 +36310,7 @@
         "properties": {
           "cacertfile": {
             "default": "${EMQX_ETC_DIR}/certs/cacert.pem",
-            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。",
+            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。<br/><br/>TLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
             "type": "string"
           },
           "certfile": {
@@ -36359,7 +36359,7 @@
         "properties": {
           "cacertfile": {
             "default": "${EMQX_ETC_DIR}/certs/cacert.pem",
-            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。",
+            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。<br/><br/>TLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
             "type": "string"
           },
           "cacerts": {
@@ -36534,7 +36534,7 @@
         "properties": {
           "cacertfile": {
             "default": "${EMQX_ETC_DIR}/certs/cacert.pem",
-            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。",
+            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。<br/><br/>TLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
             "type": "string"
           },
           "cacerts": {
@@ -36995,7 +36995,7 @@
           },
           "idle_timeout": {
             "default": "15s",
-            "description": "设置连接被断开或进入休眠状态前的等待时间，空闲超时后，<br/>  - 如暂未收到客户端的 CONNECT 报文，连接将断开；<br/>  - 如已收到客户端的 CONNECT 报文，连接将进入休眠模式以节省系统资源。<br/><br/>注意：请合理设置该参数值，如等待时间设置过长，可能造成系统资源的浪费。",
+            "description": "新连接在尚未收到 CONNECT 报文时可保持的时长。如果在此时间内没有收到 CONNECT 报文，EMQX 将关闭该连接。<br/>收到 CONNECT 报文之后，此选项不再生效。休眠由 `hibernate_after` 控制，统计定时器由 `stats_emit_interval` 控制。<br/>注意：时间设置得越长，静默连接占用资源的时间也越长。",
             "oneOf": [
               {
                 "example": "12m",
@@ -37394,7 +37394,7 @@
       "emqx.ssl_client_opts": {
         "properties": {
           "cacertfile": {
-            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。",
+            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。<br/><br/>TLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
             "type": "string"
           },
           "cacerts": {
@@ -37762,7 +37762,7 @@
           },
           "buffer_retention_strategy": {
             "default": "packet",
-            "description": "Receive buffer retention strategy for the `socket` TCP backend.<br/><br/>- `packet`: Do not keep the *receive buffer* while waiting for the next packet.<br/>- `always`: Always keep the *receive buffer* while waiting for data.",
+            "description": "`socket` TCP 后端的接收缓冲区保留策略。<br/><br/>- `packet`：在等待下一个报文期间不保留*接收缓冲区*。<br/>- `always`：在等待数据期间始终保留*接收缓冲区*。",
             "enum": [
               "always",
               "packet"
@@ -37781,7 +37781,7 @@
             "type": "string"
           },
           "low_watermark": {
-            "description": "The amount of queued outgoing data below which a congested connection is considered recovered.<br/><br/>This option applies to the `gen_tcp` TCP backend only. When the Erlang internal socket buffer grows beyond `high_watermark`, the socket becomes busy; it stays busy until the buffer drains below `low_watermark`. A larger gap between the two watermarks makes a busy socket accept new data less often but in larger batches.<br/><br/>When this option is not set, the default is a quarter of `high_watermark`, but never below `4KB` (the Erlang/OTP default). This is the same ratio the `socket` TCP backend uses to clear congestion. A value above `high_watermark` is clamped to `high_watermark`.<br/><br/>The `socket` TCP backend ignores this option.",
+            "description": "当排队的待发送数据量低于此值时，拥塞的连接被视为已恢复。<br/><br/>此选项仅适用于 `gen_tcp` TCP 后端。当 Erlang 内部的套接字缓冲区增长超过 `high_watermark` 时，套接字进入繁忙状态，并一直保持繁忙，直到缓冲区降至 `low_watermark` 以下。两个水位线之间的差距越大，繁忙的套接字接受新数据的频率越低，但每次接受的批量越大。<br/><br/>未设置此选项时，默认值为 `high_watermark` 的四分之一，但不低于 `4KB`（Erlang/OTP 的默认值）。这与 `socket` TCP 后端解除拥塞所使用的比例相同。大于 `high_watermark` 的取值会被限制为 `high_watermark`。<br/><br/>`socket` TCP 后端会忽略此选项。",
             "example": "32MB",
             "type": "string"
           },
@@ -41828,7 +41828,7 @@
             "type": "integer"
           },
           "recv_cnt": {
-            "description": "接收的 TCP 数据包数量。",
+            "description": "接收的 MQTT 报文数量。此字段与 `recv_pkt` 的值相同，保留此字段仅为兼容性考虑。",
             "type": "integer"
           },
           "recv_msg": {
@@ -41868,7 +41868,7 @@
             "type": "integer"
           },
           "send_cnt": {
-            "description": "发送的 TCP 数据包数量。",
+            "description": "发送的 MQTT 报文数量。此字段与 `send_pkt` 的值相同，保留此字段仅为兼容性考虑。",
             "type": "integer"
           },
           "send_msg": {
@@ -41981,7 +41981,7 @@
             "type": "string"
           },
           "inserted_at": {
-            "description": "微秒精度的 Unix epoch 时间戳，用于记录消息进入 待发队列（mqueue ）或者飞行窗口的时间。",
+            "description": "消息插入时间，为以纳秒为单位的 Unix epoch 时间戳。<br/>对于飞行窗口中的消息，实际时钟精度为微秒。",
             "type": "string"
           },
           "msgid": {
@@ -42021,7 +42021,7 @@
             "type": "string"
           },
           "inserted_at": {
-            "description": "微秒精度的 Unix epoch 时间戳，用于记录消息进入 待发队列（mqueue ）或者飞行窗口的时间。",
+            "description": "消息插入时间，为以纳秒为单位的 Unix epoch 时间戳。<br/>对于飞行窗口中的消息，实际时钟精度为微秒。",
             "type": "string"
           },
           "mqueue_priority": {
@@ -42239,7 +42239,7 @@
         "properties": {
           "site": {
             "description": "站点的标识符。",
-            "example": "BE6F76028A3550BB",
+            "example": "82EFA0B728872847",
             "type": "string"
           },
           "status": {
@@ -44647,7 +44647,7 @@
       "exhook.ssl_conf": {
         "properties": {
           "cacertfile": {
-            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。",
+            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。<br/><br/>TLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
             "type": "string"
           },
           "cacerts": {
@@ -44963,7 +44963,7 @@
             "type": "integer"
           },
           "region": {
-            "description": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.<br/><br/>When this field is set, its value takes precedence over the region inferred from the endpoint host.<br/>Otherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.<br/><br/>Set this field when the endpoint host does not contain the region, for example a custom domain name.",
+            "description": "用于对 S3 端点请求进行签名的区域，例如 `us-west-2`。<br/><br/>当设置了此字段时，其取值优先于根据端点主机推断出的区域。<br/>否则，区域将根据端点主机推断；如果无法推断出区域，则使用 `us-east-1`。<br/><br/>当端点主机不包含区域信息时（例如使用自定义域名），请设置此字段。",
             "type": "string"
           },
           "secret_access_key": {
@@ -45083,7 +45083,7 @@
           },
           "exchange_lifetime": {
             "default": "247s",
-            "description": "临时分块状态的保留时长。<br/>过短可能导致慢速传输中断；过长会占用更多内存。",
+            "description": "临时分块状态的保留时长。必须大于零。<br/>过短可能导致慢速传输中断；过长会占用更多内存。",
             "example": "32s",
             "type": "string"
           },
@@ -45097,19 +45097,19 @@
           },
           "max_body_size": {
             "default": "4MB",
-            "description": "重组后的最终负载最大大小。<br/>超过此大小的消息将被拒绝以保护内存。",
+            "description": "重组后的最终负载最大大小。必须大于零。<br/>超过此大小的消息将被拒绝以保护内存。",
             "example": "32MB",
             "type": "string"
           },
           "max_concurrent_exchanges": {
             "default": 16,
-            "description": "Maximum number of block-wise exchanges retained by one client session.<br/>When full, new uploads receive 4.29 and downlink notifications wait in the Observe queue.",
+            "description": "单个客户端会话可保留的最大分块传输数量。<br/>达到上限时，新的上行传输会收到 4.29 响应，下行通知则在 Observe 队列中等待。",
             "minimum": 1,
             "type": "integer"
           },
           "max_total_size": {
             "default": "16MB",
-            "description": "Maximum total payload bytes retained by block-wise exchanges in one client session. Must be greater than zero.<br/>When full, uploads receive 4.13 and downlink notifications wait if they can fit later.",
+            "description": "单个客户端会话中，所有分块传输可保留的负载总字节数上限。必须大于零。<br/>达到上限时，上行传输会收到 4.13 响应，下行通知若之后能够容纳则继续等待。",
             "example": "32MB",
             "type": "string"
           }
@@ -45120,7 +45120,7 @@
         "properties": {
           "cacertfile": {
             "default": "${EMQX_ETC_DIR}/certs/cacert.pem",
-            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。",
+            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。<br/><br/>TLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
             "type": "string"
           },
           "cacerts": {
@@ -45481,7 +45481,7 @@
           },
           "exchange_lifetime": {
             "default": "247s",
-            "description": "临时分块状态的保留时长。<br/>过短可能导致慢速传输中断；过长会占用更多内存。",
+            "description": "临时分块状态的保留时长。必须大于零。<br/>过短可能导致慢速传输中断；过长会占用更多内存。",
             "example": "32s",
             "type": "string"
           },
@@ -45495,19 +45495,19 @@
           },
           "max_body_size": {
             "default": "4MB",
-            "description": "重组后的最终负载最大大小。<br/>超过此大小的消息将被拒绝以保护内存。",
+            "description": "重组后的最终负载最大大小。必须大于零。<br/>超过此大小的消息将被拒绝以保护内存。",
             "example": "32MB",
             "type": "string"
           },
           "max_concurrent_exchanges": {
             "default": 16,
-            "description": "Maximum number of block-wise exchanges retained by one client session.<br/>When full, new uploads receive 4.29 and downlink commands wait in the session queue.",
+            "description": "单个客户端会话可保留的最大分块传输数量。<br/>达到上限时，新的上行传输会收到 4.29 响应，下行命令则在会话队列中等待。",
             "minimum": 1,
             "type": "integer"
           },
           "max_total_size": {
             "default": "16MB",
-            "description": "Maximum total payload bytes retained by block-wise exchanges in one client session. Must be greater than zero.<br/>When full, uploads receive 4.13 and downlink commands wait if they can fit later.",
+            "description": "单个客户端会话中分块传输可保留的负载总字节数上限。必须大于零。<br/>达到上限时，上行传输会收到 4.13 响应，下行命令若之后能够容纳则继续等待。",
             "example": "32MB",
             "type": "string"
           }
@@ -48701,7 +48701,7 @@
       "ldap.ssl": {
         "properties": {
           "cacertfile": {
-            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。",
+            "description": "受信任的 PEM 格式 CA  证书捆绑文件<br/><br/>此文件中的证书用于验证 TLS 对等方的证书。<br/>如果要信任新 CA，请将新证书附加到文件中。<br/>无需重启 EMQX 即可加载更新的文件，因为系统会定期检查文件是否已更新（并重新加载）<br/><br/>注意：从文件中失效（删除）证书不会影响已建立的连接。<br/><br/>TLS 客户端可以设置为 <code>system_default</code> 而非文件路径，以信任 <code>node.trusted_certs</code> 中的 CA 证书。监听器不接受此取值。",
             "type": "string"
           },
           "cacerts": {
@@ -49935,7 +49935,7 @@
           },
           "tcp_backend": {
             "default": "gen_tcp",
-            "description": "指示监听器应使用哪个 TCP 后端。<br/><br/>- `socket`：自 6.3.0 起（在 Unix/Linux 上）的默认后端，可改善消息延迟和计算资源使用。<br/>    部分 `tcp_options` 在不同后端下行为不同。例如，`high_watermark` 由 EMQX 用于发送队列拥塞处理，而 `send_timeout_close` 在此后端下无效。<br/><br/>- `gen_tcp`：非 Unix 系统上的默认后端。<br/><br/>更改后端需要重启监听器，这将终止其所有活动连接。",
+            "description": "指示监听器应使用哪个 TCP 后端。<br/><br/>- `gen_tcp`：默认后端，在所有系统上均可用。<br/><br/>- `socket`：仅在 Unix/Linux 上可用。它可改善消息延迟和计算资源使用，代价是每个连接占用更多内存。目前仅在建立连接但不产生消息流量的测试中测量过该内存开销；尚未在产生消息流量的测试中测量。<br/>    部分 `tcp_options` 在不同后端下行为不同。例如，`high_watermark` 由 EMQX 用于发送队列拥塞处理，而 `send_timeout_close` 在此后端下无效。<br/><br/>更改后端需要重启监听器，这将终止其所有活动连接。",
             "enum": [
               "gen_tcp",
               "socket"
@@ -50120,7 +50120,7 @@
           },
           "tcp_backend": {
             "default": "gen_tcp",
-            "description": "指示监听器应使用哪个 TCP 后端。<br/><br/>- `socket`：自 6.3.0 起（在 Unix/Linux 上）的默认后端，可改善消息延迟和计算资源使用。<br/>    部分 `tcp_options` 在不同后端下行为不同。例如，`high_watermark` 由 EMQX 用于发送队列拥塞处理，而 `send_timeout_close` 在此后端下无效。<br/><br/>- `gen_tcp`：非 Unix 系统上的默认后端。<br/><br/>更改后端需要重启监听器，这将终止其所有活动连接。",
+            "description": "指示监听器应使用哪个 TCP 后端。<br/><br/>- `gen_tcp`：默认后端，在所有系统上均可用。<br/><br/>- `socket`：仅在 Unix/Linux 上可用。它可改善消息延迟和计算资源使用，代价是每个连接占用更多内存。目前仅在建立连接但不产生消息流量的测试中测量过该内存开销；尚未在产生消息流量的测试中测量。<br/>    部分 `tcp_options` 在不同后端下行为不同。例如，`high_watermark` 由 EMQX 用于发送队列拥塞处理，而 `send_timeout_close` 在此后端下无效。<br/><br/>更改后端需要重启监听器，这将终止其所有活动连接。",
             "enum": [
               "gen_tcp",
               "socket"
@@ -50646,7 +50646,7 @@
           },
           "tcp_backend": {
             "default": "gen_tcp",
-            "description": "指示监听器应使用哪个 TCP 后端。<br/><br/>- `socket`：自 6.3.0 起（在 Unix/Linux 上）的默认后端，可改善消息延迟和计算资源使用。<br/>    部分 `tcp_options` 在不同后端下行为不同。例如，`high_watermark` 由 EMQX 用于发送队列拥塞处理，而 `send_timeout_close` 在此后端下无效。<br/><br/>- `gen_tcp`：非 Unix 系统上的默认后端。<br/><br/>更改后端需要重启监听器，这将终止其所有活动连接。",
+            "description": "指示监听器应使用哪个 TCP 后端。<br/><br/>- `gen_tcp`：默认后端，在所有系统上均可用。<br/><br/>- `socket`：仅在 Unix/Linux 上可用。它可改善消息延迟和计算资源使用，代价是每个连接占用更多内存。目前仅在建立连接但不产生消息流量的测试中测量过该内存开销；尚未在产生消息流量的测试中测量。<br/>    部分 `tcp_options` 在不同后端下行为不同。例如，`high_watermark` 由 EMQX 用于发送队列拥塞处理，而 `send_timeout_close` 在此后端下无效。<br/><br/>更改后端需要重启监听器，这将终止其所有活动连接。",
             "enum": [
               "gen_tcp",
               "socket"
@@ -52798,7 +52798,7 @@
               "lastvalue": false,
               "regular": false
             },
-            "description": "当订阅队列主题时，如果消息队列不存在，自动创建的设置"
+            "description": "当订阅队列主题时，如果消息队列不存在，自动创建的设置。<br/>自动创建默认处于禁用状态。设置 <code>regular</code> 或 <code>lastvalue</code> 之一即可启用，两者不能同时启用。"
           },
           "enable": {
             "default": "auto",
@@ -52858,7 +52858,7 @@
               "lastvalue": false,
               "regular": false
             },
-            "description": "当订阅队列主题时，如果消息队列不存在，自动创建的设置"
+            "description": "当订阅队列主题时，如果消息队列不存在，自动创建的设置。<br/>自动创建默认处于禁用状态。设置 <code>regular</code> 或 <code>lastvalue</code> 之一即可启用，两者不能同时启用。"
           },
           "enable": {
             "default": "auto",
@@ -52914,7 +52914,7 @@
         "properties": {
           "lastvalue": {
             "default": false,
-            "description": "自动创建最后值消息队列的设置",
+            "description": "自动创建最后值消息队列的设置。<br/>设置为 <code>false</code> 表示不自动创建最后值消息队列。",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/mq.auto_create_lastvalue"
@@ -52929,7 +52929,7 @@
           },
           "regular": {
             "default": false,
-            "description": "自动创建常规消息队列的设置",
+            "description": "自动创建常规消息队列的设置。<br/>设置为 <code>false</code> 表示不自动创建常规消息队列。",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/mq.auto_create_regular"
@@ -53116,7 +53116,7 @@
             "type": "string"
           },
           "deleted_at": {
-            "description": "The deletion request time in milliseconds since the Unix epoch. Present only while the deletion is pending.",
+            "description": "删除请求的时间，为自 Unix epoch 起的毫秒数。仅在删除操作尚未完成时存在。",
             "minimum": 0,
             "type": "integer"
           },
@@ -53235,7 +53235,7 @@
             "type": "string"
           },
           "deleted_at": {
-            "description": "The deletion request time in milliseconds since the Unix epoch. Present only while the deletion is pending.",
+            "description": "删除请求的时间，为自 Unix epoch 起的毫秒数。仅在删除操作尚未完成时存在。",
             "minimum": 0,
             "type": "integer"
           },
@@ -56582,7 +56582,7 @@
           },
           "delivery_rate": {
             "default": "1000/s",
-            "description": "发送保留消息的最大速率",
+            "description": "为通配符主题过滤器读取保留消息时，每秒最多检查的存储记录数。<br/>订阅不含通配符的主题时，读取其保留消息不受此限制。",
             "example": "1000/s",
             "type": "string"
           },
@@ -59170,7 +59170,7 @@
           },
           "max_retries": {
             "default": 2,
-            "description": "如果发送请求时出错，最大的重试次数。",
+            "description": "单次动作查询中 HTTP 请求失败后的最大重试次数。<br/>因连接正常关闭过程中发生的竞态条件而产生的重试不计入此配额。<br/>动作缓冲区可能会独立地重试可恢复的错误，直到请求 TTL 到期。",
             "minimum": 0,
             "type": "integer"
           },
@@ -60273,7 +60273,7 @@
               "lastvalue": false,
               "regular": false
             },
-            "description": "在订阅队列主题时，如果消息流不存在，自动创建的设置。"
+            "description": "在订阅队列主题时，如果消息流不存在，自动创建的设置。<br/>自动创建默认处于禁用状态。设置 <code>regular</code> 或 <code>lastvalue</code> 之一即可启用，两者不能同时启用。"
           },
           "enable": {
             "default": false,
@@ -60325,7 +60325,7 @@
               "lastvalue": false,
               "regular": false
             },
-            "description": "在订阅队列主题时，如果消息流不存在，自动创建的设置。"
+            "description": "在订阅队列主题时，如果消息流不存在，自动创建的设置。<br/>自动创建默认处于禁用状态。设置 <code>regular</code> 或 <code>lastvalue</code> 之一即可启用，两者不能同时启用。"
           },
           "enable": {
             "default": false,
@@ -60373,7 +60373,7 @@
         "properties": {
           "lastvalue": {
             "default": false,
-            "description": "最后值消息流自动创建的设置",
+            "description": "最后值消息流自动创建的设置。<br/>设置为 <code>false</code> 表示不自动创建最后值消息流。",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/streams.auto_create_lastvalue"
@@ -60388,7 +60388,7 @@
           },
           "regular": {
             "default": false,
-            "description": "常规消息流自动创建的设置",
+            "description": "常规消息流自动创建的设置。<br/>设置为 <code>false</code> 表示不自动创建常规消息流。",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/streams.auto_create_regular"
@@ -60514,7 +60514,7 @@
             "type": "string"
           },
           "deleted_at": {
-            "description": "The deletion request time in milliseconds since the Unix epoch. Present only while the deletion is pending.",
+            "description": "删除请求的时间，为自 Unix epoch 起的毫秒数。仅在删除操作尚未完成时存在。",
             "minimum": 0,
             "type": "integer"
           },
@@ -60650,7 +60650,7 @@
             "type": "string"
           },
           "deleted_at": {
-            "description": "The deletion request time in milliseconds since the Unix epoch. Present only while the deletion is pending.",
+            "description": "删除请求的时间，为自 Unix epoch 起的毫秒数。仅在删除操作尚未完成时存在。",
             "minimum": 0,
             "type": "integer"
           },
@@ -62050,7 +62050,7 @@
   "info": {
     "description": "A request accepts at most 100 query parameters in total, including repeated and pagination parameters.",
     "title": "EMQX Enterprise API",
-    "version": "6.3.3-rc.5"
+    "version": "6.3.3"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -62666,17 +62666,18 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "s3tables",
                       "snowflake_streaming",
-                      "syskeeper_forwarder",
                       "doris",
                       "tdengine",
                       "azure_event_grid",
                       "rocketmq",
                       "snowflake",
+                      "bigquery",
                       "influxdb",
                       "sqlserver",
                       "mysql",
+                      "s3tables",
+                      "gcp_pubsub_producer",
                       "cockroachdb",
                       "redis",
                       "iotdb",
@@ -62686,19 +62687,18 @@
                       "cassandra",
                       "emqx_tables",
                       "oracle",
-                      "kafka_producer",
                       "greptimedb",
                       "datalayers",
+                      "rabbitmq",
                       "disk_log",
                       "timescale",
-                      "kinesis",
-                      "rabbitmq",
                       "quasardb",
                       "alloydb",
+                      "kinesis",
                       "mongodb",
                       "http",
                       "aws_timestream",
-                      "bigquery",
+                      "syskeeper_forwarder",
                       "mqtt",
                       "azure_blob_storage",
                       "s3",
@@ -62707,7 +62707,7 @@
                       "azure_event_hub_producer",
                       "elasticsearch",
                       "pgsql",
-                      "gcp_pubsub_producer",
+                      "kafka_producer",
                       "confluent_producer",
                       "pulsar",
                       "couchbase",
@@ -62719,17 +62719,18 @@
                 "schema": {
                   "items": {
                     "enum": [
-                      "s3tables",
                       "snowflake_streaming",
-                      "syskeeper_forwarder",
                       "doris",
                       "tdengine",
                       "azure_event_grid",
                       "rocketmq",
                       "snowflake",
+                      "bigquery",
                       "influxdb",
                       "sqlserver",
                       "mysql",
+                      "s3tables",
+                      "gcp_pubsub_producer",
                       "cockroachdb",
                       "redis",
                       "iotdb",
@@ -62739,19 +62740,18 @@
                       "cassandra",
                       "emqx_tables",
                       "oracle",
-                      "kafka_producer",
                       "greptimedb",
                       "datalayers",
+                      "rabbitmq",
                       "disk_log",
                       "timescale",
-                      "kinesis",
-                      "rabbitmq",
                       "quasardb",
                       "alloydb",
+                      "kinesis",
                       "mongodb",
                       "http",
                       "aws_timestream",
-                      "bigquery",
+                      "syskeeper_forwarder",
                       "mqtt",
                       "azure_blob_storage",
                       "s3",
@@ -62760,7 +62760,7 @@
                       "azure_event_hub_producer",
                       "elasticsearch",
                       "pgsql",
-                      "gcp_pubsub_producer",
+                      "kafka_producer",
                       "confluent_producer",
                       "pulsar",
                       "couchbase",
@@ -82701,7 +82701,7 @@
             "$ref": "#/components/parameters/public.limit"
           },
           {
-            "description": "Username. This parameter can be repeated.",
+            "description": "用户名。此参数可以重复指定。",
             "in": "query",
             "name": "username",
             "required": false,
@@ -82853,7 +82853,7 @@
             }
           },
           {
-            "description": "Client ID. This parameter can be repeated.",
+            "description": "客户端 ID。此参数可以重复指定。",
             "in": "query",
             "name": "clientid",
             "required": false,
@@ -98325,7 +98325,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "BE6F76028A3550BB",
+            "example": "82EFA0B728872847",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98388,7 +98388,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "BE6F76028A3550BB",
+            "example": "82EFA0B728872847",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98802,7 +98802,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "BE6F76028A3550BB",
+            "example": "82EFA0B728872847",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98888,7 +98888,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "BE6F76028A3550BB",
+            "example": "82EFA0B728872847",
             "in": "path",
             "name": "site",
             "required": true,
@@ -118089,7 +118089,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Message queue is being deleted",
+                      "description": "消息队列正在删除",
                       "type": "string"
                     }
                   },
@@ -124789,7 +124789,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Message stream is being deleted",
+                      "description": "消息流正在删除",
                       "type": "string"
                     }
                   },
