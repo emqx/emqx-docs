@@ -49,13 +49,9 @@
 
   Docker 镜像现在会在构建时从 curl.se 安装当时提供的 Mozilla CA 证书包。
 
-  相关 PR：[#19756](https://github.com/emqx/emqx/pull/19756)、[#19799](https://github.com/emqx/emqx/pull/19799)。
+  相关 PR：[#19702](https://github.com/emqx/emqx/pull/19702)、[#19799](https://github.com/emqx/emqx/pull/19799)。
 
-  [#19702](https://github.com/emqx/emqx/pull/19702) 还将内置 CA 信任存储更新为截至 2026-10-20 的 Mozilla CA 集合。
-
-  更新后的证书包包含 118 个证书。与此前的证书包相比，移除了 `emSign Root CA - C1`、`emSign ECC Root CA - C3`、`emSign ECC Root CA - G3`、`SecureSign Root CA12` 和 `Atos TrustedRoot 2011`，新增了 `SECOM TLS RSA Root CA 2024`、`SECOM TLS ECC Root CA 2024`、`Telia RSA TLS Root CA v3` 和 `Telia EC TLS Root CA v3`。
-
-  对于发送 HTTP 请求且未配置 `cacertfile` 的连接器，该证书包将用作信任存储。如需固定出站连接的信任锚，请自行配置 `cacertfile`。
+  如需指定出站连接信任的 CA 证书，请显式配置 `cacertfile`。
 
 - [#19088](https://github.com/emqx/emqx/pull/19088) `authentication_settings.ignore_backend_failures` 和 `authorization.ignore_backend_failures` 现在同时适用于 `legacy` 和 `hardened` 安全配置方案。此前，这两个配置项仅在 `hardened` 配置方案下生效。
 
@@ -67,7 +63,7 @@
 
   升级注意事项：在 `legacy` 配置方案下，已存储的 `false` 值现在会在后端发生故障时拒绝客户端。在早期 6.x 版本中，即使未更改此配置，通过 REST API 或 Dashboard 保存授权设置也可能存储 `false`。如需保留此前的 `legacy` 行为，请在升级后将该值设置为 `per_security_profile`。
 
-- [#19096](https://github.com/emqx/emqx/pull/19096) 新增 `mqtt.max_connect_packet_size` 配置。除 `mqtt.max_packet_size` 外，该配置也会限制 CONNECT 报文大小。CONNECT 报文超过该限制时，EMQX 会关闭客户端连接，并在监听器关闭计数器 `connect_packet_too_large` 中计数。其默认值为 `1MB`，与 `mqtt.max_packet_size` 的默认值相同，因此只有降低该配置值后行为才会发生变化。
+- [#19096](https://github.com/emqx/emqx/pull/19096) 新增 `mqtt.max_connect_packet_size` 配置。除 `mqtt.max_packet_size` 外，该配置也会限制 CONNECT 报文大小。CONNECT 报文超过该限制时，EMQX 会关闭客户端连接，并在监听器关闭计数器 `connect_packet_too_large` 中计数。其默认值为 `1MB`，与 `mqtt.max_packet_size` 的默认值相同，因此默认配置的行为不变。如果已将 `mqtt.max_packet_size` 设置为高于 `1MB` 以接受更大的 CONNECT 报文，请相应提高 `mqtt.max_connect_packet_size`。
 
 #### 性能与资源占用
 
@@ -309,7 +305,7 @@
 
   此限制应用于所有分片合并后的完整 WebSocket 消息；启用 `compress` 时，应用于解压后的消息。客户端发送更大的消息时，连接会以 WebSocket 状态码 1009 关闭。
 
-- [#19174](https://github.com/emqx/emqx/pull/19174) 使用默认配置 `parse_unit = frame` 时，TCP 和 SSL 监听器现在会在传输层应用 `mqtt.max_connect_packet_size`：如果第一个报文超过限制，系统会根据其固定报头直接拒绝，而不会先缓冲报文正文。此前，传输层会先缓冲到 `mqtt.max_packet_size` 上限，再执行检查。客户端连接成功后，限制会恢复为 `mqtt.max_packet_size`。两个配置项的默认值均为 `1MB`，因此只有降低 `mqtt.max_connect_packet_size` 后行为才会发生变化。
+- [#19174](https://github.com/emqx/emqx/pull/19174) 使用默认配置 `parse_unit = frame` 时，TCP 和 SSL 监听器现在会在传输层应用 `mqtt.max_connect_packet_size`：如果第一个报文超过限制，系统会根据其固定报头直接拒绝，而不会先缓冲报文正文。此前，传输层会先缓冲到 `mqtt.max_packet_size` 上限，再执行检查。客户端连接成功后，限制会恢复为 `mqtt.max_packet_size`。两个配置项的默认值均为 `1MB`，因此默认配置的行为不变。如果已将 `mqtt.max_packet_size` 设置为高于 `1MB` 以接受更大的 CONNECT 报文，请相应提高 `mqtt.max_connect_packet_size`。
 
 - [#19239](https://github.com/emqx/emqx/pull/19239) 修复了 WebSocket 监听器对无法解析的 `Sec-WebSocket-Protocol` 请求头的响应。WebSocket 监听器、网关 WebSocket 和 OCPP 网关现在会按缺少该请求头的情况处理此类请求：启用 `fail_if_no_subprotocol` 时返回 400，否则升级连接但不协商子协议。此前，请求进程会退出，客户端收到空的 400 响应，日志中还会记录崩溃报告。
 

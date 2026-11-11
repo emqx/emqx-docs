@@ -49,17 +49,9 @@ The following changes can alter the behavior of an existing deployment.
 
   The Docker image now installs the current Mozilla CA bundle from curl.se at build time.
 
-  Relevant PRs: [#19756](https://github.com/emqx/emqx/pull/19756), [#19799](https://github.com/emqx/emqx/pull/19799).
+  Relevant PRs: [#19702](https://github.com/emqx/emqx/pull/19702), [#19799](https://github.com/emqx/emqx/pull/19799).
 
-  [#19702](https://github.com/emqx/emqx/pull/19702) also updated the bundled CA trust store to the Mozilla CA set as of 2026-10-20.
-
-  The bundle now holds 118 certificates. Relative to the previous bundle it drops `emSign Root CA - C1`,
-  `emSign ECC Root CA - C3`, `emSign ECC Root CA - G3`, `SecureSign Root CA12` and `Atos TrustedRoot 2011`, and it
-  adds `SECOM TLS RSA Root CA 2024`, `SECOM TLS ECC Root CA 2024`, `Telia RSA TLS Root CA v3` and
-  `Telia EC TLS Root CA v3`.
-
-  This bundle is the trust store for connectors that send HTTP requests and have no `cacertfile` configured. Set
-  `cacertfile` to pin the trust anchors of an outgoing connection yourself.
+  To pin the trust anchors of an outgoing connection, set `cacertfile` explicitly.
 
 - [#19088](https://github.com/emqx/emqx/pull/19088) The `authentication_settings.ignore_backend_failures` and `authorization.ignore_backend_failures` settings now apply in both the `legacy` and `hardened` security profiles. Previously they took effect only under the `hardened` profile.
 
@@ -71,7 +63,7 @@ The following changes can alter the behavior of an existing deployment.
 
   Upgrade note: under the `legacy` profile, a stored value of `false` now denies the client on a backend failure. Saving the authorization settings through the REST API or the Dashboard in an earlier 6.x release can store `false` even if you did not change this setting. To keep the previous `legacy` behavior, set the value to `per_security_profile` after the upgrade.
 
-- [#19096](https://github.com/emqx/emqx/pull/19096) Added the `mqtt.max_connect_packet_size` setting. It limits the size of a CONNECT packet, in addition to `mqtt.max_packet_size`. EMQX closes the connection of a client whose CONNECT packet is larger, and counts it under the listener shutdown counter `connect_packet_too_large`. The default is `1MB`, the same as the default `mqtt.max_packet_size`, so nothing changes until the setting is lowered.
+- [#19096](https://github.com/emqx/emqx/pull/19096) Added the `mqtt.max_connect_packet_size` setting. It limits the size of a CONNECT packet, in addition to `mqtt.max_packet_size`. EMQX closes the connection of a client whose CONNECT packet is larger, and counts it under the listener shutdown counter `connect_packet_too_large`. The default is `1MB`, the same as the default `mqtt.max_packet_size`, so default configurations are unchanged. If `mqtt.max_packet_size` is set above `1MB` to accept larger CONNECT packets, raise `mqtt.max_connect_packet_size` accordingly.
 
 #### Performance and Resource Usage
 
@@ -331,9 +323,9 @@ The following changes can alter the behavior of an existing deployment.
 
   The limit applies to a WebSocket message after its fragments are joined, and after decompression when `compress` is enabled. When a client sends a larger message, the connection is closed with WebSocket status code 1009.
 
-- [#19174](https://github.com/emqx/emqx/pull/19174) With `parse_unit = frame` (the default), TCP and SSL listeners now apply `mqtt.max_connect_packet_size` at the transport: a first packet larger than the limit is refused from its fixed header, before its body is buffered. Previously the transport buffered up to `mqtt.max_packet_size` before the check ran. The limit goes back to `mqtt.max_packet_size` once the client is connected. Defaults are unchanged (both limits are `1MB`), so nothing changes until `mqtt.max_connect_packet_size` is lowered.
+- [#19174](https://github.com/emqx/emqx/pull/19174) With `parse_unit = frame` (the default), TCP and SSL listeners now apply `mqtt.max_connect_packet_size` at the transport: a first packet larger than the limit is refused from its fixed header, before its body is buffered. Previously the transport buffered up to `mqtt.max_packet_size` before the check ran. The limit goes back to `mqtt.max_packet_size` once the client is connected. Both limits default to `1MB`, so default configurations are unchanged. If `mqtt.max_packet_size` is set above `1MB` to accept larger CONNECT packets, raise `mqtt.max_connect_packet_size` accordingly.
 
-- [#19239](https://github.com/emqx/emqx/pull/19239) Fixed the WebSocket listener response for an unparseable `Sec-WebSocket-Protocol` header. Such a request now gets the same handling as a request without the header (a 400 reply when `fail_if_no_subprotocol` is enabled, an upgrade without subprotocol otherwise), in the WebSocket listener, the gateway WebSocket behavior and the OCPP gateway. Previously, the request process exited, the client got an empty 400 response, and a crash report was written to the log.
+- [#19239](https://github.com/emqx/emqx/pull/19239) Fixed the WebSocket listener response for an unparsable `Sec-WebSocket-Protocol` header. Such a request now gets the same handling as a request without the header (a 400 reply when `fail_if_no_subprotocol` is enabled, an upgrade without subprotocol otherwise), in the WebSocket listener, the gateway WebSocket behavior and the OCPP gateway. Previously, the request process exited, the client got an empty 400 response, and a crash report was written to the log.
 
 - [#19374](https://github.com/emqx/emqx/pull/19374) Fixed an issue where an abnormal WebSocket disconnect did not trigger publication of a pending MQTT 5 Will Message when the Session Expiry Interval was 0.
 
