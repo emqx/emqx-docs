@@ -110,36 +110,36 @@ The following tables list active release lines and release lines that have reach
 
 ### Active Releases
 
-| Version | Release Date | Support Type | Support Duration (Months) | EOL Date | Notes |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **4.4 LTS** | **2021-12-21** | **LTS** | **60** | **2026-12-21** | Extended support during the transition period. |
-| **5.8 LTS** | **2024-08-28** | **LTS** | **36** | **2027-08-27** | **Current Active LTS Version** |
-| **5.10** | 2025-06-09 | Feature Release | 18 | 2026-12-08 |  |
-| **6.0** | 2025-09-30 | Major Release | 18 | 2027-03-30 |  |
-| **6.1** | 2025-12-30 | Feature Release | 18 | 2027-06-30 |  |
-| **6.2** | 2026-03-31 | Feature Release | 18 | 2027-09-30 |  |
-| **6.3 LTS** | **2026-09-03** | **LTS** | **36** | **2029-09-02** | **Latest Active LTS Version** |
+| Version | Release Date | Support Duration (Months) | EOL Date | Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| **4.4 LTS** | **2021-12-21** | **60** | **2026-12-21** | Extended support during the transition period. |
+| **5.8 LTS** | **2024-08-28** | **36** | **2027-08-27** | **Current Active LTS Version** |
+| **5.10** | 2025-06-09 | 18 | 2026-12-08 |  |
+| **6.0** | 2025-09-30 | 18 | 2027-03-30 |  |
+| **6.1** | 2025-12-30 | 18 | 2027-06-30 |  |
+| **6.2** | 2026-03-31 | 18 | 2027-09-30 |  |
+| **6.3 LTS** | **2026-09-03** | **36** | **2029-09-02** | **Latest Active LTS Version** |
 
 ### End-of-Life Releases
 
 These release lines have reached EOL. The last patch release is listed for each line.
 
-| Version | Release Date | Support Type | Support Duration (Months) | EOL Date | Last Patch Release |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **3.4** | 2019-12-02 | Feature Release | 18 | 2021-06-30 | 3.4.5 |
-| **4.0** | 2020-01-18 | Feature Release | 18 | 2021-07-17 | 4.0.10 |
-| **4.1** | 2020-07-18 | Feature Release | 18 | 2022-01-17 | 4.1.5 |
-| **4.2** | 2020-10-13 | Feature Release | 18 | 2022-04-12 | 4.2.13 |
-| **4.3** | 2021-05-19 | Feature Release | 18 | 2022-11-18 | 4.3.19 |
-| **5.0** | 2023-02-03 | Feature Release | 18 | 2024-08-02 | 5.0.4 |
-| **5.1** | 2023-06-21 | Feature Release | 18 | 2024-12-20 | 5.1.1 |
-| **5.2** | 2023-09-07 | Feature Release | 18 | 2025-03-06 | 5.2.1 |
-| **5.3** | 2023-09-29 | Feature Release | 18 | 2025-03-28 | 5.3.2 |
-| **5.4** | 2023-12-23 | Feature Release | 18 | 2025-06-22 | 5.4.1 |
-| **5.5** | 2024-02-01 | Feature Release | 18 | 2025-07-31 | 5.5.1 |
-| **5.6** | 2024-03-28 | Feature Release | 18 | 2025-09-27 | 5.6.1 |
-| **5.7** | 2024-05-27 | Feature Release | 18 | 2025-11-26 | 5.7.2 |
-| **5.9** | 2025-05-02 | Feature Release | 18 | 2026-11-01 | 5.9.4 |
+| Version | Release Date | Support Duration (Months) | EOL Date | Last Patch Release |
+| :--- | :--- | :--- | :--- | :--- |
+| **3.4** | 2019-12-02 | 18 | 2021-06-30 | 3.4.5 |
+| **4.0** | 2020-01-18 | 18 | 2021-07-17 | 4.0.10 |
+| **4.1** | 2020-07-18 | 18 | 2022-01-17 | 4.1.5 |
+| **4.2** | 2020-10-13 | 18 | 2022-04-12 | 4.2.13 |
+| **4.3** | 2021-05-19 | 18 | 2022-11-18 | 4.3.19 |
+| **5.0** | 2023-02-03 | 18 | 2024-08-02 | 5.0.4 |
+| **5.1** | 2023-06-21 | 18 | 2024-12-20 | 5.1.1 |
+| **5.2** | 2023-09-07 | 18 | 2025-03-06 | 5.2.1 |
+| **5.3** | 2023-09-29 | 18 | 2025-03-28 | 5.3.2 |
+| **5.4** | 2023-12-23 | 18 | 2025-06-22 | 5.4.1 |
+| **5.5** | 2024-02-01 | 18 | 2025-07-31 | 5.5.1 |
+| **5.6** | 2024-03-28 | 18 | 2025-09-27 | 5.6.1 |
+| **5.7** | 2024-05-27 | 18 | 2025-11-26 | 5.7.2 |
+| **5.9** | 2025-05-02 | 18 | 2026-11-01 | 5.9.4 |
 
 ## Upgrade Path Recommendations
 
