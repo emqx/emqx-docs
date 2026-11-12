@@ -313,10 +313,10 @@ Volcano Engine RTC SDKはソフトウェアアプリケーションおよびハ�
 | プラットフォーム | SDK               | ドキュメント                                                |
 | ---------------- | ----------------- | ---------------------------------------------------------- |
 | Web              | `@volcengine/rtc` | [Web SDKドキュメント](https://www.volcengine.com/docs/6348/104398)  |
-| iOS              | VolcEngineRTC     | [iOS SDKドキュメント](https://www.volcengine.com/docs/6348/70080)   |
+| iOS              | VolcEngineRTC     | [iOS SDKドキュメント](https://docs.volcengine.com/docs/real-time-communication/ios-sample-project?lang=en)   |
 | Android          | VolcEngineRTC     | [Android SDKドキュメント](https://www.volcengine.com/docs/6348/70082) |
 | Windows          | VolcEngineRTC     | [Windows SDKドキュメント](https://www.volcengine.com/docs/6348/70084) |
-| macOS            | VolcEngineRTC     | [macOS SDKドキュメント](https://www.volcengine.com/docs/6348/70086) |
+| macOS            | VolcEngineRTC     | [macOS SDKドキュメント](https://docs.volcengine.com/docs/real-time-communication/macos-sample-project?lang=en) |
 | Linux            | VolcEngineRTC     | [Linux SDKドキュメント](https://www.volcengine.com/docs/6348/113623) |
 | Flutter          | volc_engine_rtc   | [Flutter SDKドキュメント](https://www.volcengine.com/docs/6348/113661) |
 | Electron         | @volcengine/rtc   | [Electron SDKドキュメント](https://www.volcengine.com/docs/6348/112063) |
