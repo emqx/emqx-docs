@@ -68,6 +68,7 @@
 - 仅在受信任网络上暴露 Dashboard。管理员访问应优先使用 HTTPS，并尽可能将 Dashboard 监听器绑定到 localhost、私网地址或受保护的管理网络。详见[Dashboard 配置](../configuration/dashboard.md)。
 - 在**管理** -> **集群配置** -> **规则引擎安全**中启用 SSRF 防护，以在测试、创建或更新 HTTP、MQTT 连接器配置时校验目标地址。从 EMQX 6.0.4 开始，该策略不覆盖其他连接器类型或运行时连接。如果允许委派管理员创建或修改规则引擎资源，或需要完整的出站网络边界，请增加主机级出站访问控制。详见[规则引擎安全](../dashboard/cluster_settings.md#规则引擎安全)和[结合规则引擎策略与防火墙规则防御 SSRF](../cluster/security.md#结合规则引擎策略与防火墙规则防御-ssrf)。
 - 如果开放管理 API，应使用 API Key 而不是 Dashboard 用户凭据进行调用，只授予所需的最小权限，并尽可能设置过期时间。详见[REST API](../api.md)和[系统](../dashboard/system.md#api-key)。
+- 仅向受信任的服务授予 `POST /api/v5/publish` 和 `POST /api/v5/publish/bulk` 的调用权限。这些 API 通过管理 API 的角色和权限范围控制访问，不检查 MQTT 客户端授权规则。获准调用这些 API 的服务可以向 Broker 中的任意主题发布消息；`publish` 权限范围不限制主题名称。如果应用需要主题级权限限制，应使用受授权规则约束的 MQTT 客户端。详见[REST API](../api.md)。
 - 如果您使用的是 EMQX 企业版，可为管理用户配置[单点登录（SSO）](../dashboard/sso.md)，并在身份提供方侧启用 MFA（如果可用）。
 - 定期执行备份并演练恢复流程。请注意，若证书或 ACL 文件存放在 EMQX 数据目录之外，则需要单独备份。详见[备份与恢复](../backup-restore.md)。
 - 在可用场景下启用审计能力，并将日志与指标统一接入可观测性平台，用于异常检测和事件响应。详见[审计日志](../dashboard/audit-log.md)、[日志配置](../configuration/logs.md)和[日志与可观测性](../observability/overview.md)。
