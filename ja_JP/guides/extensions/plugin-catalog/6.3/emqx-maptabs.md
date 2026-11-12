@@ -105,5 +105,7 @@ maptab_lookup('signals', concat(client_attrs.tns, ':', item_id))
 |---|---|---|
 | 6.3.0 | 0.1.2 | [emqx_maptabs-0.1.2.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.0/emqx_maptabs-0.1.2.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.0/emqx_maptabs-0.1.2.sha256)) |
 | 6.3.1 | 0.1.2 | [emqx_maptabs-0.1.2.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.1/emqx_maptabs-0.1.2.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.1/emqx_maptabs-0.1.2.sha256)) |
+| 6.3.2 | 0.1.2 | [emqx_maptabs-0.1.2.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.2/emqx_maptabs-0.1.2.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.2/emqx_maptabs-0.1.2.sha256)) |
+| 6.3.3 | 0.1.2 | [emqx_maptabs-0.1.2.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.3/emqx_maptabs-0.1.2.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.3/emqx_maptabs-0.1.2.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

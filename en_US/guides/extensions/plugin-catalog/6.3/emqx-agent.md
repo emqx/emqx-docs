@@ -463,5 +463,7 @@ Tarballs for each EMQX release:
 |---|---|---|
 | 6.3.0 | 1.0.0 | [emqx_agent-1.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.0/emqx_agent-1.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.0/emqx_agent-1.0.0.sha256)) |
 | 6.3.1 | 1.0.0 | [emqx_agent-1.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.1/emqx_agent-1.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.1/emqx_agent-1.0.0.sha256)) |
+| 6.3.2 | 1.0.0 | [emqx_agent-1.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.2/emqx_agent-1.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.2/emqx_agent-1.0.0.sha256)) |
+| 6.3.3 | 1.0.0 | [emqx_agent-1.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.3/emqx_agent-1.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.3/emqx_agent-1.0.0.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
