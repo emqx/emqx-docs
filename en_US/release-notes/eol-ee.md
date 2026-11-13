@@ -106,28 +106,40 @@ EMQX releases receive different maintenance based on their type and lifecycle st
 
 This section provides the maintenance and End-of-Life (EOL) timelines for public Feature and LTS releases. Internal releases are maintained separately and are not listed here.
 
-The following table outlines release dates, support types, lifecycles, and estimated EOL dates for major EMQX versions. It is updated periodically to reflect the latest status.
+The following tables list active release lines and release lines that have reached EOL. Dates and support periods apply to the entire release line, including its patch releases.
 
-| Version | Release Date | Support Type | Support Duration | EOL Date | Notes |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **3.4.x** | 2019-12-02 | Feature Release | 18 months | 2021-06-30 | EOLed |
-| **4.0.x** | 2020-01-18 | Feature Release | 18 months | 2021-07-17 | EOLed |
-| **4.1.x** | 2020-07-18 | Feature Release | 18 months | 2022-01-17 | EOLed |
-| **4.2.x** | 2020-10-13 | Feature Release | 18 months | 2022-04-12 | EOLed |
-| **4.3.x** | 2021-05-19 | Feature Release | 18 months | 2022-11-18 | EOLed |
-| **4.4.x LTS** | **2021-12-21** | **LTS** | **3 years** For 4.4.x LTS, as a special case during the transition period, the EOL Date is set to five years after the release date. | **2026-12-21** | **Current Active LTS Version** |
-| **5.0.x** | 2023-02-03 | Feature Release | 18 months | 2024-08-02 | |
-| **5.1.x** | 2023-06-21 | Feature Release | 18 months | 2024-12-20 | |
-| **5.2.x** | 2023-09-07 | Feature Release | 18 months | 2025-03-06 | |
-| **5.3.x** | 2023-09-29 | Feature Release | 18 months | 2025-03-28 | |
-| **5.4.x** | 2023-12-23 | Feature Release | 18 months | 2025-06-22 | |
-| **5.5.x** | 2024-02-01 | Feature Release | 18 months | 2025-07-31 | |
-| **5.6.x** | 2024-03-28 | Feature Release | 18 months | 2025-09-27 | |
-| **5.7.x** | 2024-05-27 | Feature Release | 18 months | 2025-11-26 | |
-| **5.8.x LTS** | **2024-08-28** | **LTS** | **3 years** | **2027-08-27** | **Latest Active LTS Version** |
-| **5.9.x** | 2025-05-02 | Feature Release | 18 months | 2026-11-01 | Latest Feature Release |
-| **5.10.x** | 2025-06-09 | Feature Release | 18 months | 2026-12-08 | Next Feature Release |
-| **6.0.0** | 2025-TBD | Major Release | 18 months | TBD | Next Major Release |
+### Active Releases
+
+| Version | Release Date | Support Duration (Months) | EOL Date | Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| **6.3 LTS** | **2026-09-03** | **36** | **2029-09-02** | **Latest Active LTS Version** |
+| **6.2** | 2026-03-31 | 18 | 2027-09-30 |  |
+| **6.1** | 2025-12-30 | 18 | 2027-06-30 |  |
+| **6.0** | 2025-09-30 | 18 | 2027-03-30 |  |
+| **5.10** | 2025-06-09 | 18 | 2026-12-08 |  |
+| **5.8 LTS** | **2024-08-28** | **36** | **2027-08-27** | **Current Active LTS Version** |
+| **4.4 LTS** | **2021-12-21** | **60** | **2026-12-21** | Extended support during the transition period. |
+
+### End-of-Life Releases
+
+These release lines have reached EOL. The last patch release is listed for each line.
+
+| Version | Release Date | Support Duration (Months) | EOL Date | Last Patch Release |
+| :--- | :--- | :--- | :--- | :--- |
+| **5.9** | 2025-05-02 | 18 | 2026-11-01 | 5.9.4 |
+| **5.7** | 2024-05-27 | 18 | 2025-11-26 | 5.7.2 |
+| **5.6** | 2024-03-28 | 18 | 2025-09-27 | 5.6.1 |
+| **5.5** | 2024-02-01 | 18 | 2025-07-31 | 5.5.1 |
+| **5.4** | 2023-12-23 | 18 | 2025-06-22 | 5.4.1 |
+| **5.3** | 2023-09-29 | 18 | 2025-03-28 | 5.3.2 |
+| **5.2** | 2023-09-07 | 18 | 2025-03-06 | 5.2.1 |
+| **5.1** | 2023-06-21 | 18 | 2024-12-20 | 5.1.1 |
+| **5.0** | 2023-02-03 | 18 | 2024-08-02 | 5.0.4 |
+| **4.3** | 2021-05-19 | 18 | 2022-11-18 | 4.3.19 |
+| **4.2** | 2020-10-13 | 18 | 2022-04-12 | 4.2.13 |
+| **4.1** | 2020-07-18 | 18 | 2022-01-17 | 4.1.5 |
+| **4.0** | 2020-01-18 | 18 | 2021-07-17 | 4.0.10 |
+| **3.4** | 2019-12-02 | 18 | 2021-06-30 | 3.4.5 |
 
 ## Upgrade Path Recommendations
 
