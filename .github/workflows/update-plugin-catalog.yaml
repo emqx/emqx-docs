@@ -1,0 +1,73 @@
+name: Update plugin catalog
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'GA source tag, e.g. 6.3.4 or e5.10.6'
+        type: string
+        required: true
+      source_sha:
+        description: 'Commit used by the successful package upload'
+        type: string
+        required: false
+
+concurrency:
+  group: plugin-catalog-${{ inputs.tag }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          ref: ${{ github.sha }}
+          path: automation
+          sparse-checkout: |
+            scripts/refresh-plugin-download-links.py
+            .github/scripts/refresh_plugin_catalog.py
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - name: Select release
+        id: release
+        env:
+          TAG: ${{ inputs.tag }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
+        run: |
+          python3 automation/.github/scripts/refresh_plugin_catalog.py \
+            --tag "$TAG" --source-sha "$SOURCE_SHA" --metadata-only >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          repository: emqx/emqx
+          ref: ${{ inputs.source_sha || inputs.tag }}
+          fetch-depth: 0
+          path: source
+          persist-credentials: false
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          ref: ${{ steps.release.outputs.base }}
+          path: docs
+          persist-credentials: false
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
+        with:
+          app-id: ${{ vars.AUTH_APP_ID }}
+          private-key: ${{ secrets.AUTH_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: emqx-docs
+      - name: Refresh catalog and create draft PR
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          TAG: ${{ inputs.tag }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
+        run: |
+          gh auth setup-git
+          python3 automation/.github/scripts/refresh_plugin_catalog.py \
+            --tag "$TAG" --source-sha "$SOURCE_SHA" \
+            --emqx-repo source --docs-root docs \
+            --run-url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
