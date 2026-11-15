@@ -199,6 +199,77 @@ Permission preset is supported in JWT and HTTP authentication. An [Access Contro
 
 You can check if a user is a superuser with the  `is_superuser` field in a database query, HTTP response, or JWT claims.
 
+## Bind Client Identity to Credentials
+
+Authentication proves that a client holds a valid credential, such as a password, a token, or a certificate. It does not prove that every identity field of the connection belongs to that credential. An authenticator verifies only the fields that it checks. Every other field keeps the value that the client sent.
+
+After authentication, EMQX uses identity fields for the following purposes:
+
+- **Sessions**: EMQX identifies a session by its Client ID only. When a client connects with the Client ID of an existing session, EMQX disconnects the existing connection. If the new connection sets `Clean Start = 0`, it resumes the existing session, including the subscriptions that EMQX authorized for the previous owner.
+- **Authorization**: Authorization rules and the `${clientid}`, `${username}`, and `${client_attrs.NAME}` placeholders use the values of these fields.
+- **Tenant isolation**: In [multi-tenancy](../../multi-tenancy/namespace-overview.md), the `client_attrs.tns` attribute determines the namespace of the client.
+
+Make sure that each identity field that your deployment relies on for these purposes either comes from a trusted source or is verified by an authenticator.
+
+### Sources of Identity Fields
+
+The following table lists where each identity field comes from and when you can trust it.
+
+| Identity Field | Source | Trusted When |
+| --- | --- | --- |
+| Client ID | The `CONNECT` packet, unless EMQX replaces it, for example with `mqtt.use_username_as_clientid` or `peer_cert_as_clientid` | An authenticator verifies that the Client ID belongs to the credential, or EMQX replaces it with a verified value |
+| Username | The `CONNECT` packet, unless EMQX replaces it with `peer_cert_as_username` | A password-based authenticator looks up the credential by the username, or another authenticator checks the username, for example with a JWT claim check |
+| Certificate fields used by `peer_cert_as_username`, `peer_cert_as_clientid`, and certificate placeholders | The client certificate presented in the TLS handshake | The listener requires a client certificate and verifies it against a CA that you control. See [Certificate Information Mapping](./x509.md#certificate-information-mapping). |
+| Client address (`${peerhost}`) | The TCP peer address, or the address reported by Proxy Protocol or by forwarded headers on WebSocket listeners | Proxy Protocol and forwarded headers are enabled only on listeners that only a trusted proxy can reach |
+| Client attributes extracted by `mqtt.client_attrs_init` | Extracted before authentication from fields such as the username, the Client ID, or the client certificate | The field that the attribute is extracted from is trusted, or an authenticator returns the same attribute |
+| Client attributes returned by an authenticator | JWT claims or the HTTP authentication response | Always, because the authentication backend sets them |
+
+### Bind the Client ID
+
+Use one of the following methods to make sure that a client can connect only with a Client ID that belongs to its credential:
+
+- **Use the username as the Client ID**: Set `mqtt.use_username_as_clientid = true`. EMQX replaces the Client ID with the username, and the password-based authenticator verifies the username.
+- **Built-in Database**: Set **UserID Type** (`user_id_type`) to `clientid`. EMQX then looks up the credential by the Client ID. See [Built-in Database](./mnesia.md).
+- **Database authenticators**: Include `${clientid}` in the query so that the query returns a credential only for a matching pair of username and Client ID. For example, with MySQL:
+
+  ```sql
+  SELECT password_hash, salt FROM mqtt_user WHERE username = ${username} AND clientid = ${clientid} LIMIT 1
+  ```
+
+- **HTTP Server**: Send `${clientid}` together with the credential to the authentication service. The service returns `deny` when the Client ID does not belong to the credential. See [HTTP Server Authentication](./http.md).
+- **JWT**: Add a claim check that compares a claim with `${clientid}`, for example a `clientid` claim with the expected value `${clientid}`. In the Dashboard, add the check under **Payload**. In the configuration file, add it to `verify_claims`. See [JWT Authentication](./jwt.md).
+- **X.509 certificate**: Set `peer_cert_as_clientid` to map a certificate field to the Client ID, on a listener that enforces mutual TLS. See [Certificate Information Mapping](./x509.md#certificate-information-mapping).
+- **Client-Info**: Add a check that denies the connection when the Client ID differs from a verified value. For example, on a listener that enforces mutual TLS, the condition `str_neq(clientid, cert_common_name)` with the result `deny` rejects a client whose Client ID differs from the common name of its certificate. Place the Client-Info authenticator before the authenticator that verifies the credential. See [Client-Info Authentication](./cinfo.md).
+
+When an authenticator does not check the username, bind the username in the same way. For example, add a JWT claim check with the expected value `${username}`, or map the username from a verified certificate with `peer_cert_as_username`.
+
+### Bind Identities on Gateways
+
+The same rule applies to clients that connect through a gateway. Each gateway derives the Client ID from its own protocol fields, and the gateway authenticator receives this value as `${clientid}`.
+
+| Gateway | Client ID Source | Credential Available to the Authenticator |
+| --- | --- | --- |
+| [MQTT-SN](../../../develop/gateway/mqttsn.md) | The Client ID field of the `CONNECT` message | None. The `CONNECT` message carries no username or password. |
+| [CoAP](../../../develop/gateway/coap.md) (connection mode) | The `clientid` parameter of the request that creates the connection | The `username` and `password` parameters of the same request |
+| [LwM2M](../../../develop/gateway/lwm2m.md) | The Endpoint Name, or the non-standard `device_id` registration parameter | None in the standard registration request |
+| [STOMP](../../../develop/gateway/stomp.md) | Generated by EMQX | The `login` and `passcode` headers |
+| [OCPP](../../../develop/gateway/ocpp.md) | The charge point identity in the connection URL path | The username and password of HTTP Basic authentication |
+| [GB/T 32960](../../../develop/gateway/gbt32960.md) | The Vehicle Identification Number (VIN) of the login command | None. The VIN is also used as the username. |
+| [JT/T 808](../../../develop/gateway/jt808.md) | The terminal phone number | The authentication code issued by the registration service |
+| [NATS](../../../develop/gateway/nats.md) | Generated by EMQX by default | The `user` and `pass` fields of the `CONNECT` message |
+| [ExProto](../../../develop/gateway/exproto.md) | Set by your ConnectionAdapter in the `Authenticate` call | Set by your ConnectionAdapter in the `Authenticate` call |
+
+Apply the following guidance:
+
+- When the client sets the Client ID and also sends a credential, as with CoAP and OCPP, configure the authenticator to verify that the Client ID belongs to the credential. See [Bind the Client ID](#bind-the-client-id).
+- When the protocol carries no secret, as with MQTT-SN, the standard LwM2M registration, and GB/T 32960, the authenticator can check only the values that the client claims. It cannot verify that the client owns them. Allow only trusted networks to reach these listeners, with the listener `access_rules` setting and network firewall rules.
+- For JT/T 808, make the registration service issue each authentication code for one phone number, and verify the pair of phone number and authentication code during authentication.
+- For ExProto, make your ConnectionAdapter pass only identity values that it has verified.
+
+### Client Attributes
+
+If authorization rules or multi-tenancy use [client attributes](../../../develop/client-attributes/client-attributes.md), check where each attribute comes from. EMQX extracts the attributes configured in `mqtt.client_attrs_init` from client-supplied fields before authentication. Extract such an attribute only from a verified field, such as a certificate field on a listener that enforces mutual TLS, or a username that a password-based authenticator verifies. Otherwise, have the authenticator return the attribute. An attribute returned by an authenticator overwrites an extracted attribute with the same name.
+
 ## Password Hashing
 
 Storing a password in plain text would mean that anyone who looked through the database would be able to just read the user’s passwords. Therefore it is recommended to use password hashing algorithms to store the password as the generated hash. EMQX supports a variety of password hashing algorithms to meet various security requirements.
