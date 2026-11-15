@@ -1,5 +1,11 @@
 # Known Issues in EMQX 5.8
 
+## e5.8.11
+
+| Since version | Issue | Workaround | Status |
+| ------------- | ----- | ---------- | ------ |
+| 5.8.9 | **Memory Growth in Kafka and Confluent Producer Actions When Acknowledgments Are Disabled**<br />With `parameters.required_acks = none`, producer memory grows with each Kafka produce request and is not released when the buffer drains. Affects EMQX 5.8.9–5.8.11, 5.9.3, and 5.10.2–5.10.5. | Drain buffered messages, then set the action's `parameters.required_acks` to `leader_only` or `all_isr`. Updating this setting recreates the producer and releases accumulated memory. | Fix merged for 5.8.12, 5.9.4, and 5.10.6; see [emqx/emqx#19994](https://github.com/emqx/emqx/pull/19994). |
+
 ## e5.8.9
 
 | Since version | Issue                                                        | Workaround                                                   | Status            |
