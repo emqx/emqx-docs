@@ -104,7 +104,7 @@ All other profile updates (description, role, scopes assigned by an administrato
 
 ### Namespaced Roles
 
-Starting from EMQX 6.0, the Dashboard supports namespaced roles. This feature extends role-based access control to enable multi-tenancy, in which each user can be restricted to operating only within a specific namespace.
+Starting from EMQX 6.0, the Dashboard supports namespaced roles. This feature extends role-based access control by limiting management of namespace-aware resources to the user's assigned namespace.
 
 ::: warning Trusted Deployments Only
 
@@ -158,7 +158,8 @@ For example:
 
 #### Behavior of Namespaced Users
 
-- **Scoped resources**: Namespaced users can view and manage only the resources within their assigned namespace, such as Connectors, Actions, Sources, Rules, and other namespace-aware modules.
+- **Scoped resources**: For namespace-aware resources, such as Connectors, Actions, Sources, and Rules, namespaced users can view and manage resources only within their assigned namespace, subject to their role and scopes.
+- **Cluster-wide metadata**: Namespaced users can view metadata such as MQTT subscription information across namespaces, subject to their role, scopes, and endpoint restrictions.
 - **Cluster-level settings**: Configurations not yet namespace-aware remain read-only for namespaced users. Only global administrators can modify them.
 - **Blocked message-content endpoints**: Certain REST API endpoints that access or manipulate raw MQTT message content are unavailable to namespaced users and return `403 Forbidden`. These endpoints are accessible only to global administrators:
   - Mqueue messages: `GET /clients/:clientid/mqueue_messages`
@@ -174,7 +175,7 @@ For example:
 - **Trace scoping**: When accessing trace endpoints, namespaced users see only traces that belong to their namespace. Attempts to stop, download, stream logs, or delete a trace from a different namespace (`PUT /trace/:name/stop`, `GET /trace/:name/download`, `GET /trace/:name/log`, `GET /trace/:name/log_detail`, `DELETE /trace/:name`) return `404 Not Found`, so the existence of cross-namespace traces is not leaked. The bulk-delete endpoint (`DELETE /trace`) returns `403 Forbidden` for namespaced users; only global administrators can clear all traces.
 - **Audit log access**: Starting from EMQX 6.0.4, namespaced users cannot view the cluster-wide audit log. Only global administrators and global viewers can view audit log entries. For details, see [Audit Log Access](./audit-log.md#audit-log-access).
 - **API key management**: Namespaced administrators can create, list, read, update, and delete API keys within their own namespace. They cannot create global API keys or keys in another namespace. Keys outside their namespace are hidden. For detailed REST API behavior, see [Manage API Keys as a Namespaced Administrator](../api.md#manage-api-keys-as-a-namespaced-administrator).
-- **Default landing page**: Namespaced users log in to the Dashboard normally and start on the **Overview** page. All menu items remain visible, but resource data is automatically filtered to their namespace.
+- **Default landing page**: Namespaced users log in to the Dashboard normally and start on the **Overview** page. All menu items remain visible, and namespace-aware resource data is automatically filtered to their namespace.
 - **License management**: Namespaced users do not see license notifications. License handling remains a responsibility of system administrators.
 
 #### Role Semantics within a Namespace

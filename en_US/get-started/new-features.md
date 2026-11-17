@@ -29,18 +29,19 @@ Learn more in the [Message Queue documentation](../develop/message-queue/message
 
 ### Multi-Tenancy with Namespaced Roles
 
-EMQX 6.0.0 introduces namespaced roles to enhance [multi-tenancy](../guides/multi-tenancy/namespace-overview.md) and access control across large-scale IoT deployments. With this feature, users are assigned to specific namespaces, isolated environments where they can manage their own resources such as Rules, Connectors, and Actions, without accessing or impacting other tenants.
+EMQX 6.0.0 introduces namespaced roles to enhance [multi-tenancy](../guides/multi-tenancy/namespace-overview.md) and access control across large-scale IoT deployments. Users can manage namespace-aware resources, such as Rules, Connectors, and Actions, within their assigned namespace.
 
-Namespaced roles support fine-grained permissions such as Administrator and Viewer, and can be managed through the Dashboard, API, or CLI, making it easier to delegate responsibilities while ensuring secure isolation between teams, departments, or customers.
+Namespaced roles support Administrator and Viewer permissions and can be managed through the Dashboard, API, or CLI. They help delegate resource management between trusted teams or business units.
 
 #### Feature Highlights
-- **Secure Isolation**: Users can only access and manage resources within their assigned namespace (e.g., `ns:team_a::administrator`).
-- **Granular Access Control**: Namespaced users have full access to namespace-specific resources, but cluster-level settings remain read-only unless granted global admin rights.
+- **Resource Management**: Users can view and manage namespace-aware resources only within their assigned namespace (e.g., `ns:team_a::administrator`).
+- **Metadata Visibility**: Cluster-wide metadata, such as MQTT subscription information, can be viewed across namespaces, subject to the user's role, scopes, and endpoint restrictions.
+- **Granular Access Control**: Permitted operations depend on the user's role and scopes. Available cluster-level settings are read-only for namespaced users.
 - **Simplified Operations**: Roles can be created and assigned easily during user creation.
-- **Scalability for Enterprises**: Ideal for organizations offering multi-tenant MQTT services or managing internal business units with separate responsibilities.
+- **Scalability for Enterprises**: Supports trusted internal teams or business units with separate resource management responsibilities.
 
 #### Additional Enhancements
-- **Improved Observability**: Dashboard views are filtered by namespace for better focus.
+- **Improved Observability**: Dashboard views for namespace-aware resources are filtered by namespace for better focus.
 - **Optimized Session Tracking**: Namespaced session counts now refresh on demand (under 1,000 sessions) or every 5 seconds otherwise, ensuring better performance and accuracy.
 
 For detailed instructions, see [Create a User with a Namespaced Role](../guides/dashboard/system.md#create-a-user-with-a-namespaced-role).
