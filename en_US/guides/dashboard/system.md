@@ -31,7 +31,7 @@ Currently, either of the following two predefined roles can be set for a user. Y
 
 + Viewer
 
-    Viewers can access all EMQX data and configurations, corresponding to all `GET` requests in the REST API. However, they do not have the rights to create, modify, or delete any data.
+    Viewers have read-only access to EMQX data and configurations through `GET` requests, except for security-sensitive operations. They cannot retrieve the unredacted HOCON configuration or download backup archives. Viewers can still retrieve the redacted JSON configuration and view the backup file list, but cannot create, modify, or delete any data.
 
 ## API Key
 
