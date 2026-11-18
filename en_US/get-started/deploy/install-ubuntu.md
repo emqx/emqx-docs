@@ -20,7 +20,7 @@ EMQX supports installing with Apt Package Manager to provide our users with a co
 2. Install EMQX:
 
    ```bash
-   sudo apt-get install emqx
+   sudo apt-get install emqx-enterprise
    ```
 
 3. Start EMQX:
@@ -52,7 +52,7 @@ sudo systemctl start emqx
 To uninstall EMQX, run:
 
 ```
-sudo apt remove --purge emqx
+sudo apt remove --purge emqx-enterprise
 ```
 
 ### Install with tar.gz

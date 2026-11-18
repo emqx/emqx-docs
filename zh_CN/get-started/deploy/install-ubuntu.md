@@ -20,7 +20,7 @@ EMQX 支持使用 Apt 包管理器进行安装，为用户提供了一种便捷�
 2. 安装 EMQX：
 
    ```bash
-   sudo apt-get install emqx
+   sudo apt-get install emqx-enterprise
    ```
 
 3. 启动 EMQX：
@@ -52,7 +52,7 @@ sudo systemctl start emqx
 安装完成后，可通过如下命令卸载 EMQX：
 
 ```shell
-sudo apt remove --purge emqx
+sudo apt remove --purge emqx-enterprise
 ```
 
 ### 通过 tar.gz 安装
