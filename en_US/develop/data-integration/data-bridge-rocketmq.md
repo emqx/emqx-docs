@@ -12,7 +12,7 @@ This page provides a detailed overview of the data integration between EMQX and 
 
 ::: tip Note
 
-This data integration does not support batch mode when using the Alibaba Cloud-hosted RockstMQ service.
+This data integration does not support batch mode when using the Alibaba Cloud-hosted RocketMQ service.
 
 :::
 
