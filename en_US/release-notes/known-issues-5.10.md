@@ -1,5 +1,11 @@
 # Known Issues in EMQX 5.10
 
+## e5.10.5
+
+| Since version | Issue                                                        | Workaround                                                   | Status            |
+| ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------- |
+| 5.10.4        | **Shared subscription members of a departed node are not removed**<br />With the default routing schema (`broker.routing.storage_schema = v3`), when a node leaves the cluster or stays down, and the node could not remove its own shared subscription members before it went away, these members stay in the cluster. Messages to the shared subscription group can still be dispatched to these members, and these messages are lost. | Apply the [shared subscription hot patch](https://github.com/emqx/emqx-hot-patches/tree/main/261114-stale-shared-routes) (5.10.4 and 5.10.5) on every node of the cluster.<br />Or remove the members manually. On a core node, list the nodes that own shared subscription members but are not running:<br />`emqx eval "lists:usort(lists:map(fun({_, _, _, P}) -> node(P) end, ets:tab2list(emqx_shared_subscription))) -- mria:running_nodes()."`<br />Then, for each node in the list, remove its members:<br />`emqx eval "emqx_shared_sub:purge_node('emqx@departed-node')."` |                   |
+
 ## e5.10.0
 
 | Since version | Issue                                                        | Workaround                                                   | Status            |
