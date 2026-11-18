@@ -1,5 +1,11 @@
 # Known Issues in EMQX 6.0
 
+## 6.0.4
+
+| Since version | Issue | Workaround | Status |
+| ------------- | ----- | ---------- | ------ |
+| 6.0.0 | **Memory Growth in JWT Authentication with JWKS and Other HTTP Client Callers**<br />The bundled Erlang/OTP HTTP client (`httpc`) keeps about 100 bytes of process memory for each asynchronous request, and for each synchronous request that fails before it is sent. Garbage collection does not release it; it is released only when the process exits. JWT authenticators that fetch keys from a JWKS endpoint grow with every key refresh. Affects EMQX 6.0.0–6.0.4, 6.1.0–6.1.5, 6.2.0–6.2.3, and 6.3.0–6.3.3. | Apply the [httpc hot patch](https://github.com/emqx/emqx-hot-patches/tree/main/261118-httpc-alias-leak) (6.0.0–6.0.4, 6.1.2–6.1.5, 6.2.0–6.2.3, and 6.3.0–6.3.3), then restart the JWT authenticator's resource as described there, or restart the node, to release memory already accumulated. On 6.1.0 and 6.1.1, upgrade to the latest 6.1 patch release first. | Erlang/OTP fix in review for 6.0 ([emqx/otp#134](https://github.com/emqx/otp/pull/134)) and for 6.1–6.3 ([emqx/otp#135](https://github.com/emqx/otp/pull/135)). |
+
 ## 6.0.0
 
 | Since version | Issue                                                        | Workaround                                                   | Status |
