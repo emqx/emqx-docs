@@ -2,10 +2,9 @@
 
 This page guides you on installing and starting the EMQX Open Source edition on macOS.
 
-The supported versions are:
+The supported version is:
 
-- macOS 14
-- macOS 13
+- macOS 15 on Apple silicon (arm64)
 
 For installation on other systems or to install other versions, visit the [EMQX Open Source download site](https://www.emqx.com/en/downloads-and-install/broker).
 
@@ -28,7 +27,7 @@ For installation on other systems or to install other versions, visit the [EMQX 
 ## Install EMQX from Zip Package
 
 1. Go to the download site and select the [**macOS** tab](https://www.emqx.com/en/downloads-and-install/broker?os=macOS).
-2. Select the latest version `@CE_VERSION@`. From the **Package Type** dropdown, select the `zip` package according to the macOS version and CPU architecture as you need.
+2. Select the latest version `@CE_VERSION@`, then select the ZIP package for macOS 15 arm64.
 3. Click the link below for downloading. You can also follow the command instructions on the page.
 
 ## Start and Stop EMQX
