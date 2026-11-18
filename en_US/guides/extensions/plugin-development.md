@@ -112,6 +112,10 @@ In the `relx` section, you specify the release name and version, and the list of
 
 Normally, you would like to add the applications of the runtime dependencies from the `deps` section to the release.
 
+In EMQX 5.10.6 and later, a plugin package can bundle an application that is also included with the EMQX release. The plugin always uses the copy from the EMQX release, regardless of the version bundled in the plugin package. Ensure that the plugin is compatible with the application version in the target EMQX release. If the bundled version differs from the EMQX version, EMQX logs a `plugin_app_already_loaded` warning.
+
+If another plugin has already loaded an application, the plugins can share it only if the `.app` files in both packages are identical. If the application was loaded from any other directory, EMQX rejects the plugin package.
+
 The release name and version are important because they are used to identify the plugin when it is installed into EMQX. They form a single identifier for the plugin (`my_emqx_plugin-1.0.0`) by which it is addressed in the API or CLI.
 
 In the plugin description section, you specify additional information about the plugin.
