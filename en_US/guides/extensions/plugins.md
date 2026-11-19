@@ -14,7 +14,7 @@ To be used in EMQX, a plugin must be:
 2. **Installed** via the Dashboard, REST API, or CLI.
 3. **Managed** through configuration and lifecycle operations (start, stop, uninstall).
 
-Upon startup, a plugin typically registers some of its functions as EMQX *callbacks* to modify or extend the behavior of EMQX. Plugins operate in isolation from EMQX core and from other plugins, ensuring they don’t interfere with each other. They are also lifecycle-aware, meaning they follow a defined process for installation, startup, shutdown, and removal. This makes them safer and easier to manage in production environments.
+Upon startup, a plugin typically registers some of its functions as EMQX *callbacks* to modify or extend the behavior of EMQX. A plugin can depend on applications included with the EMQX release or bundled in its package. Plugin developers must ensure that these dependencies are compatible with the target EMQX release. Plugins are lifecycle-aware, meaning they follow a defined process for installation, startup, shutdown, and removal. This makes them safer and easier to manage in production environments.
 
 ## Key Concepts
 
