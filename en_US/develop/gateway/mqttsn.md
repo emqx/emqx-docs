@@ -80,6 +80,16 @@ The MQTT-SN protocol already defines the publish/subscribe behavior, e.g:
 - The `SUBSCRIBE` message of the MQTT-SN protocol is used as a subscribing operation, whose topic and QoS are both specified by this message.
 - The `UNSUBSCRIBE` message of the MQTT-SN protocol is used as an unsubscribe operation, whose topic is specified by this message.
 
+The MQTT-SN gateway does not have separate publish or subscribe permission settings. Configure topic permissions through [Authorization](../../guides/access-control/authz/authz.md).
+
+Starting from EMQX 5.8.12, when `enable_qos3` is enabled, EMQX performs authentication and checks publish authorization for each connectionless QoS -1 `PUBLISH` packet before routing the message. EMQX checks authorization at QoS 0 because the message enters the broker at QoS 0. If authentication fails or authorization denies the publish request, EMQX does not route the message.
+
+::: warning Important Notice
+
+When upgrading to EMQX 5.8.12 with `enable_qos3` enabled, verify that the authentication backend accepts the client information generated for connectionless QoS -1 publishers. Also verify that the authorization rules allow the authenticated identity to publish to the intended topics at QoS 0.
+
+:::
+
 ## Customize Your MQTT-SN Gateway
 
 In addition to the default settings, EMQX provides a variety of configuration options to better accommodate your specific business requirements. This section offers an in-depth overview of the various fields available on the **Gateways** page.
@@ -151,13 +161,15 @@ Then you can continue to set:
 
 ### Configure Authentication
 
-Since the connection message of the MQTT-SN protocol only gives the Client ID of the Client, therefore, the MQTT-SN gateway only supports [HTTP Server Authentication](../../guides/access-control/authn/http.md).
+An MQTT-SN `CONNECT` packet includes a Client ID but does not include a username or password. EMQX generates client information for authentication and authorization as follows:
 
-The client information generation rules are as follows:
+- For a client that sends a `CONNECT` packet, the Client ID is the value of the Client ID field in the packet.
+- For a connectionless QoS -1 publisher, the Client ID is `NegQoS-Client`.
+- By default, the username and password are undefined for both types of clients.
 
-- Client ID: using the Client ID field of `CONNECT` message.
-- Username: undefined
-- Password: undefined
+You can use the `clientinfo_override` configuration to override the Client ID, username, or password.
+
+After successful authentication, EMQX uses the resulting client information to check publish authorization.
 
 This part takes the Dashboard as an example to illustrate how to do the authentication configuration. 
 
