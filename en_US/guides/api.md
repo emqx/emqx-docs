@@ -79,7 +79,9 @@ Each time EMQX starts, it will add the data set in the file to the API key list.
 In the EMQX Enterprise edition, the REST API implements role-based access control. When creating an API key, you can assign one of the following three predefined roles:
 
 - **Administrator**: This role can access all resources and is the default value if no role is specified. The corresponding role identifier is `administrator`.
-- **Viewer**: This role can only view resources and data, corresponding to all GET requests in the REST API. The corresponding role identifier is `viewer`.
+- **Viewer**: This role can access read-only resources and data through `GET` requests, except for security-sensitive operations. The corresponding role identifier is `viewer`.
+  - **Configuration export**: Viewers cannot retrieve the unredacted HOCON (`text/plain`) representation from `GET /api/v5/configs`. Requests without an `Accept` header, or with `text/plain` or `*/*`, return `403` (`UNAUTHORIZED_ROLE`). To retrieve the redacted JSON representation, set `Accept: application/json`.
+  - **Backup files**: Viewers can list backup files through `GET /api/v5/data/files`, but cannot download backup archives from `GET /api/v5/data/files/:filename`. Download requests return `403` with the error code `UNAUTHORIZED_ROLE`.
 - **Publisher**: Designed specifically for MQTT message publishing, this role is limited to accessing APIs related to message publishing. The corresponding role identifier is `publisher`.
 
 #### Authentication Method Using API Keys
