@@ -4,7 +4,7 @@
 
 | 始于版本 | 问题描述 | 解决方法 | 状态 |
 | -------- | -------- | -------- | ---- |
-| 6.0.1 | **禁用确认时，Kafka 和 Confluent 生产者动作的内存持续增长**<br />当 `parameters.required_acks = none` 时，每个 Kafka 生产请求都会导致生产者内存增长，且缓冲区排空后仍不会释放。影响 EMQX 6.0.1–6.0.4、6.1.0–6.1.5、6.2.0–6.2.3 和 6.3.0–6.3.2。 | 先排空缓冲消息，再将动作的 `parameters.required_acks` 设置为 `leader_only` 或 `all_isr`。更新此设置会重建生产者并释放已累积的内存。 | 已在 6.3.3 中修复，详见 [emqx/emqx#19992](https://github.com/emqx/emqx/pull/19992)。 |
+| 6.0.1 | **禁用确认时，Kafka 和 Confluent 生产者动作的内存占用持续增长**<br />当 `parameters.required_acks = none` 时，生产者的内存占用会随每个 Kafka 生产请求持续增长；即使缓冲区已排空，已累积的内存仍不会释放。受影响的版本包括 EMQX 6.0.1–6.0.4、6.1.0–6.1.5、6.2.0–6.2.3 和 6.3.0–6.3.2。 | 等待缓冲区中的消息全部发送完毕后，将动作的 `parameters.required_acks` 设置为 `leader_only` 或 `all_isr`。更改此设置会重建生产者并释放已累积的内存。 | 已在 6.3.3 中修复，详见 [emqx/emqx#19992](https://github.com/emqx/emqx/pull/19992)。 |
 
 ## 6.0.0
 
