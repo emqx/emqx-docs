@@ -72,7 +72,7 @@ Starting from EMQX 6.0.4, an explicit scope list for a global Dashboard user can
 
 Users with a mixed scope list created before EMQX 6.0.4 continue to work, and their administrator-equivalent scopes remain effective. When you edit such a global user in the Dashboard, the form displays a compatibility warning and requires you to select **Privilege Scopes**, **Custom Restricted Permissions**, or **Role Default Scopes** before saving. An explicit scope list must contain either only administrator-equivalent scopes or only scopes outside this group. Using the role defaults or granting no scopes does not trigger this restriction.
 
-This mutual-exclusion rule does not apply to namespaced Dashboard users. These users can combine scopes allowed for their namespaced role but can still access only operations and resources within their namespace.
+This mutual-exclusion rule does not apply to namespaced Dashboard users. These users can combine scopes allowed for their namespaced role. For namespace-aware resources, access remains limited to their assigned namespace.
 
 :::
 
@@ -158,7 +158,7 @@ For example:
 
 #### Behavior of Namespaced Users
 
-- **Scoped resources**: For namespace-aware resources, such as Connectors, Actions, Sources, and Rules, namespaced users can view and manage resources only within their assigned namespace, subject to their role and scopes.
+- **Scoped resources**: For namespace-aware resources, such as connectors, actions, sources, and rules, namespaced users can view and manage resources only within their assigned namespace, subject to their role and scopes.
 - **Cluster-wide metadata**: Namespaced users can view metadata such as MQTT subscription information across namespaces, subject to their role, scopes, and endpoint restrictions.
 - **Cluster-level settings**: Configurations not yet namespace-aware remain read-only for namespaced users. Only global administrators can modify them.
 - **Blocked message-content endpoints**: Certain REST API endpoints that access or manipulate raw MQTT message content are unavailable to namespaced users and return `403 Forbidden`. These endpoints are accessible only to global administrators:
@@ -180,8 +180,10 @@ For example:
 
 #### Role Semantics within a Namespace
 
-- **Administrator**: Full control (create, update, delete, and read) over resources in the assigned namespace.
-- **Viewer**: Read-only access (equivalent to `GET` requests) within the assigned namespace.
+The following descriptions assume that role-default scopes are used. Explicit scopes can further restrict the operations available to a user.
+
+- **Administrator**: Full control (create, update, delete, and read) over namespace-aware resources in the assigned namespace.
+- **Viewer**: Read-only access (equivalent to `GET` requests) to namespace-aware resources in the assigned namespace.
 
 ## Audit Logs
 

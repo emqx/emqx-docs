@@ -29,15 +29,15 @@ Learn more in the [Message Queue documentation](../develop/message-queue/message
 
 ### Multi-Tenancy with Namespaced Roles
 
-EMQX 6.0.0 introduces namespaced roles to enhance [multi-tenancy](../guides/multi-tenancy/namespace-overview.md) and access control across large-scale IoT deployments. Users can manage namespace-aware resources, such as Rules, Connectors, and Actions, within their assigned namespace.
+EMQX 6.0.0 introduces namespaced roles to enhance [multi-tenancy](../guides/multi-tenancy/namespace-overview.md) and access control across large-scale IoT deployments. Users can manage namespace-aware resources, such as rules, connectors, and actions, within their assigned namespace.
 
-Namespaced roles support Administrator and Viewer permissions and can be managed through the Dashboard, API, or CLI. They help delegate resource management between trusted teams or business units.
+Users can be assigned the namespaced Administrator or Viewer role through the Dashboard, API, or CLI. This helps delegate resource management between trusted teams or business units.
 
 #### Feature Highlights
 - **Resource Management**: Users can view and manage namespace-aware resources only within their assigned namespace (e.g., `ns:team_a::administrator`).
 - **Metadata Visibility**: Cluster-wide metadata, such as MQTT subscription information, can be viewed across namespaces, subject to the user's role, scopes, and endpoint restrictions.
 - **Granular Access Control**: Permitted operations depend on the user's role and scopes. Available cluster-level settings are read-only for namespaced users.
-- **Simplified Operations**: Roles can be created and assigned easily during user creation.
+- **Simplified Operations**: Assign a namespaced role when creating a user.
 - **Scalability for Enterprises**: Supports trusted internal teams or business units with separate resource management responsibilities.
 
 #### Additional Enhancements
