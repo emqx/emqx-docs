@@ -77,7 +77,7 @@ EMQX 支持多种安装方式，比如[容器化部署](./deploy/install-docker.
 
 ### 通过安装包快速安装
 
-您也可以选择通过安装包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。以下步骤将以 macOS13 amd64 为例演示如何下载并安装 EMQX。
+您也可以选择通过安装包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。以下步骤将以 macOS 15 arm64 为例演示如何下载并安装 EMQX。
 
 由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，**不建议**在生产环境中使用。
 
@@ -87,7 +87,7 @@ EMQX 支持多种安装方式，比如[容器化部署](./deploy/install-docker.
 
 1. 前往 [EMQX 官方下载页面的 macOS 页签](https://www.emqx.com/zh/downloads-and-install/enterprise?os=macOS)。
 
-2. 选择最新版本 `@EE_VERSION@`，在**安装包类型**中选择 `macOS 13 amd64 / zip`。
+2. 选择最新版本 `@EE_VERSION@`，然后选择适用于 macOS 15 arm64 的 ZIP 安装包。
 
 3. 直接点击下方的下载链接。您也可以参照页面中的命令指导步骤进行下载与安装。
 
@@ -124,7 +124,7 @@ EMQX 支持多种安装方式，比如[容器化部署](./deploy/install-docker.
 
 1. 前往 [EMQX 官方下载页面的 macOS 页签](https://www.emqx.com/zh/downloads-and-install/broker?os=macOS)。
 
-2. 选择最新版本 `@CE_VERSION@`，在**安装包类型**中选择 `macOS 13 amd64 / zip`。
+2. 选择最新版本 `@CE_VERSION@`，然后选择适用于 macOS 15 arm64 的 ZIP 安装包。
 
 2. 直接点击下方的下载链接。您也可以参照页面中的命令指导步骤进行下载与安装。
 
