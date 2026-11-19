@@ -5,7 +5,7 @@ Starting from EMQX 5.9.0, the Namespace feature allows users to logically group 
 The Namespace feature in EMQX consists of two parts:
 
 - **MQTT client namespace** — logical grouping of MQTT clients (by username, SNI, or other connection metadata) with per-namespace quotas, rate limits, and isolation knobs for client IDs and topics.
-- **Admin user namespace** — Dashboard, CLI, and API users scoped to a specific namespace via [namespaced roles](../dashboard/system.md#namespaced-roles), so delegated administrators only see and operate on resources within their assigned namespace. Available since EMQX 6.0.
+- **Admin user namespace** — Dashboard, CLI, and API users scoped to a specific namespace via [namespaced roles](../dashboard/system.md#namespaced-roles) for managing namespace-aware resources. Cluster-wide metadata, such as MQTT subscription information, can remain visible across namespaces. Available since EMQX 6.0.
 
 ::: warning Trusted Deployments Only
 
@@ -52,14 +52,14 @@ Namespaces are identified by a special client attribute `tns` (tenant namespace)
   Starting from EMQX 6.0, namespaces are extended to Dashboard, CLI, and API users through [namespaced roles](../dashboard/system.md#namespaced-roles). See the [Trusted Deployments Only](#namespace) notice at the top of this page for the trust model and required safeguards.
 
   - Admin users can be created with roles restricted to a specific namespace, e.g., `ns:team_a::administrator`.
-  - Namespaced users only see and operate on resources within their assigned namespace.
+  - Namespaced users can view and manage namespace-aware resources, such as rules, connectors, actions, and sources, only within their assigned namespace and according to their role and scopes.
+  - Cluster-wide metadata, such as MQTT subscription information, can be viewed across namespaces, subject to the user's role, scopes, and endpoint restrictions.
   - Cluster-level configurations not yet namespace-aware are visible but read-only for namespaced users, and only modifiable by global administrators.
   - Starting from EMQX 6.0.4, namespaced administrators can [manage API keys within their own namespace](../api.md#manage-api-keys-as-a-namespaced-administrator). Global keys and keys in other namespaces remain inaccessible.
-  - This ensures secure, tenant-specific administrative access alongside data isolation.
 
 - **Multi-Tenant Management**
 
-  System administrators can manage multiple namespaces within the same cluster, while each tenant operates in a self-contained environment with isolated resources and user permissions.
+  System administrators can manage multiple namespaces within the same cluster and delegate management of namespace-aware resources to each namespace's users.
 
 ## Operational Security for Admin Namespaces
 
