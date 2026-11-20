@@ -65,6 +65,8 @@ The output of the above content proves that `emqtt-bench` has been correctly ins
 
 ## Use eMQTT-Bench
 
+The examples below cover common options. For additional options, see the [eMQTT-Bench README](https://github.com/emqx/emqtt-bench/blob/master/README.md). To check which flags your installed version supports, run `emqtt_bench pub --help`, `emqtt_bench sub --help`, or `emqtt_bench conn --help`.
+
 There are three subcommands of `emqtt_bench`:
 
 1. `pub`: Create a large number of clients to perform the operation of publishing messages.
