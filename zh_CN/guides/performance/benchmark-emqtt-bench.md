@@ -65,6 +65,8 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ## 用 eMQTT-Bench 进行性能测试
 
+下文示例介绍常用参数。更多参数请参阅 [eMQTT-Bench README](https://github.com/emqx/emqtt-bench/blob/master/README.md)。要确认已安装版本支持哪些参数，可运行 `emqtt_bench pub --help`、`emqtt_bench sub --help` 或 `emqtt_bench conn --help`。
+
 `emqtt_bench` 共三个子命令：
 
 1. `pub`：用于创建大量客户端执行发布消息的操作。
