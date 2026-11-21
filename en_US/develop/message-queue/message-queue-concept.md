@@ -259,6 +259,8 @@ Derived name format:
 
 > This derived name preserves backward compatibility with existing `$q/<topic_filter>` subscriptions.
 
+EMQX 7.0 removes the `$q/` prefix, so clients cannot subscribe to legacy queues after the upgrade. Delete legacy queues before you upgrade. See [Remove Legacy Queues and Streams Before Upgrading to EMQX 7.0](../../get-started/deploy/upgrade-legacy-queues-streams.md) for how to preserve or discard their stored messages.
+
 ### Deprecated Prefix
 
 The `$q` prefix remains supported for legacy subscriptions but is deprecated.
