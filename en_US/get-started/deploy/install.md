@@ -1,6 +1,44 @@
-# Installation and Migration
+# Installation Guide
 
-This chapter walks you through the basic installation steps for EMQX, the minimum hardware specification, and the file and directory locations to facilitate future configuration and maintenance jobs. It also covers how to configure a license for EMQX Enterprise and migrate from EMQX 4.4 to EMQX 5.1.
+EMQX releases a Docker image and installation packages for different operating systems and platforms with each release. Download the package for EMQX Enterprise from the [EMQX website](https://www.emqx.com/en/try?product=enterprise).
+
+Use this guide to choose an installation method and review the supported operating systems, installation environment, port usage, and file and directory locations. For migration guidance, see [Migration Guide](../migration/overview.md).
+
+::: tip
+
+You can also try [EMQX Cloud](https://www.emqx.com/en/cloud), a fully managed MQTT service for IoT. [Register for an account](https://accounts.emqx.com/signup?continue=https://cloud-intl.emqx.com/console/) to start your MQTT service and connect IoT devices without maintaining the underlying infrastructure.
+
+:::
+
+## Choose an Installation Method
+
+**[Install Using Docker](./install-docker.md)**
+
+Use the official Docker image to install and run EMQX Enterprise and use Docker Compose to build an EMQX cluster.
+
+**[Install on Debian](./install-debian.md)**
+
+Install EMQX Enterprise on Debian with a deb or tar.gz package.
+
+**[Install on Ubuntu](./install-ubuntu.md)**
+
+Install EMQX Enterprise on Ubuntu with a deb or tar.gz package.
+
+**[Install on CentOS/RHEL](./install-rhel.md)**
+
+Install EMQX Enterprise on CentOS/RHEL with an rpm or tar.gz package.
+
+**[Install on macOS](./install-macOS.md)**
+
+Install EMQX Enterprise on macOS with a zip package.
+
+**[Deploy on Kubernetes](https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html)**
+
+Use EMQX Operator to deploy EMQX Enterprise.
+
+**[Work with License](./license.md)**
+
+Apply for, update, and configure an EMQX Enterprise license.
 
 ## Supported Operating Systems
 

@@ -1,4 +1,4 @@
-# ログとオブザーバビリティ
+# オブザーバビリティとログ
 
 EMQXは、システムの監視、管理、および診断を支援する一連のオブザーバビリティ関連機能を提供しています。これらの機能はすべて、ダッシュボードの以下のメニュー項目からアクセスおよび設定が可能です。
 
@@ -22,13 +22,13 @@ EMQXは、システムの監視、管理、および診断を支援する一連�
 
   [Prometheus](https://prometheus.io/)はSoundCloudがオープンソースで提供する監視ソリューションで、多次元データモデル、柔軟なクエリ言語、強力なアラーム管理を特徴としています。EMQXはPrometheusとの統合をサポートしており、システムメトリクスの収集や`pushgateway`へのメトリクスプッシュが可能です。
 
-- [ブローカーのヘルス指標](./broker-health-indicators.md)
-
-  EMQXブローカーの監視に最も有用なPrometheusメトリクスを、システム、ブローカー、認証／認可、データ統合ごとに整理したリファレンスです。Prometheus統合ガイドと併せて利用し、収集対象、アラート設定、グラフ化の参考にしてください。
-
 - [Datadogとの統合](./datadog.md)
 
   [Datadog](https://www.datadoghq.com/)はアプリケーション向けに統合されたリアルタイムのオブザーバビリティおよびセキュリティソリューションを提供するプラットフォームです。EMQXはDatadogとの統合をサポートしており、EMQXの稼働状況の把握、システムパフォーマンス問題の監視・トラブルシューティング、Datadogコンソール上でのメトリクス閲覧を支援します。
+
+- [OpenTelemetryとの統合](./opentelemetry/opentelemetry.md)
+
+  [OpenTelemetry](https://opentelemetry.io/docs/what-is-opentelemetry/)は、メトリクス、トレース、ログなどのテレメトリデータを生成・管理するためのベンダー中立なオブザーバビリティフレームワークです。EMQXはgRPC OTELプロトコルを使用してテレメトリデータをOpenTelemetry Collectorに送信し、Collectorで処理してオブザーバビリティバックエンドに転送できます。
 
 **診断**:
 
