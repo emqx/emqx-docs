@@ -117,7 +117,7 @@
 
 - [#18301](https://github.com/emqx/emqx/pull/18301) Elasticsearch 动作在构造请求路径时，现在会对 `index` 和 `id` 值进行 URL 编码。因此，模板值中的 `#` 或 `/` 等字符会被视为单个路径段中的普通文本，而不会改变请求目标。JSON 请求体不受影响。
 
-- [#18465](https://github.com/emqx/emqx/pull/18465) 修复了 ClickHouse、TDengine、SQL Server 和 MySQL 数据桥接中模板化 INSERT SQL 语句的处理问题（启用批量插入时）。
+- [#18465](https://github.com/emqx/emqx/pull/18465) 修复了 ClickHouse、TDengine、SQL Server 和 MySQL Sink 在启用批量插入时对模板化 INSERT SQL 语句的处理问题。
 
   此前，手动输入的模板本身存在语法错误或插值处理不正确时，渲染 SQL 模板经常会生成格式错误的 SQL。
 
@@ -125,9 +125,9 @@
 
   MySQL 还支持 `ON DUPLICATE KEY UPDATE`，ClickHouse 支持 `FORMAT Values` 和 `FORMAT JSONCompactEachRow`，TDengine 支持 `INSERT ... USING ... TAGS` 和表标识符插值。
 
-  为确保 MySQL 模板渲染结果一致，MySQL 数据桥接会在所有连接中无条件禁用 `ANSI_QUOTES` 和 `NO_BACKSLASH_ESCAPES` 模式，并按此规则处理语句。
+  为确保 MySQL 模板渲染结果一致，MySQL Sink 会在所有连接中无条件禁用 `ANSI_QUOTES` 和 `NO_BACKSLASH_ESCAPES` 模式，并按此规则处理语句。
 
-  ClickHouse 数据桥接现在会从 SQL 模板推断批量值分隔符，并忽略所配置的 `batch_value_separator` 值。
+  ClickHouse Sink 现在会从 SQL 模板推断批量值分隔符，并忽略所配置的 `batch_value_separator` 值。
 
 - [#18762](https://github.com/emqx/emqx/pull/18762) 修复了 TDengine 动作的错误信息引用了错误 ID 的问题。找不到动作时，错误信息此前显示的是连接器 ID，而不是动作 ID，导致有效的连接器 ID 看起来像无效 ID。
 
