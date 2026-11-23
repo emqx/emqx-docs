@@ -77,7 +77,9 @@ foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
 在 EMQX 企业版中，REST API 实现了基于角色的访问控制，API 密钥创建时，可以分配以下3个预定义的角色：
 
 - **管理员**：此角色可以访问所有资源，未指定角色时默认使用此值。对应的角色标识为 `administrator`。
-- **查看者**：此角色只能查看资源和数据，对应于 REST API 中的所有 GET 请求。对应的角色标识为 `viewer`。
+- **查看者**：此角色可通过 `GET` 请求访问只读资源和数据，但不能执行安全敏感操作。对应的角色标识为 `viewer`。
+  - **配置导出**：查看者无法通过 `GET /api/v5/configs` 获取未脱敏的 HOCON（`text/plain`）格式配置。未设置 `Accept` 请求头，或请求头中包含 `text/plain` 或 `*/*` 时，请求将返回 `403`（`UNAUTHORIZED_ROLE`）。如需获取脱敏后的 JSON 格式配置，请设置 `Accept: application/json`。
+  - **备份文件**：查看者可通过 `GET /api/v5/data/files` 查看备份文件列表，但无法通过 `GET /api/v5/data/files/:filename` 下载备份归档。下载请求将返回 `403`，错误码为 `UNAUTHORIZED_ROLE`。
 - **发布者**：专门为 MQTT 消息发布定制，此角色仅限于访问与消息发布相关的 API。对应的角色标识为 `publisher`。
 
 #### 认证方式
