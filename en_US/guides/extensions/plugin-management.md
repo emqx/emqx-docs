@@ -83,7 +83,7 @@ When the plugin is started and its information is requested, the `on_health_chec
 
 When the plugin is stopped:
 
-- The plugin's applications are stopped.
+- EMQX stops the plugin's own applications. Applications included in the EMQX release remain running.
 - The plugin is registered as `disabled` in the EMQX config (`plugins.states`).
 
 Although the plugin’s application is stopped, its code remains loaded on the node, as a stopped plugin can still be configured.
@@ -93,7 +93,7 @@ Although the plugin’s application is stopped, its code remains loaded on the n
 The uninstallation process is as follows:
 
 1. The plugin is stopped (if it is running).
-2. The plugin's code is unloaded from the node.
+2. EMQX unloads the plugin code from the node. Applications included with the EMQX release remain loaded.
 3. Its package files are removed from the nodes (the config file is preserved).
 4. The plugin is unregistered in the EMQX config (`plugins.states`).
 
