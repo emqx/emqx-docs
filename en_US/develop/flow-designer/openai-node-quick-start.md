@@ -66,6 +66,8 @@ Make sure you have a valid OpenAI API Key.
      - **Output Result Alias**: Enter `summary`.
    - Click **Save**.
 
+   The OpenAI node uses the CA trust store bundled with EMQX to verify HTTPS server certificates. It does not support configuring `cacertfile`. When you use a custom **Base URL**, you cannot override the bundled CA trust store or configure a fixed CA trust store. The trust anchors in the bundled store may change between EMQX releases.
+
 5. Add a **Republish** node.
 
    - Drag a **Republish** node from the Sink section and connect it to the OpenAI node.
