@@ -98,7 +98,7 @@ EMQX 与 Tablestore 的数据集成目前仅支持时序模型。因此，以下
      - **访问密钥 ID**：用于与 Tablestore 认证的 Access Key ID。此密钥由阿里云颁发，用于安全访问 Tablestore 资源。
      - **访问密钥**：与 Access Key ID 相关联的用于认证的 Access Key Secret。
      - **存储模型类型**：目前仅支持`时序`。
-   - 配置 TLS 参数。Tablestore 使用 HTTPS 端点，故默认情况下 TLS 已经启用，并且无需配置 TLS 参数。有关 TLS 连接选项的详细信息，请参阅[启用 TLS 加密访问外部资源](../../guides/network/overview.md#启用-tls-加密访问外部资源)。
+   - **启用 TLS**：Tablestore 使用 HTTPS 端点。连接器不会将此处的 TLS 设置应用于 Tablestore 连接，而是使用 EMQX 随附的 CA 信任库验证服务器证书。您无法通过 **CA 证书**（`cacertfile`）覆盖随附的 CA 信任库，也无法为 Tablestore 连接配置固定的 CA 信任库。随附信任库中的信任锚可能随 EMQX 版本发生变化。
 5. 在点击**创建**之前，您可以点击**测试连接**，以测试连接器是否能够连接到 Tablestore 服务器。
 6. 点击最下方的**创建**按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建规则和 Sink，以指定要转发到 Tablestore 的数据。具体步骤请参见[创建 Tablestore Sink 规则](#创建-tablestore-sink-规则)。
 

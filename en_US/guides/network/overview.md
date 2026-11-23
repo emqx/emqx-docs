@@ -22,6 +22,8 @@ EMQX also offers you the option of enabling TLS when there is a need to access e
 - When the server needs to verify the client certificate, the **TLS Cert** and **TLS Key** must be filled in.
 - When **TLS Verify** is enabled, the **CA Cert** field must be filled in to verify the legitimacy of the server certificate.
 
+Some HTTP-based integrations use the CA trust store bundled with EMQX to verify server certificates. The trust anchors in the bundled store may change between EMQX releases. Support for configuring `cacertfile` to use a private CA or a fixed CA trust store varies by integration. Not every TLS client in EMQX uses the bundled CA trust store.
+
 <img src="./assets/enable-TLS-dashboard.png" alt="enable-TLS-dashboard" style="zoom:50%;" />
 
 In addition, you can add `ssl` options when you configure the features in the configuration file. For example, you can configure the `authentication` group in the `emqx.conf` by adding the following statement:
