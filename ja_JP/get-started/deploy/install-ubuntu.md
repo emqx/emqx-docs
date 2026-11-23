@@ -20,7 +20,7 @@ EMQXはAptパッケージマネージャーによるインストールをサポ�
 2. EMQXをインストールします：
 
    ```bash
-   sudo apt-get install emqx
+   sudo apt-get install emqx-enterprise
    ```
 
 3. EMQXを起動します：
@@ -52,7 +52,7 @@ sudo systemctl start emqx
 EMQXをアンインストールするには、以下を実行してください。
 
 ```
-sudo apt remove --purge emqx
+sudo apt remove --purge emqx-enterprise
 ```
 
 ### tar.gzパッケージによるインストール
