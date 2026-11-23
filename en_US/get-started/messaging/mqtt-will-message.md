@@ -4,7 +4,7 @@ EMQX implements the will message feature of MQTT. If a will message is set for a
 
 You can use client tools to try this messaging service in EMQX. This section introduces how to use the [MQTTX Desktop](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and see how a will message is published and received.
 
-## Reconnecting Before the Will Delay Expires
+## Will Delay Interval and Will Message Publication
 
 In MQTT 5.0, a pending Will Message is not published if the client reconnects and resumes the same session before the Will Delay Interval expires. To resume that session, use the same Client ID and set Clean Start to false. The session must still exist when the client reconnects.
 
