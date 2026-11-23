@@ -4,14 +4,20 @@ This page guides you on installing and starting EMQX on the Ubuntu system.
 
 Supported versions:
 
+- Ubuntu 26.04
 - Ubuntu 24.04
 - Ubuntu 22.04
 - Ubuntu 20.04
-- Ubuntu 18.04
 
 ## Install with Apt Source
 
 EMQX supports installing with Apt source to provide our users with a convenient and reliable way to manage EMQX installation and updates. Here is how to install EMQX with Apt source:
+
+::: tip
+
+Ubuntu 26.04 packages are not available from the Apt source. To install EMQX on Ubuntu 26.04, download a `deb` or `tar.gz` package from the [EMQX Enterprise download site](https://www.emqx.com/en/downloads-and-install/enterprise?os=Ubuntu).
+
+:::
 
 1. Download the EMQX repository:
 

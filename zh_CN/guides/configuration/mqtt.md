@@ -19,6 +19,7 @@ EMQX 完全兼容 MQTT 5.0 和 3.x，本节将介绍 MQTT 相关功能的基本�
 ```bash
 mqtt {
   max_packet_size = 1MB
+  max_connect_user_properties = 100
   max_clientid_len = 65535
   max_topic_levels = 128
   max_qos_allowed = 2
@@ -32,6 +33,7 @@ mqtt {
 | **配置项**         | Dashboard UI       | **描述**                                                     | **默认值** | **可选值**      |
 | ------------------ | ------------------ | ------------------------------------------------------------ | ---------- | --------------- |
 | `max_packet_size`  | 最大报文大小       | MQTT 报文用于在 MQTT 客户端和 EMQX 之间发送消息。<br /><br />此设置允许的最大 MQTT 报文大小。 | `1MB`      |                 |
+| `max_connect_user_properties` <Badge type="tip" text="5.8.12+" /> | CONNECT 用户属性数量上限 | 设置 CONNECT 报文的 CONNECT 属性和 Will 属性中分别允许的 MQTT 5.0 User Property 键值对数量上限。任意一组属性超过此上限时，EMQX 将拒绝该 CONNECT 报文并关闭连接。此配置不限制其他 MQTT 报文类型中的 User Property 键值对，报文大小仍受 `max_packet_size` 限制。<br /><br />将此配置设置为 `infinity` 可禁用该数量限制。运行时修改此配置后，新值可能仅对之后建立的连接生效。 | `100` | 非负整数、`infinity` |
 | `max_clientid_len` | 最大客户端 ID 长度 | 此设置 MQTT 客户端 ID 的最大长度。<br /><br />它可以帮助防止客户端使用过长的客户端 ID 导致问题。 | `65535`    | `23` - `65535`  |
 | `max_topic_levels` | 最大主题层级       | MQTT 主题用于组织和分类消息。<br /><br />此设置允许 MQTT 主题中的最大级别数量。 | `128`      | `1` - `65535`   |
 | `max_qos_allowed`  | 最大 QoS           | QoS 等级决定了消息的可靠性和传递保证等级。<br /><br />此设置允许 MQTT 消息的最大服务质量（QoS）等级。 |            |                 |

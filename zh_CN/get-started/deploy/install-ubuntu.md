@@ -4,12 +4,18 @@
 
 支持的 Ubuntu 版本：
 
+- Ubuntu 26.04
 - Ubuntu 24.04
 - Ubuntu 22.04
 - Ubuntu 20.04
-- Ubuntu 18.04
 
 如希望在其他支持系统中进行安装，或体验其他版本，请可前往 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise)获取安装信息。
+
+::: tip
+
+Apt 源不提供 Ubuntu 26.04 安装包。如需在 Ubuntu 26.04 上安装 EMQX，请从 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise?os=Ubuntu)下载 `deb` 或 `tar.gz` 安装包。
+
+:::
 
 ## 通过 deb 安装
 
