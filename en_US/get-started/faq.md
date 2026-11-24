@@ -128,3 +128,33 @@ The default username and password of the Dashboard are admin and public respecti
 ```bash
 ./bin/emqx ctl admins passwd <Username> <Password>
 ```
+
+## Why does EMQX memory usage stay high after a load spike?
+
+After a spike in connections, messages, or queued work, the memory that the operating system reports for EMQX often remains high even after the load subsides. This is usually not a memory leak.
+
+EMQX runs on the Erlang VM, which manages memory with its own allocators. An allocator requests large memory areas, called carriers, from the operating system and divides them into blocks for processes, messages, binaries, and ETS tables. When EMQX releases data, the corresponding memory blocks return to the allocator rather than to the operating system. The allocator returns a carrier to the operating system only when every block in it is free. A small amount of long-lived data, such as retained messages or session data, can occupy blocks in an otherwise mostly empty carrier and prevent the carrier from being released.
+
+The allocators can reuse this free space, so they may need to request less memory from the operating system during a later, similar spike. Operating-system-level memory measurements can include this allocator-retained free space, but they have different scopes:
+
+- The process resident set size (RSS) measures the resident memory of the EMQX process.
+- Container memory usage includes memory used by EMQX and other memory charged to the container's cgroup.
+- The node memory shown on the Dashboard and the `emqx_vm_used_memory` Prometheus metric report system memory for the node or container, not only the EMQX process.
+
+### How to tell retained memory from a leak
+
+Compare the memory reserved by the Erlang VM allocators with the memory occupied by Erlang data. Each command returns a value in bytes:
+
+```bash
+./bin/emqx eval 'recon_alloc:memory(allocated).'
+./bin/emqx eval 'recon_alloc:memory(used).'
+```
+
+To see what the used memory consists of, such as processes, binaries, and ETS tables, run `./bin/emqx ctl vm memory`.
+
+- If `allocated` is much larger than `used`, and `used` is stable or decreasing, the difference is free space that the allocators hold. This is not a leak.
+- If `used` keeps growing while the load is stable, data is accumulating. For example, a slow subscriber can build up a long message queue, or sessions of disconnected clients can accumulate. Investigate further, or contact [technical support](./support/technical-support.md).
+
+### How to release the memory
+
+You do not need to release the memory: the allocators reuse it. If you need to reduce the memory usage reported by the operating system, restart the node. In a cluster, restart one node at a time.
