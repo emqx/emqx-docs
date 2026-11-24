@@ -4,7 +4,7 @@
 
 | 始于版本 | 问题描述                                                     | 解决方法                                                     | 状态              |
 | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------- |
-| 5.10.4   | **已离开集群的节点的共享订阅成员不会被移除**<br />使用默认的路由表模式（`broker.routing.storage_schema = v3`）时，如果某个节点离开集群或持续宕机，且该节点在离开前未能移除自己的共享订阅成员，这些成员会一直保留在集群中。发往该共享订阅组的消息仍可能被分发给这些成员，这些消息会丢失。 | 在集群的每个节点上应用[共享订阅热补丁](https://github.com/emqx/emqx-hot-patches/tree/main/261114-stale-shared-routes)（适用于 5.10.4 和 5.10.5）。<br />或者手动移除这些成员。在一个核心节点上，列出仍拥有共享订阅成员但未运行的节点：<br />`emqx eval "lists:usort(lists:map(fun({_, _, _, P}) -> node(P) end, ets:tab2list(emqx_shared_subscription))) -- mria:running_nodes()."`<br />然后，对列表中的每个节点，移除其成员：<br />`emqx eval "emqx_shared_sub:purge_node('emqx@departed-node')."` |                   |
+| 5.10.4   | **节点离开集群或持续宕机后，共享订阅成员不会被移除**<br />使用默认的路由表模式（`broker.routing.storage_schema = v3`）时，如果某个节点在未移除自身共享订阅成员的情况下离开集群或持续宕机，这些成员会继续保留在集群中。发往共享订阅组的消息仍可能被分发给这些成员，导致消息丢失。 | 在集群的每个节点上应用[共享订阅热补丁](https://github.com/emqx/emqx-hot-patches/tree/main/261114-stale-shared-routes)（适用于 5.10.4 和 5.10.5）。<br />或者手动移除这些成员。在一个核心节点上，列出仍拥有共享订阅成员但未运行的节点：<br />`emqx eval "lists:usort(lists:map(fun({_, _, _, P}) -> node(P) end, ets:tab2list(emqx_shared_subscription))) -- mria:running_nodes()."`<br />正在重启或暂时断连的节点也可能出现在列表中。请等待几分钟后再次运行该命令。仅移除已永久离开集群的节点所拥有的成员。清理可能恢复运行的节点会导致其订阅者无法接收共享订阅消息，直至重新订阅。<br />对于每个已永久离开集群的节点，移除其成员：<br />`emqx eval "emqx_shared_sub:purge_node('emqx@departed-node')."` | 计划于 5.10.6 修复 |
 
 ## e5.10.0
 
