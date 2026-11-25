@@ -66,12 +66,15 @@ MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数�
 
 ## 认证
 
-由于 MQTT-SN 协议的连接报文只定义了 Client ID 的概念，没有 Username 和 Password 。所以 MQTT-SN 网关目前仅支持 [HTTP Server 认证](../../guides/access-control/authn/http.md)
+MQTT-SN 的 `CONNECT` 报文包含 Client ID，但不包含 Username 和 Password。EMQX 按以下规则生成用于认证和授权的客户端信息：
 
-其客户端信息生成规则如下：
-- Client ID：为 CONNECT 报文中的 Client ID 字段。
-- Username：默认为空
-- Password：默认为空
+- 对于发送 `CONNECT` 报文的客户端，Client ID 为报文中 Client ID 字段的值。
+- 对于使用 QoS -1 的无连接发布端，Client ID 为 `NegQoS-Client`。
+- 默认情况下，这两类客户端的 Username 和 Password 均为空。
+
+可以通过 `clientinfo_override` 配置覆盖 Client ID、Username 或 Password。
+
+认证成功后，EMQX 使用认证后的客户端信息检查发布授权。
 
 例如，通过 HTTP API 或 emqx.conf 为 MQTT-SN 网关创建一个 HTTP 认证：
 
@@ -143,6 +146,14 @@ MQTT-SN 协议已经定了发布/订阅的行为，MQTT-SN 网关未对其进行
 - MQTT-SN 协议的 UNSUBSCRIBE 报文，作为取消订阅操作，其主题由该报文指定。
 
 网关内无独立的发布订阅的权限控制，其对主题的权限控制需要统一在 [授权（Authorization）](../../guides/access-control/authz/authz.md) 中管理。
+
+从 EMQX 5.8.12 开始，启用 `enable_qos3` 时，EMQX 会对每个来自无连接发布端的 QoS -1 `PUBLISH` 报文执行认证，并在路由消息前检查发布授权。由于消息以 QoS 0 进入 Broker，EMQX 会按 QoS 0 检查发布授权。认证失败或发布授权拒绝该请求时，EMQX 不会路由消息。
+
+::: warning 重要提示
+
+升级到 EMQX 5.8.12 时，如果已启用 `enable_qos3`，请确认认证后端接受为使用 QoS -1 的无连接发布端生成的客户端信息。还需确认授权规则允许认证后的身份以 QoS 0 向目标主题发布消息。
+
+:::
 
 ## 用户层接口
 
