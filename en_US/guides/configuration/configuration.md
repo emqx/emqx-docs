@@ -214,7 +214,7 @@ This means that the settings in `base.hocon` have the lowest priority and can be
 Before version 5.8.4, the `base.hocon` file did not exist. The priority order remains the same, but without `base.hocon`.
 :::
 
-Changes made through EMQX Dashboard UI, HTTP API, or CLI are persisted in `cluster.hocon` at runtime and will take effect immediately. However, changes may get reverted after a node restart if the same configuration items are set differently in `emqx.conf` or environment variables.  
+For settings that support dynamic updates, changes made through the Dashboard, HTTP API, or CLI take effect immediately and are persisted in `cluster.hocon`. After a node restarts, values set in `emqx.conf` or environment variables may override these changes.
 
 To avoid confusion, **do not overlap configuration settings** between `emqx.conf` and `cluster.hocon`.
 

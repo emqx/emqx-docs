@@ -220,7 +220,7 @@ base.hocon < cluster.hocon < emqx.conf < 环境变量
 
 :::
 
-通过 EMQX Dashboard UI、HTTP API 或 CLI 所做的更改会在运行时持久化到 `cluster.hocon` 文件中，并立即生效。然而，如果在 `emqx.conf` 或环境变量中对相同的配置项进行了不同的设置，重启节点后这些更改可能会被恢复。
+对于支持动态更新的配置项，通过 Dashboard、HTTP API 或 CLI 所做的更改会立即生效，并持久化到 `cluster.hocon`。节点重启后，`emqx.conf` 或环境变量中的设置可能会覆盖这些更改。
 
 为了避免混淆，**不要在 `emqx.conf` 和 `cluster.hocon` 之间重叠配置设置**。
 
