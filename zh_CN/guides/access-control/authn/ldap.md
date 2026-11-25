@@ -20,7 +20,7 @@ EMQX 的 LDAP 集成包括两种不同的密码认证方式：
 
 - **LDAP 绑定验证**
 
-  EMQX 通过 LDAP 的绑定（Bind）操作直接对用户名和密码进行认证。当客户端连接到 EMQX 时，EMQX 会接收用户名和密码，并根据配置的 `base_dn` 和 `filter` 构造出用户的唯一标识（DN，Distinguished Name）。随后，EMQX 使用这些凭据尝试以该用户身份绑定到 LDAP 服务器。如果绑定成功，则认证通过；否则连接会被拒绝。
+  EMQX 通过 LDAP 绑定（Bind）操作验证用户名和密码。客户端连接时，EMQX 根据配置的 `base_dn` 和 `filter` 查找对应的 LDAP 条目。如果找到匹配的条目，且用于 LDAP 绑定的密码不为空，EMQX 会使用该条目的专有名称（DN，Distinguished Name）和该密码发送绑定请求。LDAP 服务器接受绑定时，认证成功。如果服务器拒绝绑定，认证失败。
 
   该方式完全依赖于 LDAP 中已有的用户条目，不需要 EMQX 获取或处理任何敏感信息（如密码哈希），设置简单，也无需修改 LDAP 的 Schema。
 
@@ -169,7 +169,6 @@ directory       /usr/local/etc/openldap/data
 
      - **密码**：与**用户名**对应的明文密码，用于完成绑定操作。此密码应与 LDAP 配置中的 `rootpw` 实际值相对应。
 
-
    - 填写与认证相关的设置：
 
      - **基本 DN**：定义搜索操作的起始节点（即 base DN）。EMQX 会从该 DN 开始查找符合过滤器条件的用户条目。支持使用占位符（如 `${username}`）动态拼接客户端身份。有关更多信息，请参见 [RFC 4511搜索请求](https://datatracker.ietf.org/doc/html/rfc4511#section-4.5.1)。
@@ -180,18 +179,15 @@ directory       /usr/local/etc/openldap/data
 
        :::
 
-
      - **密码认证方式**：选择认证方式：`LDAP 绑定验证`（默认）或 `本地密码比对`。
 
+     - **绑定密码**（`bind_password`）：EMQX 验证客户端身份时用于 LDAP 绑定请求的密码模板。默认模板为 `${password}`，求值结果为客户端提交的密码。
 
-     - **绑定密码**：指定 EMQX 用于向 LDAP 服务器认证自身的密码，在执行任何操作或查询之前必须进行此认证。它通过占位符 `${password}` 引用，在运行时将使用配置选项**密码**中定义的实际密码来解析。
-
+       从 EMQX 5.8.12 开始，如果该模板求值为空字符串，认证会直接失败，EMQX 不向 LDAP 服务器发送绑定请求。
 
      - **密码属性名**：当选择 `本地密码比对` 作为认证方法时，指定代表用户密码的属性。此属性的值应遵循 [RFC 3112](https://datatracker.ietf.org/doc/html/rfc3112)，支持的算法有 `md5` `sha` `sha256` `sha384` `sha512`和`ssha`。
 
-
      - **超级用户属性名**：当选择 `本地密码比对` 作为认证方法时，用来标识用户是否为超级用户的 LDAP 属性名称。此属性的值应为布尔值，如果缺失则等于 `false`。
-
 
    - **启用 TLS**：如果要启用 TLS，请打开切换按钮。有关启用TLS的更多信息，请参见[网络和TLS](../../network/overview.md)。
 
