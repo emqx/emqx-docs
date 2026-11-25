@@ -2,7 +2,7 @@
 
 ## 5.8.12
 
-*发布日期：2026-11-24*
+*发布日期：2026-11-25*
 
 ### 增强
 
@@ -60,7 +60,9 @@
 
 - [#20116](https://github.com/emqx/emqx/pull/20116) 更新了 Hackney，使其使用内置 CA 证书执行标准 TLS 证书路径验证。
 
-- [#20149](https://github.com/emqx/emqx/pull/20149) 将 `gen_rpc` 升级到 3.5.3。集群 RPC 连接的认证握手现在会限制认证报文大小，并对质询交换执行更严格的检查。
+- [#20149](https://github.com/emqx/emqx/pull/20149), [#20194](https://github.com/emqx/emqx/pull/20194) 将 `gen_rpc` 升级到 3.5.4。集群 RPC 连接的认证握手现在会限制认证报文大小，并对质询交换执行更严格的检查。集群 RPC 使用专用解码器解析认证报文，报文格式保持不变。
+
+- [#20188](https://github.com/emqx/emqx/pull/20188) Dashboard LDAP 单点登录和使用 `bind` 方式的 LDAP 认证遇到空密码时，EMQX 会直接判定为密码错误，无需向 LDAP 服务器发送绑定请求。
 
 - [#20154](https://github.com/emqx/emqx/pull/20154) 加强了 Dashboard、REST API 和 WebSocket 监听器的 HTTP 请求解析：
 
@@ -72,6 +74,8 @@
   - multipart 请求体中单个部分的请求头块超过 2048 字节时，请求会被拒绝。
 
   对于 EMQX 接收的 HTTP/2 响应（例如来自 ExHook 和 ExProto gRPC 服务的响应），请求头及尾部字段同样受 32 KB 限制。如果 gRPC 服务返回的元数据超过该限制，gRPC 调用会失败。
+
+- [#20209](https://github.com/emqx/emqx/pull/20209) 通过 REST API 或 Dashboard 上传插件包时，EMQX 现在会校验文件名。如果文件名不符合插件命名规则，EMQX 会拒绝上传并返回 `BAD_PLUGIN_INFO`。
 
 ### 修复
 

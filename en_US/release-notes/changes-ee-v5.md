@@ -2,7 +2,7 @@
 
 ## 5.8.12
 
-*Release Date: 2026-11-24*
+*Release Date: 2026-11-25*
 
 ### Enhancements
 
@@ -60,7 +60,9 @@
 
 - [#20116](https://github.com/emqx/emqx/pull/20116) Update Hackney to use standard TLS certificate-path validation with the bundled CA certificates.
 
-- [#20149](https://github.com/emqx/emqx/pull/20149) Upgraded `gen_rpc` to 3.5.3. The authentication handshake of cluster RPC connections now limits the size of authentication packets and checks the challenge exchange more strictly.
+- [#20149](https://github.com/emqx/emqx/pull/20149), [#20194](https://github.com/emqx/emqx/pull/20194) Upgraded `gen_rpc` to 3.5.4. The authentication handshake of cluster RPC connections now limits the size of authentication packets and checks the challenge exchange more strictly. A dedicated decoder now parses authentication packets. The packet format stays the same.
+
+- [#20188](https://github.com/emqx/emqx/pull/20188) For Dashboard LDAP single sign-on and LDAP authentication using the `bind` method, EMQX now rejects empty passwords as incorrect without sending a bind request to the LDAP server.
 
 - [#20154](https://github.com/emqx/emqx/pull/20154) Made HTTP request parsing on the Dashboard, the REST API and the WebSocket listeners stricter:
 
@@ -72,6 +74,8 @@
   - Multipart request bodies with a part header block larger than 2048 bytes are rejected.
 
   EMQX also applies the 32 KB limit to the headers and trailers of HTTP/2 responses it receives, for example from ExHook and ExProto gRPC servers. A gRPC call fails when the server returns larger metadata.
+
+- [#20209](https://github.com/emqx/emqx/pull/20209) EMQX now checks the file names of plugin packages uploaded through the REST API or Dashboard. If the file name does not match the plugin naming pattern, EMQX rejects the upload with `BAD_PLUGIN_INFO`.
 
 ### Bug Fixes
 

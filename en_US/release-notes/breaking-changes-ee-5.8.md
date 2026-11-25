@@ -10,6 +10,8 @@
 
   A cluster whose nodes all run 5.3.0 or later is unaffected. To cluster with a node older than 5.3.0, set `rpc.insecure_fallback = true` on every node explicitly. A node logs a warning each time it uses the fallback, so check the node logs for `gen_rpc_insecure_fallback` before you upgrade.
 
+- [#20192](https://github.com/emqx/emqx/pull/20192) Changing `plugins.install_dir` requires a node restart. Set the directory in the configuration file or through `EMQX_PLUGINS__INSTALL_DIR`, then restart the node. If a cluster configuration update attempts to change this setting, the initiating node rejects the update. A node receiving a replicated update keeps its current directory, logs a warning, and applies the other plugin settings.
+
 ## e5.8.9
 
 - [#16062](https://github.com/emqx/emqx/pull/16062) Fixed an issue where the RocketMQ action was disregarding the given payload template and rendering the whole Rule output.
