@@ -33,7 +33,7 @@ MQTT 的增强认证仅在协议版本 5 及以上版本中支持。
 
 ### 配置 Kerberos 库
 
-Kerberos 库的配置文件是 `/etc/krb5.conf`。该文件包含 Kerberos 库的配置信息，包括领域（realms）和密钥分发中心（KDCs）。Kerberos 库使用该文件来定位 KDCs 和 realms。
+默认情况下，Kerberos 库从 `krb5.conf` 文件读取配置，该文件通常位于 `/etc` 目录中。如需覆盖默认位置，请在 EMQX 服务的运行环境中设置 `KRB5_CONFIG`。Kerberos 配置定义领域，并指定各领域的密钥分发中心（KDC）位置。
 
 以下是一个 `krb5.conf` 文件的示例：
 
@@ -53,7 +53,7 @@ Kerberos 库的配置文件是 `/etc/krb5.conf`。该文件包含 Kerberos 库�
 
 要配置 Kerberos 认证器，您需要一个运行中的 KDC（密钥分发中心）服务器以及服务器和客户端的有效密钥表文件。该文件存储与服务器主体关联的加密密钥。此文件使服务器能够在无需手动输入密码的情况下向 Kerberos KDC 进行身份验证。
 
-EMQX 只能支持默认位置的密钥表文件。您可以使用环境变量 `KRB5_KTNAME` 或通过在 `/etc/krb5.conf` 中设置 `default_keytab_name` 来配置系统默认值。
+EMQX 仅支持系统默认的密钥表文件。使用环境变量 `KRB5_KTNAME` 或 Kerberos 配置项 `default_keytab_name` 设置默认密钥表路径。
 
 ## 通过 Dashboard 配置
 
@@ -63,7 +63,7 @@ EMQX 只能支持默认位置的密钥表文件。您可以使用环境变量 `K
 
    - **主体**：设置服务器的 Kerberos 主体，用于定义服务器在 Kerberos 身份验证系统中的身份。例如，`mqtt/cluster1.example.com@EXAMPLE.COM`。
 
-     注意：使用的领域必须在 EMQX 节点上的 `/etc/krb5.conf` 中配置。
+     注意：使用的领域必须在 EMQX 节点的 Kerberos 配置中设置。
 
 
    - **密钥表文件**：指定 Kerberos 密钥表文件的路径。
@@ -122,7 +122,7 @@ sequenceDiagram
 
   注意，EMQX 目前仅支持默认位置的密钥表文件。如果出现此错误，系统将在错误消息中返回当前默认密钥表文件的路径。
 
-- 尝试通过使用环境变量 `KRB5_KTNAME` 或在 `/etc/krb5.conf` 中设置 `default_keytab_name` 来配置系统默认密钥表文件路径。
+- 使用环境变量 `KRB5_KTNAME` 或 Kerberos 配置项 `default_keytab_name` 设置系统默认的密钥表路径。
 
 ### `invalid_server_principal_string`
 
@@ -132,9 +132,9 @@ sequenceDiagram
 
 ### `Cannot find KDC for realm "EXAMPLE.COM"`
 
-**原因：** 指定的 Kerberos 领域（`EXAMPLE.COM`）未在 `/etc/krb5.conf` 文件的 `realms` 部分中列出。
+**原因：** 指定的 Kerberos 领域（`EXAMPLE.COM`）未在 Kerberos 配置的 `realms` 部分中列出。
 
-**解决方案：** 将缺少的领域信息添加到 `/etc/krb5.conf` 文件的 `realms` 部分。
+**解决方案：** 将缺少的领域信息添加到 Kerberos 配置的 `realms` 部分。
 
 ### `Cannot contact any KDC for realm "EXAMPLE.COM"`
 
@@ -144,7 +144,7 @@ sequenceDiagram
 
 ### `Resource temporarily unavailable`
 
-**原因：** 在 `/etc/krb5.conf` 中配置的 KDC 服务未运行或无法访问。
+**原因：** Kerberos 配置中指定的 KDC 服务未运行或无法访问。
 
 **解决方案：** 确保 KDC 服务正常运行，并且 EMQX 节点能够与其通信。
 
