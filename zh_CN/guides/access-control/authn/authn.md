@@ -188,6 +188,77 @@ EMQX 允许在认证阶段为客户端设置**超级用户**角色以及预设**
 
 超级用户的判定发生在认证阶段，由数据库查询结果、HTTP 响应或者 JWT 声明中的 `is_superuser` 字段来指示。
 
+## 将客户端身份与凭据绑定
+
+认证只能证明客户端持有有效的凭据，例如密码、令牌或证书，并不能证明连接中的每个身份字段都属于该凭据。认证器只验证它检查的字段，其余字段保留客户端发送的值。
+
+认证完成后，EMQX 将身份字段用于以下用途：
+
+- **会话**：EMQX 仅通过客户端 ID 标识会话。当客户端使用某个已有会话的客户端 ID 连接时，EMQX 会断开该会话的现有连接。如果新连接设置 `Clean Start = 0`，它会恢复该会话，包括 EMQX 为原所有者授权的订阅。
+- **授权**：授权规则以及 `${clientid}`、`${username}` 和 `${client_attrs.NAME}` 占位符使用这些字段的值。
+- **租户隔离**：在[多租户](../../multi-tenancy/namespace-overview.md)场景中，`client_attrs.tns` 属性决定客户端所属的命名空间。
+
+请确保您的部署在上述用途中依赖的每个身份字段，要么来自可信来源，要么经过认证器验证。
+
+### 身份字段的来源
+
+下表列出了各身份字段的来源，以及在何种条件下可以信任该字段。
+
+| 身份字段 | 来源 | 可信条件 |
+| --- | --- | --- |
+| 客户端 ID | `CONNECT` 报文，除非 EMQX 将其替换，例如通过 `mqtt.use_username_as_clientid` 或 `peer_cert_as_clientid` | 认证器验证该客户端 ID 属于该凭据，或者 EMQX 将其替换为经过验证的值 |
+| 用户名 | `CONNECT` 报文，除非 EMQX 通过 `peer_cert_as_username` 将其替换 | 密码认证器根据用户名查找凭据，或者其他认证器检查用户名，例如通过 JWT Claim 检查 |
+| `peer_cert_as_username`、`peer_cert_as_clientid` 和证书占位符使用的证书字段 | 客户端在 TLS 握手中出示的证书 | 监听器要求客户端提供证书，并使用您掌控的 CA 对其进行验证。详见[证书信息映射](./x509.md#证书信息映射)。 |
+| 客户端地址（`${peerhost}`） | TCP 对端地址，或 Proxy Protocol 以及 WebSocket 监听器转发请求头所报告的地址 | 仅在只有可信代理能够访问的监听器上启用 Proxy Protocol 和转发请求头 |
+| 通过 `mqtt.client_attrs_init` 提取的客户端属性 | 在认证之前从用户名、客户端 ID 或客户端证书等字段中提取 | 提取属性所用的字段可信，或者认证器返回同名属性 |
+| 认证器返回的客户端属性 | JWT Claims 或 HTTP 认证响应 | 始终可信，因为这些属性由认证后端设置 |
+
+### 绑定客户端 ID
+
+使用以下任一方法，确保客户端只能使用属于其凭据的客户端 ID 进行连接：
+
+- **使用用户名作为客户端 ID**：设置 `mqtt.use_username_as_clientid = true`。EMQX 会将客户端 ID 替换为用户名，并由密码认证器验证该用户名。
+- **内置数据库**：将 **UserID 类型**（`user_id_type`）设置为 `clientid`，EMQX 将根据客户端 ID 查找凭据。详见[使用内置数据库进行密码认证](./mnesia.md)。
+- **数据库认证器**：在查询中包含 `${clientid}`，使查询仅对匹配的用户名与客户端 ID 组合返回凭据。以 MySQL 为例：
+
+  ```sql
+  SELECT password_hash, salt FROM mqtt_user WHERE username = ${username} AND clientid = ${clientid} LIMIT 1
+  ```
+
+- **HTTP 服务**：将 `${clientid}` 与凭据一起发送给认证服务。当客户端 ID 不属于该凭据时，服务返回 `deny`。详见[使用 HTTP 服务进行密码认证](./http.md)。
+- **JWT**：添加一个将 Claim 与 `${clientid}` 进行比较的 Claim 检查，例如 Claim 为 `clientid`、期望值为 `${clientid}`。在 Dashboard 中，在 **Payload** 下添加该检查；在配置文件中，将其添加到 `verify_claims`。详见 [JWT 认证](./jwt.md)。
+- **X.509 证书**：在强制启用双向 TLS 的监听器上，设置 `peer_cert_as_clientid`，将证书字段映射为客户端 ID。详见[证书信息映射](./x509.md#证书信息映射)。
+- **Client-Info**：添加一项检查，在客户端 ID 与经过验证的值不一致时拒绝连接。例如，在强制启用双向 TLS 的监听器上，条件 `str_neq(clientid, cert_common_name)` 配合结果 `deny`，会拒绝客户端 ID 与其证书通用名称不一致的客户端。请将 Client-Info 认证器放在验证凭据的认证器之前。详见 [Client-Info 认证](./cinfo.md)。
+
+当认证器不检查用户名时，请以同样的方式绑定用户名。例如，添加期望值为 `${username}` 的 JWT Claim 检查，或通过 `peer_cert_as_username` 从经过验证的证书映射用户名。
+
+### 网关的身份绑定
+
+同样的规则也适用于通过网关连接的客户端。每个网关都根据自身协议字段确定客户端 ID，网关认证器以 `${clientid}` 的形式接收该值。
+
+| 网关 | 客户端 ID 来源 | 认证器可用的凭据 |
+| --- | --- | --- |
+| [MQTT-SN](../../../develop/gateway/mqttsn.md) | `CONNECT` 消息中的 Client ID 字段 | 无。`CONNECT` 消息不携带用户名或密码。 |
+| [CoAP](../../../develop/gateway/coap.md)（连接模式） | 创建连接请求中的 `clientid` 参数 | 同一请求中的 `username` 和 `password` 参数 |
+| [LwM2M](../../../develop/gateway/lwm2m.md) | Endpoint Name，或非标准注册参数 `device_id` | 标准注册请求中没有凭据 |
+| [Stomp](../../../develop/gateway/stomp.md) | 由 EMQX 生成 | `login` 和 `passcode` 头部 |
+| [OCPP](../../../develop/gateway/ocpp.md) | 连接 URL 路径中的充电桩标识 | HTTP Basic 认证中的用户名和密码 |
+| [GB/T 32960](../../../develop/gateway/gbt32960.md) | 登录命令中的车辆识别代码（VIN） | 无。VIN 同时用作用户名。 |
+| [JT/T 808](../../../develop/gateway/jt808.md) | 终端手机号 | 注册服务颁发的鉴权码 |
+| [NATS](../../../develop/gateway/nats.md) | 默认由 EMQX 生成 | `CONNECT` 消息中的 `user` 和 `pass` 字段 |
+| [ExProto](../../../develop/gateway/exproto.md) | 由您的 ConnectionAdapter 在 `Authenticate` 调用中设置 | 由您的 ConnectionAdapter 在 `Authenticate` 调用中设置 |
+
+请遵循以下建议：
+
+- 当客户端既设置客户端 ID 又发送凭据时（例如 CoAP 和 OCPP），请配置认证器验证客户端 ID 是否属于该凭据。详见[绑定客户端 ID](#绑定客户端-id)。
+- 当协议不携带任何密钥时（例如 MQTT-SN、标准 LwM2M 注册和 GB/T 32960），认证器只能检查客户端声称的值，无法验证客户端确实拥有这些值。请通过监听器的 `access_rules` 配置和网络防火墙规则，仅允许可信网络访问这些监听器。
+- 对于 JT/T 808，请让注册服务为每个手机号单独颁发鉴权码，并在鉴权时验证手机号与鉴权码的组合。
+- 对于 ExProto，请确保您的 ConnectionAdapter 只传递经过其验证的身份值。
+
+### 客户端属性
+
+如果授权规则或多租户使用了[客户端属性](../../../develop/client-attributes/client-attributes.md)，请检查每个属性的来源。EMQX 在认证之前，从客户端提供的字段中提取 `mqtt.client_attrs_init` 中配置的属性。请仅从经过验证的字段中提取此类属性，例如在强制启用双向 TLS 的监听器上使用证书字段，或使用经过密码认证器验证的用户名；否则，请由认证器返回该属性。认证器返回的属性会覆盖同名的提取属性。
+
 ## 密码散列
 
 通过明文存储密码会有非常高的密码泄漏风险。因此 EMQX 支持多种密码散列算法以满足不同用户的安全性要求，同时我们建议生成一个随机的盐，数据库中存储盐与对密码加盐后散列得到的值（password_hash）。
