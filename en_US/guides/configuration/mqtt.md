@@ -55,6 +55,12 @@ Starting from EMQX 6.3.0, strict MQTT packet validation is enabled by default. W
 
 When a malformed packet is detected, EMQX closes the client connection and records a `frame_parse_error` log at the `info` level with the specific reason. For MQTT 5.0 clients, EMQX also sends a CONNACK or DISCONNECT packet with reason code `0x81` (Malformed Packet) when possible. MQTT 3.1 and MQTT 3.1.1 clients are disconnected without a reason code for malformed packets.
 
+::: warning Passwords Must Be UTF-8 Text
+
+The MQTT specification defines the CONNECT password as binary data, so a client can send any bytes. In strict mode, EMQX checks the password as a UTF-8 string. If the password is not valid UTF-8, or it contains a control character, EMQX refuses the connection and closes it. If your clients send binary passwords, such as raw hash or token bytes, set `mqtt.strict_mode = false` for them. You can set it globally, or only for these clients through a dedicated zone, as shown below.
+
+:::
+
 If an existing client does not conform to these MQTT protocol requirements, you can temporarily disable the protocol compliance checks that are enforced only in strict mode:
 
 ```bash
