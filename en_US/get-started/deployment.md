@@ -1,5 +1,13 @@
 # Deployment FAQs
 
+::: warning Homebrew Core Formula
+
+Homebrew core disables the `emqx` formula (EMQX 5.8.8) on **2026-11-30**. For EMQX 6.3.3, use the [macOS ZIP packages](https://github.com/emqx/emqx/releases/tag/6.3.3#macos) or the [Docker installation guide](https://docs.emqx.com/en/emqx/latest/get-started/deploy/install-docker.html).
+
+The separate [EMQ Homebrew tap](https://github.com/emqx/homebrew-emqx) supports `brew install emqx/emqx/emqx@6`. This installs **EMQX Enterprise 6.2.2**, only on **Apple Silicon (arm64) with macOS 14 or later**. It does not install EMQX 6.3.3.
+
+:::
+
 ## Which operating systems are recommended for EMQX deployment?
 
 EMQX supports running on a variety of operating systems and hardware platforms. Considering the stability and reliability of enterprise-level deployment, we generally recommend deploying it on Linux distributions such as CentOS, Ubuntu, and Debian.
@@ -144,40 +152,25 @@ After the completion, execute `ldd lib/crypto-*/priv/lib/crypto.so` in the lib-l
 
 ::: tab macOS
 
-Go to the installation directory of EMQX:
+Go to the directory where you extracted the ZIP package:
 
 ```bash
-  ## package installation
-$ cd emqx
-
-  ## brew installation
-$ cd /usr/local/Cellar/emqx/<version>/
+cd /path/to/emqx
 ```
 
-Query the list of `.so` dynamic libraries that `crypto` depends on:
+For EMQX Enterprise 6.2.2 installed from the EMQ Homebrew tap on Apple Silicon, find its directory with Homebrew:
 
 ```bash
-$ otool -L lib/crypto-*/priv/lib/crypto.so
-
-lib/crypto-4.4.2.1/priv/lib/crypto.so:
-  /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib (compatibility version 1.1.0, current version 1.1.0)
-  /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1252.200.5)
+cd "$(brew --prefix emqx/emqx/emqx@6)"
 ```
 
-It shows that OPENSSL has been successfully installed to the specified directory by checking:
+Inspect the libraries required by the installed crypto module:
 
 ```bash
-$ ls /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib
-ls: /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib: No such file or directory
+otool -L lib/crypto-*/priv/lib/crypto.so
 ```
 
-If the file does not exist, you need to install the version of OPENSSL corresponding with what printed by `otool`. For example, it shown here as `openssl@1.1`:
-
-```bash
-$ brew install openssl@1.1
-```
-
-After the installation is complete, you can start EMQX normally.
+If the output lists a library that is missing from your system, install the version identified by that path. The EMQ tap's 6.2.2 formula declares `openssl@3` as a dependency. For EMQX 6.3.3, follow the [macOS ZIP installation guide](https://docs.emqx.com/en/emqx/latest/get-started/deploy/install-macOS.html).
 
 ## EMQX failed to start with log message "libatomic.so.1: cannot open shared object file: No such file or directory"
 
