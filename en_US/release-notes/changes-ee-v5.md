@@ -2,7 +2,7 @@
 
 ## 5.8.12
 
-*Release Date: 2026-11-25*
+*Release Date: 2026-11-26*
 
 ### Enhancements
 
