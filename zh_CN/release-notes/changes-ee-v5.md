@@ -50,7 +50,9 @@
 
   使用 API key 调用 `POST /data/export` 时，备份文件会省略 Mnesia 的 `dashboard_users` 和 `api_keys` 表。使用 API key 调用 `POST /data/import` 时，如果备份包含任一表，EMQX 会返回 `403 FORBIDDEN`。
 
-  通过 Dashboard 登录取得 Bearer 令牌的用户仍可备份和恢复完整数据，包括 Dashboard 用户和 API key。这项变更使备份端点遵循 `/users` 和 `/api_key` 的访问限制。
+  通过 Dashboard 登录取得 Bearer 令牌的用户仍可备份和恢复完整数据，包括 Dashboard 用户和 API key。
+
+  使用 API key 访问数据备份端点时，适用与 `/users` 和 `/api_key` 相同的访问规则。
 
 - [#17188](https://github.com/emqx/emqx/pull/17188) 从无需认证的 `GET /status?format=json` 响应中移除了 EMQX 发布版本号（`rel_vsn`），避免向未认证的调用方披露 Broker 版本。需要认证的节点信息 API 仍会提供版本信息。
 
@@ -110,7 +112,7 @@
 
 - [#20116](https://github.com/emqx/emqx/pull/20116) 更新了 Hackney，使其使用内置 CA 证书执行标准 TLS 证书路径验证。
 
-- [#16452](https://github.com/emqx/emqx/pull/16452), [#19989](https://github.com/emqx/emqx/pull/19989), [#20149](https://github.com/emqx/emqx/pull/20149), [#20194](https://github.com/emqx/emqx/pull/20194) 将 `gen_rpc` 升级到 3.5.4。集群 RPC 连接的认证握手现在会限制认证报文大小，并对质询交换执行更严格的检查。集群 RPC 使用专用解码器解析认证报文，报文格式保持不变。连接不到对端节点时，日志更简短，并限制了记录频率。
+- [#16452](https://github.com/emqx/emqx/pull/16452), [#19989](https://github.com/emqx/emqx/pull/19989), [#20149](https://github.com/emqx/emqx/pull/20149), [#20194](https://github.com/emqx/emqx/pull/20194) 为加强集群 RPC 的安全性，将 `gen_rpc` 升级到 3.5.4。认证报文格式保持不变。对端节点不可达时，EMQX 会缩短连接失败日志并限制记录频率。
 
 - [#20155](https://github.com/emqx/emqx/pull/20155) 加强了 Dashboard、REST API 和 WebSocket 监听器的 HTTP 请求解析：
 
@@ -160,11 +162,7 @@
 
   同时修复了节点疏散或再平衡后会话过期时产生不必要错误日志的问题。
 
-- [#19730](https://github.com/emqx/emqx/pull/19730) 修复了三类格式错误的 MQTT 报文的处理。EMQX 现在会将这些报文作为协议错误拒绝并关闭连接，而不会再导致连接进程异常终止。
-
-  - 剩余长度为零但使用多个字节编码的报文，例如编码为 `10 80 00` 的 CONNECT。采用此编码的 DISCONNECT 或 PINGREQ 现在会按普通的 DISCONNECT 或 PINGREQ 处理。
-  - 变长字节整数（例如属性长度）的最后一个字节仍设置了延续位，或长度超过 4 个字节。
-  - MQTT 5.0 用户属性在键之后结束，缺少完整的值长度。
+- [#19730](https://github.com/emqx/emqx/pull/19730) 对于剩余长度（Remaining Length）为 0 的 MQTT 报文，EMQX 现在会按相同规则处理该字段的不同编码形式。不含报文体的 `DISCONNECT` 和 `PINGREQ` 报文可正常处理。遇到无效的剩余长度、格式错误的可变字节整数或不完整的 MQTT 5.0 用户属性时，EMQX 会判定为协议错误并关闭连接。
 
 - [#20140](https://github.com/emqx/emqx/pull/20140) 现在会将剩余长度字段超过 4 个字节的 MQTT 报文作为格式错误报文拒绝。MQTT 规范规定该字段最多使用 4 个字节。
 

@@ -52,7 +52,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Dashboard bearer-token (login) callers are unaffected and continue to be able to back up and restore the full database, including dashboard users and API keys.
 
-  This closes a privilege-escalation gap where an API key holder could read or write dashboard login credentials and API key records through the data backup endpoints. The `/users` and `/api_key` endpoints already deny API keys access to these records.
+  This brings the backup endpoints into line with the API key access rules for `/users` and `/api_key`.
 
 - [#17188](https://github.com/emqx/emqx/pull/17188) Removed the EMQX release version (`rel_vsn`) from the unauthenticated `GET /status?format=json` response to avoid disclosing the broker version to unauthenticated callers. The version remains available via the authenticated node-info APIs.
 
@@ -112,7 +112,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#20116](https://github.com/emqx/emqx/pull/20116) Update Hackney to use standard TLS certificate-path validation with the bundled CA certificates.
 
-- [#16452](https://github.com/emqx/emqx/pull/16452), [#19989](https://github.com/emqx/emqx/pull/19989), [#20149](https://github.com/emqx/emqx/pull/20149), [#20194](https://github.com/emqx/emqx/pull/20194) Upgraded `gen_rpc` to 3.5.4. The authentication handshake of cluster RPC connections now limits the size of authentication packets and checks the challenge exchange more strictly. A dedicated decoder now parses authentication packets. The packet format stays the same. Connection failures to unreachable peers now produce shorter, rate-limited logs.
+- [#16452](https://github.com/emqx/emqx/pull/16452), [#19989](https://github.com/emqx/emqx/pull/19989), [#20149](https://github.com/emqx/emqx/pull/20149), [#20194](https://github.com/emqx/emqx/pull/20194) Updated `gen_rpc` to 3.5.4 for cluster RPC security. The authentication packet format is unchanged. Connection failures to unreachable peers now produce shorter, rate-limited logs.
 
 - [#20155](https://github.com/emqx/emqx/pull/20155) Made HTTP request parsing on the Dashboard, the REST API and the WebSocket listeners stricter:
 
@@ -166,11 +166,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Fixed unnecessary error logs when sessions expire after node evacuation or rebalancing.
 
-- [#19730](https://github.com/emqx/emqx/pull/19730) Fixed the handling of three kinds of malformed MQTT packets. EMQX now rejects each of them as a protocol error and closes the connection, instead of ending the connection process with an error.
-
-  - A packet with a Remaining Length of zero encoded in more than one byte, for example a CONNECT sent as `10 80 00`. A DISCONNECT or PINGREQ with this encoding is now handled as a normal DISCONNECT or PINGREQ.
-  - A packet with a variable byte integer, such as a Property Length, that ends while its continuation bit is set, or that is longer than four bytes.
-  - An MQTT 5.0 User Property that ends after its key, without a complete value length.
+- [#19730](https://github.com/emqx/emqx/pull/19730) EMQX now handles zero Remaining Length consistently across encodings. DISCONNECT and PINGREQ are accepted as bodyless packets. Invalid Remaining Lengths, malformed variable byte integers, and incomplete MQTT 5.0 User Properties close the connection with a protocol error.
 
 - [#20140](https://github.com/emqx/emqx/pull/20140) MQTT packets with a Remaining Length longer than four bytes are now rejected as malformed. The MQTT specification allows at most four bytes.
 
