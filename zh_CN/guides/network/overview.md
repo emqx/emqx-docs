@@ -34,6 +34,14 @@ EMQX 提供了全面的 SSL/TLS 功能支持，包括单向/双向身份验证�
 - 当服务器需要验证客户端证书时，则必须填写 **TLS 证书** 和 **TLS 密钥**。
 - 当启用 **TLS 验证** 时，必须填写 **CA 证书** 字段以验证服务器证书的合法性。
 
+在 EMQX 5.8 中，部分基于 HTTP 的集成使用 EMQX 随附的 CA 信任库验证服务器证书。随附信任库中的信任锚可能随 EMQX 版本发生变化。是否支持通过 `cacertfile` 使用私有 CA 或固定的 CA 信任库，取决于具体集成。并非 EMQX 中的所有 TLS 客户端都使用随附的 CA 信任库。
+
+::: tip 注意
+
+从 EMQX 6.3.3 开始，如果未配置自定义 CA，Hackney HTTP 客户端会使用 `node.trusted_certs` 配置的 CA 信任库来验证服务器证书。该配置项默认使用系统 CA 信任库。
+
+:::
+
 除了在 Dashboard 中开启 SSL 加密连接外部资源，您还可以通过 `emqx.conf` 配置，例如在 `authentication` 配置组中添加配置：
 
 ```json
