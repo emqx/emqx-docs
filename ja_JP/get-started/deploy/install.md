@@ -12,7 +12,7 @@
 | [Debian](./install-debian.md)      | Debian 11<br />Debian 12<br />Debian 13    | 対応         | 対応  |
 | [CentOS/RHEL](./install-rhel.md)   | Rocky Linux 8<br />Rocky Linux 9<br />Rocky Linux 10 | 対応         | 対応  |
 | [Amazon Linux](./install-rhel.md)  | Amazon Linux 2023                          | 対応         | 対応  |
-| [macOS 14+](./install-macOS.md)    | macOS 14<br />macOS 15<br />macOS 26       | 非対応       | 対応  |
+| [macOS](./install-macOS.md)        | macOS 15<br />macOS 26                   | 非対応       | 対応  |
 
 <!-- ## ハードウェア仕様
 

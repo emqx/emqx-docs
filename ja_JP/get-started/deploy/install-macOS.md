@@ -1,11 +1,12 @@
 # macOSへのEMQXインストール
 このページでは、zipファイルを使用してmacOSにEMQXをインストールし、起動する手順を案内します。
 
-対応バージョン：
+対応バージョン（Apple Silicon / arm64）：
 
 - macOS 26
 - macOS 15
-- macOS 14
+
+EMQX 6.3.3 は macOS 15 と macOS 26 用の ZIP パッケージを提供します。macOS 15 用パッケージには macOS 15.0 以降が必要で、macOS 14（Sonoma）では実行できません。コンテナでのデプロイについては、[Docker インストールガイド](./install-docker.md)をご覧ください。
 
 他のシステムへのインストールや他バージョンのインストールについては、[EMQX Enterpriseダウンロードサイト](https://www.emqx.com/en/downloads-and-install/enterprise)をご覧ください。
 

@@ -1,19 +1,28 @@
 # 在 macOS 上安装 EMQX
 
+::: warning Homebrew Core 配方
+
+Homebrew core 将于 **2026-11-30** 禁用 `emqx` 配方（EMQX 5.8.8）。安装 EMQX 6.3.3，请使用 [macOS ZIP 安装包](https://github.com/emqx/emqx/releases/tag/6.3.3#macos)或 [Docker 安装指南](https://docs.emqx.com/zh/emqx/latest/get-started/deploy/install-docker.html)。
+
+独立的 [EMQ Homebrew tap](https://github.com/emqx/homebrew-emqx)提供 `brew install emqx/emqx/emqx@6` 命令。该命令安装的是 **EMQX 企业版 6.2.2**，仅适用于 **Apple Silicon（arm64）且运行 macOS 14 或更高版本**的 Mac，不会安装 EMQX 6.3.3。
+
+:::
+
 本页将指导您如何通过 zip 包在 macOS 系统中下载安装并启动最新版 EMQX。
 
-支持的操作系统：
+支持的操作系统（仅限 Apple Silicon / arm64）：
 
 - macOS 26
 - macOS 15
-- macOS 14
+
+EMQX 6.3.3 分别提供 macOS 15 和 macOS 26 的 ZIP 安装包。macOS 15 安装包要求系统版本为 macOS 15.0 或更高版本，不能在 macOS 14（Sonoma）上运行。如需使用容器部署，请参考 [Docker 安装指南](./install-docker.md)。
 
 如果您希望安装其他版本或在其他操作系统中进行安装，请访问 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise)。
 
 ## 安装 EMQX
 
 1. 前往官方下载页面，选择 [macOS 页签](https://www.emqx.com/zh/downloads-and-install/enterprise?os=macOS)。
-2. 选择最新版本 `@EE_VERSION@`，在**安装包类型**中根据需要的版本和 CPU 架构选择 `zip` 安装包。
+2. 选择版本 `@EE_VERSION@`，在**安装包类型**中选择与系统匹配的 macOS 15 arm64 或 macOS 26 arm64 ZIP 安装包。
 3. 点击下方的下载链接。您也可以参照命令行指导步骤进行下载与安装。
 
 ## 启动和停止 EMQX

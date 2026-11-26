@@ -1,5 +1,13 @@
 # Install EMQX Open Source
 
+::: warning Homebrew Core Formula
+
+Homebrew core disables the `emqx` formula (EMQX 5.8.8) on **2026-11-30**. For EMQX 6.3.3, use the [macOS ZIP packages](https://github.com/emqx/emqx/releases/tag/6.3.3#macos) or the [Docker installation guide](https://docs.emqx.com/en/emqx/latest/get-started/deploy/install-docker.html).
+
+The separate [EMQ Homebrew tap](https://github.com/emqx/homebrew-emqx) supports `brew install emqx/emqx/emqx@6`. This installs **EMQX Enterprise 6.2.2**, only on **Apple Silicon (arm64) with macOS 14 or later**. It does not install EMQX 6.3.3.
+
+:::
+
 EMQX releases the corresponding Docker image and the installation packages for different operating systems or platforms in each release. You may click [here](https://www.emqx.com/en/try?product=broker) to download it.
 
 You can also download the alpha, beta, or rc versions from our [GitHub pages](https://github.com/emqx/emqx/releases).
@@ -29,7 +37,7 @@ Install the EMQX on CentOS/RHEL system with Yum source, rpm, and tar.gz.
 
 **[Install on macOS](./install-macOS-ce.md)**
 
-Install the EMQX on macOS with Homebrew and a zip package.
+Install EMQX Open Source on macOS from a ZIP package.
 
 **[Deploy on Kubernetes](https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html)**
 
