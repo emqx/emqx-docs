@@ -335,6 +335,12 @@ Including Avro Schema and i18n files in your plugin package ensures they are inc
 
 EMQX supports plugin installation via the Dashboard and CLI. However, due to security enhancements, plugin installation via the Dashboard now requires explicit permission before proceeding.
 
+### Configure the Plugin Installation Directory
+
+Starting with EMQX 5.8.12, to change the plugin installation directory, set `plugins.install_dir` in `emqx.conf` or set the `EMQX_PLUGINS__INSTALL_DIR` environment variable, then restart the node.
+
+If a runtime configuration update attempts to change the directory, the node that initiates the update rejects it. If a node receives a replicated configuration update with a different directory, it keeps its current directory, logs a warning, and applies the other plugin settings in the update.
+
 ### Install Plugins via Dashboard
 
 ::: tip Important Security Update
