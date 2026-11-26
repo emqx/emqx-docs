@@ -75,6 +75,8 @@
 
   EMQX also applies the 32 KB limit to the headers and trailers of HTTP/2 responses it receives, for example from ExHook and ExProto gRPC servers. A gRPC call fails when the server returns larger metadata.
 
+- [#20203](https://github.com/emqx/emqx/pull/20203) Cluster Linking now validates route replication operation types.
+
 - [#20209](https://github.com/emqx/emqx/pull/20209) EMQX now checks the file names of plugin packages uploaded through the REST API or Dashboard. If the file name does not match the plugin naming pattern, EMQX rejects the upload with `BAD_PLUGIN_INFO`.
 
 ### Bug Fixes
@@ -167,7 +169,9 @@
 
 - [#19305](https://github.com/emqx/emqx/pull/19305) Restricted the backup file download (`GET /api/v5/data/files/:filename`) to administrators. Viewer API keys now get a 403 response, like dashboard viewers. Viewers can still list the backup files with `GET /api/v5/data/files`.
 
-- [#20123](https://github.com/emqx/emqx/pull/20123) Fixed a memory leak in the Erlang/OTP HTTP client (`httpc`). Each asynchronous HTTP request, and each synchronous request that failed before it was sent, left about 100 bytes in the process that made the request, and the memory was freed only when that process exited. The most visible case was JWT authentication with a JWKS endpoint: the JWKS client processes grew with every key set refresh.
+#### Erlang Runtime
+
+- [#20123](https://github.com/emqx/emqx/pull/20123), [#20231](https://github.com/emqx/emqx/pull/20231) Updated Erlang/OTP to 26.2.5.14-3. This fixes an HTTP client memory leak that affected JWKS refreshes and a possible node crash when decoding malformed Erlang external term data.
 
 #### Clustering
 

@@ -75,6 +75,8 @@
 
   对于 EMQX 接收的 HTTP/2 响应（例如来自 ExHook 和 ExProto gRPC 服务的响应），请求头及尾部字段同样受 32 KB 限制。如果 gRPC 服务返回的元数据超过该限制，gRPC 调用会失败。
 
+- [#20203](https://github.com/emqx/emqx/pull/20203) 集群连接会校验路由复制操作的类型。
+
 - [#20209](https://github.com/emqx/emqx/pull/20209) 通过 REST API 或 Dashboard 上传插件包时，EMQX 现在会校验文件名。如果文件名不符合插件命名规则，EMQX 会拒绝上传并返回 `BAD_PLUGIN_INFO`。
 
 ### 修复
@@ -167,7 +169,9 @@
 
 - [#19305](https://github.com/emqx/emqx/pull/19305) 将备份文件下载（`GET /api/v5/data/files/:filename`）限制为仅管理员可用。Viewer API key 现在与 Dashboard Viewer 一样会收到 403 响应。Viewer 仍可通过 `GET /api/v5/data/files` 列出备份文件。
 
-- [#20123](https://github.com/emqx/emqx/pull/20123) 修复了 Erlang/OTP HTTP 客户端（`httpc`）中的内存泄漏。每个异步 HTTP 请求，以及每个在发送前失败的同步请求，都会在发起请求的进程中遗留约 100 字节内存，且只有进程退出时才会释放。最明显的情况是使用 JWKS 端点的 JWT 认证：JWKS 客户端进程的内存占用会在每次刷新密钥集时持续增长。
+#### Erlang 运行时
+
+- [#20123](https://github.com/emqx/emqx/pull/20123), [#20231](https://github.com/emqx/emqx/pull/20231) 将 Erlang/OTP 升级至 26.2.5.14-3。此次升级修复了影响 JWKS 刷新的 HTTP 客户端内存泄漏，以及解码无效的 Erlang 外部项格式（ETF）数据时可能发生的节点崩溃。
 
 #### 集群
 
