@@ -1520,7 +1520,6 @@
             "type": "boolean"
           },
           "expired_at": {
-            "default": "infinity",
             "description": "No longer valid datetime",
             "example": "2021-12-05T02:01:34.186Z",
             "oneOf": [
@@ -1552,7 +1551,6 @@
             "type": "string"
           },
           "role": {
-            "default": "administrator",
             "description": "Role for this API",
             "example": "administrator",
             "type": "string"
@@ -2382,7 +2380,7 @@
             "type": "string"
           },
           "principal": {
-            "description": "Server Kerberos principal.<br/>For example <code>mqtt/emqx-cluster-1.example.com@MY_REALM.EXAMPLE.COM</code>.<br/>NOTE: The realm in use has to be configured in /etc/krb5.conf in EMQX nodes.",
+            "description": "Server Kerberos principal.<br/>For example <code>mqtt/emqx-cluster-1.example.com@MY_REALM.EXAMPLE.COM</code>.<br/>NOTE: The realm in use has to be configured in the default config file krb5.conf, usually located in `/etc`, on EMQX nodes.",
             "type": "string"
           }
         },
@@ -5917,13 +5915,13 @@
           },
           "max_linger_bytes": {
             "default": "10MB",
-            "description": "Maximum number of bytes for a per-partition producer to wait for messages in order to collect a batch to buffer.",
+            "description": "Maximum number of bytes a per-partition producer accumulates while waiting before it stops waiting and sends the batch.",
             "example": "32MB",
             "type": "string"
           },
           "max_linger_time": {
             "default": "0ms",
-            "description": "Maximum duration for a per-partition producer to wait for messages in order to collect a batch to buffer.<br/>The default value `0` means no wait. For non-memory buffer mode, it's advised to configure at least `5ms` for less IOPS.",
+            "description": "Maximum duration a per-partition producer waits to accumulate more messages into a larger batch.<br/>The default value `0` means no wait (messages are sent as soon as they arrive).<br/>The wait ends early as soon as a full batch's worth of data has accumulated, so a busy producer is never delayed.<br/>When buffering to disk, the wait happens before writing to the buffer; configuring at least `5ms` is advised there to reduce disk IOPS.",
             "example": "32s",
             "type": "string"
           },
@@ -7058,12 +7056,12 @@
         "properties": {
           "batch_value_separator": {
             "default": ", ",
-            "description": "The default value ',' works for the VALUES format. You can also use other separator if other format is specified. See [INSERT INTO Statement](https://clickhouse.com/docs/en/sql-reference/statements/insert-into).",
+            "description": "This argument is ignored and retained for compatibility. The action derives the batch separator from the SQL format.",
             "type": "string"
           },
           "sql": {
             "default": "INSERT INTO messages(data, arrived) VALUES ('${payload}', ${timestamp})",
-            "description": "The template string can contain ${field} placeholders for message metadata and payload field. Make sure that the inserted values are formatted and escaped correctly. [Prepared Statement](https://docs.emqx.com/en/enterprise/v5.0/data-integration/data-bridges.html#Prepared-Statement) is not supported.",
+            "description": "A restricted ClickHouse `INSERT` template. It supports `VALUES`, `FORMAT Values`, and `JSONCompactEachRow`. Placeholders are allowed only in value positions and string values. Comments, extra statements, and dynamic identifiers are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -7207,7 +7205,7 @@
           },
           "batch_value_separator": {
             "default": ", ",
-            "description": "The default value ',' works for the VALUES format. You can also use other separator if other format is specified. See [INSERT INTO Statement](https://clickhouse.com/docs/en/sql-reference/statements/insert-into).",
+            "description": "This argument is ignored and retained for compatibility. The action derives the batch separator from the SQL format.",
             "type": "string"
           },
           "connect_timeout": {
@@ -7259,7 +7257,7 @@
           },
           "sql": {
             "default": "INSERT INTO messages(data, arrived) VALUES ('${payload}', ${timestamp})",
-            "description": "The template string can contain ${field} placeholders for message metadata and payload field. Make sure that the inserted values are formatted and escaped correctly. [Prepared Statement](https://docs.emqx.com/en/enterprise/v5.0/data-integration/data-bridges.html#Prepared-Statement) is not supported.",
+            "description": "A restricted ClickHouse `INSERT` template. It supports `VALUES`, `FORMAT Values`, and `JSONCompactEachRow`. Placeholders are allowed only in value positions and string values. Comments, extra statements, and dynamic identifiers are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -7502,7 +7500,7 @@
           },
           "batch_value_separator": {
             "default": ", ",
-            "description": "The default value ',' works for the VALUES format. You can also use other separator if other format is specified. See [INSERT INTO Statement](https://clickhouse.com/docs/en/sql-reference/statements/insert-into).",
+            "description": "This argument is ignored and retained for compatibility. The action derives the batch separator from the SQL format.",
             "type": "string"
           },
           "connect_timeout": {
@@ -7547,7 +7545,7 @@
           },
           "sql": {
             "default": "INSERT INTO messages(data, arrived) VALUES ('${payload}', ${timestamp})",
-            "description": "The template string can contain ${field} placeholders for message metadata and payload field. Make sure that the inserted values are formatted and escaped correctly. [Prepared Statement](https://docs.emqx.com/en/enterprise/v5.0/data-integration/data-bridges.html#Prepared-Statement) is not supported.",
+            "description": "A restricted ClickHouse `INSERT` template. It supports `VALUES`, `FORMAT Values`, and `JSONCompactEachRow`. Placeholders are allowed only in value positions and string values. Comments, extra statements, and dynamic identifiers are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -7721,7 +7719,7 @@
           },
           "batch_value_separator": {
             "default": ", ",
-            "description": "The default value ',' works for the VALUES format. You can also use other separator if other format is specified. See [INSERT INTO Statement](https://clickhouse.com/docs/en/sql-reference/statements/insert-into).",
+            "description": "This argument is ignored and retained for compatibility. The action derives the batch separator from the SQL format.",
             "type": "string"
           },
           "connect_timeout": {
@@ -7762,7 +7760,7 @@
           },
           "sql": {
             "default": "INSERT INTO messages(data, arrived) VALUES ('${payload}', ${timestamp})",
-            "description": "The template string can contain ${field} placeholders for message metadata and payload field. Make sure that the inserted values are formatted and escaped correctly. [Prepared Statement](https://docs.emqx.com/en/enterprise/v5.0/data-integration/data-bridges.html#Prepared-Statement) is not supported.",
+            "description": "A restricted ClickHouse `INSERT` template. It supports `VALUES`, `FORMAT Values`, and `JSONCompactEachRow`. Placeholders are allowed only in value positions and string values. Comments, extra statements, and dynamic identifiers are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -9723,6 +9721,13 @@
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "status": {
             "description": "The status of the bridge<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the bridge passes the health probes.<br/><br/>- <code>disconnected</code>: when the bridge can not pass health probes.<br/><br/>- <code>stopped</code>: when the bridge resource is requested to be stopped.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status.",
             "enum": [
@@ -9850,6 +9855,13 @@
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "status": {
             "description": "The status of the bridge<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the bridge passes the health probes.<br/><br/>- <code>disconnected</code>: when the bridge can not pass health probes.<br/><br/>- <code>stopped</code>: when the bridge resource is requested to be stopped.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status.",
             "enum": [
@@ -9963,6 +9975,13 @@
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "tags": {
             "description": "Tags to annotate this config entry.",
             "items": {
@@ -10068,6 +10087,13 @@
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "tags": {
             "description": "Tags to annotate this config entry.",
             "items": {
@@ -10144,6 +10170,13 @@
           "service_account_json": {
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
           },
           "tags": {
             "description": "Tags to annotate this config entry.",
@@ -10236,6 +10269,13 @@
           "service_account_json": {
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
           },
           "tags": {
             "description": "Tags to annotate this config entry.",
@@ -14688,7 +14728,7 @@
             "type": "string"
           },
           "kerberos_principal": {
-            "description": "SASL GSSAPI authentication Kerberos principal. For example <code>kafka/node1.example.com@EXAMPLE.COM</code>, NOTE: The realm in use has to be configured in /etc/krb5.conf in EMQX nodes.",
+            "description": "SASL GSSAPI authentication Kerberos principal. For example <code>kafka/node1.example.com@EXAMPLE.COM</code>, NOTE: The realm in use has to be configured in the default config file krb5.conf, usually located in `/etc`, on EMQX nodes.",
             "type": "string"
           }
         },
@@ -15782,13 +15822,13 @@
           },
           "max_linger_bytes": {
             "default": "10MB",
-            "description": "Maximum number of bytes for a per-partition producer to wait for messages in order to collect a batch to buffer.",
+            "description": "Maximum number of bytes a per-partition producer accumulates while waiting before it stops waiting and sends the batch.",
             "example": "32MB",
             "type": "string"
           },
           "max_linger_time": {
             "default": "0ms",
-            "description": "Maximum duration for a per-partition producer to wait for messages in order to collect a batch to buffer.<br/>The default value `0` means no wait. For non-memory buffer mode, it's advised to configure at least `5ms` for less IOPS.",
+            "description": "Maximum duration a per-partition producer waits to accumulate more messages into a larger batch.<br/>The default value `0` means no wait (messages are sent as soon as they arrive).<br/>The wait ends early as soon as a full batch's worth of data has accumulated, so a busy producer is never delayed.<br/>When buffering to disk, the wait happens before writing to the buffer; configuring at least `5ms` is advised there to reduce disk IOPS.",
             "example": "32s",
             "type": "string"
           },
@@ -26482,7 +26522,7 @@
         "properties": {
           "sql": {
             "default": "insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )",
-            "description": "SQL Template",
+            "description": "A restricted SQL Server INSERT INTO VALUES template. Placeholders are allowed only in value positions and string values. Comments, extra statements, multiple configured rows, and dynamic identifiers are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -26676,7 +26716,7 @@
           },
           "sql": {
             "default": "insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )",
-            "description": "SQL Template",
+            "description": "A restricted SQL Server INSERT INTO VALUES template. Placeholders are allowed only in value positions and string values. Comments, extra statements, multiple configured rows, and dynamic identifiers are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -26962,7 +27002,7 @@
           },
           "sql": {
             "default": "insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )",
-            "description": "SQL Template",
+            "description": "A restricted SQL Server INSERT INTO VALUES template. Placeholders are allowed only in value positions and string values. Comments, extra statements, multiple configured rows, and dynamic identifiers are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -27175,7 +27215,7 @@
           },
           "sql": {
             "default": "insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )",
-            "description": "SQL Template",
+            "description": "A restricted SQL Server INSERT INTO VALUES template. Placeholders are allowed only in value positions and string values. Comments, extra statements, multiple configured rows, and dynamic identifiers are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -27907,7 +27947,7 @@
           },
           "sql": {
             "default": "insert into t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})",
-            "description": "SQL Template",
+            "description": "A restricted TDengine INSERT template. It supports multi-table VALUES inserts and USING stable TAGS clauses. A bare or backtick-quoted target table may contain placeholders, for example, `test_${clientid}`. EMQX renders the complete target as one quoted identifier. Comments, FILE input, and extra statements are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -27977,7 +28017,7 @@
           },
           "sql": {
             "default": "insert into t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})",
-            "description": "SQL Template",
+            "description": "A restricted TDengine INSERT template. It supports multi-table VALUES inserts and USING stable TAGS clauses. A bare or backtick-quoted target table may contain placeholders, for example, `test_${clientid}`. EMQX renders the complete target as one quoted identifier. Comments, FILE input, and extra statements are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -28146,7 +28186,7 @@
           },
           "sql": {
             "default": "insert into t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})",
-            "description": "SQL Template",
+            "description": "A restricted TDengine INSERT template. It supports multi-table VALUES inserts and USING stable TAGS clauses. A bare or backtick-quoted target table may contain placeholders, for example, `test_${clientid}`. EMQX renders the complete target as one quoted identifier. Comments, FILE input, and extra statements are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -28274,7 +28314,7 @@
           },
           "sql": {
             "default": "insert into t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})",
-            "description": "SQL Template",
+            "description": "A restricted TDengine INSERT template. It supports multi-table VALUES inserts and USING stable TAGS clauses. A bare or backtick-quoted target table may contain placeholders, for example, `test_${clientid}`. EMQX renders the complete target as one quoted identifier. Comments, FILE input, and extra statements are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -29817,13 +29857,13 @@
           },
           "max_linger_bytes": {
             "default": "10MB",
-            "description": "Maximum number of bytes for a per-partition producer to wait for messages in order to collect a batch to buffer.",
+            "description": "Maximum number of bytes a per-partition producer accumulates while waiting before it stops waiting and sends the batch.",
             "example": "32MB",
             "type": "string"
           },
           "max_linger_time": {
             "default": "0ms",
-            "description": "Maximum duration for a per-partition producer to wait for messages in order to collect a batch to buffer.<br/>The default value `0` means no wait. For non-memory buffer mode, it's advised to configure at least `5ms` for less IOPS.",
+            "description": "Maximum duration a per-partition producer waits to accumulate more messages into a larger batch.<br/>The default value `0` means no wait (messages are sent as soon as they arrive).<br/>The wait ends early as soon as a full batch's worth of data has accumulated, so a busy producer is never delayed.<br/>When buffering to disk, the wait happens before writing to the buffer; configuring at least `5ms` is advised there to reduce disk IOPS.",
             "example": "32s",
             "type": "string"
           },
@@ -30041,6 +30081,14 @@
             "minimum": 0,
             "type": "integer"
           },
+          "enable": {
+            "default": true,
+            "description": "Enable TLS.",
+            "enum": [
+              true
+            ],
+            "type": "string"
+          },
           "hibernate_after": {
             "default": "5s",
             "description": "Specifies the amount of time that an SSL process will hibernate after being idle, thus reducing its memory footprint.<br/><br/>The hibernating process will be woken up when a new message arrives.<br/>Hibernating and waking up too often can cause CPU utilization to increase, as they both perform garbage collection on the process.",
@@ -30115,6 +30163,15 @@
                 "type": "string"
               }
             ]
+          },
+          "verify": {
+            "default": "verify_none",
+            "description": "Enable or disable peer verification.",
+            "enum": [
+              "verify_peer",
+              "verify_none"
+            ],
+            "type": "string"
           },
           "verify_peer_ext_key_usage": {
             "description": "Verify extended key usage in peer's certificate<br/>For additional peer certificate validation, the value defined here must present in the<br/>'Extended Key Usage' of peer certificate defined in<br/>[rfc5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.12).<br/><br/>Allowed values are<br/>- `clientAuth`<br/>- `serverAuth`<br/>- `codeSigning`<br/>- `emailProtection`<br/>- `timeStamping`<br/>- `ocspSigning`<br/>- raw OID, for example: \"OID:1.3.6.1.5.5.7.3.2\" means `id-pk 2` which is equivalent to `clientAuth`<br/><br/>Comma-separated string is also supported for validating more than one key usages.<br/><br/>For example, `\"serverAuth,OID:1.3.6.1.5.5.7.3.2\"`",
@@ -32401,7 +32458,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 20,
+            "default": 4,
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online",
             "type": "integer"
           },
@@ -32448,7 +32505,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 20,
+            "default": 4,
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online",
             "type": "integer"
           },
@@ -34176,6 +34233,22 @@
             "minimum": 23,
             "type": "integer"
           },
+          "max_connect_user_properties": {
+            "default": 100,
+            "description": "Maximum number of 'User-Property' pairs accepted in a CONNECT packet.<br/>The limit applies separately to the CONNECT properties and to the will properties.<br/>EMQX rejects a CONNECT carrying more pairs than this and closes the connection.<br/>Set to `infinity` to accept any number.<br/>Note: changing this config at runtime may only take effect for newly established connections after the change.",
+            "oneOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
           "max_inflight": {
             "default": 32,
             "description": "Maximum number of QoS 1 and QoS 2 messages that are allowed to be delivered simultaneously before completing the acknowledgment.",
@@ -34317,7 +34390,7 @@
           },
           "response_information": {
             "default": "",
-            "description": "MQTT v5 Response Information (Optional).<br/>Specifies a string returned to clients in the `CONNACK` packet if requested.<br/>The server passes this value as-is and does automatically add it to Access Control (ACL) rules.<br/>It is intended solely to help publishers and subscribers establish their own topic contract<br/> (e.g., a topic prefix). Leave blank to disable.",
+            "description": "MQTT v5 Response Information (Optional).<br/>Specifies a string returned to clients in the `CONNACK` packet if requested.<br/>The server passes this value as-is and does not automatically add it to Access Control (ACL) rules.<br/>It is intended solely to help publishers and subscribers establish their own topic contract<br/> (e.g., a topic prefix). Leave blank to disable.",
             "type": "string"
           },
           "retain_available": {
@@ -34911,12 +34984,12 @@
           },
           "proxy_address_header": {
             "default": "x-forwarded-for",
-            "description": "The HTTP request header that carries the original client's IP address, EMQX will take the leftmost IP in the header as the original client's IP.<br/><br/>This option is typically used when EMQX is deployed behind a WebSocket proxy.",
+            "description": "The HTTP request header that carries the original client's IP address, EMQX will take the leftmost IP in the header as the original client's IP.<br/><br/>This option is typically used when EMQX is deployed behind a WebSocket proxy.<br/><br/>Set it to an empty string (<code>\"\"</code>) to disable the header lookup, in which case the source IP address of the TCP connection is always used.",
             "type": "string"
           },
           "proxy_port_header": {
             "default": "x-forwarded-port",
-            "description": "The HTTP request header that carries the original client's source port, EMQX will take the leftmost port in the header as the original client's source port.<br/><br/>This option is typically used when EMQX is deployed behind a WebSocket proxy.",
+            "description": "The HTTP request header that carries the original client's source port, EMQX will take the leftmost port in the header as the original client's source port.<br/><br/>This option is typically used when EMQX is deployed behind a WebSocket proxy.<br/><br/>Set it to an empty string (<code>\"\"</code>) to disable the header lookup, in which case the source port of the TCP connection is always used.",
             "type": "string"
           },
           "supported_subprotocols": {
@@ -39841,7 +39914,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "660CAE8FCA45E70C",
+            "example": "76A6515262975D41",
             "type": "string"
           },
           "status": {
@@ -40256,6 +40329,11 @@
           },
           "packets.publish.inuse": {
             "description": "Number of received PUBLISH packet with occupied identifiers",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "packets.publish.quota_exceeded": {
+            "description": "Number of PUBLISH packets rejected due to quota exceeded",
             "minimum": 0,
             "type": "integer"
           },
@@ -40740,6 +40818,11 @@
           },
           "packets.publish.inuse": {
             "description": "Number of received PUBLISH packet with occupied identifiers",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "packets.publish.quota_exceeded": {
+            "description": "Number of PUBLISH packets rejected due to quota exceeded",
             "minimum": 0,
             "type": "integer"
           },
@@ -43123,6 +43206,13 @@
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "status": {
             "description": "The status of the connector<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the connector passes the health probes.<br/><br/>- <code>disconnected</code>: when the connector can not pass health probes.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status.",
             "enum": [
@@ -43287,6 +43377,13 @@
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "tags": {
             "description": "Tags to annotate this config entry.",
             "items": {
@@ -43409,6 +43506,13 @@
           "service_account_json": {
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
           },
           "tags": {
             "description": "Tags to annotate this config entry.",
@@ -43707,6 +43811,13 @@
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "status": {
             "description": "The status of the connector<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the connector passes the health probes.<br/><br/>- <code>disconnected</code>: when the connector can not pass health probes.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status.",
             "enum": [
@@ -43853,6 +43964,13 @@
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "tags": {
             "description": "Tags to annotate this config entry.",
             "items": {
@@ -43968,6 +44086,13 @@
           "service_account_json": {
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
           },
           "tags": {
             "description": "Tags to annotate this config entry.",
@@ -48436,7 +48561,7 @@
           },
           "follow_traceparent": {
             "default": true,
-            "description": "Enable/Disable, Whether to follow the traceparent passed in by the client through User-Property.",
+            "description": "Whether EMQX uses the `traceparent` user property in incoming MQTT packets to link its end-to-end tracing to an existing trace.",
             "type": "boolean"
           },
           "msg_trace_level": {
@@ -55502,7 +55627,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.8.10"
+    "version": "5.8.12"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -55519,39 +55644,39 @@
                     "summary": "Action types",
                     "value": [
                       "http",
-                      "rabbitmq",
                       "cassandra",
+                      "rabbitmq",
                       "rocketmq",
-                      "syskeeper_forwarder",
+                      "azure_event_hub_producer",
                       "kafka_producer",
-                      "sqlserver",
-                      "hstreamdb",
-                      "greptimedb",
-                      "gcp_pubsub_producer",
-                      "iotdb",
-                      "pulsar",
+                      "mongodb",
                       "influxdb",
                       "confluent_producer",
-                      "mongodb",
-                      "azure_event_hub_producer",
-                      "kinesis",
+                      "greptimedb",
+                      "iotdb",
+                      "pulsar",
+                      "hstreamdb",
+                      "syskeeper_forwarder",
+                      "gcp_pubsub_producer",
+                      "sqlserver",
                       "s3",
+                      "datalayers",
                       "opents",
                       "redis",
-                      "datalayers",
+                      "kinesis",
                       "mqtt",
-                      "timescale",
                       "couchbase",
-                      "snowflake",
+                      "tablestore",
+                      "timescale",
                       "tdengine",
                       "clickhouse",
-                      "tablestore",
+                      "snowflake",
                       "oracle",
                       "azure_blob_storage",
-                      "matrix",
                       "elasticsearch",
-                      "mysql",
+                      "matrix",
                       "pgsql",
+                      "mysql",
                       "dynamo"
                     ]
                   }
@@ -55560,39 +55685,39 @@
                   "items": {
                     "enum": [
                       "http",
-                      "rabbitmq",
                       "cassandra",
+                      "rabbitmq",
                       "rocketmq",
-                      "syskeeper_forwarder",
+                      "azure_event_hub_producer",
                       "kafka_producer",
-                      "sqlserver",
-                      "hstreamdb",
-                      "greptimedb",
-                      "gcp_pubsub_producer",
-                      "iotdb",
-                      "pulsar",
+                      "mongodb",
                       "influxdb",
                       "confluent_producer",
-                      "mongodb",
-                      "azure_event_hub_producer",
-                      "kinesis",
+                      "greptimedb",
+                      "iotdb",
+                      "pulsar",
+                      "hstreamdb",
+                      "syskeeper_forwarder",
+                      "gcp_pubsub_producer",
+                      "sqlserver",
                       "s3",
+                      "datalayers",
                       "opents",
                       "redis",
-                      "datalayers",
+                      "kinesis",
                       "mqtt",
-                      "timescale",
                       "couchbase",
-                      "snowflake",
+                      "tablestore",
+                      "timescale",
                       "tdengine",
                       "clickhouse",
-                      "tablestore",
+                      "snowflake",
                       "oracle",
                       "azure_blob_storage",
-                      "matrix",
                       "elasticsearch",
-                      "mysql",
+                      "matrix",
                       "pgsql",
+                      "mysql",
                       "dynamo"
                     ],
                     "type": "string"
@@ -64080,7 +64205,6 @@
                       "type": "boolean"
                     },
                     "expired_at": {
-                      "default": "infinity",
                       "description": "No longer valid datetime",
                       "example": "2021-12-05T02:01:34.186Z",
                       "oneOf": [
@@ -64112,7 +64236,6 @@
                       "type": "string"
                     },
                     "role": {
-                      "default": "administrator",
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
@@ -64336,7 +64459,6 @@
                       "type": "boolean"
                     },
                     "expired_at": {
-                      "default": "infinity",
                       "description": "No longer valid datetime",
                       "example": "2021-12-05T02:01:34.186Z",
                       "oneOf": [
@@ -64368,7 +64490,6 @@
                       "type": "string"
                     },
                     "role": {
-                      "default": "administrator",
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
@@ -64440,7 +64561,6 @@
                     "type": "boolean"
                   },
                   "expired_at": {
-                    "default": "infinity",
                     "description": "No longer valid datetime",
                     "example": "2021-12-05T02:01:34.186Z",
                     "oneOf": [
@@ -64467,7 +64587,6 @@
                     ]
                   },
                   "role": {
-                    "default": "administrator",
                     "description": "Role for this API",
                     "example": "administrator",
                     "type": "string"
@@ -64518,7 +64637,6 @@
                       "type": "boolean"
                     },
                     "expired_at": {
-                      "default": "infinity",
                       "description": "No longer valid datetime",
                       "example": "2021-12-05T02:01:34.186Z",
                       "oneOf": [
@@ -64550,7 +64668,6 @@
                       "type": "string"
                     },
                     "role": {
-                      "default": "administrator",
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
@@ -66257,9 +66374,9 @@
                       "metrics": {
                         "failed": 0,
                         "nomatch": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
+                        "rate": 0.0,
+                        "rate_last5m": 0.0,
+                        "rate_max": 0.0,
                         "success": 0,
                         "total": 0
                       },
@@ -66270,9 +66387,9 @@
                             "failed": 0,
                             "matched": 0,
                             "nomatch": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
+                            "rate": 0.0,
+                            "rate_last5m": 0.0,
+                            "rate_max": 0.0,
                             "total": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -66283,9 +66400,9 @@
                           "metrics": {
                             "failed": 0,
                             "matched": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
+                            "rate": 0.0,
+                            "rate_last5m": 0.0,
+                            "rate_max": 0.0,
                             "success": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -66300,9 +66417,9 @@
                       "resource_metrics": {
                         "failed": 0,
                         "matched": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
+                        "rate": 0.0,
+                        "rate_last5m": 0.0,
+                        "rate_max": 0.0,
                         "success": 0
                       },
                       "status": "connected"
@@ -68891,9 +69008,9 @@
                         "allow": 0,
                         "deny": 0,
                         "nomatch": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
+                        "rate": 0.0,
+                        "rate_last5m": 0.0,
+                        "rate_max": 0.0,
                         "total": 0
                       },
                       "node_metrics": [
@@ -68902,9 +69019,9 @@
                             "allow": 0,
                             "deny": 0,
                             "nomatch": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
+                            "rate": 0.0,
+                            "rate_last5m": 0.0,
+                            "rate_max": 0.0,
                             "total": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -68915,9 +69032,9 @@
                           "metrics": {
                             "failed": 0,
                             "matched": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
+                            "rate": 0.0,
+                            "rate_last5m": 0.0,
+                            "rate_max": 0.0,
                             "success": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -68932,9 +69049,9 @@
                       "resource_metrics": {
                         "failed": 0,
                         "matched": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
+                        "rate": 0.0,
+                        "rate_last5m": 0.0,
+                        "rate_max": 0.0,
                         "success": 0
                       },
                       "status": "connected"
@@ -89708,7 +89825,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "660CAE8FCA45E70C",
+            "example": "76A6515262975D41",
             "in": "path",
             "name": "site",
             "required": true,
@@ -90102,7 +90219,7 @@
           },
           {
             "description": "Site ID",
-            "example": "660CAE8FCA45E70C",
+            "example": "76A6515262975D41",
             "in": "path",
             "name": "site",
             "required": true,
@@ -90187,7 +90304,7 @@
           },
           {
             "description": "Site ID",
-            "example": "660CAE8FCA45E70C",
+            "example": "76A6515262975D41",
             "in": "path",
             "name": "site",
             "required": true,
@@ -112907,7 +113024,7 @@
         ]
       },
       "post": {
-        "description": "Create dashboard user",
+        "description": "Create Dashboard user",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -112991,7 +113108,7 @@
     },
     "/users/{username}": {
       "delete": {
-        "description": "Delete dashboard user",
+        "description": "Delete Dashboard user",
         "parameters": [
           {
             "example": "local",
@@ -113082,7 +113199,7 @@
         ]
       },
       "put": {
-        "description": "Update dashboard user description",
+        "description": "Update Dashboard user description",
         "parameters": [
           {
             "example": "local",
@@ -113205,7 +113322,7 @@
     },
     "/users/{username}/change_pwd": {
       "post": {
-        "description": "Change dashboard user password",
+        "description": "Change Dashboard user password",
         "parameters": [
           {
             "description": "Dashboard Username",
