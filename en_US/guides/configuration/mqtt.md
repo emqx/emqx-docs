@@ -57,7 +57,7 @@ When a malformed packet is detected, EMQX closes the client connection and recor
 
 ::: warning Strict Mode Requires UTF-8-Encoded Passwords
 
-The MQTT specification defines the Password field in a CONNECT packet as Binary Data, which may contain arbitrary bytes. When strict mode is enabled, EMQX validates this field as a UTF-8 string. If the password contains invalid UTF-8 or control characters, EMQX rejects the CONNECT packet and closes the network connection.
+The MQTT specification defines the password field in a CONNECT packet as binary data, which may contain arbitrary bytes. When strict mode is enabled, EMQX validates this field as a UTF-8 string. If the password contains invalid UTF-8 or control characters, EMQX rejects the CONNECT packet and closes the network connection.
 
 If affected clients must send binary passwords, such as raw hash bytes or binary tokens, use the dedicated zone and listener configuration shown below to disable strict mode only for those clients. Disabling strict mode also disables the other checks that EMQX applies only in strict mode.
 
