@@ -1,5 +1,11 @@
 # EMQX 5.9 已知问题
 
+## e5.9.3
+
+| 始于版本 | 问题描述                                                     | 解决方法                                                     | 状态 |
+| -------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ---- |
+| 5.9.3 | **禁用确认时，Kafka 和 Confluent 生产者动作的内存占用持续增长**<br />当 `parameters.required_acks = none` 时，生产者的内存占用会随每个 Kafka 生产请求持续增长；即使缓冲区已排空，已累积的内存仍不会释放。 | 等待缓冲区中的消息全部发送完毕后，将动作的 `parameters.required_acks` 设置为 `leader_only` 或 `all_isr`。更改此设置会重建生产者并释放已累积的内存。 | 已在 EMQX 5.9.4 中修复。详见 [emqx/emqx#19994](https://github.com/emqx/emqx/pull/19994)。 |
+
 ## e5.9.0
 
 | 始于版本 | 问题描述                                                     | 解决方法                                                     | 状态 |
@@ -7,3 +13,4 @@
 | 5.0.0    | **集群中路由表与会话注册表可能出现不一致**<br />在集群发生网络分区恢复、节点非正常关闭或清理过程中 RPC 超时等情况后，路由表和全局会话（Channel）注册表中可能残留陈旧条目或丢失正常条目。已知表现包括：<br />- 网络分区恢复后，副本节点（Replicant）上的订阅路由可能未能完全重新同步，导致部分订阅静默丢消息，直到对应节点重启才能恢复。<br />- 网络分区恢复后，副本节点上的 Channel 可能从全局会话注册表中丢失，进而导致会话接管行为异常（重新连接的客户端无法替换其旧会话）以及 Dashboard 中客户端计数失真。<br />- 当会话所有者进程异常结束且未完成清理性注销（例如出现短暂网络分区导致注销消息无法复制，或在 down-event 清理过程中核心节点的一致性检查超时），如果同名客户端 ID 不再连接，注册表中的该条目可能永久残留。随着时间推移，这类失效条目会持续累积。<br />相关修复已在更新的发布线中合入，但不会回移植到 5.9。详见 emqx/emqx PR [#17076](https://github.com/emqx/emqx/pull/17076)、[#17257](https://github.com/emqx/emqx/pull/17257) 与 [#17522](https://github.com/emqx/emqx/pull/17522)。 | -                                                            | 请升级至 5.10.4+、6.1.2+ 或 6.2.1+ |
 | 5.0.0    | **Linux 单调时钟回调导致 EMQX 节点重启**<br />在某些虚拟 Linux 环境中，操作系统无法保持时钟的单调性，这可能会导致 Erlang VM 因为错误消息 `OS monotonic time stepped backwards!` 而退出。 | 对于这类环境，可以在 `etc/vm.args` 中将 `+c` 标志设置为 `false`。 |      |
 | 5.3.0    | **基于 SAML 的单点登录限制**<br />EMQX Dashboard 支持基于安全断言标记语言（SAML）2.0 标准的单点登录（SSO），并与 Okta 和 OneLogin 作为身份提供商集成。然而，基于 SAML 的 SSO 目前不支持证书签名验证机制，并且由于其复杂性，无法与 Azure Entra ID 兼容。 | -                                                            |      |
+| 5.9.0 | **使用 JWKS 的 JWT 认证及其他 `httpc` 调用方内存持续增长**<br />内置的 Erlang/OTP HTTP 客户端（`httpc`）在每次异步请求后，以及每次在发送前失败的同步请求后，会在调用进程中残留约 100 字节内存。垃圾回收无法释放这部分内存，只有进程退出时才会释放。对于通过 JWKS 端点获取密钥的 JWT 认证器，其 JWKS 客户端池的内存占用会随每次密钥刷新而增加。影响 EMQX 5.9.0–5.9.3。 | 应用 [httpc 热补丁](https://github.com/emqx/emqx-hot-patches/tree/main/261118-httpc-alias-leak)（适用于 5.9.2–5.9.3），以阻止内存继续增长。加载补丁后，按[释放 JWKS 客户端已累积的内存](https://github.com/emqx/emqx-hot-patches/tree/main/261118-httpc-alias-leak#release-memory-already-leaked-by-jwks-clients)中的说明重启 JWT 认证器资源，或重启节点，以释放已累积的内存。对于 5.9.0 和 5.9.1，请先升级到该补丁支持的版本。 | 已在 EMQX 5.9.4 中修复。详见 [emqx/emqx#20124](https://github.com/emqx/emqx/pull/20124)。 |

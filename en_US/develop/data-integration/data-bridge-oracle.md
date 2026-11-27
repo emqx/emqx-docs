@@ -143,15 +143,17 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    Note: This is a [preprocessed SQL](./data-bridges.md#prepared-statement), so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
 
+   When binding text payloads whose encoded size exceeds 4,000 bytes to `CLOB` or `NCLOB` columns, place the corresponding placeholder after all non-LOB placeholders to comply with Oracle's LOB bind ordering requirements. The following example uses `${payload}` as the last bind parameter.
+
    ```sql
-   INSERT INTO t_mqtt_msgs(msgid, sender, topic, qos, retain, payload, arrived) VALUES(
+   INSERT INTO t_mqtt_msgs(msgid, sender, topic, qos, retain, arrived, payload) VALUES(
      ${id},
      ${clientid},
      ${topic},
      ${qos},
      ${flags.retain},
-     ${payload},
-     TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') + NUMTODSINTERVAL(${timestamp}/1000, 'SECOND')
+     TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') + NUMTODSINTERVAL(${timestamp}/1000, 'SECOND'),
+     ${payload}
    )
    ```
 

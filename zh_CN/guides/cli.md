@@ -848,6 +848,7 @@ ssl:default
   listen_on       : 0.0.0.0:8883
   acceptors       : 16
   proxy_protocol  : false
+  enable          : true
   running         : true
   current_conn    : 0
   max_conns       : 5000000
@@ -855,6 +856,7 @@ tcp:default
   listen_on       : 0.0.0.0:1883
   acceptors       : 16
   proxy_protocol  : false
+  enable          : true
   running         : true
   current_conn    : 12
   max_conns       : 5000000
@@ -863,6 +865,7 @@ ws:default
   listen_on       : 0.0.0.0:8083
   acceptors       : 16
   proxy_protocol  : false
+  enable          : true
   running         : true
   current_conn    : 0
   max_conns       : 5000000
@@ -870,6 +873,7 @@ wss:default
   listen_on       : 0.0.0.0:8084
   acceptors       : 16
   proxy_protocol  : false
+  enable          : true
   running         : true
   current_conn    : 0
   max_conns       : 5000000

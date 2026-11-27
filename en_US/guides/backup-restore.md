@@ -81,7 +81,7 @@ This section explains how to perform data import and export operations on the Da
    - **Created At**: The creation time of the backup file.
    - **File Size**: The size of the backup file.
 
-   You can click **Download** in the **Actions** column to download the file and back it up locally.
+   Starting with EMQX 5.9.4, only users with the Administrator role can download backup files. Viewers can view the backup file list but cannot download the files. To save a backup file locally, click **Download** in the **Actions** column.
 
 3. To import data, click the **Upload** button in the top right corner to upload a backup file to the current EMQX cluster. The file will not be restored immediately upon upload. You can go to the **Actions** column in the backup file list and click **Restore** to import the backup file into the current EMQX cluster.
 

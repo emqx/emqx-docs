@@ -118,7 +118,7 @@ Starting from EMQX 5.3, Dashboard users are assigned one of two predefined roles
 | Role | Permissions |
 |---|---|
 | **Administrator** | Full access to all EMQX features and resources, including client management, system configuration, API keys, and user management. |
-| **Viewer** | Read-only access to all data and configurations, corresponding to all `GET` requests in the REST API. Cannot create, modify, or delete any data. |
+| **Viewer** | Read-only access to EMQX data and configuration. Starting with EMQX 5.9.4, viewers can view redacted JSON configuration and list backups. Exporting unredacted HOCON configuration and downloading backup archives require the Administrator role. |
 
 ::: tip
 For security reasons, Dashboard users cannot be used for REST API authentication (since EMQX 5.0.0). Use [API Keys](./api-keys.md) for programmatic access instead.
