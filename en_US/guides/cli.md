@@ -839,8 +839,6 @@ This command is used to manage listeners.
 
 List information of all listeners.
 
-Starting with EMQX 5.9.4, `emqx ctl listeners` reports the listener's enabled flag as `enable` instead of `enbale`. If your scripts parse this output, update them to use `enable`.
-
 ```bash
 $ emqx ctl listeners
 ssl:default
