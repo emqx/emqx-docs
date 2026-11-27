@@ -1079,7 +1079,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18186](https://github.com/emqx/emqx/pull/18186) Improved deep-page queries in the subscriptions HTTP API by accumulating in-memory subscription rows on each target node, avoiding one RPC per pagination batch.
 
-### Security Hardening
+#### Security Hardening
 
 - [#18205](https://github.com/emqx/emqx/pull/18205) Strengthened validation of data backup archives during import so a backup file's contents are restored only into the table it is meant for.
 
