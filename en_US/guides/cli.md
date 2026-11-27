@@ -839,12 +839,15 @@ This command is used to manage listeners.
 
 List information of all listeners.
 
+Starting with EMQX 5.9.4, `emqx ctl listeners` reports the listener's enabled flag as `enable` instead of `enbale`. If your scripts parse this output, update them to use `enable`.
+
 ```bash
 $ emqx ctl listeners
 ssl:default
   listen_on       : 0.0.0.0:8883
   acceptors       : 16
   proxy_protocol  : false
+  enable          : true
   running         : true
   current_conn    : 0
   max_conns       : 5000000
@@ -852,6 +855,7 @@ tcp:default
   listen_on       : 0.0.0.0:1883
   acceptors       : 16
   proxy_protocol  : false
+  enable          : true
   running         : true
   current_conn    : 12
   max_conns       : 5000000
@@ -860,6 +864,7 @@ ws:default
   listen_on       : 0.0.0.0:8083
   acceptors       : 16
   proxy_protocol  : false
+  enable          : true
   running         : true
   current_conn    : 0
   max_conns       : 5000000
@@ -867,6 +872,7 @@ wss:default
   listen_on       : 0.0.0.0:8084
   acceptors       : 16
   proxy_protocol  : false
+  enable          : true
   running         : true
   current_conn    : 0
   max_conns       : 5000000

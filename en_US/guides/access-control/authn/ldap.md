@@ -13,7 +13,7 @@ Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
 EMQX's LDAP integration includes two distinct authentication methods:
 - **LDAP Bind Authentication**
 
-   EMQX uses the configured `base_dn` and `filter` to search for the client's LDAP entry. If it finds a matching entry, EMQX uses the entry's Distinguished Name (DN) and the password produced by the bind password template to bind to the LDAP server. Authentication succeeds if the server accepts the bind.
+   EMQX uses the configured `base_dn` and `filter` to search for the client's LDAP entry. If it finds a matching entry, EMQX uses the entry's Distinguished Name (DN) and the password produced by the bind password template to bind to the LDAP server. Starting with EMQX 5.9.4, if the template resolves to an empty string, authentication fails without sending the client's bind request. Authentication succeeds only if the LDAP server accepts the bind.
 
    This method relies solely on the existing LDAP user entries and does not require EMQX to retrieve or process any sensitive data like password hashes. It is simple to set up and does not require modifying the LDAP schema.
 
@@ -170,6 +170,8 @@ You can configure how to use LDAP for password authentication in the EMQX Dashbo
      - **Password Authentication Method**: Select the authentication method: `LDAP Bind Authentication` (default) or `Local Password Comparison`.
 
      - **Bind Password** (`bind_password`): The password template for the LDAP bind request used to authenticate the client. The default template, `${password}`, resolves to the password supplied by the client.
+
+       Starting with EMQX 5.9.4, if this template resolves to an empty string, EMQX rejects authentication immediately without sending a bind request to the LDAP server.
 
      - **Base DN**: Specifies the starting point (i.e., base DN) for LDAP search operations. EMQX begins searching for user entries that match the configured filter from this DN. Placeholders such as `${username}` are supported for dynamically constructing the client identity. For more information, see, see [RFC 4511 Search Request](https://datatracker.ietf.org/doc/html/rfc4511#section-4.5.1).
 

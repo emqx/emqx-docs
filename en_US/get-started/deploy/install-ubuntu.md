@@ -4,11 +4,14 @@ This page guides you on installing and starting EMQX on the Ubuntu system.
 
 Supported versions:
 
+- Ubuntu 26.04
 - Ubuntu 24.04
 - Ubuntu 22.04
 - Ubuntu 20.04
 
 ## Install with Apt Package Manager
+
+Starting with EMQX 5.9.4, Ubuntu 26.04 packages are available from the [EMQX Enterprise download site](https://www.emqx.com/en/downloads-and-install/enterprise?os=Ubuntu). The Apt repository does not provide Ubuntu 26.04 packages. For this Ubuntu version, follow the [manual package installation](#manual-package-installation) steps below.
 
 EMQX supports installing with Apt Package Manager to provide our users with a convenient and reliable way to manage EMQX installation and updates. Here is how to install EMQX with apt:
 
@@ -37,7 +40,7 @@ EMQX supports installation via deb packages or tar.gz packages. For installation
 ### Install with deb
 
 1. Go to the official download page and select the [**Ubuntu** tab](https://www.emqx.com/en/downloads-and-install/enterprise?os=Ubuntu).
-2. Select the latest version `@EE_VERSION@` and select the `deb` package according to the required version and CPU architecture in the **Package Type** dropdown.
+2. Select the EMQX version you want to install and select the `deb` package according to the required version and CPU architecture in the **Package Type** dropdown.
 3. Click the link below for downloading. You can also follow the command-line guide steps for downloading and installing.
 
 #### Start EMQX
@@ -59,7 +62,7 @@ sudo apt remove --purge emqx
 ### Install with tar.gz
 
 1. Go to the official download page and select the [**Ubuntu** tab](https://www.emqx.com/en/downloads-and-install/enterprise?os=Ubuntu).
-2. Select the latest version `@EE_VERSION@` and select the `tar.gz` package according to the required version and CPU architecture in the **Package Type** dropdown.
+2. Select the EMQX version you want to install and select the `tar.gz` package according to the required version and CPU architecture in the **Package Type** dropdown.
 3. Click the link below for downloading. You can also follow the command-line guide steps for downloading and installing.
 
 #### Start EMQX

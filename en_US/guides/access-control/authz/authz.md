@@ -283,7 +283,7 @@ Where,
 
 ::: tip Recommendation for brokers exposed to untrusted networks
 
-For brokers exposed to untrusted or public networks, consider setting `deny_action` to `disconnect` to stop clients from making further unauthorized requests on the same connection. Use [flapping detection](../flapping-detect.md) to limit frequent reconnections and tune its thresholds for your workload.
+For brokers exposed to untrusted or public networks, consider setting `deny_action` to `disconnect` to stop clients from making further unauthorized requests on the same connection. Use [flapping detection](../flapping-detect.md) to limit frequent reconnections and tune its thresholds for your workload. Set thresholds that allow normal bursts of reconnections to avoid banning legitimate clients.
 
 This setting applies globally to all listeners. It also disconnects legitimate clients that attempt an operation they are not authorized to perform.
 

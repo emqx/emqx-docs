@@ -842,12 +842,15 @@ Del cluster_trace mytraces_ip successfully
 
 列出所有监听器的信息。
 
+从 EMQX 5.9.4 开始，`emqx ctl listeners` 输出中的监听器启用状态字段由 `enbale` 更正为 `enable`。如果您的脚本会解析此输出，请更新脚本，使其读取 `enable`。
+
 ```bash
 $ emqx ctl listeners
 ssl:default
   listen_on       : 0.0.0.0:8883
   acceptors       : 16
   proxy_protocol  : false
+  enable          : true
   running         : true
   current_conn    : 0
   max_conns       : 5000000
@@ -855,6 +858,7 @@ tcp:default
   listen_on       : 0.0.0.0:1883
   acceptors       : 16
   proxy_protocol  : false
+  enable          : true
   running         : true
   current_conn    : 12
   max_conns       : 5000000
@@ -863,6 +867,7 @@ ws:default
   listen_on       : 0.0.0.0:8083
   acceptors       : 16
   proxy_protocol  : false
+  enable          : true
   running         : true
   current_conn    : 0
   max_conns       : 5000000
@@ -870,6 +875,7 @@ wss:default
   listen_on       : 0.0.0.0:8084
   acceptors       : 16
   proxy_protocol  : false
+  enable          : true
   running         : true
   current_conn    : 0
   max_conns       : 5000000

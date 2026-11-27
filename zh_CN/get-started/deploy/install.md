@@ -16,15 +16,15 @@ EMQX 企业版：<https://www.emqx.com/zh/downloads-and-install/enterprise>
 
 ## 支持的操作系统与平台
 
-EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是支持情况：
+下表列出了 EMQX 5.9.4 提供安装包的操作系统和架构。
 
 | 操作系统                          | 支持版本                 | x86_64/amd64 | arm64 |
 | :-------------------------------- | :----------------------- | :----------- | :---- |
-| [Ubuntu](./install-ubuntu.md)     | Ubuntu 20.04<br />Ubuntu 22.04<br />Ubuntu 24.04 | 是 | 是 |
+| [Ubuntu](./install-ubuntu.md)     | Ubuntu 20.04<br />Ubuntu 22.04<br />Ubuntu 24.04<br />Ubuntu 26.04 | 是 | 是 |
 | [Debian](./install-debian.md)     | Debian 11<br />Debian 12<br />Debian 13          | 是 | 是 |
-| [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是 | 是 |
+| [CentOS/RHEL](./install-rhel.md)  | Rocky Linux 8<br />Rocky Linux 9<br />Rocky Linux 10 | 是 | 是 |
 | [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | 是 | 是 |
-| [macOS](./install-macOS.md)       | macOS 14<br />macOS 15                           | 否 | 是 |
+| [macOS](./install-macOS.md)       | macOS 15                           | 否 | 是 |
 
 <!-- ## 硬件规格
 
