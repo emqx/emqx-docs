@@ -160,7 +160,7 @@
 
   同时修复了节点疏散或再平衡后会话过期时产生不必要错误日志的问题。
 
-- [#19730](https://github.com/emqx/emqx/pull/19730) 对于剩余长度（Remaining Length）为 0 的 MQTT 报文，EMQX 现在会按相同规则处理该字段的不同编码形式。不含报文体的 `DISCONNECT` 和 `PINGREQ` 报文可正常处理。遇到无效的剩余长度、格式错误的可变字节整数或不完整的 MQTT 5.0 用户属性时，EMQX 会判定为协议错误并关闭连接。
+- [#19730](https://github.com/emqx/emqx/pull/19730), [#19809](https://github.com/emqx/emqx/pull/19809) 修复了 MQTT 报文中剩余长度（Remaining Length）为 0 时，不同编码形式的处理不一致的问题，并改进了对不完整的 MQTT 5.0 用户属性的错误处理。
 
 - [#20140](https://github.com/emqx/emqx/pull/20140) 现在会将剩余长度字段超过 4 个字节的 MQTT 报文作为格式错误报文拒绝。MQTT 规范规定该字段最多使用 4 个字节。
 
@@ -174,7 +174,7 @@
 
 - [#16415](https://github.com/emqx/emqx/pull/16415) 将 Apache Pulsar 客户端升级至 2.1.2。当 Pulsar 生产者动作的 `batch_size` 为 `1` 时，生产者会按单条消息编码，避免生成只含一条消息的批次，使消费者能够使用 Key Share 策略分摊负载。
 
-- [#16507](https://github.com/emqx/emqx/pull/16507) 修复了 MQTT Source 的连接器重连后未重新订阅主题的问题。此前需要重启连接器才能恢复 Source，现在 Source 会在重连时重新订阅。
+- [#16508](https://github.com/emqx/emqx/pull/16508) 修复了 MQTT Source 的连接器重连后未重新订阅主题的问题。此前需要重启连接器才能恢复 Source，现在 Source 会在重连时重新订阅。
 
 - [#16618](https://github.com/emqx/emqx/pull/16618) Kafka 请求超时会自动设为至少元数据请求超时的两倍，且不低于 30 秒。这可减少元数据请求耗时较长时不必要的重连和重试，尤其是在元数据请求超时设置较短时。
 
@@ -192,7 +192,7 @@
 
   默认 TCP/TLS 连接超时也从 60 秒缩短到 10 秒，便于更快发现配置错误。
 
-- [#17179](https://github.com/emqx/emqx/pull/17179) 修复了高负载下调用 MongoDB 进程超时时，错误被判为不可恢复而导致消息未重试的问题。现在遇到此类超时会重试消息。
+- [#17184](https://github.com/emqx/emqx/pull/17184) 修复了高负载下调用 MongoDB 进程超时时，错误被判为不可恢复而导致消息未重试的问题。现在遇到此类超时会重试消息。
 
   此前可能出现如下日志：
 
@@ -202,7 +202,7 @@
 
 - [#17210](https://github.com/emqx/emqx/pull/17210) 在 `$events/client/connack` 规则事件中补充了 `connected_at` 字段，与文档中的字段说明一致。
 
-- [#17301](https://github.com/emqx/emqx/pull/17301) 将 Kafka 客户端库 `brod` 从 4.5.2 升级到 4.5.4，将 `wolff` 从 4.1.7 升级到 4.1.10。
+- [#17302](https://github.com/emqx/emqx/pull/17302) 将 Kafka 客户端库 `brod` 从 4.5.2 升级到 4.5.4，将 `wolff` 从 4.1.7 升级到 4.1.10。
 
   - 修复了 SASL 重新认证期间的连接竞态，避免丢弃排队中的生产请求以及 `sync` 生产调用超时。
   - 改进了分区 Leader 连接的重连处理，避免在空闲连接断开后立即返回已失效的连接。
