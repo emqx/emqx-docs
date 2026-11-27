@@ -2,8 +2,6 @@
 
 ## 5.9.4
 
-- [#16284](https://github.com/emqx/emqx/pull/16284), [#16491](https://github.com/emqx/emqx/pull/16491) 停止发布适用于 macOS 13（Ventura）和 CentOS 7 的安装包。
-
 - [#18983](https://github.com/emqx/emqx/pull/18983) 如果 MQTT 连接收到的第一个报文不是 CONNECT，监听器现在会立即关闭连接，不再读取该报文的剩余内容。新增了 `mqtt.max_connect_user_properties` 配置，分别限制 CONNECT 属性和遗嘱属性中可接受的 MQTT v5 用户属性键值对数量。默认值为 100。将其设为 `infinity` 可禁用此限制。
 
 - [#19454](https://github.com/emqx/emqx/pull/19454) 将 `rpc.insecure_fallback` 的默认值从 `true` 改为 `false`。

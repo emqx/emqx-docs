@@ -10,8 +10,6 @@
 
 #### 平台支持与许可证
 
-- [#16491](https://github.com/emqx/emqx/pull/16491) 新增适用于 macOS 15（Sequoia）的安装包。
-
 - [#16853](https://github.com/emqx/emqx/pull/16853) EMQX v5 的许可证解析器现在兼容 v6 许可证密钥。
 
 - [#18031](https://github.com/emqx/emqx/pull/18031) 新增了适用于 Red Hat Enterprise Linux 10、Rocky Linux 10 及兼容发行版的 Enterprise Linux 10（EL10）安装包。
@@ -102,7 +100,7 @@
 
   信任库从 certifi 2.10.0 的 142 个证书调整为 118 个。移除的根证书包括 `emSign ECC Root CA - G3`、`AAA Certificate Services`、`emSign Root CA - C1`、`emSign ECC Root CA - C3`、`SecureSign Root CA12` 和 `Atos TrustedRoot 2011`；新增了 Mozilla 此后加入的根证书，例如 `SECOM TLS RSA Root CA 2024`、`SECOM TLS ECC Root CA 2024`、`Telia RSA TLS Root CA v3` 和 `Telia EC TLS Root CA v3`。
 
-  发送 HTTP 请求且未配置 `cacertfile` 的连接器会使用此信任库。若要自行固定出站连接的信任锚，请设置 `cacertfile`。
+  Hackney 默认使用内置 CA 证书验证 HTTPS 服务器证书。如果连接器支持为此类请求设置 `cacertfile`，可通过该参数指定自定义 CA 文件。
 
 - [#19802](https://github.com/emqx/emqx/pull/19802) 修复了 GCP PubSub 生产者请求体未在日志和追踪中正确脱敏的问题。请求体较大时，可能增加 CPU 和内存使用量，并触发 `long_schedule` 和 `large_heap` 警告。这些警告会指向正在格式化日志消息的 `ehttpc` 进程。
 

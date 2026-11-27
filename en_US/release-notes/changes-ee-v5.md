@@ -10,8 +10,6 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Platform Support and Licensing
 
-- [#16491](https://github.com/emqx/emqx/pull/16491) Added packages for macOS 15 (Sequoia).
-
 - [#16853](https://github.com/emqx/emqx/pull/16853) Make v5 license parser forward compatible with v6 license keys.
 
 - [#18031](https://github.com/emqx/emqx/pull/18031) Added Enterprise Linux 10 (EL10) packages, for Red Hat Enterprise Linux 10, Rocky Linux 10, and compatible distributions.
@@ -102,7 +100,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   The bundle moves from certifi 2.10.0 (142 certificates) to 118 certificates. Among the roots it no longer contains are `emSign ECC Root CA - G3`, `AAA Certificate Services`, `emSign Root CA - C1`, `emSign ECC Root CA - C3`, `SecureSign Root CA12` and `Atos TrustedRoot 2011`; it gains the roots Mozilla has added since, such as `SECOM TLS RSA Root CA 2024`, `SECOM TLS ECC Root CA 2024`, `Telia RSA TLS Root CA v3` and `Telia EC TLS Root CA v3`.
 
-  This bundle is the trust store for connectors that send HTTP requests and have no `cacertfile` configured. Set `cacertfile` to pin the trust anchors of an outgoing connection yourself.
+  Hackney uses the bundled CA certificates by default to verify HTTPS server certificates. If a connector supports `cacertfile` for those requests, you can configure a custom CA file.
 
 - [#19802](https://github.com/emqx/emqx/pull/19802) Fixed an issue where GCP PubSub Producer request bodies were not properly redacted from logs and traces.  When such bodies were large enough, they could lead to increased CPU and memory usage, as well as `long_schedule` and `large_heap` warnings pointing to `ehttpc` processes formatting log messages.
 
