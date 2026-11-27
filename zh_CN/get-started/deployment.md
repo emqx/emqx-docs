@@ -1,13 +1,5 @@
 # 常见安装部署问题解答
 
-::: warning Homebrew Core 配方
-
-Homebrew core 将于 **2026-11-30** 禁用 `emqx` 配方（EMQX 5.8.8）。安装 EMQX 6.3.3，请使用 [macOS ZIP 安装包](https://github.com/emqx/emqx/releases/tag/6.3.3#macos)或 [Docker 安装指南](https://docs.emqx.com/zh/emqx/latest/get-started/deploy/install-docker.html)。
-
-独立的 [EMQ Homebrew tap](https://github.com/emqx/homebrew-emqx)提供 `brew install emqx/emqx/emqx@6` 命令。该命令安装的是 **EMQX 企业版 6.2.2**，仅适用于 **Apple Silicon（arm64）且运行 macOS 14 或更高版本**的 Mac，不会安装 EMQX 6.3.3。
-
-:::
-
 ## 推荐在哪些操作系统上部署 EMQX？
 
 EMQX 支持在多种操作系统和硬件平台上运行，考虑到企业级部署的稳定性和可靠性，一般来说，我们推荐在 CentOS、Ubuntu、Debian 等 Linux 发行版上部署。
@@ -125,6 +117,12 @@ $ ln -s /usr/local/lib64/libcrypto.so.1.1 /usr/lib64/libcrypto.so.1.1
 
 ::: tab macOS
 
+::: warning Homebrew Core 配方
+
+Homebrew core 将于 **2026-11-30** 禁用 `emqx` 配方（EMQX 5.8.8）。其他安装方式及 EMQ Homebrew tap 的适用范围请参阅 [EMQX 开源版 macOS 安装指南](./deploy/install-macOS-ce.md)。
+
+:::
+
 进入 ZIP 包解压后的 EMQX 目录：
 
 ```bash
@@ -143,8 +141,7 @@ cd "$(brew --prefix emqx/emqx/emqx@6)"
 otool -L lib/crypto-*/priv/lib/crypto.so
 ```
 
-如果输出中列出的动态库在系统中不存在，请根据该路径安装对应版本。EMQ tap 的 6.2.2 配方声明依赖 `openssl@3`。安装 EMQX 6.3.3，请参考 [macOS ZIP 安装指南](https://docs.emqx.com/zh/emqx/latest/get-started/deploy/install-macOS.html)。
-
+如果输出中列出的动态库在系统中不存在，请根据该路径安装对应版本。EMQ tap 的 6.2.2 配方声明依赖 `openssl@3`。安装 EMQX 企业版 6.3.3，请参考 [macOS ZIP 安装指南](https://docs.emqx.com/zh/emqx/latest/get-started/deploy/install-macOS.html)。
 
 :::
 

@@ -2,9 +2,11 @@
 
 ::: warning Homebrew Core 配方
 
-Homebrew core 将于 **2026-11-30** 禁用 `emqx` 配方（EMQX 5.8.8）。安装 EMQX 6.3.3，请使用 [macOS ZIP 安装包](https://github.com/emqx/emqx/releases/tag/6.3.3#macos)或 [Docker 安装指南](https://docs.emqx.com/zh/emqx/latest/get-started/deploy/install-docker.html)。
+Homebrew core 将于 **2026-11-30** 禁用 `emqx` 配方（EMQX 5.8.8）。
 
-独立的 [EMQ Homebrew tap](https://github.com/emqx/homebrew-emqx)提供 `brew install emqx/emqx/emqx@6` 命令。该命令安装的是 **EMQX 企业版 6.2.2**，仅适用于 **Apple Silicon（arm64）且运行 macOS 14 或更高版本**的 Mac，不会安装 EMQX 6.3.3。
+如需继续使用 EMQX 5.8 开源版，请按下文的 ZIP 安装步骤操作，或参阅 [5.8 Docker 安装指南](./install-docker-ce.md)。如需安装 EMQX 企业版 6.3.3，请使用 [macOS ZIP 安装包](https://github.com/emqx/emqx/releases/tag/6.3.3#macos)或参阅[企业版 Docker 安装指南](https://docs.emqx.com/zh/emqx/latest/get-started/deploy/install-docker.html)。
+
+独立的 [EMQ Homebrew tap](https://github.com/emqx/homebrew-emqx) 提供 `brew install emqx/emqx/emqx@6` 命令。该命令安装的是 **EMQX 企业版 6.2.2**，仅适用于 **Apple Silicon（arm64）且运行 macOS 14 或更高版本**的 Mac，不会安装 EMQX 6.3.3。
 
 :::
 
