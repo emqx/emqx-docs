@@ -2,7 +2,7 @@
 
 ## 5.9.4
 
-*Release Date: 2026-11-26*
+*Release Date: 2026-11-27*
 
 Make sure to check the breaking changes and known issues before upgrading to EMQX 5.9.4.
 
