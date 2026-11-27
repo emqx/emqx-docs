@@ -269,7 +269,15 @@
   collapsed: true
   children:
     - guides/extensions/hooks
-    - guides/extensions/plugins
+    - title_en: Plugins
+      title_cn: 插件
+      title_ja: プラグイン
+      path: guides/extensions/plugins
+      collapsed: true
+      children:
+        - guides/extensions/plugin-development
+        - guides/extensions/plugin-example
+        - guides/extensions/plugin-management
     - guides/extensions/exhook
 - title_en: Telemetry
   title_cn: 遥测

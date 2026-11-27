@@ -146,15 +146,17 @@ CREATE TABLE t_emqx_client_events (
 
    注意：此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;` 。
 
+   将编码后大小超过 4,000 字节的文本载荷绑定到 `CLOB` 或 `NCLOB` 列时，请将对应的占位符放在所有非 LOB 占位符之后，以满足 Oracle 对 LOB 绑定顺序的要求。以下示例将 `${payload}` 作为最后一个绑定参数。
+
    ```sql
-   INSERT INTO t_mqtt_msgs(msgid, sender, topic, qos, retain, payload, arrived) VALUES(
+   INSERT INTO t_mqtt_msgs(msgid, sender, topic, qos, retain, arrived, payload) VALUES(
      ${id},
      ${clientid},
      ${topic},
      ${qos},
      ${flags.retain},
-     ${payload},
-     TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') + NUMTODSINTERVAL(${timestamp}/1000, 'SECOND')
+     TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') + NUMTODSINTERVAL(${timestamp}/1000, 'SECOND'),
+     ${payload}
    )
    ```
 

@@ -306,6 +306,10 @@ http {
 }
 ```
 
+::: tip
+`$proxy_add_x_forwarded_for` appends `$remote_addr` to any `X-Forwarded-For` header already present in the inbound request, while EMQX reads the first (leftmost) entry of the header — which in the appended form is supplied by the client and can be spoofed. If EMQX uses this header as the client's source address (see [Forwarded Client Address](../configuration/listener.md#forwarded-client-address-websocket-listeners)), overwrite the header with the address NGINX observed instead: `proxy_set_header X-Forwarded-For $remote_addr;`.
+:::
+
 ### Configure Reverse Proxy for MQTT WebSocket SSL
 
 You can configure NGINX to reverse proxy MQTT WebSocket and decrypt TLS connections, forwarding encrypted MQTT requests from clients to the backend MQTT servers to ensure communication security. Specify an HTTP domain name or IP address using `server_name`. To achieve this, you only need to add SSL and certificate-related parameters on top of the WebSocket-based configuration:

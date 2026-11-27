@@ -28,7 +28,7 @@ Before configuring the Kerberos authenticator, you must install the MIT Kerberos
 
 ### Configure Kerberos Library
 
-The Kerberos library configuration file is `/etc/krb5.conf`. The file contains the configuration information for the Kerberos library, including the realms and Key Distribution Centers (KDCs). The Kerberos library uses this file to locate the KDCs and realms.
+By default, the Kerberos library reads configuration from `krb5.conf`, which is usually located in `/etc`. To override the default location, set `KRB5_CONFIG` in the EMQX service environment. The Kerberos configuration defines realms and specifies the locations of their Key Distribution Centers (KDCs).
 
 Here is an example of a `krb5.conf` file:
 
@@ -48,11 +48,11 @@ Here is an example of a `krb5.conf` file:
 
 To configure the Kerberos authenticator, you need a running KDC (Key Distribution Center) server and valid keytab files for both the server and clients. Keytab files store cryptographic keys associated with the server's principal. They allow the server to authenticate to the Kerberos KDC without manual password entry.
 
-EMQX can only support keytab files at the default location. You can configure the system default value by using the environment variable `KRB5_KTNAME` or by setting `default_keytab_name` in `/etc/krb5.conf`.
+EMQX supports only the system's default keytab file. Set the default keytab path with the `KRB5_KTNAME` environment variable or the `default_keytab_name` option in the Kerberos configuration.
 
 ::: tip Note
 
-The keytab file `/etc/krb5.conf` must be located on the EMQX nodes, and the user running the EMQX service must have read permissions for the file.
+The user running the EMQX service must have read access to both the Kerberos configuration file and the default keytab on each EMQX node.
 
 :::
 
@@ -68,7 +68,7 @@ The keytab file `/etc/krb5.conf` must be located on the EMQX nodes, and the user
 
    - **Principal**: Set Kerberos principal for the server to define the server's identity within the Kerberos authentication system. For example, `mqtt/cluster1.example.com@EXAMPLE.COM`.
 
-     Note: The realm in use must be configured in `/etc/krb5.conf` on EMQX nodes.
+     Note: The realm in use must be configured in the Kerberos configuration on EMQX nodes.
 
    - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this Kerberos authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
 
@@ -123,7 +123,7 @@ Here’s a guide to resolving some common issues you may encounter when configur
 
   Note that EMQX currently supports keytab files only at the default location. If this error occurs, the system will return the path of the current default keytab file in the error message.
 
-- Try to configure the system default keytab file path by using the environment variable `KRB5_KTNAME` or by setting `default_keytab_name` in `/etc/krb5.conf`.
+- Set the system's default keytab path with the `KRB5_KTNAME` environment variable or the `default_keytab_name` option in the Kerberos configuration.
 
 ### `invalid_server_principal_string`
 
@@ -133,9 +133,9 @@ Here’s a guide to resolving some common issues you may encounter when configur
 
 ### `Cannot find KDC for realm "EXAMPLE.COM"`
 
-**Cause:** The specified Kerberos realm (`EXAMPLE.COM`) is not listed in the `/etc/krb5.conf` file's `realms` section.
+**Cause:** The specified Kerberos realm (`EXAMPLE.COM`) is not listed in the `realms` section of the Kerberos configuration.
 
-**Solution:** Add the missing realm information to the `realms` section of your `/etc/krb5.conf` file.
+**Solution:** Add the missing realm information to the `realms` section of the Kerberos configuration.
 
 ### `Cannot contact any KDC for realm "EXAMPLE.COM"`
 
@@ -145,7 +145,7 @@ Here’s a guide to resolving some common issues you may encounter when configur
 
 ### `Resource temporarily unavailable`
 
-**Cause:** The KDC service configured in `/etc/krb5.conf` is either not running or not reachable.
+**Cause:** The KDC service specified in the Kerberos configuration is either not running or not reachable.
 
 **Solution:** Make sure the KDC service is operational and that the EMQX node can communicate with it.
 

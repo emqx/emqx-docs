@@ -21,6 +21,8 @@ This is because if the configuration is set in emqx.conf, any changes made throu
 ```bash
 mqtt {
   max_packet_size = 1MB
+  # EMQX 5.9.4 and later
+  # max_connect_user_properties = 100
   max_clientid_len = 65535
   max_topic_levels = 128
   max_qos_allowed = 2
@@ -34,6 +36,7 @@ Where,
 | **Configuration Items** | Dashboard UI         | **Description**                                              | **Default value** | **Optional Values** |
 | ----------------------- | -------------------- | ------------------------------------------------------------ | ----------------- | ------------------- |
 | `max_packet_size`       | Max Packet Size      | MQTT packets are used to send messages between MQTT clients and EMQX.<br /><br /> This sets the maximum MQTT packet size allowed. | `1MB`             |                     |
+| `max_connect_user_properties` <Badge type="tip" text="5.9.4+" /> | Max CONNECT User Properties | Sets the maximum number of MQTT 5.0 User Property pairs allowed in each of the two property collections of a CONNECT packet: the CONNECT properties and the Will properties. If either the CONNECT properties or the Will properties contain more User Property pairs than the configured limit, EMQX rejects the CONNECT packet and closes the connection. This setting does not limit User Property pairs in other MQTT packet types. Packet size remains subject to `max_packet_size`.<br /><br />Set this option to `infinity` to disable the limit. Changes made at runtime may apply only to connections established after the change. | `100` | Non-negative integer, `infinity` |
 | `max_clientid_len`      | Max Client ID Length | This sets the maximum length of an MQTT client ID.<br /><br />It can help to prevent clients from using excessively long client IDs that could cause issues. | `65535`           | `23` - `65535`      |
 | `max_topic_levels`      | Max Topic Levels     | MQTT topics are used to organize and categorize messages. <br /><br />This sets the maximum number of levels allowed in an MQTT topic. | `128`             | `1` - `35`          |
 | `max_qos_allowed`       | Max QoS              | QoS levels determine the level of reliability and delivery assurance for messages.<br /><br /> This sets maximum quality of service (QoS) level that is allowed for MQTT messages. |                   |                     |

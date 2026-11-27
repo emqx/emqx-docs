@@ -20,7 +20,15 @@ EMQX also offers you the option of enabling TLS when there is a need to access e
 
 - **SNI** means Server Name Indication, indicating whether the server domain name and certificate are verified to be the same; A null value means no validation.
 - When the server needs to verify the client certificate, the **TLS Cert** and **TLS Key** must be filled in.
-- When **TLS Verify** is enabled, the **CA Cert** field must be filled in to verify the legitimacy of the server certificate.
+- After enabling **TLS Verify**, specify the appropriate certificate in **CA Cert** if the integration requires a custom CA to verify the server certificate.
+
+Some HTTP-based integrations use the CA trust store bundled with EMQX to verify server certificates. EMQX 5.9.4 updates this store to the Mozilla CA set as of October 20, 2026. Trust anchors can change between releases. Support for using `cacertfile` to select a private CA or a fixed trust store depends on the integration.
+
+::: tip Note
+
+Starting in EMQX 6.3.3, when the Hackney HTTP client verifies a server certificate without a custom CA configuration, it uses the trust store configured in `node.trusted_certs`. This setting defaults to the system CA trust store.
+
+:::
 
 <img src="./assets/enable-TLS-dashboard.png" alt="enable-TLS-dashboard" style="zoom:50%;" />
 

@@ -93,7 +93,14 @@ The following steps assume that you run both EMQX and Tablestore on the local ma
      - **Access Key ID**: The Access Key ID used to authenticate with Tablestore. This key is issued by Alibaba Cloud for accessing Tablestore resources securely.
      - **Access Key Secret**: The Access Key Secret used for authentication, associated with the Access Key ID.
      - **Storage Model Type**: Currently only `TimeSeries` is supported.
-   - Configure TLS Parameters. Tablestore uses HTTPS endpoints, so TLS is enabled by default and no additional TLS parameter configuration is required. For detailed information on TLS connection options, see [TLS for External Resource Access](../../guides/network/overview.md#enabling-tls-for-external-resource-access).
+   - Tablestore uses HTTPS endpoints. In EMQX 5.9, the connector verifies the server certificate using the bundled CA trust store. It does not apply the TLS settings in this section to Tablestore connections, so **CA Cert** (`cacertfile`) cannot override the bundled trust store. You cannot configure a fixed CA trust store for Tablestore connections. The trust anchors in the bundled store may change between EMQX releases. For details, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).
+
+     ::: tip Note
+
+     Starting in EMQX 6.3.3, the Tablestore connector applies the configured TLS options to HTTPS connections. You can specify a custom CA file using **CA Cert** (`cacertfile`).
+
+     :::
+
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Tablestore server.
 6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Tablestore. For detailed steps, see [Create a Rule with Tablestore Sink](#create-a-rule-with-tablestore-sink).
 

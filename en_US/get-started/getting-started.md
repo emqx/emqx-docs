@@ -17,7 +17,6 @@ Besides the deployment methods introduced in this quickstart guide, you are also
 EMQX can be run with [Docker](./deploy/install-docker.md), installed with [EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator), or installed on a computer or virtual machine (VM) via a download package. If you choose to install EMQX with a download package, the following operating systems are currently supported:
 
 - RedHat
-- CentOS
 - RockyLinux
 - AmazonLinux
 - Ubuntu

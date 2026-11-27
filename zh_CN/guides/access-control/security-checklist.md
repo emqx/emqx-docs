@@ -11,6 +11,7 @@
 - 如果节点存在多个网卡接口，应将 Erlang 分布式通信仅绑定到私网接口。
 - 如果 EMQX 部署在负载均衡器或 TCP 代理之后，仅应在确实需要获取真实客户端 IP 或客户端证书信息的监听器上启用 [Proxy Protocol](../cluster/lb.md)。
 - 如果某个监听器启用了 Proxy Protocol，则该监听地址和端口只应暴露给指定的代理或负载均衡器，不能再直接对公网客户端开放。可在 EMQX 中通过 `listeners.{type}.{name}.access_rules = ["allow <trusted-LB-CIDR>", "deny all"]` 进行限制，并结合网络层控制（防火墙、私有网络或 Unix socket）。否则，能直接访问该端口的客户端可以伪造任意对端证书字段的 PROXY v2 帧，从而冒充任意身份。
+- 如果 WebSocket 监听器（`ws` 或 `wss`）前面没有会覆盖 `x-forwarded-for` 请求头的受信任代理，应设置 `listeners.{type}.{name}.websocket.proxy_address_header = ""`（以及 `websocket.proxy_port_header = ""`），使基于 IP 的授权规则、客户端封禁、连接抖动检测和审计日志使用真实的 TCP 对端地址。一旦启用该请求头，除非受信任代理覆盖它，派生出的源 IP 就是由客户端提供的——仅向入站请求头追加内容的代理并不能提供保护。详见 [WebSocket 监听器的转发客户端地址](../configuration/listener.md#websocket-监听器的转发客户端地址)。
 
 ## 阶段 2：Erlang 与集群
 
@@ -25,7 +26,7 @@
 - 根据组织的安全基线禁用过时的 TLS 协议版本和弱密码套件，并在发布前于测试环境验证监听器的最终配置。
 - 使用受信任 CA 或内部 PKI 签发的证书，并在证书到期前完成轮换。
 - 当设备身份需要通过客户端证书建立信任时，应启用双向 TLS。在该模式下，需要同时校验证书链以及客户端在 TLS 握手期间是否实际提供证书。详见[X.509 证书认证](./authn/x509.md)。
-- 若将对端证书字段映射为 MQTT 用户名或客户端 ID（`peer_cert_as_username` / `peer_cert_as_clientid`），监听器**必须**强制启用 mTLS（`verify = verify_peer`、`fail_if_no_peer_cert = true`），并使用您自己掌控的 CA 证书集合。否则，客户端可以出示一张 CN/DN 任意填写的自签名证书，从而冒充任意身份。针对空用户名场景，可在监听器上同时设置 `listeners.{type}.{name}.enable_authn = quick_deny_anonymous` 作为补充防护。详见[证书信息映射](./authn/x509.md#证书信息映射)。
+- 若将对端证书字段映射进 MQTT 身份，相关的全局 `mqtt` 配置会对所有共享该配置的监听器生效。映射方式包括将证书字段设置为用户名或客户端 ID（`peer_cert_as_username` / `peer_cert_as_clientid`），以及通过读取 `cn` 或 `dn` 的 [`client_attrs_init`](../../develop/client-attributes/client-attributes.md) 表达式填充 `client_attrs`。每个可接受这些客户端连接的 TLS 监听器都**必须**强制启用 mTLS（`verify = verify_peer`、`fail_if_no_peer_cert = true`），并使用您自己掌控的 CA 证书集合。EMQX 不会自动强制启用这些设置。只要有一个监听器保留 `verify_none` / `fail_if_no_peer_cert = false` 默认值，客户端就可以出示一张 CN/DN 任意填写的自签名证书来冒充任意身份，包括将伪造的值注入 `${client_attrs.X}` 等授权模板。客户端也可以完全不出示证书即可连接，并静默回退到使用 MQTT `CONNECT` 报文中的用户名或客户端 ID。针对空用户名场景，可在监听器上同时设置 `listeners.{type}.{name}.enable_authn = quick_deny_anonymous` 作为补充防护。详见[证书信息映射](./authn/x509.md#证书信息映射)。
 - 如果您的环境要求校验证书吊销状态，可评估启用 [CRL 检查](../network/crl.md)或 [OCSP Stapling](../network/ocsp.md)。
 - 当 EMQX 连接外部资源（例如 HTTP 认证服务、数据库或其他集成组件）时，也应启用 TLS。
 
@@ -40,6 +41,7 @@
 - 当 ACL 主题模板中包含 `${clientid}`、`${username}` 或 `${client_attrs.X}` 占位符时（参见[授权占位符](./authz/authz.md#authorization-placeholders)），必须对这些身份字段进行校验，禁止其包含 MQTT 主题通配符（`+`、`#`）或主题分隔符（`/`）。例如模板 `clients/${clientid}/data` 在未做校验的情况下，若客户端 ID 为 `+`，整段模板会退化为通配模式，可访问其他客户端的所有子主题；若取值为 `tenantA/+` 或含有 `/`，则会突破原本分配的主题子树范围。应在认证侧强制约束身份格式，例如通过 [Client-Info](./authn/cinfo.md) 规则、JWT 声明的正则校验或 HTTP 认证拒绝不合规的请求。应在握手阶段直接拒绝连接，而不是寄希望于 ACL 兜底处理非法替换值。
 - 在生产环境依赖授权能力之前，应移除或调整过于宽松的默认规则。
 - 对于基于文件的 ACL，可在适用场景下采用默认拒绝策略，例如以 `{deny, all}` 作为结尾规则，并设置 `authorization.no_match = deny`。详见[使用 ACL 文件](./authz/file.md)。
+- 对于暴露在不受信任网络或公共网络中的 Broker，可考虑设置 `authorization.deny_action = disconnect`（默认值为 `ignore`）。如果客户端尝试发布或订阅未授权主题，EMQX 会断开该客户端连接，而不是保持连接打开。配合[连接抖动检测](./flapping-detect.md)使用时，反复重连并触发授权拒绝的客户端会被自动封禁。`deny_action` 是全局配置，因此同样会断开尝试了被拒绝操作的合法客户端。建议在客户端正常只发布和订阅已授权主题的场景下使用。应调整连接抖动检测阈值，避免正常重连风暴导致客户端被封禁。详见[授权](./authz/authz.md)。
 - 检查授权缓存配置以及 Authorizer 的执行顺序，确保策略变更能够按预期生效。
 - 限制 MQTT 资源使用范围，降低异常客户端或恶意客户端的影响面，例如检查报文大小、主题层级、订阅数量、Inflight 窗口和排队消息等限制。详见[MQTT 配置](../configuration/mqtt.md)。
 - 在需要时，对监听器启用速率限制，控制连接突发和消息突发。详见[速率限制器配置](../configuration/limiter.md)。

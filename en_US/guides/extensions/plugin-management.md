@@ -30,6 +30,10 @@ For plugins, only the plugin state (`true` or `false` for the `enable` flag) is 
 
 :::
 
+Starting with EMQX 5.9.4, to change the plugin installation directory, set `plugins.install_dir` in `emqx.conf` or set the `EMQX_PLUGINS__INSTALL_DIR` environment variable, then restart the node.
+
+If a runtime configuration update attempts to change the directory, the node that initiates the update rejects it. If a node receives a replicated configuration update with a different directory, it keeps its current directory, logs a warning, and applies the other plugin settings in the update.
+
 ### Configuration
 
 After installation, plugin configuration can be updated through the Dashboard or API:

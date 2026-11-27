@@ -4,11 +4,14 @@
 
 支持的 Ubuntu 版本：
 
+- Ubuntu 26.04
 - Ubuntu 24.04
 - Ubuntu 22.04
 - Ubuntu 20.04
 
 ## 使用 Apt 包管理器安装
+
+从 EMQX 5.9.4 开始，可在 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise?os=Ubuntu)获取 Ubuntu 26.04 安装包。Apt 源不提供 Ubuntu 26.04 安装包，请按下文的[手动安装软件包](#手动安装软件包)步骤安装。
 
 EMQX 支持使用 Apt 包管理器进行安装，为用户提供了一种便捷且可靠的方式来管理 EMQX 的安装和更新。以下是使用 apt 安装 EMQX 的步骤：
 
@@ -37,7 +40,7 @@ EMQX 支持通过 `.deb` 软件包或 `.tar.gz` 压缩包进行安装。如希�
 ### 通过 deb 安装
 
 1. 前往官方下载页面，选择 [Ubuntu 页签](https://www.emqx.com/zh/downloads-and-install/enterprise?os=Ubuntu)。
-2. 选择最新版本 `@EE_VERSION@`，在**安装包类型**中根据需要的版本和 CPU 架构选择 `deb` 安装包。
+2. 选择要安装的 EMQX 版本，在**安装包类型**中根据需要的版本和 CPU 架构选择 `deb` 安装包。
 3. 点击下方的下载链接。您也可以参照命令行指导步骤进行下载与安装。
 
 #### 启动 EMQX
@@ -59,7 +62,7 @@ sudo apt remove --purge emqx
 ### 通过 tar.gz 安装
 
 1. 前往官方下载页面，选择 [Ubuntu 页签](https://www.emqx.com/zh/downloads-and-install/enterprise?os=Ubuntu)。
-2. 选择最新版本 `@EE_VERSION@`，在**安装包类型**中根据需要的版本和 CPU 架构选择 `tar.gz`。
+2. 选择要安装的 EMQX 版本，在**安装包类型**中根据需要的版本和 CPU 架构选择 `tar.gz`。
 3. 点击下方的下载链接。您也可以参照命令行指导步骤进行下载与安装。
 
 安装完成后，可通过如下命令启动 EMQX。
