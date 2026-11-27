@@ -144,22 +144,10 @@ After the completion, execute `ldd lib/crypto-*/priv/lib/crypto.so` in the lib-l
 
 ::: tab macOS
 
-::: warning Homebrew Core Formula
-
-Homebrew core disables the `emqx` formula (EMQX 5.8.8) on **2026-11-30**. See the [EMQX Open Source macOS installation guide](./deploy/install-macOS-ce.md) for installation alternatives and details about the EMQ Homebrew tap.
-
-:::
-
 Go to the directory where you extracted the ZIP package:
 
 ```bash
 cd /path/to/emqx
-```
-
-For EMQX Enterprise 6.2.2 installed from the EMQ Homebrew tap on Apple Silicon, find its directory with Homebrew:
-
-```bash
-cd "$(brew --prefix emqx/emqx/emqx@6)"
 ```
 
 Inspect the libraries required by the installed crypto module:
@@ -168,7 +156,7 @@ Inspect the libraries required by the installed crypto module:
 otool -L lib/crypto-*/priv/lib/crypto.so
 ```
 
-If the output lists a library that is missing from your system, install the version identified by that path. The EMQ tap's 6.2.2 formula declares `openssl@3` as a dependency. For EMQX Enterprise 6.3.3, follow the [macOS ZIP installation guide](https://docs.emqx.com/en/emqx/latest/get-started/deploy/install-macOS.html).
+If the output lists a library that is missing from your system, install the version identified by that path.
 
 :::
 

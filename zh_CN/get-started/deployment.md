@@ -117,22 +117,10 @@ $ ln -s /usr/local/lib64/libcrypto.so.1.1 /usr/lib64/libcrypto.so.1.1
 
 ::: tab macOS
 
-::: warning Homebrew Core 配方
-
-Homebrew core 将于 **2026-11-30** 禁用 `emqx` 配方（EMQX 5.8.8）。其他安装方式及 EMQ Homebrew tap 的适用范围请参阅 [EMQX 开源版 macOS 安装指南](./deploy/install-macOS-ce.md)。
-
-:::
-
 进入 ZIP 包解压后的 EMQX 目录：
 
 ```bash
 cd /path/to/emqx
-```
-
-如果在 Apple Silicon 上通过 EMQ Homebrew tap 安装了 EMQX 企业版 6.2.2，请通过 Homebrew 获取安装目录：
-
-```bash
-cd "$(brew --prefix emqx/emqx/emqx@6)"
 ```
 
 检查已安装的 crypto 模块依赖哪些动态库：
@@ -141,7 +129,7 @@ cd "$(brew --prefix emqx/emqx/emqx@6)"
 otool -L lib/crypto-*/priv/lib/crypto.so
 ```
 
-如果输出中列出的动态库在系统中不存在，请根据该路径安装对应版本。EMQ tap 的 6.2.2 配方声明依赖 `openssl@3`。安装 EMQX 企业版 6.3.3，请参考 [macOS ZIP 安装指南](https://docs.emqx.com/zh/emqx/latest/get-started/deploy/install-macOS.html)。
+如果输出中列出的动态库在系统中不存在，请根据该路径安装对应版本。
 
 :::
 
