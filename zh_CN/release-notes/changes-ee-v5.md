@@ -349,6 +349,8 @@
 
   此前，通过认证但被基于角色的访问控制拒绝的请求会以空 `source` 记录，且不包含 `http_request.bindings`，导致 `GET /api/v5/audit` 无法显示请求方及其目标。未认证请求的记录方式保持不变。
 
+- [#20253](https://github.com/emqx/emqx/pull/20253) 明确了 `follow_traceparent` 的配置说明。启用此设置后，EMQX 会使用传入 MQTT 报文中的 `traceparent` 用户属性，将端到端追踪关联到已有的追踪。
+
 #### 管理
 
 - [#16732](https://github.com/emqx/emqx/pull/16732) 修复了存在共享订阅时运行 `emqx ctl subscriptions list` 可能失败并且无输出的问题。现在该命令可以列出普通订阅和共享订阅。
@@ -370,6 +372,8 @@
 - [#19617](https://github.com/emqx/emqx/pull/19617) 修复了备份导出期间错误记录 `failed_to_read_data_file` 警告的问题。对于仅以数据目录名开头的配置值（例如 Tablestore 动作中的 `data_source`），此前会记录该警告。导出的备份始终正确，只有日志有误。
 
 - [#19896](https://github.com/emqx/emqx/pull/19896) 修复了 `emqx ctl license info` 中非 ASCII 客户名称显示不正确的问题。
+
+- [#20179](https://github.com/emqx/emqx/pull/20179) 修正了 `mqtt.response_information` 的配置说明。客户端请求响应信息时，EMQX 会在 `CONNACK` 报文中返回配置值。此设置不会授予主题访问权限，也不会添加 ACL 规则。
 
 #### 插件
 
