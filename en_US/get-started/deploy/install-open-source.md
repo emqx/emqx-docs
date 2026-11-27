@@ -29,7 +29,7 @@ Install the EMQX on CentOS/RHEL system with Yum source, rpm, and tar.gz.
 
 **[Install on macOS](./install-macOS-ce.md)**
 
-Install the EMQX on macOS with Homebrew and a zip package.
+Install EMQX Open Source on macOS from a ZIP package.
 
 **[Deploy on Kubernetes](https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html)**
 

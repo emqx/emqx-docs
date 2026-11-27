@@ -144,40 +144,23 @@ After the completion, execute `ldd lib/crypto-*/priv/lib/crypto.so` in the lib-l
 
 ::: tab macOS
 
-Go to the installation directory of EMQX:
+Go to the directory where you extracted the ZIP package:
 
 ```bash
-  ## package installation
-$ cd emqx
-
-  ## brew installation
-$ cd /usr/local/Cellar/emqx/<version>/
+cd /path/to/emqx
 ```
 
-Query the list of `.so` dynamic libraries that `crypto` depends on:
+Inspect the libraries required by the installed crypto module:
 
 ```bash
-$ otool -L lib/crypto-*/priv/lib/crypto.so
-
-lib/crypto-4.4.2.1/priv/lib/crypto.so:
-  /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib (compatibility version 1.1.0, current version 1.1.0)
-  /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1252.200.5)
+otool -L lib/crypto-*/priv/lib/crypto.so
 ```
 
-It shows that OPENSSL has been successfully installed to the specified directory by checking:
+If the output lists a library that is missing from your system, install the version identified by that path.
 
-```bash
-$ ls /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib
-ls: /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib: No such file or directory
-```
+:::
 
-If the file does not exist, you need to install the version of OPENSSL corresponding with what printed by `otool`. For example, it shown here as `openssl@1.1`:
-
-```bash
-$ brew install openssl@1.1
-```
-
-After the installation is complete, you can start EMQX normally.
+::::
 
 ## EMQX failed to start with log message "libatomic.so.1: cannot open shared object file: No such file or directory"
 
@@ -201,10 +184,6 @@ libatomic is needed by emqx-5.7.0-el8-amd64.rpm
 The solution is still to manually install the dependency libatomic first.
 
 Of course, the most recommended installation method is to use the package manager (yum, apt, etc.), which will automatically install the required dependencies without us having to worry about it.
-
-:::
-
-::::
 
 ## Failed to start EMQX with Docker, log prompts "Permission denied"
 

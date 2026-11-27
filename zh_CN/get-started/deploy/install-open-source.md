@@ -30,7 +30,7 @@
 
 **[在 macOS 上安装](./install-macOS-ce.md)**
 
-在 macOS 系统中下载 EMQX 并使用 Homebrew 或 Zip 软件包安装。
+在 macOS 系统中下载并通过 ZIP 软件包安装 EMQX 开源版。
 
 **[Kubernetes 部署](https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html)**
 
