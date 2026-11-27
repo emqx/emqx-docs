@@ -162,6 +162,10 @@ On the **Create Rule** page, click the **Create** button at the bottom to comple
 The republishing action does not prevent the delivery of the original message. For example, according to the rule, messages under topic "t/1" will be republished under topic "a/1", in the meantime "t/1" message will still be delivered to the clients subscribed to topic  "t/1".
 :::
 
+::: tip
+EMQX does not check authorization for messages that the Republish action publishes. The action can publish to topics that the client that sent the original message is not allowed to publish to. If the **Topic** template takes values from the original message, for example `${payload.target}` or `${clientid}`, that client controls where the message goes. Use a fixed target topic or a fixed topic prefix, and do not take the target topic from the message payload.
+:::
+
 ### Add Console Output Action
 
 ::: tip
