@@ -1,5 +1,17 @@
 # Incompatible Changes in EMQX 5.9
 
+## 5.9.4
+
+- [#18983](https://github.com/emqx/emqx/pull/18983) MQTT listeners now close a connection as soon as its first packet is not a CONNECT, before reading the packet body. Added `mqtt.max_connect_user_properties`, which limits the number of MQTT v5 User Property pairs accepted separately in CONNECT properties and Will properties. The default is 100; set it to `infinity` to disable the limit.
+
+- [#19454](https://github.com/emqx/emqx/pull/19454) Changed the default of `rpc.insecure_fallback` from `true` to `false`.
+
+  Cluster nodes authenticate their backplane (RPC) connections with a challenge-response handshake. The fallback sends the Erlang cookie to the peer when that handshake fails, and it existed to cluster with EMQX releases older than 5.3.0, which do not speak the challenge-response handshake.
+
+  A cluster whose nodes all run 5.3.0 or later is unaffected. To cluster with a node older than 5.3.0, set `rpc.insecure_fallback = true` on every node explicitly. A node logs a warning each time it uses the fallback, so check the node logs for `gen_rpc_insecure_fallback` before you upgrade.
+
+- [#20192](https://github.com/emqx/emqx/pull/20192) Changing `plugins.install_dir` requires a node restart. Set the directory in the configuration file or through `EMQX_PLUGINS__INSTALL_DIR`, then restart the node. If a cluster configuration update attempts to change this setting, the initiating node rejects the update. A node receiving a replicated update keeps its current directory, logs a warning, and applies the other plugin settings.
+
 ## 5.9.2
 
 - [#15753](https://github.com/emqx/emqx/pull/15753) Listener connection rate limits (`max_conn_rate` and `max_conn_burst`) are now enforced per listener rather than per acceptor, restoring the behavior before 5.9.0.

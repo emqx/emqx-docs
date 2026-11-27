@@ -1,5 +1,17 @@
 # EMQX 5.9 中的不兼容变更
 
+## 5.9.4
+
+- [#18983](https://github.com/emqx/emqx/pull/18983) 如果 MQTT 连接收到的第一个报文不是 CONNECT，监听器现在会立即关闭连接，不再读取该报文的剩余内容。新增了 `mqtt.max_connect_user_properties` 配置，分别限制 CONNECT 属性和遗嘱属性中可接受的 MQTT v5 用户属性键值对数量。默认值为 100。将其设为 `infinity` 可禁用此限制。
+
+- [#19454](https://github.com/emqx/emqx/pull/19454) 将 `rpc.insecure_fallback` 的默认值从 `true` 改为 `false`。
+
+  集群节点使用质询-响应握手对后端网络（RPC）连接进行认证。如果握手失败，回退机制会将 Erlang cookie 发送给对端。该机制用于与不支持质询-响应握手的 EMQX 5.3.0 之前版本组成集群。
+
+  如果集群中的所有节点都运行 5.3.0 或更高版本，则不受此变更影响。若要与 5.3.0 之前的节点组成集群，请在每个节点上显式设置 `rpc.insecure_fallback = true`。节点每次使用回退机制时都会记录警告日志；升级前请检查节点日志中是否存在 `gen_rpc_insecure_fallback`。
+
+- [#20192](https://github.com/emqx/emqx/pull/20192) 修改 `plugins.install_dir` 需要重启节点。请在配置文件中指定安装目录，或设置 `EMQX_PLUGINS__INSTALL_DIR`，然后重启节点。如果集群配置更新试图修改此设置，发起更新的节点会拒绝该更新。收到同步更新的节点会保留当前安装目录、记录警告，并应用其他插件设置。
+
 ## 5.9.2
 
 - [#15753](https://github.com/emqx/emqx/pull/15753) 监听器连接速率限制（`max_conn_rate` 和 `max_conn_burst`）现在按监听器维度生效，而不再是按 acceptor （连接接收进程）生效，恢复了 5.9.0 之前的行为。
