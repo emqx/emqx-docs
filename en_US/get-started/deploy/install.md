@@ -12,7 +12,7 @@ The table below lists the operating systems and versions that EMQX supports.
 | [Debian](./install-debian.md)     | Debian 11<br />Debian 12<br />Debian 13 | Yes | Yes |
 | [CentOS/RHEL](./install-rhel.md)  | Rocky Linux 8<br />Rocky Linux 9<br />Rocky Linux 10 | Yes | Yes |
 | [Amazon Linux](./install-rhel.md) | Amazon Linux 2023              | Yes | Yes |
-| [macOS 14+](./install-macOS.md)   | macOS 14<br />macOS 15<br />macOS 26 | No  | Yes |
+| [macOS](./install-macOS.md)       | macOS 15<br />macOS 26 | No  | Yes |
 
 <!-- ## Hardware Specification
 

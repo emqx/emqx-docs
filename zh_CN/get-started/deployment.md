@@ -111,40 +111,19 @@ $ ln -s /usr/local/lib64/libcrypto.so.1.1 /usr/lib64/libcrypto.so.1.1
 
 ::: tab macOS
 
-进入到 EMQX 的安装目录：
+进入 ZIP 包解压后的 EMQX 目录：
 
 ```bash
-## 安装包安装
-$ cd emqx
-
-## brew 安装
-$ cd /usr/local/Cellar/emqx/<version>/
+cd /path/to/emqx
 ```
 
-查询 `crypto` 依赖的 `.so` 动态库列表：
+检查已安装的 crypto 模块依赖哪些动态库：
 
 ```bash
-$ otool -L lib/crypto-*/priv/lib/crypto.so
-
-lib/crypto-4.4.2.1/priv/lib/crypto.so:
-	/usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib (compatibility version 1.1.0, current version 1.1.0)
-	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1252.200.5)
+otool -L lib/crypto-*/priv/lib/crypto.so
 ```
 
-检查列出的动态库是否存在：
-
-```bash
-$ ls /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib
-ls: /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib: No such file or directory
-```
-
-若不存在该动态库，则需安装与 `otool` 打印出来的对应的 OpenSSL 版本，例如此处显示的为 `openssl@1.1`：
-
-```bash
-brew install openssl@1.1
-```
-
-安装完成后，即可正常启动 EMQX。
+如果输出中列出的动态库在系统中不存在，请根据该路径安装对应版本。
 
 :::
 
