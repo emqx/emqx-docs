@@ -1,13 +1,5 @@
 # Deployment FAQs
 
-::: warning Homebrew Core Formula
-
-Homebrew core disables the `emqx` formula (EMQX 5.8.8) on **2026-11-30**. For EMQX 6.3.3, use the [macOS ZIP packages](https://github.com/emqx/emqx/releases/tag/6.3.3#macos) or the [Docker installation guide](https://docs.emqx.com/en/emqx/latest/get-started/deploy/install-docker.html).
-
-The separate [EMQ Homebrew tap](https://github.com/emqx/homebrew-emqx) supports `brew install emqx/emqx/emqx@6`. This installs **EMQX Enterprise 6.2.2**, only on **Apple Silicon (arm64) with macOS 14 or later**. It does not install EMQX 6.3.3.
-
-:::
-
 ## Which operating systems are recommended for EMQX deployment?
 
 EMQX supports running on a variety of operating systems and hardware platforms. Considering the stability and reliability of enterprise-level deployment, we generally recommend deploying it on Linux distributions such as CentOS, Ubuntu, and Debian.
@@ -152,19 +144,17 @@ Go to the directory where you extracted the ZIP package:
 cd /path/to/emqx
 ```
 
-For EMQX Enterprise 6.2.2 installed from the EMQ Homebrew tap on Apple Silicon, find its directory with Homebrew:
-
-```bash
-cd "$(brew --prefix emqx/emqx/emqx@6)"
-```
-
 Inspect the libraries required by the installed crypto module:
 
 ```bash
 otool -L lib/crypto-*/priv/lib/crypto.so
 ```
 
-If the output lists a library that is missing from your system, install the version identified by that path. The EMQ tap's 6.2.2 formula declares `openssl@3` as a dependency. For EMQX 6.3.3, follow the [macOS ZIP installation guide](https://docs.emqx.com/en/emqx/latest/get-started/deploy/install-macOS.html).
+If the output lists a library that is missing from your system, install the version identified by that path.
+
+:::
+
+::::
 
 ## EMQX failed to start with log message "libatomic.so.1: cannot open shared object file: No such file or directory"
 
@@ -188,10 +178,6 @@ libatomic is needed by emqx-5.7.0-el8-amd64.rpm
 The solution is still to manually install the dependency libatomic first.
 
 Of course, the most recommended installation method is to use the package manager (yum, apt, etc.), which will automatically install the required dependencies without us having to worry about it.
-
-:::
-
-::::
 
 ## Failed to start EMQX with Docker, log prompts "Permission denied"
 
